@@ -1,1 +1,4 @@
 Think before going public :-)
+
+# configure install script to run and configure vBilling instance to run on saperate machine than FS
+# mod_xml_curl to use HTTPS
