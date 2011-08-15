@@ -21,7 +21,7 @@
 
     <X-PRE-PROCESS cmd="set" data="vbilling_gateway_host=api.vbilling.org"/>
     <X-PRE-PROCESS cmd="set" data="vbilling_gateway_port=7665"/>
-    <X-PRE-PROCESS cmd="set" data="freeswitch_cofiguration_server=http://config.vbilling.org"/>
+    <X-PRE-PROCESS cmd="set" data="freeswitch_cofiguration_server=http://config.vbilling.org:8449"/>
     <X-PRE-PROCESS cmd="set" data="freeswitch_binding=configuration"/>
     <X-PRE-PROCESS cmd="set" data="freeswitch_cofiguration_server_login=foo"/>
     <X-PRE-PROCESS cmd="set" data="freeswitch_cofiguration_server_password=bar"/>
