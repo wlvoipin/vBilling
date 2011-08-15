@@ -103,9 +103,13 @@ function randomGenerator() {
 FS_login=$(randomGenerator)
 FS_password=$(randomGenerator)
 
+#sed -i \
+#-e "s/<X-PRE-PROCESS cmd=\"set\" data=\"freeswitch_cofiguration_server_login=foo\"\/>/<X-PRE-PROCESS cmd=\"set\" data=\"freeswitch_cofiguration_server_login=$FS_login\"\/>/g" \
+#-e "s/<X-PRE-PROCESS cmd=\"set\" data=\"freeswitch_cofiguration_server_password=bar\"\/>/<X-PRE-PROCESS cmd=\"set\" data=\"freeswitch_cofiguration_server_password=$FS_password\"\/>/g" \
+#-e "s/<X-PRE-PROCESS cmd=\"set\" data=\"vbilling_gateway_port=7665\"\/>/<X-PRE-PROCESS cmd=\"set\" data=\"vbilling_gateway_port=$VBILLING_GATEWAY_PORT\"\/>/g" \
+#/usr/local/freeswitch/conf/freeswitch.xml
+
 sed -i \
--e "s/<X-PRE-PROCESS cmd=\"set\" data=\"freeswitch_cofiguration_server_login=foo\"\/>/<X-PRE-PROCESS cmd=\"set\" data=\"freeswitch_cofiguration_server_login=$FS_login\"\/>/g" \
--e "s/<X-PRE-PROCESS cmd=\"set\" data=\"freeswitch_cofiguration_server_password=bar\"\/>/<X-PRE-PROCESS cmd=\"set\" data=\"freeswitch_cofiguration_server_password=$FS_password\"\/>/g" \
 -e "s/<X-PRE-PROCESS cmd=\"set\" data=\"vbilling_gateway_port=7665\"\/>/<X-PRE-PROCESS cmd=\"set\" data=\"vbilling_gateway_port=$VBILLING_GATEWAY_PORT\"\/>/g" \
 /usr/local/freeswitch/conf/freeswitch.xml
 
@@ -123,8 +127,10 @@ echo "Your FreeSWITCH configuration server login is: '$FS_login'"
 echo "Your FreeSWITCH configuration server password is: '$FS_password'"
 echo "vBilling gateway port for your server is: '$VBILLING_GATEWAY_PORT'"
 echo ""
-echo "Please email this outout to '$VBILLING_EMAIL' and we will generate configuration files"
-echo "for your switch. Please note that without this email, your instance of FreeSWITCH"
+echo "Please email this output to '$VBILLING_EMAIL' and we will generate necessary configuration"
+echo "files for your switch."
+echo ""
+echo "Please note that without this email, your instance of FreeSWITCH"
 echo "will *NOT* work with vBilling."
 echo ""
 read -n 1 -p "Press any key to continue..."

@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<document type="freeswitch/xml">
+    <section name="configuration" description="Various Configuration">
+        <configuration name="xml_cdr.conf" description="XML CDR CURL logger">
+            <settings>
+                <param name="url" value="http://178.63.207.137/conf/billing-cdr.php"/>
+                <param name="retries" value="2"/>
+                <param name="delay" value="10"/>
+                <param name="log-http-and-disk" value="true"/>
+                <param name="log-dir" value=""/>
+                <param name="log-b-leg" value="true"/>
+                <param name="prefix-a-leg" value="true"/>
+                <param name="encode" value="true"/>
+            </settings>
+        </configuration>
+    </section>
+</document>

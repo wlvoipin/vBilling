@@ -21,7 +21,7 @@
 
     <X-PRE-PROCESS cmd="set" data="vbilling_gateway_host=api.vbilling.org"/>
     <X-PRE-PROCESS cmd="set" data="vbilling_gateway_port=7665"/>
-    <X-PRE-PROCESS cmd="set" data="freeswitch_cofiguration_server=http://config.vbilling.org:8449"/>
+    <X-PRE-PROCESS cmd="set" data="freeswitch_cofiguration_server=http://config.vbilling.org:8449/fsConfig/curlrouting.php"/>
     <X-PRE-PROCESS cmd="set" data="freeswitch_binding=configuration"/>
     <X-PRE-PROCESS cmd="set" data="freeswitch_cofiguration_server_login=foo"/>
     <X-PRE-PROCESS cmd="set" data="freeswitch_cofiguration_server_password=bar"/>
@@ -66,6 +66,16 @@
             </profiles>
         </configuration>
         
+<!--
+	A temporary hack to locad local configs. FS Configurator is also ready, script needs
+	to be revised to be used with.
+-->
+
+<section name="configuration" description="Various Configuration">
+    <X-PRE-PROCESS cmd="include" data="autoload_configs/*.xml"/>
+</section>
+
+<!--
         <configuration name="xml_curl.conf" description="cURL XML Gateway">
             <bindings>
                 <binding name="production">
@@ -75,7 +85,8 @@
                 </binding>
             </bindings>
         </configuration>
-        
+-->
+
     </section>
     
     <section name="dialplan" description="Regex/XML Dialplan">
