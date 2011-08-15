@@ -29,7 +29,7 @@ fi
 if [ $INSTALL_BOTH = "y" ]; then
 	clear
 	echo ""
-	echo "I am going to install FreeSWITCH and vBilling on same machine"
+	echo "I am going to install FreeSWITCH and vBilling on the same machine"
 	read -n 1 -p "Press any key to continue..."
 	clear
 #	Remove any previous versions of FS install script
