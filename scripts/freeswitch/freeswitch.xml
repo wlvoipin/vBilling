@@ -2,69 +2,27 @@
 
     <X-PRE-PROCESS cmd="set" data="auto_answer=false"/>
     <X-PRE-PROCESS cmd="set" data="domain=$${local_ip_v4}"/>
-
-<!--
-	Need to work more on better codec management
--->
-
-	<X-PRE-PROCESS cmd="set" data="global_codec_prefs=G722,PMCA,PCMU,GSM,G723,G729"/>
+    <X-PRE-PROCESS cmd="set" data="global_codec_prefs=G722,PCMU,PCMA,GSM,G723,G729"/>
     <X-PRE-PROCESS cmd="set" data="outbound_caller_name=vBilling"/>
     <X-PRE-PROCESS cmd="set" data="outbound_caller_id=0000000000"/>
     <X-PRE-PROCESS cmd="set" data="console_loglevel=alert"/>
     <X-PRE-PROCESS cmd="set" data="call_debug=false"/>
-    <X-PRE-PROCESS cmd="set" data="internal_auth_calls=false"/>
-    <X-PRE-PROCESS cmd="set" data="internal_sip_port=5060"/>
+<!--
+	Configure better SIP authentication scheme. Currenly SIP authentication is not configured,
+	as we allow any SIP call to vBilling and it will take care of it by itself. 
+	internal_auth_calls=false will disable all SIP authentication by default.
+-->
+<X-PRE-PROCESS cmd="set" data="internal_auth_calls=false"/>
+<X-PRE-PROCESS cmd="set" data="internal_sip_port=5060"/>
 
 <!--
-	START Custom Defines
+	START -- Custom Defines
 -->
-
-    <X-PRE-PROCESS cmd="set" data="vbilling_gateway_host=api.vbilling.org"/>
+    <X-PRE-PROCESS cmd="set" data="vbilling_gateway_host=localhost"/>
     <X-PRE-PROCESS cmd="set" data="vbilling_gateway_port=7665"/>
-    <X-PRE-PROCESS cmd="set" data="freeswitch_cofiguration_server=http://config.vbilling.org:8449/fsConfig/curlrouting.php"/>
-    <X-PRE-PROCESS cmd="set" data="freeswitch_binding=configuration"/>
-    <X-PRE-PROCESS cmd="set" data="freeswitch_cofiguration_server_login=foo"/>
-    <X-PRE-PROCESS cmd="set" data="freeswitch_cofiguration_server_password=bar"/>
-
 <!--
-	END Custom Defines
+	END -- Custom Defines
 -->
-    
-    <section name="configuration" description="Various Configuration">
-
-        <configuration name="modules.conf" description="Modules">
-            <modules>
-                <load module="mod_console"/>
-                <load module="mod_logfile"/>
-                <load module="mod_xml_curl"/>
-            </modules>
-        </configuration>
-        
-        <configuration name="console.conf" description="Console Logger">
-            <mappings>
-                <map name="all" value="console,debug,info,notice,warning,err,crit,alert"/>
-            </mappings>
-            <settings>
-                <param name="colorize" value="true"/>
-                <param name="loglevel" value="$${console_loglevel}"/>
-            </settings>
-        </configuration>
-        
-        <configuration name="logfile.conf" description="File Logging">
-            <settings>
-                <param name="rotate-on-hup" value="true"/>
-            </settings>
-            <profiles>
-                <profile name="default">
-                    <settings>
-                        <param name="uuid" value="true" />
-                    </settings>
-                    <mappings>
-                        <map name="all" value="debug,info,notice,warning,err,crit,alert"/>
-                    </mappings>
-                </profile>
-            </profiles>
-        </configuration>
         
 <!--
 	A temporary hack to locad local configs. FS Configurator is also ready, script needs
@@ -88,8 +46,8 @@
 -->
 
     </section>
-    
-    <section name="dialplan" description="Regex/XML Dialplan">
+
+  <section name="dialplan" description="Regex/XML Dialplan">
         <context name="default">
             <extension name="api_authenticated">
                 <condition field="destination_number" expression="^(\d+)$">
