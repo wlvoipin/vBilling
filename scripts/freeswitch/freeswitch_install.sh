@@ -81,13 +81,11 @@ wget --no-check-certificate $FS_CONF_PATH_MODULE
 
 # Good to go, let's now compile and install FreeSWITCH
 make && make install
-
 cd $FS_INSTALLED_PATH/conf
 
 # We do not want any of the configs. Let's make room for our own
 rm -rf $FS_INSTALLED_PATH/conf/*
 mkdir $FS_INSTALLED_PATH/conf/autoload_configs
-
 
 # Instead download the files
 wget --no-check-certificate $FS_CONF_PATH_FSXML

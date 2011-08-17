@@ -1,11 +1,12 @@
 #!/bin/bash
 #
-# FreeSWITCH and vBilling install script v0.2
+# FreeSWITCH and vBilling install script v0.3
 #
 
 # Define some variables
 FS_INSTALL_SCRIPT=https://raw.github.com/digitallinx/vBilling/master/scripts/freeswitch/freeswitch_install.sh
 FS_INSTALL_SCRIPT_NAME=freeswitch_install.sh
+API_INSTALL_SCRIPT=https://raw.github.com/digitallinx/vBilling/master/scripts/api_install.sh
 
 # Prompt the user for installation of FS and vBilling on same machine or split install
 # We currently support single instance install as ease of management for the user
@@ -37,7 +38,7 @@ if [ $INSTALL_BOTH = "y" ]; then
 	wget --no-check-certificate $FS_INSTALL_SCRIPT
 	chmod 700 $FS_INSTALL_SCRIPT_NAME
 	./$FS_INSTALL_SCRIPT_NAME
-	exit 1
+#	exit 1
 	
 elif [ $INSTALL_BOTH = "n" ]; then
 	clear
@@ -49,4 +50,19 @@ elif [ $INSTALL_BOTH = "n" ]; then
 	echo ""
 fi
 
+echo ""
+echo "Now going to install the Billing API"
+read -n 1 -p "Press any key to continue..."
+echo ""
+wget --no-check-certificate $API_INSTALL_SCRIPT
+chmod 750 $API_INSTALL_SCRIPT
+./$API_INSTALL_SCRIPT /usr/local/plivo
+rm -f $API_INSTALL_SCRIPT
+
+# FS, API install complete. Continue to vBilling install
+clear
+echo ""
+echo "FreeSWITCH and vBilling API have been installed and configured successfully"
+read -n 1 -p "Press any key to continue installing vBilling web application..."
+echo ""
 

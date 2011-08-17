@@ -23,7 +23,7 @@ cat <<EOF > event_socket.conf.xml
     <settings>
         <param name="nat-map" value="false"/>
         <param name="listen-ip" value="127.0.0.1"/>
-        <param name="listen-port" value="8044"/>
+        <param name="listen-port" value="8021"/>
         <param name="password" value="ClueCon"/>
     </settings>
 </configuration>
