@@ -39,7 +39,7 @@ if [ $INSTALL_BOTH = "y" ]; then
 	chmod 700 $FS_INSTALL_SCRIPT_NAME
 	./$FS_INSTALL_SCRIPT_NAME
 #	exit 1
-	
+
 elif [ $INSTALL_BOTH = "n" ]; then
 	clear
 	echo ""
@@ -48,6 +48,7 @@ elif [ $INSTALL_BOTH = "n" ]; then
 	echo ""
 	echo "*** Installation aborted"
 	echo ""
+	exit 1
 fi
 
 echo ""
