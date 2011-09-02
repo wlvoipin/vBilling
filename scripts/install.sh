@@ -41,7 +41,7 @@ if [ $INSTALL_BOTH = "y" ]; then
 	wget --no-check-certificate $FS_INSTALL_SCRIPT
 	chmod 700 $FS_INSTALL_SCRIPT_NAME
 	./$FS_INSTALL_SCRIPT_NAME
-#	exit 1
+	rm -f $FS_INSTALL_SCRIPT_NAME
 
 elif [ $INSTALL_BOTH = "n" ]; then
 	clear
