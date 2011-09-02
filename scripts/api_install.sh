@@ -10,6 +10,7 @@
 PLIVO_CONF_PATH=https://raw.github.com/digitallinx/vBilling/master/scripts/conf/api/default.conf
 PLIVO_GIT_REPO=https://github.com/plivo/plivo.git
 PLIVO_SRC=/home/vBilling/api/src
+PLIVO_CACHE_CONF_PATH=https://raw.github.com/digitallinx/vBilling/master/scripts/conf/api/cache.conf
 
 #####################################################
 PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin
@@ -149,9 +150,7 @@ esac
 # Setup virtualenv
 virtualenv --no-site-packages $REAL_PATH
 source $REAL_PATH/bin/activate
-
 pip install -e git+${PLIVO_GIT_REPO}@${BRANCH}#egg=plivo
-
 
 if [ $ACTION = 'INSTALL' ]; then
     mkdir -p $REAL_PATH/etc/plivo &>/dev/null
@@ -160,8 +159,9 @@ if [ $ACTION = 'INSTALL' ]; then
     mkdir -p $REAL_PATH/tmp/plivocache &>/dev/null
     cd $REAL_PATH/src/plivo
     git checkout $BRANCH
-    cp -f $REAL_PATH/src/plivo/src/config/default.conf $REAL_PATH/etc/plivo/default.conf
-    cp -f $REAL_PATH/src/plivo/src/config/cache.conf $REAL_PATH/etc/plivo/cache/cache.conf
+    wget --no-check-certificate $PLIVO_CONF_PATH -O $REAL_PATH/etc/plivo/default.conf
+# We are not doing any caching yet
+# wget --no-check-certificate $PLIVO_CACHE_CONF_PATH -O $REAL_PATH/etc/plivo/cache.conf
 fi
 
 $REAL_PATH/bin/plivo-postinstall &>/dev/null
