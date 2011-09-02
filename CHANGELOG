@@ -1,4 +1,47 @@
-# vBilling CHANGELOG
+2011-08-29
+	* Tweaks
 
-# install script v0.3
-# Chnaged from split to local install
+2011-08-30
+	* Installer update for CentOS 6.x
+
+2011-08-17
+	* vBilling API install script added
+	* .gitignore fixed
+	* Changed install scripts to configure FS for local config instance
+
+2011-08-15
+	* Changed freeswitch.xml to start with local configuration files
+	* Web server port changed to 8449
+	* ' added
+	* Junk removed
+	* Install script updated
+
+2011-08-05
+	* sed bugs removed
+
+2011-07-29
+	* install script updated for mod_xml_curl
+	* .gitignore update
+
+2011-07-28
+	* .gitignore updated
+
+2011-07-27
+	* Updated README
+	* minor changes in FS install script
+	* Edited scripts/freeswitch/modules.conf via GitHub
+	* Edited scripts/freeswitch/freeswitch_install.sh via GitHub
+	* Edited scripts/freeswitch/freeswitch_install.sh via GitHub
+	* Edited scripts/freeswitch/freeswitch_install.sh via GitHub
+	* Revert 0c00ee4aa9659f94b178febf1f0ab682dc214430^..HEAD
+	* Edited scripts/freeswitch/freeswitch_install.sh via GitHub
+	* Revert "Edited scripts/freeswitch/freeswitch_install.sh via GitHub"
+	* Edited scripts/freeswitch/freeswitch_install.sh via GitHub
+	* Paths redefined
+	* Install script update
+	* Typos
+	* FreeSWITCH install script created
+
+2011-07-26
+	* Repo Created
+

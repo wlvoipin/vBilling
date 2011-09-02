@@ -1,6 +1,7 @@
 #!/bin/bash
 #
 # This script has been modified to fit the needs of vBilling
+# Please do not use this script to install only Plivo
 #
 # Plivo Installation script for CentOS 5 and 6
 # and Debian based distros (Debian 5.0 , Ubuntu 10.04 and above)
@@ -146,7 +147,6 @@ gpgcheck = 1
     ;;
 esac
 
-
 # Setup virtualenv
 virtualenv --no-site-packages $REAL_PATH
 source $REAL_PATH/bin/activate
@@ -159,7 +159,21 @@ if [ $ACTION = 'INSTALL' ]; then
 fi
 
 $REAL_PATH/bin/plivo-postinstall &>/dev/null
+
+read -n 1 -p "Press any key tart Plivo service now..."
 /usr/local/plivo/bin/plivo start &>/dev/null
+
+# Configure auto service start for Plivo
+read -n 1 -p "Do you want to start Plivo automatically at system startup?"
+echo
+if [ $REPLY = "y" ]; then
+# Configure me for service start
+echo
+elif [ $REPLY = "n" ]; then
+echo "You would have to start Plivo service manually after a system reboot."
+echo
+fi
+
 #
 # Install Complete
 #

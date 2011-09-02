@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# FreeSWITCH and vBilling install script v0.3
+# FreeSWITCH and vBilling install script v0.4
 #
 
 # Define some variables
@@ -8,15 +8,16 @@ FS_INSTALL_SCRIPT=https://raw.github.com/digitallinx/vBilling/master/scripts/fre
 FS_INSTALL_SCRIPT_NAME=freeswitch_install.sh
 API_INSTALL_SCRIPT=https://raw.github.com/digitallinx/vBilling/master/scripts/api_install.sh
 
-# Prompt the user for installation of FS and vBilling on same machine or split install
-# We currently support single instance install as ease of management for the user
+# Prompt user for installation of FS and vBilling on same machine or split install
+# We currently support single instance install as ease of management for the user (YET)
+# Distributed setup is highly recommended and is only supported by consulting services
 
 clear
 echo ""
 read -n 1 -p "Do you want to install FreeSWITCH and vBilling on the same machine? (y/n) : "
 echo
 if [ $REPLY = "y" ]; then
-	INSTALL_BOTH=y 
+	INSTALL_BOTH=y
 elif [ $REPLY = "n" ]; then
 	INSTALL_BOTH=n
 else
@@ -44,7 +45,7 @@ elif [ $INSTALL_BOTH = "n" ]; then
 	clear
 	echo ""
 	echo "*** Installation of split instance is not supported through this script yet"
-	echo "*** Please contact vBilling@digitallinx.com for more info"
+	echo "*** Please contact vBilling@digitallinx.com if you like to have a distributed setup for vBilling"
 	echo ""
 	echo "*** Installation aborted"
 	echo ""
@@ -66,4 +67,3 @@ echo ""
 echo "FreeSWITCH and vBilling API have been installed and configured successfully"
 read -n 1 -p "Press any key to continue installing vBilling web application..."
 echo ""
-
