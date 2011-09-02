@@ -58,7 +58,6 @@ echo ""
 echo "Now going to install the Billing API"
 read -n 1 -p "Press any key to continue..."
 echo ""
-mkdir -p $API_INSTALL_PATH
 wget --no-check-certificate $API_INSTALL_SCRIPT
 chmod 750 $API_INSTALL_SCRIPT_NAME
 ./$API_INSTALL_SCRIPT_NAME $API_INSTALL_PATH

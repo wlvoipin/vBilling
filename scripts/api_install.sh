@@ -160,17 +160,17 @@ fi
 
 $REAL_PATH/bin/plivo-postinstall &>/dev/null
 
-read -n 1 -p "Press any key tart Plivo service now..."
-/usr/local/plivo/bin/plivo start &>/dev/null
+read -n 1 -p "Press any key start vBilling API service now..."
+$REAL_PATH/bin/plivo start &>/dev/null
 
-# Configure auto service start for Plivo
-read -n 1 -p "Do you want to start Plivo automatically at system startup?"
+# Configure auto service start for vBilling API
+read -n 1 -p "Do you want to start vBilling API automatically at system startup? "
 echo
 if [ $REPLY = "y" ]; then
 # Configure me for service start
 echo
 elif [ $REPLY = "n" ]; then
-echo "You would have to start Plivo service manually after a system reboot."
+echo "You would have to start vBilling API service manually after a system reboot."
 echo
 fi
 
