@@ -8,7 +8,7 @@
 # Copyright (c) 2011 Plivo Team. See LICENSE for details.
 
 PLIVO_CONF_PATH=https://raw.github.com/digitallinx/vBilling/master/scripts/conf/api/default.conf
-PLIVO_GIT_REPO=git://github.com/plivo/plivo.git
+PLIVO_GIT_REPO=https://github.com/plivo/plivo.git
 
 #####################################################
 PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin
