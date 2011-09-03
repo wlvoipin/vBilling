@@ -1,3 +1,15 @@
+2011-09-04
+	* Updated README
+
+2011-09-02
+	* api_installer.sh updates
+	* api_install.sh tweaks
+	* Plivo repo url changed from git to https
+	* Misc Updates to install script
+	* API_INSTALL_PATH added
+	* api_install.sh was not properly called. Fixed
+	* CHANGELOG updated
+
 2011-08-29
 	* Tweaks
 

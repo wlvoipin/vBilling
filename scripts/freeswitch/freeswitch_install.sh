@@ -11,11 +11,12 @@
 #####################################################
 FS_GIT_REPO=git://git.freeswitch.org/freeswitch.git
 FS_CONF_PATH_FSXML=https://raw.github.com/digitallinx/vBilling/master/scripts/freeswitch/freeswitch.xml
-FS_CONF_COMBINED=https://raw.github.com/digitallinx/vBilling/master/scripts/freeswitch/freeswitch_combined_config.sh
+FS_CONF_COMBINED=https://github.com/digitallinx/vBilling/raw/master/scripts/freeswitch/conf/freeswitch_combined_config.sh
 FS_CONF_PATH_MODULE=https://raw.github.com/digitallinx/vBilling/master/scripts/freeswitch/modules.conf
 FS_INSTALLED_PATH=/usr/local/freeswitch
 FS_BASE_PATH=/usr/src/
 CURRENT_PATH=$PWD
+VBILLING_GATEWAY_PORT=7665
 #VBILLING_EMAIL="vbilling-robot@digitallinx.com"
 #VBILLING_GATEWAY_HOST=vbilling-api.digitallinx.com
 #####################################################

@@ -58,9 +58,9 @@ cat <<EOF > sofia.conf.xml
         <profile name="internal">
             <gateways>
                 <gateway name="trunk_001">
-                    <param name="username" value="FSAPI"/>
+                    <param name="username" value="vBilling"/>
                     <param name="password" value="2011"/>
-                    <param name="proxy" value="sbc.vbilling.org"/>
+                    <param name="proxy" value="sbc.digitallinx.com"/>
                     <param name="register" value="false"/>
                 </gateway>
             </gateways>

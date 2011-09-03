@@ -9,7 +9,6 @@
 
 PLIVO_CONF_PATH=https://raw.github.com/digitallinx/vBilling/master/scripts/conf/api/default.conf
 PLIVO_GIT_REPO=https://github.com/plivo/plivo.git
-PLIVO_SRC=/home/vBilling/api/src
 PLIVO_CACHE_CONF_PATH=https://raw.github.com/digitallinx/vBilling/master/scripts/conf/api/cache.conf
 
 #####################################################
@@ -165,14 +164,13 @@ if [ $ACTION = 'INSTALL' ]; then
 fi
 
 $REAL_PATH/bin/plivo-postinstall &>/dev/null
-rm -rf $PLIVO_SRC
 
 read -n 1 -p "Press any key start vBilling API service now..."
 $REAL_PATH/bin/plivo start &>/dev/null
 # Configure me for a good start status
 
 # Configure auto service start for vBilling API
-read -n 1 -p "Do you want to start vBilling API automatically at system startup? "
+read -n 1 -p "Do you want to start vBilling API automatically at system startup? [y/n] "
 echo
 if [ $REPLY = "y" ]; then
 # Configure me for service start
