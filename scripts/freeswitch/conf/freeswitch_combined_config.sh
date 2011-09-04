@@ -30,7 +30,7 @@ cat <<EOF > event_socket.conf.xml
 EOF
 cat <<EOF > modules.conf.xml
 <configuration name="modules.conf" description="Modules">
-    <modules>                
+    <modules>
         <load module="mod_console"/>
         <load module="mod_logfile"/>
         <load module="mod_sofia"/>
@@ -43,6 +43,7 @@ cat <<EOF > modules.conf.xml
         <load module="mod_g729"/>
         <load module="mod_xml_cdr"/>
         <!--
+<load module="mod_xml_curl"/>
 <load module="mod_cdr_csv"/>
 -->
     </modules>
@@ -654,7 +655,7 @@ EOF
 cat <<EOF > xml_cdr.conf.xml
 <configuration name="xml_cdr.conf" description="XML CDR CURL logger">
     <settings>
-        <param name="url" value="http://localhost/conf/billing-cdr.php"/>
+        <param name="url" value="http://127.0.0.1/vBilling/POST/vBilling-cdr.php"/>
         <param name="retries" value="2"/>
         <param name="delay" value="10"/>
         <param name="log-http-and-disk" value="true"/>

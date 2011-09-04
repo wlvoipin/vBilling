@@ -12,6 +12,7 @@
 FS_GIT_REPO=git://git.freeswitch.org/freeswitch.git
 FS_CONF_PATH_FSXML=https://raw.github.com/digitallinx/vBilling/master/scripts/freeswitch/freeswitch.xml
 FS_CONF_COMBINED=https://github.com/digitallinx/vBilling/raw/master/scripts/freeswitch/conf/freeswitch_combined_config.sh
+FS_CONF=freeswitch_combined_config.sh
 FS_CONF_PATH_MODULE=https://raw.github.com/digitallinx/vBilling/master/scripts/freeswitch/modules.conf
 FS_INSTALLED_PATH=/usr/local/freeswitch
 FS_BASE_PATH=/usr/src/
@@ -98,11 +99,11 @@ mkdir $FS_INSTALLED_PATH/conf/autoload_configs
 wget --no-check-certificate $FS_CONF_PATH_FSXML
 
 # We download all the configuration files bundeled in 1 big file, and extract them
+cd $FS_INSTALLED_PATH/conf/autoload_configs
 wget --no-check-certificate $FS_CONF_COMBINED
-chmod 750 $FS_CONF_COMBINED
-cd autoload_configs
-../$FS_CONF_COMBINED
-rm -f ../$FS_CONF_COMBINED
+chmod 700 $FS_CONF
+./$FS_CONF
+rm -f $FS_CONF
 
 # Each customer gets a random port for vBilling API gateway
 # TODO: Find a way to improve this, there can be a port conflict on the server
@@ -124,9 +125,9 @@ rm -f ../$FS_CONF_COMBINED
 #-e "s/<X-PRE-PROCESS cmd=\"set\" data=\"vbilling_gateway_port=7665\"\/>/<X-PRE-PROCESS cmd=\"set\" data=\"vbilling_gateway_port=$VBILLING_GATEWAY_PORT\"\/>/g" \
 #/usr/local/freeswitch/conf/freeswitch.xml
 
-sed -i \
--e "s/<X-PRE-PROCESS cmd=\"set\" data=\"vbilling_gateway_port=7665\"\/>/<X-PRE-PROCESS cmd=\"set\" data=\"vbilling_gateway_port=$VBILLING_GATEWAY_PORT\"\/>/g" \
-/usr/local/freeswitch/conf/freeswitch.xml
+#sed -i \
+#-e "s/<X-PRE-PROCESS cmd=\"set\" data=\"vbilling_gateway_port=7665\"\/>/<X-PRE-PROCESS cmd=\"set\" data=\"vbilling_gateway_port=$VBILLING_GATEWAY_PORT\"\/>/g" \
+#/usr/local/freeswitch/conf/freeswitch.xml
 
 cd $CURRENT_PATH
 

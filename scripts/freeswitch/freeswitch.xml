@@ -16,12 +16,12 @@
 <X-PRE-PROCESS cmd="set" data="internal_sip_port=5060"/>
 
 <!--
-	START -- Custom Defines
+	START Custom Defines
 -->
     <X-PRE-PROCESS cmd="set" data="vbilling_gateway_host=localhost"/>
     <X-PRE-PROCESS cmd="set" data="vbilling_gateway_port=7665"/>
 <!--
-	END -- Custom Defines
+	END Custom Defines
 -->
         
 <!--
@@ -44,8 +44,6 @@
             </bindings>
         </configuration>
 -->
-
-    </section>
 
   <section name="dialplan" description="Regex/XML Dialplan">
         <context name="default">
