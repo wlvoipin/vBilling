@@ -80,12 +80,12 @@ gpgcheck = 1
 	esac
 	git clone $VBILLING_REPO /tmp/vBilling
 	chmod 700 $FS_INSTALL_SCRIPT
-	./$FS_INSTALL_SCRIPT
+#	/$FS_INSTALL_SCRIPT
 elif [ $REPLY = "n" ]; then
 	clear
 	echo ""
 	echo "*** Installation of split instance is not supported through this script yet"
-	echo "*** Please send ane mail to support@vbilling.org if you like to have a distributed setup"
+	echo "*** Please send an mail to support@vbilling.org if you like to have a distributed setup"
 	echo ""
 	echo "*** Installation aborted"
 	echo ""
@@ -103,12 +103,13 @@ else
 fi
 
 # FS install is good. Let's move forward for API install
+clear
 echo ""
 echo "*** Now going to install the Billing API"
 read -n 1 -p "*** Press any key to continue..."
 echo ""
 chmod 700 $API_INSTALL_SCRIPT
-./$API_INSTALL_SCRIPT $API_INSTALL_PATH
+/$API_INSTALL_SCRIPT $API_INSTALL_PATH
 
 # FS, API install complete. Continue to vBilling install
 clear

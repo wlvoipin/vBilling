@@ -149,8 +149,8 @@ esac
 # Setup virtualenv
 virtualenv --no-site-packages $REAL_PATH
 source $REAL_PATH/bin/activate
-pip install -e git+${PLIVO_SRC}@${BRANCH}#egg=plivo
-
+pip install ${PLIVO_SRC}#egg=plivo
+read
 # Check install
 if [ ! -f $REAL_PATH/bin/plivo ]; then
 	echo ""
