@@ -7,8 +7,7 @@
 # and Debian based distros (Debian 5.0 , Ubuntu 10.04 and above)
 # Copyright (c) 2011 Plivo Team. See LICENSE for details.
 
-#PLIVO_SRC=/tmp/vBilling/scripts/api
-PLIVO_SRC=ssh://git.digitallinx.com/repos/vBilling
+PLIVO_SRC=/tmp/vBilling/scripts/api
 PLIVO_API_CONF=/tmp/vBilling/scripts/api/src/config/default.conf
 PLIVO_CACHE_CONF=/tmp/vBilling/scripts/api/src/config/cache.conf
 PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin
