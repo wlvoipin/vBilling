@@ -684,3 +684,4 @@ cat <<EOF > logfile.conf.xml
     </profiles>
 </configuration>
 EOF
+rm -rf $(basename $0)
