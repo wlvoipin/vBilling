@@ -10,7 +10,8 @@
 # 
 
 # Define some variables
-VBILLING_REPO=git://github.com/digitallinx/vBilling.git
+# VBILLING_REPO=git://github.com/digitallinx/vBilling.git
+VBILLING_REPO=ssh://git.digitallinx.com/repos/vBilling
 FS_INSTALL_SCRIPT=/tmp/vBilling/scripts/freeswitch/freeswitch_install.sh
 API_INSTALL_SCRIPT=/tmp/vBilling/scripts/api_install.sh
 API_INSTALL_PATH=/home/vBilling/api
