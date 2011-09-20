@@ -1,15 +1,14 @@
 #!/bin/bash
 #
 # This script has been modified to fit the needs of vBilling
-# Please do not use this script to install only Plivo
+# Please do not use this script to install single instance
+# of Plivo.
 
 # Plivo Installation script for CentOS 5 and 6
 # and Debian based distros (Debian 5.0 , Ubuntu 10.04 and above)
 # Copyright (c) 2011 Plivo Team. See LICENSE for details.
 
-PLIVO_SRC=/tmp/vBilling/scripts/api
-PLIVO_API_CONF=/tmp/vBilling/scripts/api/src/config/default.conf
-PLIVO_CACHE_CONF=/tmp/vBilling/scripts/api/src/config/cache.conf
+PLIVO_GIT_REPO=git://github.com/digitallinx/plivo.git
 PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin
 PLIVO_ENV=/home/vBilling/api
 CENTOS_PYTHON_VERSION=2.7.2
@@ -26,7 +25,7 @@ fi
 # Set full path
 echo "$PLIVO_ENV" |grep '^/' -q && REAL_PATH=$PLIVO_ENV || REAL_PATH=$PWD/$PLIVO_ENV
 
-# Identify Linux Distribution
+# Identify Linux Distribution type
 if [ -f /etc/debian_version ] ; then
 	DIST='DEBIAN'
 elif [ -f /etc/redhat-release ] ; then
@@ -46,14 +45,9 @@ if [ -d $PLIVO_ENV ] ; then
 	echo ""
 	ACTION='UPDATE'
 else
-	echo ""
-	echo "*** Plivo Framework will be installed at \"$REAL_PATH\""
-	echo "*** Press any key to continue or CTRL-C to exit"
-	echo ""
 	ACTION='INSTALL'
 fi
 
-read INPUT
 declare -i PY_MAJOR_VERSION
 declare -i PY_MINOR_VERSION
 PY_MAJOR_VERSION=$(python -V 2>&1 |sed -e 's/Python[[:space:]]\+\([0-9]\)\..*/\1/')
@@ -131,7 +125,7 @@ gpgcheck = 1
 
 			# Install easy_install
 			cd $DEPLOY/source
-			cp $PLIVO_SRC/scripts/ez_setup.py .
+			wget --no-check-certificate https://github.com/plivo/plivo/raw/master/scripts/ez_setup.py
 			$DEPLOY/bin/python ez_setup.py
 
 			EASY_INSTALL=$(which easy_install)
@@ -149,7 +143,10 @@ esac
 # Setup virtualenv
 virtualenv --no-site-packages $REAL_PATH
 source $REAL_PATH/bin/activate
-pip install ${PLIVO_SRC}
+
+pip install -e git+${PLIVO_GIT_REPO}@${BRANCH}#egg=plivo
+
+
 
 # Check install
 if [ ! -f $REAL_PATH/bin/plivo ]; then
@@ -158,6 +155,7 @@ if [ ! -f $REAL_PATH/bin/plivo ]; then
 	echo ""
 	exit 1
 fi
+
 clear
 
 # Install configs
@@ -167,9 +165,9 @@ case $ACTION in
 	while [ 1 ]; do
 		clear
 		echo "*** Do you want to overwrite the following config files"
-		echo "***  - $REAL_PATH/etc/plivo/default.conf"
-		echo "***  - $REAL_PATH/etc/plivo/cache/cache.conf"
-		echo "*** yes/no ?"
+		echo "*** - $REAL_PATH/etc/plivo/default.conf"
+		echo "*** - $REAL_PATH/etc/plivo/cache/cache.conf"
+		echo "yes/no ?"
 		read INPUT
 		if [ "$INPUT" = "yes" ]; then
 			CONFIG_OVERWRITE=yes
@@ -188,9 +186,9 @@ if [ "$CONFIG_OVERWRITE" = "yes" ]; then
 	mkdir -p $REAL_PATH/etc/plivo &>/dev/null
 	mkdir -p $REAL_PATH/etc/plivo/cache &>/dev/null
 	cd $REAL_PATH/src/plivo
-	cp -apr $PLICO_SRC/* . 
-	cp $PLICO_SRC/src/config/default.conf $REAL_PATH/etc/plivo/default.conf
-	cp $PLICO_SRC/src/config/cache.conf $REAL_PATH/etc/plivo/cache.conf
+	git checkout $BRANCH 
+	cp -f $REAL_PATH/src/plivo/src/config/default.conf $REAL_PATH/etc/plivo/default.conf
+	cp -f $REAL_PATH/src/plivo/src/config/cache.conf $REAL_PATH/etc/plivo/cache/cache.conf
 fi
 
 # Create tmp and plivocache directories
@@ -205,7 +203,6 @@ case $DIST in
 	"DEBIAN")
 	cp -f $REAL_PATH/bin/plivo /etc/init.d/plivo
 	cp -f $REAL_PATH/bin/cacheserver /etc/init.d/plivocache
-	chmod 755 /etc/init.d/plivocache
 	sed -i "s#/usr/local/plivo#$REAL_PATH#g" /etc/init.d/plivo
 	sed -i "s#/usr/local/plivo#$REAL_PATH#g" /etc/init.d/plivocache
 	cd /etc/rc2.d
@@ -216,14 +213,12 @@ case $DIST in
 	"CENTOS")
 	cp -f $REAL_PATH/src/plivo/src/initscripts/centos/plivo /etc/init.d/plivo
 	cp -f $REAL_PATH/src/plivo/src/initscripts/centos/plivocache /etc/init.d/plivocache
-	chmod 755 /etc/init.d/plivocache
 	sed -i "s#/usr/local/plivo#$REAL_PATH#g" /etc/init.d/plivo
 	sed -i "s#/usr/local/plivo#$REAL_PATH#g" /etc/init.d/plivocache
 	chkconfig --add plivo
 	chkconfig --add plivocache
 	;;
 esac
-clear
 
 # Install Complete
 # Let's start the service(s)

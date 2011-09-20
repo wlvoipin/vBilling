@@ -80,8 +80,8 @@ esac
 cd $FS_BASE_PATH
 git clone $FS_GIT_REPO
 cd $FS_BASE_PATH/freeswitch
-sh bootstrap.sh && ./configure
-[ -f modules.conf ] && rm -rf modules.conf
+sh bootstrap.sh && ./configure --prefix=$FS_INSTALL_PATH
+[ -f modules.conf ] && rm -f modules.conf
 
 # We will copy modules.conf file customized for our API
 cp $FS_CONF_PATH_MODULE .
