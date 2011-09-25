@@ -37,7 +37,7 @@ fi
 
 clear
 echo ""
-echo "*** FreeSWITCH will be installed in $FS_INSTALL_PATH"
+echo "*** FreeSWITCH will be installed in \"$FS_INSTALL_PATH\""
 echo "*** Press any key to continue or CTRL-C to exit"
 echo ""
 read INPUT
@@ -86,7 +86,7 @@ sh bootstrap.sh && ./configure --prefix=$FS_INSTALL_PATH
 
 # We will copy modules.conf file customized for our API
 cp $FS_CONF_PATH_MODULE .
-make && make install
+# make && make install
 
 # Just making sure we have good binaries in our path :)
 echo "" >> /etc/profile
@@ -98,18 +98,10 @@ source /etc/profile
 cd $FS_INSTALL_PATH/conf
 
 # We do not want any of the configs. Let's make room for our own
-rm -rf $FS_INSTALLED_PATH/conf/*
-mkdir $FS_INSTALLED_PATH/conf/autoload_configs
+rm -rf "$FS_INSTALL_PATH"/conf/*
 
-# Instead copy our own generated XML files
-cp $FS_CONF_PATH_FSXML $FS_INSTALL_PATH/conf/freeswitch.xml
-
-# We copy all the configuration files bundeled in 1 big file, and extract them
-# This is just to avoid any un-necessary scripting. Musch easir to do it like this
-cd $FS_INSTALLED_PATH/conf/autoload_configs
-cp $FS_CONF_COMBINED $FS_INSTALL_PATH/conf/autoload_configs/ && chmod 750 $FS_INSTALL_PATH/conf/autoload_configs/`basename $FS_CONF_COMBINED`
-cd $FS_INSTALL_PATH/conf/autoload_configs
-./`basename $FS_CONF_COMBINED`
+# Instead copy our own generated XML files. We use xml_curl for everything
+cp $FS_CONF_FSXML $FS_INSTALL_PATH/conf/freeswitch.xml
 cd $CURRENT_PATH
 
 # Install init scripts
@@ -118,6 +110,7 @@ case $DIST in
 	# Download FS init script
 	cp $FS_INIT_DEBIAN -O /etc/init.d/freeswitch
 	chmod 755 /etc/init.d/freeswitch
+	echo "FREESWITCH_ENABLED=true" > /etc/default/freeswitch
 	cd /etc/rc2.d
 	ln -s /etc/init.d/freeswitch S99freeswitch
 	;;
@@ -134,7 +127,7 @@ esac
 # Let's start the service(s)
 clear
 echo ""
-echo "*** Congratulations, FreeSWITCH is now installed at '$FS_INSTALLED_PATH'"
+echo "*** Congratulations, FreeSWITCH is now installed at \"$FS_INSTALLED_PATH\""
 read -n 1 -p "*** Press any key to start FreeSWITCH now ..."
 /etc/init.d/freeswitch start
 read -n 1 -p "*** Press any key to continue..."
