@@ -1,36 +1,8 @@
 <?xml version="1.0"?>
 <document type="freeswitch/xml">
-	<X-PRE-PROCESS cmd="set" data="be-ring=%(1000,3000,425)"/>
-	<X-PRE-PROCESS cmd="set" data="ca-ring=%(2000,4000,440,480)"/>
-	<X-PRE-PROCESS cmd="set" data="cn-ring=%(1000,4000,450)"/>
-	<X-PRE-PROCESS cmd="set" data="cy-ring=%(1500,3000,425)"/>
-	<X-PRE-PROCESS cmd="set" data="cz-ring=%(1000,4000,425)"/>
-	<X-PRE-PROCESS cmd="set" data="de-ring=%(1000,4000,425)"/>
-	<X-PRE-PROCESS cmd="set" data="dk-ring=%(1000,4000,425)"/>
-	<X-PRE-PROCESS cmd="set" data="dz-ring=%(1500,3500,425)"/>
-	<X-PRE-PROCESS cmd="set" data="eg-ring=%(2000,1000,475,375)"/>
-	<X-PRE-PROCESS cmd="set" data="fi-ring=%(1000,4000,425)"/>
-	<X-PRE-PROCESS cmd="set" data="fr-ring=%(1500,3500,440)"/>
-	<X-PRE-PROCESS cmd="set" data="hk-ring=%(400,200,440,480);%(400,3000,440,480)"/>
-	<X-PRE-PROCESS cmd="set" data="hu-ring=%(1250,3750,425)"/>
-	<X-PRE-PROCESS cmd="set" data="il-ring=%(1000,3000,400)"/>
-	<X-PRE-PROCESS cmd="set" data="in-ring=%(400,200,425,375);%(400,2000,425,375)"/>
-	<X-PRE-PROCESS cmd="set" data="jp-ring=%(1000,2000,420,380)"/>
-	<X-PRE-PROCESS cmd="set" data="ko-ring=%(1000,2000,440,480)"/>
-	<X-PRE-PROCESS cmd="set" data="pk-ring=%(1000,2000,400)"/>
-	<X-PRE-PROCESS cmd="set" data="pl-ring=%(1000,4000,425)"/>
-	<X-PRE-PROCESS cmd="set" data="ro-ring=%(1850,4150,475,425)"/>
-	<X-PRE-PROCESS cmd="set" data="rs-ring=%(1000,4000,425)"/>
-	<X-PRE-PROCESS cmd="set" data="ru-ring=%(800,3200,425)"/>
-	<X-PRE-PROCESS cmd="set" data="sa-ring=%(1200,4600,425)"/>
-	<X-PRE-PROCESS cmd="set" data="tr-ring=%(2000,4000,450)"/>
-	<X-PRE-PROCESS cmd="set" data="uk-ring=%(400,200,400,450);%(400,2000,400,450)"/>
-	<X-PRE-PROCESS cmd="set" data="us-ring=%(2000,4000,440,480)"/>
-	<X-PRE-PROCESS cmd="set" data="bong-ring=v=-7;%(100,0,941.0,1477.0);v=-7;>=2;+=.1;%(1400,0,350,440)"/>
-	<X-PRE-PROCESS cmd="set" data="sit=%(274,0,913.8);%(274,0,1370.6);%(380,0,1776.7)"/>
 	<X-PRE-PROCESS cmd="set" data="domain=$${local_ip_v4}"/>
 	<X-PRE-PROCESS cmd="set" data="domain_name=$${domain}"/>
-	<X-PRE-PROCESS cmd="set" data="codecs=G729,PCMU,PCMA,GSM"/>
+	<X-PRE-PROCESS cmd="set" data="codecs=G729,PCMU,PCMA,GSM,G723"/>
 
 	<!--
 	vBilling Custom Defines
@@ -39,7 +11,7 @@
 	<X-PRE-PROCESS cmd="set" data="freeswitch_binding=configuration"/>
 	<X-PRE-PROCESS cmd="set" data="vBilling_API_host=127.0.0.1"/>
 	<X-PRE-PROCESS cmd="set" data="vBilling_API_port=7665"/>
-	<X-PRE-PROCESS cmd="set" data="vBilling_CDR=localhost/vBilling/POST/vBilling-cdr.php"/>
+	<X-PRE-PROCESS cmd="set" data="vBilling_CDR=http://localhost/vBilling/POST/vBilling-cdr.php"/>
 	<X-PRE-PROCESS cmd="set" data="event_socket_listen_ip=127.0.0.1"/>
 	<X-PRE-PROCESS cmd="set" data="event_socket_listen_port=8021"/>
 	<X-PRE-PROCESS cmd="set" data="event_socket_password=ClueCon"/>
@@ -55,12 +27,10 @@
 				<load module="mod_xml_curl"/>
 			</modules>
 		</configuration>
-
 		<configuration name="logfile.conf" description="File Logging">
 			<settings>
 				<param name="rotate-on-hup" value="true"/>
 			</settings>
-
 			<profiles>
 				<profile name="debug">
 					<settings>
@@ -72,7 +42,6 @@
 						<map name="all" value="debug,info,notice,warning,err,crit,alert"/>
 					</mappings>
 				</profile>
-
 				<profile name="error">
 					<settings>
 						<param name="logfile" value="/home/vBilling/freeswitch/log/error.log"/>
@@ -83,7 +52,6 @@
 						<map name="all" value="warning,err,crit,alert"/>
 					</mappings>
 				</profile>
-
 				<profile name="sofia">
 					<settings>
 						<param name="logfile" value="/home/vBilling/freeswitch/log/sofia.log"/>
@@ -99,7 +67,6 @@
 						<map name="sofia_presence.c" value="info,notice,warning,err,crit,alert"/>
 					</mappings>
 				</profile>
-
 				<profile name="siptrace">
 					<settings>
 						<param name="logfile" value="/home/vBilling/freeswitch/log/siptrace.log"/>
@@ -112,7 +79,6 @@
 				</profile>
 			</profiles>
 		</configuration>
-
 		<configuration name="xml_curl.conf" description="cURL XML Gateway">
 			<bindings>
 				<binding name="production">
@@ -121,16 +87,15 @@
 			</bindings>
 		</configuration>
 	</section>
-
 	<section name="dialplan" description="Regex/XML Dialplan">
 		<context name="default">
-			<extension name="api_authenticated">
+			<extension name="api_unauthenticated">
 				<condition field="destination_number" expression="^(\d+)$">
 					<action application="socket" data="$${vBilling_API_host}:$${vBilling_API_port} async full"/>
 				</condition>
 			</extension>
 
-			<extension name="api_unauthenticated">
+			<extension name="api_authenticated">
 				<condition field="destination_number" expression="^sip:(.*)$">
 					<action application="socket" data="$${vBilling_API_host}:$${vBilling_API_port} async full"/>
 				</condition>

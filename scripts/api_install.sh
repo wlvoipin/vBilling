@@ -143,10 +143,7 @@ esac
 # Setup virtualenv
 virtualenv --no-site-packages $REAL_PATH
 source $REAL_PATH/bin/activate
-
 pip install -e git+${PLIVO_GIT_REPO}@${BRANCH}#egg=plivo
-
-
 
 # Check install
 if [ ! -f $REAL_PATH/bin/plivo ]; then
@@ -155,7 +152,6 @@ if [ ! -f $REAL_PATH/bin/plivo ]; then
 	echo ""
 	exit 1
 fi
-
 clear
 
 # Install configs
@@ -166,7 +162,6 @@ case $ACTION in
 		clear
 		echo "*** Do you want to overwrite the following config files"
 		echo "*** - $REAL_PATH/etc/plivo/default.conf"
-		echo "*** - $REAL_PATH/etc/plivo/cache/cache.conf"
 		echo "yes/no ?"
 		read INPUT
 		if [ "$INPUT" = "yes" ]; then
@@ -184,16 +179,13 @@ case $ACTION in
 esac
 if [ "$CONFIG_OVERWRITE" = "yes" ]; then
 	mkdir -p $REAL_PATH/etc/plivo &>/dev/null
-	mkdir -p $REAL_PATH/etc/plivo/cache &>/dev/null
 	cd $REAL_PATH/src/plivo
 	git checkout $BRANCH 
 	cp -f $REAL_PATH/src/plivo/src/config/default.conf $REAL_PATH/etc/plivo/default.conf
-	cp -f $REAL_PATH/src/plivo/src/config/cache.conf $REAL_PATH/etc/plivo/cache/cache.conf
 fi
 
-# Create tmp and plivocache directories
+# Create tmp directories
 mkdir -p $REAL_PATH/tmp &>/dev/null
-mkdir -p $REAL_PATH/tmp/plivocache &>/dev/null
 
 # Post install script
 $REAL_PATH/bin/plivo-postinstall &>/dev/null
@@ -202,21 +194,13 @@ $REAL_PATH/bin/plivo-postinstall &>/dev/null
 case $DIST in
 	"DEBIAN")
 	cp -f $REAL_PATH/bin/plivo /etc/init.d/plivo
-	cp -f $REAL_PATH/bin/cacheserver /etc/init.d/plivocache
 	sed -i "s#/usr/local/plivo#$REAL_PATH#g" /etc/init.d/plivo
-	sed -i "s#/usr/local/plivo#$REAL_PATH#g" /etc/init.d/plivocache
-	cd /etc/rc2.d
-	ln -s /etc/init.d/plivocache S99plivocache
-	ln -s /etc/init.d/plivo S99plivo
 	;;
 
 	"CENTOS")
 	cp -f $REAL_PATH/src/plivo/src/initscripts/centos/plivo /etc/init.d/plivo
-	cp -f $REAL_PATH/src/plivo/src/initscripts/centos/plivocache /etc/init.d/plivocache
 	sed -i "s#/usr/local/plivo#$REAL_PATH#g" /etc/init.d/plivo
-	sed -i "s#/usr/local/plivo#$REAL_PATH#g" /etc/init.d/plivocache
 	chkconfig --add plivo
-	chkconfig --add plivocache
 	;;
 esac
 

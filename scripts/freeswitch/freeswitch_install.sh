@@ -123,6 +123,9 @@ case $DIST in
 	;;
 esac
 
+# Add FreeSWITCH user without any password
+useradd -M -d $FS_INSTALL_PATH -c "FreeSWITCH Engine User" -s /bin/false freeswitch
+
 # Install Complete
 # Let's start the service(s)
 clear

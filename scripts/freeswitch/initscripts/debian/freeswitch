@@ -24,6 +24,7 @@ USER=freeswitch
 PIDFILE=/home/vBilling/freeswitch/run/$NAME.pid
 SCRIPTNAME=/etc/init.d/$NAME
 WORKDIR=/home/vBilling/$NAME
+FREESWITCH_PARAMS="-nonat -nc"
 
 # Check if we are being executed by init
 CALLEDSCRIPT=`basename $0`

@@ -88,7 +88,7 @@ elif [ $REPLY = "n" ]; then
 	clear
 	echo ""
 	echo "*** Installation of split instance is not supported through this script yet"
-	echo "*** Please send an mail to support@vbilling.org if you like to have a distributed setup"
+	echo "*** Please send an mail to \"support@vbilling.org\" in order to have a distributed setup"
 	echo ""
 	echo "*** Installation aborted"
 	echo ""
@@ -108,8 +108,7 @@ fi
 # FS install is good. Let's move forward for API install
 clear
 echo ""
-echo "*** Now going to install the Billing API"
-read -n 1 -p "*** Press any key to continue..."
+read -n 1 -p "*** Press any key to install vBilling API"
 echo ""
 chmod 700 $API_INSTALL_SCRIPT
 /$API_INSTALL_SCRIPT $API_INSTALL_PATH
@@ -119,7 +118,7 @@ clear
 echo ""
 echo "*** vBilling source is not online at the moment. Please send an email to"
 echo "*** support@vbilling.org and ask for a manual install."
-read -n 1 -p "*** Press any key to continue to finish the install script"
+echo "*** Install finished"
 echo ""
 
 # We remove all local source, in order to download fresh files against updates
