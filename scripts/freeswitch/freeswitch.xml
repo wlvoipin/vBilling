@@ -1,63 +1,140 @@
+<?xml version="1.0"?>
 <document type="freeswitch/xml">
+	<X-PRE-PROCESS cmd="set" data="be-ring=%(1000,3000,425)"/>
+	<X-PRE-PROCESS cmd="set" data="ca-ring=%(2000,4000,440,480)"/>
+	<X-PRE-PROCESS cmd="set" data="cn-ring=%(1000,4000,450)"/>
+	<X-PRE-PROCESS cmd="set" data="cy-ring=%(1500,3000,425)"/>
+	<X-PRE-PROCESS cmd="set" data="cz-ring=%(1000,4000,425)"/>
+	<X-PRE-PROCESS cmd="set" data="de-ring=%(1000,4000,425)"/>
+	<X-PRE-PROCESS cmd="set" data="dk-ring=%(1000,4000,425)"/>
+	<X-PRE-PROCESS cmd="set" data="dz-ring=%(1500,3500,425)"/>
+	<X-PRE-PROCESS cmd="set" data="eg-ring=%(2000,1000,475,375)"/>
+	<X-PRE-PROCESS cmd="set" data="fi-ring=%(1000,4000,425)"/>
+	<X-PRE-PROCESS cmd="set" data="fr-ring=%(1500,3500,440)"/>
+	<X-PRE-PROCESS cmd="set" data="hk-ring=%(400,200,440,480);%(400,3000,440,480)"/>
+	<X-PRE-PROCESS cmd="set" data="hu-ring=%(1250,3750,425)"/>
+	<X-PRE-PROCESS cmd="set" data="il-ring=%(1000,3000,400)"/>
+	<X-PRE-PROCESS cmd="set" data="in-ring=%(400,200,425,375);%(400,2000,425,375)"/>
+	<X-PRE-PROCESS cmd="set" data="jp-ring=%(1000,2000,420,380)"/>
+	<X-PRE-PROCESS cmd="set" data="ko-ring=%(1000,2000,440,480)"/>
+	<X-PRE-PROCESS cmd="set" data="pk-ring=%(1000,2000,400)"/>
+	<X-PRE-PROCESS cmd="set" data="pl-ring=%(1000,4000,425)"/>
+	<X-PRE-PROCESS cmd="set" data="ro-ring=%(1850,4150,475,425)"/>
+	<X-PRE-PROCESS cmd="set" data="rs-ring=%(1000,4000,425)"/>
+	<X-PRE-PROCESS cmd="set" data="ru-ring=%(800,3200,425)"/>
+	<X-PRE-PROCESS cmd="set" data="sa-ring=%(1200,4600,425)"/>
+	<X-PRE-PROCESS cmd="set" data="tr-ring=%(2000,4000,450)"/>
+	<X-PRE-PROCESS cmd="set" data="uk-ring=%(400,200,400,450);%(400,2000,400,450)"/>
+	<X-PRE-PROCESS cmd="set" data="us-ring=%(2000,4000,440,480)"/>
+	<X-PRE-PROCESS cmd="set" data="bong-ring=v=-7;%(100,0,941.0,1477.0);v=-7;>=2;+=.1;%(1400,0,350,440)"/>
+	<X-PRE-PROCESS cmd="set" data="sit=%(274,0,913.8);%(274,0,1370.6);%(380,0,1776.7)"/>
+	<X-PRE-PROCESS cmd="set" data="domain=$${local_ip_v4}"/>
+	<X-PRE-PROCESS cmd="set" data="domain_name=$${domain}"/>
+	<X-PRE-PROCESS cmd="set" data="codecs=G729,PCMU,PCMA,GSM"/>
 
-    <X-PRE-PROCESS cmd="set" data="auto_answer=false"/>
-    <X-PRE-PROCESS cmd="set" data="domain=$${local_ip_v4}"/>
-    <X-PRE-PROCESS cmd="set" data="global_codec_prefs=G722,PCMU,PCMA,GSM,G723,G729"/>
-    <X-PRE-PROCESS cmd="set" data="outbound_caller_name=vBilling"/>
-    <X-PRE-PROCESS cmd="set" data="outbound_caller_id=0000000000"/>
-    <X-PRE-PROCESS cmd="set" data="console_loglevel=alert"/>
-    <X-PRE-PROCESS cmd="set" data="call_debug=false"/>
-<!--
-	Configure better SIP authentication scheme. Currenly SIP authentication is not configured,
-	as we allow any SIP call to vBilling and it will take care of it by itself. 
-	internal_auth_calls=false will disable all SIP authentication by default.
--->
-<X-PRE-PROCESS cmd="set" data="internal_auth_calls=false"/>
-<X-PRE-PROCESS cmd="set" data="internal_sip_port=5060"/>
+	<!--
+	vBilling Custom Defines
+	-->
+	<X-PRE-PROCESS cmd="set" data="freeswitch_config_server=http://localhost/vBilling/fs_Curl/index.php"/>
+	<X-PRE-PROCESS cmd="set" data="freeswitch_binding=configuration"/>
+	<X-PRE-PROCESS cmd="set" data="vBilling_API_host=127.0.0.1"/>
+	<X-PRE-PROCESS cmd="set" data="vBilling_API_port=7665"/>
+	<X-PRE-PROCESS cmd="set" data="vBilling_CDR=localhost/vBilling/POST/vBilling-cdr.php"/>
+	<X-PRE-PROCESS cmd="set" data="event_socket_listen_ip=127.0.0.1"/>
+	<X-PRE-PROCESS cmd="set" data="event_socket_listen_port=8021"/>
+	<X-PRE-PROCESS cmd="set" data="event_socket_password=ClueCon"/>
+	<!--
+	vBilling Custom Defines
+	-->
 
-<!--
-	START Custom Defines
--->
-    <X-PRE-PROCESS cmd="set" data="vbilling_gateway_host=localhost"/>
-    <X-PRE-PROCESS cmd="set" data="vbilling_gateway_port=7665"/>
-<!--
-	END Custom Defines
--->
-        
-<!--
-	A temporary hack to locad local configs. FS Configurator is also ready, script needs
-	to be revised to be used with.
--->
+	<section name="configuration" description="Various Configuration">
+		<configuration name="modules.conf" description="Modules">
+			<modules>
+				<load module="mod_console"/>
+				<load module="mod_logfile"/>			    
+				<load module="mod_xml_curl"/>
+			</modules>
+		</configuration>
 
-<section name="configuration" description="Various Configuration">
-    <X-PRE-PROCESS cmd="include" data="autoload_configs/*.xml"/>
-</section>
+		<configuration name="logfile.conf" description="File Logging">
+			<settings>
+				<param name="rotate-on-hup" value="true"/>
+			</settings>
 
-<!--
-        <configuration name="xml_curl.conf" description="cURL XML Gateway">
-            <bindings>
-                <binding name="production">
-                    <param name="gateway-url" value="$${freeswitch_cofiguration_server}" bindings="$${freeswitch_binding}"/>
-                    <param name="gateway-credentials" value="$${freeswitch_cofiguration_server_login}:$${freeswitch_cofiguration_server_password}"/>
-                    <param name="auth-scheme" value="digest"/>
-                </binding>
-            </bindings>
-        </configuration>
--->
+			<profiles>
+				<profile name="debug">
+					<settings>
+						<param name="logfile" value="/home/vBilling/freeswitch/log/debug.log"/>
+						<param name="rollover" value="26214400"/>
+						<param name="uuid" value="true" />
+					</settings>
+					<mappings>
+						<map name="all" value="debug,info,notice,warning,err,crit,alert"/>
+					</mappings>
+				</profile>
 
-  <section name="dialplan" description="Regex/XML Dialplan">
-        <context name="default">
-            <extension name="api_authenticated">
-                <condition field="destination_number" expression="^(\d+)$">
-                    <action application="socket" data="$${vbilling_gateway_host}:$${vbilling_gateway_port} async full"/>
-                </condition>
-            </extension>
-            
-            <extension name="api_unauthenticated">
-                <condition field="destination_number" expression="^sip:(.*)$">
-                    <action application="socket" data="$${vbilling_gateway_host}:$${vbilling_gateway_port} async full"/>
-                </condition>
-            </extension>
-        </context>
-    </section>
+				<profile name="error">
+					<settings>
+						<param name="logfile" value="/home/vBilling/freeswitch/log/error.log"/>
+						<param name="rollover" value="26214400"/>
+						<param name="uuid" value="true" />
+					</settings>
+					<mappings>
+						<map name="all" value="warning,err,crit,alert"/>
+					</mappings>
+				</profile>
+
+				<profile name="sofia">
+					<settings>
+						<param name="logfile" value="/home/vBilling/freeswitch/log/sofia.log"/>
+						<param name="rollover" value="10485760"/>
+						<param name="uuid" value="true" />
+					</settings>
+					<mappings>
+						<map name="mod_sofia.c" value="info,notice,warning,err,crit,alert"/>
+						<map name="sofia.c" value="info,notice,warning,err,crit,alert"/>
+						<map name="sofia_glue.c" value="info,notice,warning,err,crit,alert"/>
+						<map name="sofia_reg.c" value="all"/>
+						<map name="sofia_sla.c" value="info,notice,warning,err,crit,alert"/>
+						<map name="sofia_presence.c" value="info,notice,warning,err,crit,alert"/>
+					</mappings>
+				</profile>
+
+				<profile name="siptrace">
+					<settings>
+						<param name="logfile" value="/home/vBilling/freeswitch/log/siptrace.log"/>
+						<param name="rollover" value="26214400"/>
+						<param name="uuid" value="true" />
+					</settings>
+					<mappings>
+						<map name="sofia.c" value="debug"/>
+					</mappings>
+				</profile>
+			</profiles>
+		</configuration>
+
+		<configuration name="xml_curl.conf" description="cURL XML Gateway">
+			<bindings>
+				<binding name="production">
+					<param name="gateway-url" value="$${freeswitch_config_server}" bindings="$${freeswitch_binding}"/>
+				</binding>
+			</bindings>
+		</configuration>
+	</section>
+
+	<section name="dialplan" description="Regex/XML Dialplan">
+		<context name="default">
+			<extension name="api_authenticated">
+				<condition field="destination_number" expression="^(\d+)$">
+					<action application="socket" data="$${vBilling_API_host}:$${vBilling_API_port} async full"/>
+				</condition>
+			</extension>
+
+			<extension name="api_unauthenticated">
+				<condition field="destination_number" expression="^sip:(.*)$">
+					<action application="socket" data="$${vBilling_API_host}:$${vBilling_API_port} async full"/>
+				</condition>
+			</extension>
+		</context>
+	</section>
 </document>

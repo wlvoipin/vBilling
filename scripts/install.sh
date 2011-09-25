@@ -12,8 +12,10 @@
 # Define some variables
 # VBILLING_REPO=git://github.com/digitallinx/vBilling.git
 VBILLING_REPO=ssh://git.digitallinx.com/repos/vBilling
-FS_INSTALL_SCRIPT=/tmp/vBilling/scripts/freeswitch/freeswitch_install.sh
-API_INSTALL_SCRIPT=/tmp/vBilling/scripts/api_install.sh
+API_REPO=git://github.com/digitallinx/plivo.git
+TEMPDIR=$(/bin/mktemp -d)
+FS_INSTALL_SCRIPT="$TEMPDIR"/scripts/freeswitch/freeswitch_install.sh
+API_INSTALL_SCRIPT="$TEMPDIR"/scripts/api_install.sh
 API_INSTALL_PATH=/home/vBilling/api
 
 # Prompt user for installation of FS and vBilling on same machine or split install
@@ -79,9 +81,9 @@ gpgcheck = 1
 		fi
 		;;
 	esac
-	git clone $VBILLING_REPO /tmp/vBilling
+	git clone $VBILLING_REPO $TEMPDIR
 	chmod 700 $FS_INSTALL_SCRIPT
-#	/$FS_INSTALL_SCRIPT
+	/$FS_INSTALL_SCRIPT $TEMPDIR
 elif [ $REPLY = "n" ]; then
 	clear
 	echo ""
@@ -91,7 +93,7 @@ elif [ $REPLY = "n" ]; then
 	echo "*** Installation aborted"
 	echo ""
 	# We remove all local source, in order to download fresh files against updates
-	rm -rf /tmp/vBilling/
+	rm -rf $TEMPDIR
 	exit 1
 else
 	clear
@@ -99,7 +101,7 @@ else
 	echo "*** Your input was not correct, installation aborted."
 	echo ""
 	# We remove all local source, in order to download fresh files against updates
-	rm -rf /tmp/vBilling/
+	rm -rf $TEMPDIR
 	exit 1
 fi
 
@@ -121,4 +123,4 @@ read -n 1 -p "*** Press any key to continue to finish the install script"
 echo ""
 
 # We remove all local source, in order to download fresh files against updates
-rm -rf /tmp/vBilling/
+rm -rf $tempdir

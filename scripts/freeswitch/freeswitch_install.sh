@@ -12,13 +12,14 @@
 # Configure FS install script to use xml_curl for FS configuration
 
 # Define some variables
+TEMPDIR=$1
 FS_GIT_REPO=git://git.freeswitch.org/freeswitch.git
 FS_INSTALL_PATH=/home/vBilling/freeswitch
-FS_CONF_FSXML=/tmp/vBilling/scripts/freeswitch/freeswitch.xml
-FS_CONF_COMBINED=/tmp/vBilling/scripts/freeswitch/conf/freeswitch_combined_config.sh
-FS_INIT_DEBIAN=/tmp/vBilling/scripts/freeswitch/initscripts/debian/freeswitch
-FS_INIT_CENTOS=/tmp/vBilling/scripts/freeswitch/initscripts/centos/freeswitch
-FS_CONF_PATH_MODULE=/tmp/vBilling/scripts/freeswitch/modules.conf
+FS_CONF_FSXML="$TEMPDIR"/scripts/freeswitch/freeswitch.xml
+FS_CONF_COMBINED="$TEMPDIR"/scripts/freeswitch/conf/freeswitch_combined_config.sh
+FS_INIT_DEBIAN="$TEMPDIR"/scripts/freeswitch/initscripts/debian/freeswitch
+FS_INIT_CENTOS="$TEMPDIR"/scripts/freeswitch/initscripts/centos/freeswitch
+FS_CONF_PATH_MODULE="$TEMPDIR"/scripts/freeswitch/modules.conf
 FS_BASE_PATH=/usr/src/
 CURRENT_PATH=$PWD
 
@@ -36,7 +37,7 @@ fi
 
 clear
 echo ""
-echo "*** FreeSWITCH will be installed in $FS_INSTALLED_PATH"
+echo "*** FreeSWITCH will be installed in $FS_INSTALL_PATH"
 echo "*** Press any key to continue or CTRL-C to exit"
 echo ""
 read INPUT
@@ -45,7 +46,7 @@ echo "*** Setting up Prerequisites and Dependencies for FreeSWITCH"
 case $DIST in
 	'DEBIAN')
 	apt-get -y update
-	apt-get -y install autoconf automake autotools-dev binutils bison build-essential cpp curl flex g++ gcc git-core libaudiofile-dev libc6-dev libdb-dev libexpat1 libgdbm-dev libgnutls-dev libmcrypt-dev libncurses5-dev libnewt-dev libpcre3 libpopt-dev libsctp-dev libsqlite3-dev libtiff4 libtiff4-dev libtool libx11-dev libxml2 libxml2-dev lksctp-tools lynx m4 make mcrypt ncftp nmap openssl sox sqlite3 ssl-cert ssl-cert unixodbc-dev unzip zip zlib1g-dev zlib1g-dev libjpeg-dev sox
+	apt-get -y install autoconf automake autotools-dev binutils bison build-essential cpp curl flex g++ gcc git-core less libaudiofile-dev libc6-dev libdb-dev libexpat1 libgdbm-dev libgnutls-dev libmcrypt-dev libncurses5-dev libnewt-dev libpcre3 libpopt-dev libsctp-dev libsqlite3-dev libtiff4 libtiff4-dev libtool libx11-dev libxml2 libxml2-dev lksctp-tools lynx m4 make mcrypt nano ncftp nmap openssl sox sqlite3 ssl-cert ssl-cert unixodbc-dev unzip zip zlib1g-dev zlib1g-dev libjpeg-dev sox
 	;;
 	'CENTOS')
 	yum -y update
@@ -86,16 +87,25 @@ sh bootstrap.sh && ./configure --prefix=$FS_INSTALL_PATH
 # We will copy modules.conf file customized for our API
 cp $FS_CONF_PATH_MODULE .
 make && make install
-cd $FS_INSTALLED_PATH/conf
+
+# Just making sure we have good binaries in our path :)
+echo "" >> /etc/profile
+echo "### START -- Path added by vBilling for FreeSWITCH binaries" >> /etc/profile
+echo "export PATH=\$PATH:/home/vBilling/freeswitch/bin" >> /etc/profile
+echo "### END -- Path added by vBilling for FreeSWITCH binaries" >> /etc/profile
+echo "" >> /etc/profile
+source /etc/profile
+cd $FS_INSTALL_PATH/conf
 
 # We do not want any of the configs. Let's make room for our own
 rm -rf $FS_INSTALLED_PATH/conf/*
 mkdir $FS_INSTALLED_PATH/conf/autoload_configs
 
 # Instead copy our own generated XML files
-cp $FS_CONF_PATH_FSXML $FS_INSTALL_PATH/conf/
+cp $FS_CONF_PATH_FSXML $FS_INSTALL_PATH/conf/freeswitch.xml
 
 # We copy all the configuration files bundeled in 1 big file, and extract them
+# This is just to avoid any un-necessary scripting. Musch easir to do it like this
 cd $FS_INSTALLED_PATH/conf/autoload_configs
 cp $FS_CONF_COMBINED $FS_INSTALL_PATH/conf/autoload_configs/ && chmod 750 $FS_INSTALL_PATH/conf/autoload_configs/`basename $FS_CONF_COMBINED`
 cd $FS_INSTALL_PATH/conf/autoload_configs
