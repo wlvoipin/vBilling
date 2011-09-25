@@ -11,7 +11,7 @@
 
 # Define some variables
 # VBILLING_REPO=git://github.com/digitallinx/vBilling.git
-VBILLING_REPO=ssh://git.digitallinx.com/repos/vBilling
+VBILLING_REPO=git://github.com/digitallinx/vBilling.git
 API_REPO=git://github.com/digitallinx/plivo.git
 TEMPDIR=$(/bin/mktemp -d)
 FS_INSTALL_SCRIPT="$TEMPDIR"/scripts/freeswitch/freeswitch_install.sh
