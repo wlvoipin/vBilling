@@ -108,7 +108,7 @@ fi
 # FS install is good. Let's move forward for API install
 clear
 echo ""
-read -n 1 -p "*** Press any key to install vBilling API"
+read -n 1 -p "*** Press any key to install vBilling API..."
 echo ""
 chmod 700 $API_INSTALL_SCRIPT
 /$API_INSTALL_SCRIPT $API_INSTALL_PATH

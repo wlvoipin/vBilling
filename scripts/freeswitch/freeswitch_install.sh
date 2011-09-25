@@ -111,8 +111,6 @@ case $DIST in
 	cp $FS_INIT_DEBIAN /etc/init.d/freeswitch
 	chmod 755 /etc/init.d/freeswitch
 	echo "FREESWITCH_ENABLED=true" > /etc/default/freeswitch
-	cd /etc/rc2.d
-	ln -s /etc/init.d/freeswitch S99freeswitch
 	;;
 
 	"CENTOS")
@@ -125,6 +123,7 @@ esac
 
 # Add FreeSWITCH user without any password
 useradd -M -d $FS_INSTALL_PATH -c "FreeSWITCH Engine User" -s /bin/false freeswitch
+chown -R freeswitch:freeswitch /home/vBilling/freeswitch
 
 # Install Complete
 # Let's start the service(s)
