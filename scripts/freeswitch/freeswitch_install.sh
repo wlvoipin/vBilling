@@ -108,7 +108,7 @@ cd $CURRENT_PATH
 case $DIST in
 	"DEBIAN")
 	# Download FS init script
-	cp $FS_INIT_DEBIAN -O /etc/init.d/freeswitch
+	cp $FS_INIT_DEBIAN /etc/init.d/freeswitch
 	chmod 755 /etc/init.d/freeswitch
 	echo "FREESWITCH_ENABLED=true" > /etc/default/freeswitch
 	cd /etc/rc2.d
@@ -117,7 +117,7 @@ case $DIST in
 
 	"CENTOS")
 	# Download FS init script
-	cp $FS_INIT_CENTOS -O /etc/init.d/freeswitch
+	cp $FS_INIT_CENTOS /etc/init.d/freeswitch
 	chmod 755 /etc/init.d/freeswitch
 	chkconfig --add freeswitch
 	;;
@@ -127,7 +127,7 @@ esac
 # Let's start the service(s)
 clear
 echo ""
-echo "*** Congratulations, FreeSWITCH is now installed at \"$FS_INSTALLED_PATH\""
+echo "*** Congratulations, FreeSWITCH is now installed at \"$FS_INSTALL_PATH\""
 read -n 1 -p "*** Press any key to start FreeSWITCH now ..."
 /etc/init.d/freeswitch start
 read -n 1 -p "*** Press any key to continue..."
