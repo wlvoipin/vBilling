@@ -123,4 +123,4 @@ echo "*** Install finished"
 echo ""
 
 # We remove all local source, in order to download fresh files against updates
-rm -rf $tempdir
+rm -rf $TEMPDIR
