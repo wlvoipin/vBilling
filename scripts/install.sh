@@ -52,6 +52,7 @@ if [ $REPLY   = "y" ]; then
 
 	case $DIST in
 		'DEBIAN')
+		export DEBIAN_FRONTEND=noninteractive
 		apt-get -y update
 		apt-get -y install git-core
 		;;
@@ -117,7 +118,7 @@ chmod 700 $API_INSTALL_SCRIPT
 clear
 echo ""
 echo "*** vBilling source is not online at the moment. Please send an email to"
-echo "*** support@vbilling.org and ask for a manual install."
+echo "*** \"support@vbilling.org\" and ask for a manual install."
 echo "*** Install finished"
 echo ""
 
