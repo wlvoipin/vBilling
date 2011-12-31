@@ -530,9 +530,9 @@ read -n 1 -p "*** Press any key to continue ..."
 
 # Setup vBilling DB user, create database and import. Web config files will be configured later
 VBILLING_MYSQL_PASSWORD=$(genpasswd)
-mysql -uroot -p"$MYSQL_ROOT_PASSWORD" -e "CREATE USER '${VBILLING_DB_USER}'@'localhost' IDENTIFIED BY '${VBILLING_MYSQL_PASSWORD}';"
-mysql -uroot -p"$MYSQL_ROOT_PASSWORD" -e "GRANT USAGE ON * . * TO '${VBILLING_DB_USER}'@'localhost' IDENTIFIED BY '${VBILLING_MYSQL_PASSWORD}' WITH MAX_QUERIES_PER_HOUR 0 MAX_CONNECTIONS_PER_HOUR 0 MAX_UPDATES_PER_HOUR 0 MAX_USER_CONNECTIONS 0;"
-mysql -uroot -p"$MYSQL_ROOT_PASSWORD" -e "GRANT ALL PRIVILEGES ON '${VBILLING_DB}' . * TO '${VBILLING_DB_USER}'@'localhost' WITH GRANT OPTION;"
+mysql -uroot -p"$MYSQL_ROOT_PASSWORD" -e "CREATE USER '$VBILLING_DB_USER'@'localhost' IDENTIFIED BY '$VBILLING_MYSQL_PASSWORD';"
+mysql -uroot -p"$MYSQL_ROOT_PASSWORD" -e "GRANT USAGE ON *.* TO '$VBILLING_DB_USER'@'localhost' IDENTIFIED BY '$VBILLING_MYSQL_PASSWORD' WITH MAX_QUERIES_PER_HOUR 0 MAX_CONNECTIONS_PER_HOUR 0 MAX_UPDATES_PER_HOUR 0 MAX_USER_CONNECTIONS 0;"
+mysql -uroot -p"$MYSQL_ROOT_PASSWORD" -e "GRANT ALL PRIVILEGES ON \`$VBILLING_DB\` . * TO '$VBILLING_DB_USER'@'localhost' WITH GRANT OPTION;"
 
 cat << 'EOF' > $TEMPDIR/vBilling.sql
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
@@ -1456,7 +1456,7 @@ INSERT INTO `xml_cdr_conf` (`id`, `param_name`, `param_value`) VALUES
 EOF
 
 # Create MySQL DB and import the database
-mysql -uroot -p"${MYSQL_ROOT_PASSWORD}" -e "create database '${VBILLING_DB}';"
+mysql -uroot -p"${MYSQL_ROOT_PASSWORD}" -e "create database ${VBILLING_DB};"
 mysql -u"${VBILLING_DB_USER}" -p"$VBILLING_MYSQL_PASSWORD" $VBILLING_DB < $TEMPDIR/vBilling.sql 
 
 # Pre Install Complete, let's move forward
@@ -1471,23 +1471,32 @@ else [ -f /etc/redhat-release ]
 fi
 
 # Download vBilling source
-git clone $VBILLING_REPO $TEMPDIR
+git clone $VBILLING_REPO $TEMPDIR/vBilling
 alias mv=mv
-mv "$TEMPDIR"/htdocs/*  "$VBILLING_HTML"/
-mv "$TEMPDIR"/htdocs/.*  "$VBILLING_HTML"/
+mv "$TEMPDIR"/vBilling/htdocs/*  "$VBILLING_HTML"/
+mv "$TEMPDIR"/vBilling/htdocs/.*  "$VBILLING_HTML"/
 
 # Generate random 30 charactor password for encryption key
 ENCRYPTION_KEY=$(genpasswd 30)
 
 # Setup some configuration files accordingly
 sed -i "s#\$config\['encryption_key'\] = 'VerySecure';#\$config\['encryption_key'\] = '$ENCRYPTION_KEY';#g" $VBILLING_HTML/application/config/config.php
-sed -i "s#define\('DEFAULT_DSN_LOGIN', 'MYSQL_USERNAME'\);#define\('DEFAULT_DSN_LOGIN', '$VBILLING_DB_USER'\);#g" $VBILLING_HTML/application/config/constants.php
-sed -i "s#define\('DEFAULT_DSN_PASSWORD', 'MYSQL_PASSWORD'\);#define\('DEFAULT_DSN_PASSWORD', '$VBILLING_MYSQL_PASSWORD'\);#g" $VBILLING_HTML/application/config/constants.php
+sed -i "s#define('DEFAULT_DSN_LOGIN', 'MYSQL_USERNAME');#define('DEFAULT_DSN_LOGIN', '$VBILLING_DB_USER');#g" $VBILLING_HTML/application/config/constants.php
+sed -i "s#define('DEFAULT_DSN_PASSWORD', 'MYSQL_PASSWORD');#define('DEFAULT_DSN_PASSWORD', '$VBILLING_MYSQL_PASSWORD');#g" $VBILLING_HTML/application/config/constants.php
 sed -i "s#\$db\['default'\]\['username'\] = 'MYSQL_USERNAME';#\$db\['default'\]\['username'\] = '$VBILLING_DB_USER';#g" $VBILLING_HTML/application/config/database.php
 sed -i "s#\$db\['default'\]\['password'\] = 'MYSQL_PASSWORD';#\$db\['default'\]\['password'\] = '$VBILLING_MYSQL_PASSWORD';#g" $VBILLING_HTML/application/config/database.php
 sed -i "s#\$db\['default'\]\['database'\] = 'VBILLING_DB';#\$db\['default'\]\['database'\] = '$VBILLING_DB';#g" $VBILLING_HTML/application/config/database.php
 
+if [ -f /etc/debian_version ] ; then
+	chown -R www-data.www-data $VBILLING_HTML
+else
+	chown -R apache.apache $VBILLING_HTML
+fi
+
+clear
+
 # Install finished
+echo ""
 echo "Install finished"
 
 elif [ $REPLY = "n" ]; then
