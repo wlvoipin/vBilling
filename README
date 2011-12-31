@@ -80,7 +80,7 @@ interface. A few of them are:
 
 In order to run vBilling, you need the following configured and working
 
-Basic Operating System (CentOS 5.x/6.x or any Debian based distro). That's it!!
+Basic Operating System (CentOS > 6.x or any Debian based distro). That's it!!
 We have made installation scripts to make sure we take care of everything from
 first installation to complex upgrades and distributed setups. All you would
 have to do is to run the installer, answer a few prompts, sit back and enjoy the
