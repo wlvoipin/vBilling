@@ -550,7 +550,7 @@ CREATE TABLE IF NOT EXISTS `accounts` (
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
 
 INSERT INTO `accounts` (`id`, `username`, `password`, `type`, `is_customer`, `customer_id`, `enabled`) VALUES
-(1, 'admin', 'e10adc3949ba59abbe56e057f20f883e', 'admin', 0, 0, 1);
+(1, 'admin', '8051d6ba25ceab9244c28a25523291fc', 'admin', 0, 0, 1);
 
 CREATE TABLE IF NOT EXISTS `acl_lists` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -1499,7 +1499,14 @@ clear
 
 # Install finished
 echo ""
-echo "Install finished"
+echo "The script has finished the install. If everything went well, you should be able to browse vBilling at:"
+echo ""
+echo "vBilling Management Interface: http://SERVER_IP_ADDRESS/"
+echo "(Replace SERVER_IP_ADDRESS with your server real IP)"
+echo ""
+echo "Default Login: admin"
+echo "Default Password: vBilling"
+echo ""
 
 elif [ $REPLY = "n" ]; then
 	clear
