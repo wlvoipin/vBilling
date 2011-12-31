@@ -1487,6 +1487,10 @@ sed -i "s#define('DEFAULT_DSN_PASSWORD', 'MYSQL_PASSWORD');#define('DEFAULT_DSN_
 sed -i "s#\$db\['default'\]\['username'\] = 'MYSQL_USERNAME';#\$db\['default'\]\['username'\] = '$VBILLING_DB_USER';#g" $VBILLING_HTML/application/config/database.php
 sed -i "s#\$db\['default'\]\['password'\] = 'MYSQL_PASSWORD';#\$db\['default'\]\['password'\] = '$VBILLING_MYSQL_PASSWORD';#g" $VBILLING_HTML/application/config/database.php
 sed -i "s#\$db\['default'\]\['database'\] = 'VBILLING_DB';#\$db\['default'\]\['database'\] = '$VBILLING_DB';#g" $VBILLING_HTML/application/config/database.php
+sed -i "s#DSN                          = \"VBILLING_DB\"#DSN                          = \"$VBILLING_DB\"#g" $FS_INSTALL_PATH/scripts/vBilling_conf.lua
+sed -i "s#DB_USER                      = \"MYSQL_USERNAME\"#DB_USER                      = \"$VBILLING_DB_USER\"#g" $FS_INSTALL_PATH/scripts/vBilling_conf.lua
+sed -i "s#DB_PASSWORD                  = \"MYSQL_PASSWORD\"#DB_PASSWORD                  = \"$VBILLING_MYSQL_PASSWORD\"#g" $FS_INSTALL_PATH/scripts/vBilling_conf.lua
+
 
 if [ -f /etc/debian_version ] ; then
 	chown -R www-data.www-data $VBILLING_HTML
@@ -1511,7 +1515,15 @@ FileUsage   = 1
 Threading   = 1
 UsageCount  = 1
 EOF
-
+	if [ $(cat /etc/debian_version | cut -d "." -f 1) == 6 ]; then
+		ln -s $VBILLING_HTML/luac/debian/vBilling.luac $FS_INSTALL_PATH/scripts/vBilling.luac
+		ln -s $VBILLING_HTML/luac/debian/vBilling_conf.lua $FS_INSTALL_PATH/scripts/vBilling_conf.lua
+		ln -s $VBILLING_HTML/luac/debian/vBilling_functions.luac $FS_INSTALL_PATH/scripts/vBilling_functions.luac
+	else
+		ln -s $VBILLING_HTML/luac/ubuntu/vBilling.luac $FS_INSTALL_PATH/scripts/vBilling.luac
+		ln -s $VBILLING_HTML/luac/ubuntu/vBilling_conf.lua $FS_INSTALL_PATH/scripts/vBilling_conf.lua
+		ln -s $VBILLING_HTML/luac/ubuntu/vBilling_functions.luac $FS_INSTALL_PATH/scripts/vBilling_functions.luac
+	fi	
 else [ -f /etc/redhat-release ]
 	chown -R apache.apache $VBILLING_HTML
 	chmod -R 777 $VBILLING_HTML/media/
@@ -1525,9 +1537,10 @@ OPTION   = 67108864
 EOF
 sed -i "s#Database   = VBILLING_DB#Database   = $VBILLING_DB#g" /etc/odbc.ini
 sed -i "s#\[vBilling\]#\[$VBILLING_DB\]#g" /etc/odbc.ini
-
+ln -s $VBILLING_HTML/luac/centos/vBilling.luac $FS_INSTALL_PATH/scripts/vBilling.luac
+ln -s $VBILLING_HTML/luac/centos/vBilling_conf.lua $FS_INSTALL_PATH/scripts/vBilling_conf.lua
+ln -s $VBILLING_HTML/luac/centos/vBilling_functions.luac $FS_INSTALL_PATH/scripts/vBilling_functions.luac
 fi
-
 clear
 
 # Install finished
