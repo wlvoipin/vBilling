@@ -1464,6 +1464,7 @@ mysql -u"${VBILLING_DB_USER}" -p"$VBILLING_MYSQL_PASSWORD" $VBILLING_DB < $TEMPD
 # Enable required apache modules
 if [ -f /etc/debian_version ] ; then
 	/usr/sbin/a2enmod php5 rewrite
+	sed -i "s#		AllowOverride None#		AllowOverride All#g" /etc/apache2/sites-available/default
 	/etc/init.d/apache2 restart
 else [ -f /etc/redhat-release ]
 	sed -i "s#    AllowOverride None#    AllowOverride All#g" /etc/httpd/conf/httpd.conf
