@@ -1523,7 +1523,8 @@ EOF
 		ln -s $VBILLING_HTML/luac/ubuntu/vBilling.luac $FS_INSTALL_PATH/scripts/vBilling.luac
 		ln -s $VBILLING_HTML/luac/ubuntu/vBilling_conf.lua $FS_INSTALL_PATH/scripts/vBilling_conf.lua
 		ln -s $VBILLING_HTML/luac/ubuntu/vBilling_functions.luac $FS_INSTALL_PATH/scripts/vBilling_functions.luac
-	fi	
+	fi
+/etc/init.d/freeswitch start
 else [ -f /etc/redhat-release ]
 	chown -R apache.apache $VBILLING_HTML
 	chmod -R 777 $VBILLING_HTML/media/
@@ -1540,6 +1541,7 @@ sed -i "s#\[vBilling\]#\[$VBILLING_DB\]#g" /etc/odbc.ini
 ln -s $VBILLING_HTML/luac/centos/vBilling.luac $FS_INSTALL_PATH/scripts/vBilling.luac
 ln -s $VBILLING_HTML/luac/centos/vBilling_conf.lua $FS_INSTALL_PATH/scripts/vBilling_conf.lua
 ln -s $VBILLING_HTML/luac/centos/vBilling_functions.luac $FS_INSTALL_PATH/scripts/vBilling_functions.luac
+/etc/init.d/freeswitch start
 fi
 clear
 
