@@ -66,12 +66,12 @@ if [ $REPLY   = "y" ]; then
 		'DEBIAN')
 		export DEBIAN_FRONTEND=noninteractive
         apt-get -y update
-        apt-get -y install autoconf automake autotools-dev binutils bison build-essential cpp curl flex g++ gcc git-core libapache2-mod-php5 libaudiofile-dev libc6-dev libdb-dev libexpat1 libgdbm-dev libgnutls-dev libmcrypt-dev libncurses5-dev libnewt-dev libpcre3 libpopt-dev libsctp-dev libsqlite3-dev libtiff4 libtiff4-dev libtool libx11-dev libxml2 libxml2-dev libjpeg-dev libssl-dev lksctp-tools lua5.1 lynx m4 make mcrypt mysql-server ncftp nmap openssl php5 php5-dev php5-mhash php5-gd php5-mysql php5-mcrypt php-apc pkg-config sox sqlite3 ssl-cert ssl-cert unixodbc-dev unzip zip zlib1g-dev zlib1g-dev sox
+        apt-get -y install autoconf automake autotools-dev binutils bison build-essential cpp curl flex g++ gcc git-core libapache2-mod-php5 libaudiofile-dev libc6-dev libdb-dev libexpat1 libgdbm-dev libgnutls-dev libmcrypt-dev libncurses5-dev libnewt-dev libpcre3 libpopt-dev libsctp-dev libsqlite3-dev libtiff4 libtiff4-dev libtool libx11-dev libxml2 libxml2-dev libjpeg-dev libmyodbc libssl-dev lksctp-tools lua5.1 lynx m4 make mcrypt mysql-server ncftp nmap openssl php5 php5-dev php5-mhash php5-gd php5-mysql php5-mcrypt php-apc pkg-config sox sqlite3 ssl-cert ssl-cert unixodbc-dev unzip zip zlib1g-dev zlib1g-dev sox
 		;;
 		'CENTOS')
 		yum -y update
 		VERS=$(cat /etc/redhat-release | cut -d ' ' -f3 | cut -d '.' -f1)
-        COMMON_PKGS="autoconf automake bzip2 cpio curl curl-devel curl-devel expat-devel fileutils git gcc-c++ gettext-devel gnutls-devel httpd libjpeg-devel libogg-devel libtiff-devel libtool libvorbis-devel lua-devel lua-static make mysql-server ncurses-devel nmap openssl openssl-devel openssl-devel patch php php-bcmath php-cli php-common php-gd php-mbstring php-mysql php-pdo php-xml unixODBC unixODBC-devel unzip wget zip zlib zlib-devel bison sox"
+        COMMON_PKGS="autoconf automake bzip2 cpio curl curl-devel curl-devel expat-devel fileutils git gcc-c++ gettext-devel gnutls-devel httpd libjpeg-devel libogg-devel libtiff-devel libtool libvorbis-devel lua-devel lua-static make mysql-connector-odbc mysql-server ncurses-devel nmap openssl openssl-devel openssl-devel patch php php-bcmath php-cli php-common php-gd php-mbstring php-mysql php-pdo php-xml unixODBC unixODBC-devel unzip wget zip zlib zlib-devel bison sox"
 		if [ "$VERS" = "6" ]
 			then
 			yum -y install $COMMON_PKGS
@@ -1491,9 +1491,41 @@ sed -i "s#\$db\['default'\]\['database'\] = 'VBILLING_DB';#\$db\['default'\]\['d
 if [ -f /etc/debian_version ] ; then
 	chown -R www-data.www-data $VBILLING_HTML
 	chmod -R 777 $VBILLING_HTML/media/
-else
+cat << 'EOF' > /etc/odbc.ini
+[vBilling]
+Driver   = MySQL
+Server   = localhost
+Port     = 3306
+Database = VBILLING_DB
+OPTION   = 67108864
+EOF
+sed -i "s#Database   = VBILLING_DB#Database   = $VBILLING_DB#g" /etc/odbc.ini
+sed -i "s#\[vBilling\]#\[$VBILLING_DB\]#g" /etc/odbc.ini
+
+cat << 'EOF' > /etc/odbcinst.ini
+[MySQL]
+Description = ODBC for MySQL
+Driver      = /usr/lib/odbc/libmyodbc.so
+Setup       = /usr/lib/odbc/libodbcmyS.so
+FileUsage   = 1
+Threading   = 1
+UsageCount  = 1
+EOF
+
+else [ -f /etc/redhat-release ]
 	chown -R apache.apache $VBILLING_HTML
 	chmod -R 777 $VBILLING_HTML/media/
+cat << 'EOF' > /etc/odbc.ini
+[vBilling]
+Driver   = MySQL
+Server   = localhost
+Port     = 3306
+Database = VBILLING_DB
+OPTION   = 67108864
+EOF
+sed -i "s#Database   = VBILLING_DB#Database   = $VBILLING_DB#g" /etc/odbc.ini
+sed -i "s#\[vBilling\]#\[$VBILLING_DB\]#g" /etc/odbc.ini
+
 fi
 
 clear
