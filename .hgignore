@@ -1,6 +1,9 @@
+# regexp syntax
+syntax: glob
+
 # Mac OS X Metadata
 .DS_Store
-Icon?
+
 *.idea
 *~
 ._*
@@ -9,6 +12,6 @@ Icon?
 *.zip
 *.tar
 *.tar.gz
+
 # Git repo
-.hg/
-#*#
+.git/
