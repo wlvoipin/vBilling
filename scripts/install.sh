@@ -1489,8 +1489,10 @@ sed -i "s#\$db\['default'\]\['database'\] = 'VBILLING_DB';#\$db\['default'\]\['d
 
 if [ -f /etc/debian_version ] ; then
 	chown -R www-data.www-data $VBILLING_HTML
+	chmod -R 777 $VBILLING_HTML/media/
 else
 	chown -R apache.apache $VBILLING_HTML
+	chmod -R 777 $VBILLING_HTML/media/
 fi
 
 clear
