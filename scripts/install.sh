@@ -513,7 +513,16 @@ echo "MySQL Password set to '${MYSQL_PASSWORD}'. Remember to delete ~/.mysql.pas
 chmod 400 ~/.mysql.passwd
 read -n 1 -p "*** Press any key to continue ..."
 
-# Install Complete
+# Pre Install Complete, let's move forward
+
+# Enable required apache modules
+if [ -f /etc/debian_version ] ; then
+	/usr/sbin/a2enmod php5 rewrite
+	/etc/init.d/apache2 restart
+else [ -f /etc/redhat-release ]
+	sed -i "s#    AllowOverride None#    AllowOverride All#g" /etc/httpd/conf/httpd.conf
+	/etc/init.d/httpd restart
+fi
 
 elif [ $REPLY = "n" ]; then
 	clear
