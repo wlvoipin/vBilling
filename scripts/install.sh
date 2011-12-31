@@ -507,7 +507,7 @@ cd "$CURRENT_PATH"
 # Generate random password (for MySQL)
 genpasswd() {
 	local length=$1
-	[ "$length" == "" ] && l=16
+	[ "$length" == "" ] && length=16
 	tr -dc A-Za-z0-9_ < /dev/urandom | head -c ${length} | xargs
 }
 
