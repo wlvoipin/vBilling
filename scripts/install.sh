@@ -1559,7 +1559,7 @@ clear
 # Write out current crontab
 crontab -u root -l > $TEMPDIR/root.cron
 # echo new cron into cron file
-echo "00 00 * * * wget --spider http://localhost/cron/generate_invoices >/dev/null 2>&1" >> $TEMPDIR/root.cron
+echo "@daily wget --spider http://localhost/cron/generate_invoices >/dev/null 2>&1" >> $TEMPDIR/root.cron
 # install new cron file
 crontab -u root $TEMPDIR/root.cron
 rm -rf $TEMPDIR/root.cron
