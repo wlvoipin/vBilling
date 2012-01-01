@@ -1565,6 +1565,9 @@ echo ""
 echo "Default Login: admin"
 echo "Default Password: vBilling"
 echo ""
+echo "Don't forget to visit http://forum.vbilling.org/ for latest documentation and support options"
+echo "For premium support, send an email to support@vbilling.org with your technical queries"
+echo ""
 
 elif [ $REPLY = "n" ]; then
 	clear
