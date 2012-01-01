@@ -1491,14 +1491,12 @@ sed -i "s#DSN                          = \"VBILLING_DB\"#DSN                    
 sed -i "s#DB_USER                      = \"MYSQL_USERNAME\"#DB_USER                      = \"$VBILLING_DB_USER\"#g" $FS_INSTALL_PATH/scripts/vBilling_conf.lua
 sed -i "s#DB_PASSWORD                  = \"MYSQL_PASSWORD\"#DB_PASSWORD                  = \"$VBILLING_MYSQL_PASSWORD\"#g" $FS_INSTALL_PATH/scripts/vBilling_conf.lua
 
-
 if [ -f /etc/debian_version ] ; then
 	chown -R www-data.www-data $VBILLING_HTML
 	chmod -R 777 $VBILLING_HTML/media/
-if [-f $VBILLING_HTML/index.html ]; then
-	rm -rf $VBILLING_HTML/index.html
-fi
-
+	if [-f $VBILLING_HTML/index.html ]; then
+		rm -rf $VBILLING_HTML/index.html
+	fi
 cat << 'EOF' > /etc/odbc.ini
 [vBilling]
 Driver   = MySQL
@@ -1507,9 +1505,8 @@ Port     = 3306
 Database = VBILLING_DB
 OPTION   = 67108864
 EOF
-sed -i "s#Database = VBILLING_DB#Database = $VBILLING_DB#g" /etc/odbc.ini
-sed -i "s#\[vBilling\]#\[$VBILLING_DB\]#g" /etc/odbc.ini
-
+	sed -i "s#Database = VBILLING_DB#Database = $VBILLING_DB#g" /etc/odbc.ini
+	sed -i "s#\[vBilling\]#\[$VBILLING_DB\]#g" /etc/odbc.ini
 cat << 'EOF' > /etc/odbcinst.ini
 [MySQL]
 Description = ODBC for MySQL
@@ -1532,9 +1529,9 @@ EOF
 else [ -f /etc/redhat-release ]
 	chown -R apache.apache $VBILLING_HTML
 	chmod -R 777 $VBILLING_HTML/media/
-if [-f $VBILLING_HTML/index.html ]; then
-	rm -rf $VBILLING_HTML/index.html
-fi
+	if [-f $VBILLING_HTML/index.html ]; then
+		rm -rf $VBILLING_HTML/index.html
+	fi
 cat << 'EOF' > /etc/odbc.ini
 [vBilling]
 Driver   = MySQL
@@ -1543,11 +1540,11 @@ Port     = 3306
 Database = VBILLING_DB
 OPTION   = 67108864
 EOF
-sed -i "s#Database = VBILLING_DB#Database = $VBILLING_DB#g" /etc/odbc.ini
-sed -i "s#\[vBilling\]#\[$VBILLING_DB\]#g" /etc/odbc.ini
-ln -s $VBILLING_HTML/luac/centos/vBilling.luac $FS_INSTALL_PATH/scripts/vBilling.luac
-ln -s $VBILLING_HTML/luac/centos/vBilling_conf.lua $FS_INSTALL_PATH/scripts/vBilling_conf.lua
-ln -s $VBILLING_HTML/luac/centos/vBilling_functions.luac $FS_INSTALL_PATH/scripts/vBilling_functions.luac
+	sed -i "s#Database = VBILLING_DB#Database = $VBILLING_DB#g" /etc/odbc.ini
+	sed -i "s#\[vBilling\]#\[$VBILLING_DB\]#g" /etc/odbc.ini
+	ln -s $VBILLING_HTML/luac/centos/vBilling.luac $FS_INSTALL_PATH/scripts/vBilling.luac
+	ln -s $VBILLING_HTML/luac/centos/vBilling_conf.lua $FS_INSTALL_PATH/scripts/vBilling_conf.lua
+	ln -s $VBILLING_HTML/luac/centos/vBilling_functions.luac $FS_INSTALL_PATH/scripts/vBilling_functions.luac
 /etc/init.d/freeswitch start
 fi
 
