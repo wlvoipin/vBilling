@@ -1555,6 +1555,15 @@ rm -rf $TEMPDIR/root.cron
 
 clear
 
+# Setup cron job for daily invoicing
+# Write out current crontab
+crontab -u root -l > $TEMPDIR/root.cron
+# echo new cron into cron file
+echo "00 * * * wget --spider http://localhost/cron/generate_invoices >/dev/null 2>&1" >> $TEMPDIR/root.cron
+# install new cron file
+crontab -u root $TEMPDIR/root.cron
+rm -rf $TEMPDIR/root.cron
+
 # Install finished
 echo ""
 echo "The script has finished the install. If everything went well, you should be able to browse vBilling at:"
