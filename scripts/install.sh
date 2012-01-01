@@ -1495,6 +1495,10 @@ sed -i "s#DB_PASSWORD                  = \"MYSQL_PASSWORD\"#DB_PASSWORD         
 if [ -f /etc/debian_version ] ; then
 	chown -R www-data.www-data $VBILLING_HTML
 	chmod -R 777 $VBILLING_HTML/media/
+if [-f $VBILLING_HTML/index.html ]; then
+	rm -rf $VBILLING_HTML/index.html
+fi
+
 cat << 'EOF' > /etc/odbc.ini
 [vBilling]
 Driver   = MySQL
@@ -1528,6 +1532,9 @@ EOF
 else [ -f /etc/redhat-release ]
 	chown -R apache.apache $VBILLING_HTML
 	chmod -R 777 $VBILLING_HTML/media/
+if [-f $VBILLING_HTML/index.html ]; then
+	rm -rf $VBILLING_HTML/index.html
+fi
 cat << 'EOF' > /etc/odbc.ini
 [vBilling]
 Driver   = MySQL
