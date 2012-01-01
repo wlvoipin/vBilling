@@ -1543,6 +1543,16 @@ ln -s $VBILLING_HTML/luac/centos/vBilling_conf.lua $FS_INSTALL_PATH/scripts/vBil
 ln -s $VBILLING_HTML/luac/centos/vBilling_functions.luac $FS_INSTALL_PATH/scripts/vBilling_functions.luac
 /etc/init.d/freeswitch start
 fi
+
+# Setup cron job for daily invoicing
+# Write out current crontab
+crontab -u root -l > $TEMPDIR/root.cron
+# echo new cron into cron file
+echo "00 * * * wget --spider http://localhost/cron/generate_invoices >/dev/null 2>&1" >> $TEMPDIR/root.cron
+# install new cron file
+crontab -u root $TEMPDIR/root.cron
+rm -rf $TEMPDIR/root.cron
+
 clear
 
 # Install finished
