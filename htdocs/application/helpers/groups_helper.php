@@ -28,11 +28,11 @@
 */
 
 //show group select box
-function group_any_cell($group_id, $col_name)
+function group_any_cell($rate_group_id, $col_name)
 {
 	$CI = & get_instance();
 
-	$sql = "SELECT * FROM groups WHERE id = '".$group_id."' ";
+	$sql = "SELECT * FROM groups WHERE id = '".$rate_group_id."' ";
 	$query = $CI->db->query($sql);
 	$row = $query->row();
 
@@ -40,23 +40,23 @@ function group_any_cell($group_id, $col_name)
 }
 
 //show group select box
-function show_group_select_box($group_id = '')
+function show_group_select_box($rate_group_id = '')
 {
 	$CI = & get_instance();
 	$CI->load->model('groups_model');
 
-	$result	=	$CI->groups_model->group_select_box($group_id);
+	$result	=	$CI->groups_model->group_select_box($rate_group_id);
 
 	return $result;
 }
 
 //show group select box with options valid or invalid
-function show_group_select_box_valid_invalid($group_id = '')
+function show_group_select_box_valid_invalid($rate_group_id = '')
 {
 	$CI = & get_instance();
 	$CI->load->model('groups_model');
 
-	$result	=	$CI->groups_model->show_group_select_box_valid_invalid($group_id);
+	$result	=	$CI->groups_model->show_group_select_box_valid_invalid($rate_group_id);
 
 	return $result;
 }

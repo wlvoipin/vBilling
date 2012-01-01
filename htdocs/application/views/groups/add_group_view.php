@@ -126,7 +126,7 @@
            var form = $('#addGroup').serialize();
             $.ajax({
                     type: "POST",
-					url: base_url+"groups/insert_new_group",
+					url: base_url+"groups/insert_new_rate_group",
 					data: form,
                     success: function(html){
                             $('.error').hide();

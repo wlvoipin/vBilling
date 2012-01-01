@@ -42,7 +42,7 @@
         <div class="form-container">
         <form enctype="multipart/form-data"  method="post" action="" name="addGroup" id="addGroup">
             <table cellspacing="3" cellpadding="2" border="0" width="95%" class="search_col">
-                <input type="hidden" name="group_id" id="group_id" value="<?php echo $group_id; ?>" />
+                <input type="hidden" name="group_id" id="group_id" value="<?php echo $rate_group_id; ?>" />
                 <tbody>
                 
                 <tr>
@@ -93,7 +93,7 @@
                         }
                     ?>
                         <tr class="main_text" <?php echo $bg;?>>
-                            <td align="center"><a href="<?php echo base_url();?>groups/update_rate/<?php echo $rowRate->id;?>/<?php echo $group_id;?>"><?php echo $rowRate->id; ?></a></td>
+                            <td align="center"><a href="<?php echo base_url();?>groups/update_rate/<?php echo $rowRate->id;?>/<?php echo $rate_group_id;?>"><?php echo $rowRate->id; ?></a></td>
                             <td align="center"><?php echo $rowRate->digits; ?></td>
                             <td align="center"><?php echo $rowRate->sell_rate; ?></td>
                             <td align="center"><?php echo $rowRate->cost_rate; ?></td>

@@ -86,17 +86,17 @@ class Groups_model extends CI_Model {
 	}
 
 	//single id data 
-	function get_single_group($group_id)
+	function get_single_group($rate_group_id)
 	{
-		$sql = "SELECT * FROM groups WHERE id='".$group_id."'";
+		$sql = "SELECT * FROM groups WHERE id='".$rate_group_id."'";
 		$query = $this->db->query($sql);
 		return $query;
 	}
 
 	//any cell 
-	function group_any_cell($group_id, $col_name)
+	function group_any_cell($rate_group_id, $col_name)
 	{
-		$sql = "SELECT * FROM groups WHERE id = '".$group_id."' ";
+		$sql = "SELECT * FROM groups WHERE id = '".$rate_group_id."' ";
 		$query = $this->db->query($sql);
 		$row = $query->row();
 
@@ -114,19 +114,19 @@ class Groups_model extends CI_Model {
 	//edit group 
 	function edit_group_db($data)
 	{
-		$sql = "UPDATE groups SET group_name='".$data['groupname']."' WHERE id='".$data['group_id']."'";
+		$sql = "UPDATE groups SET group_name='".$data['groupname']."' WHERE id='".$data['rate_group_id']."'";
 		$query = $this->db->query($sql);
 	}
 
 	//enable disable carrier
 	function enable_disable_group($data)
 	{
-		$sql = "UPDATE groups SET enabled = '".$data['status']."' WHERE id = '".$data['group_id']."'";
+		$sql = "UPDATE groups SET enabled = '".$data['status']."' WHERE id = '".$data['rate_group_id']."'";
 		$query = $this->db->query($sql);
 	}
 
 	//new group
-	function insert_new_group($name)
+	function insert_new_rate_group($name)
 	{
 		$sql = "INSERT INTO groups (group_name, enabled) VALUES ('".$name."', '1') ";
 		$query = $this->db->query($sql);
@@ -134,7 +134,7 @@ class Groups_model extends CI_Model {
 	}
 
 	//create new customer rate table
-	function create_new_group_rate_tbl($insert_id)
+	function create_new_rate_group_rate_tbl($insert_id)
 	{
 		$sql = "CREATE TABLE IF NOT EXISTS `lcr_group_".$insert_id."` (
 			`id` int(11) NOT NULL AUTO_INCREMENT,
@@ -167,7 +167,7 @@ class Groups_model extends CI_Model {
 	}
 
 	//populate group select box
-	function group_select_box($group_id = '')
+	function group_select_box($rate_group_id = '')
 	{
 		$sql = "SELECT * FROM groups";
 		$query = $this->db->query($sql);
@@ -179,7 +179,7 @@ class Groups_model extends CI_Model {
 		{
 			foreach($query->result() as $row)
 			{
-				if($group_id == $row->id)
+				if($rate_group_id == $row->id)
 				{
 					$data .= '<option value="'.$row->id.'" selected>'.$row->group_name.'</option>';
 				}
@@ -194,7 +194,7 @@ class Groups_model extends CI_Model {
 	}
 
 	//show group select box with valid or invalid options
-	function show_group_select_box_valid_invalid($group_id)
+	function show_group_select_box_valid_invalid($rate_group_id)
 	{
 		$sql = "SELECT * FROM groups";
 		$query = $this->db->query($sql);
@@ -206,7 +206,7 @@ class Groups_model extends CI_Model {
 		{
 			foreach($query->result() as $row)
 			{
-				if($group_id == $row->id)
+				if($rate_group_id == $row->id)
 				{
 					$data .= '<option value="'.$row->id.'" selected>'.$row->group_name.' ('.$this->group_valid_invalid($row->group_rate_table).')</option>';
 				}
@@ -296,19 +296,19 @@ class Groups_model extends CI_Model {
 		}
 	}
 
-	function check_group_in_use($group_id)
+	function check_group_in_use($rate_group_id)
 	{
-		$sql = "SELECT * FROM customers WHERE customer_rate_group = '".$group_id."' ";
+		$sql = "SELECT * FROM customers WHERE customer_rate_group = '".$rate_group_id."' ";
 		$query = $this->db->query($sql);
 		return $query;
 	}
 
-	function delete_group($group_id)
+	function delete_group($rate_group_id)
 	{
-		$group_rate_table = $this->group_any_cell($group_id, 'group_rate_table');
+		$group_rate_table = $this->group_any_cell($rate_group_id, 'group_rate_table');
 
 		//delete the group
-		$sql = "DELETE FROM groups WHERE id = '".$group_id."' ";
+		$sql = "DELETE FROM groups WHERE id = '".$rate_group_id."' ";
 		$query = $this->db->query($sql);
 
 		//delete the group rate table
@@ -316,7 +316,7 @@ class Groups_model extends CI_Model {
 		$query2 = $this->db->query($sql2);
 
 		//remove from customer table 
-		$sql3 = "UPDATE customers SET customer_rate_group = '0' WHERE customer_rate_group = '".$group_id."' ";
+		$sql3 = "UPDATE customers SET customer_rate_group = '0' WHERE customer_rate_group = '".$rate_group_id."' ";
 		$query3 = $this->db->query($sql3);
 	}
 

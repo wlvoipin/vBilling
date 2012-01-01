@@ -129,7 +129,7 @@
                     <td align="right"><span class="required">*</span> Group:</td>
                     <td align="left">
                         <select id="group" name="group" class="textfield">
-                            <?php echo show_group_select_box($group_id);?>
+                            <?php echo show_group_select_box($rate_group_id);?>
                         </select>
                     </td>
                 </tr>

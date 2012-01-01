@@ -117,7 +117,7 @@ class Groups extends CI_Controller {
 		$data['groups']         =   $this->groups_model->get_all_groups($config['per_page'],$config['uri_segment'], $filter_groups, $filter_group_type);
 		$data['page_name']		=	'group_view';
 		$data['selected']		=	'groups';
-		$data['sub_selected']   =   'list_groups';
+		$data['sub_selected']   =   'list_rate_groups';
 		$data['page_title']		=	'GROUPS';
 		$data['main_menu']	    =	'default/main_menu/main_menu';
 		$data['sub_menu']	    =	'default/sub_menu/groups_sub_menu';
@@ -128,17 +128,17 @@ class Groups extends CI_Controller {
 	//enable or disable customer 
 	function enable_disable_group()
 	{
-		$data['group_id']           = $this->input->post('group_id');
+		$data['rate_group_id']           = $this->input->post('rate_group_id');
 		$data['status']             = $this->input->post('status');
 		$this->groups_model->enable_disable_group($data);
 	}
 
 	//new group
-	function new_group()
+	function new_rate_group()
 	{
 		$data['page_name']		=	'group_view';
 		$data['selected']		=	'groups';
-		$data['sub_selected']   =   'new_group';
+		$data['sub_selected']   =   'new_rate_group';
 		$data['page_title']		=	'NEW GROUP';
 		$data['main_menu']	    =	'default/main_menu/main_menu';
 		$data['sub_menu']	    =	'default/sub_menu/groups_sub_menu';
@@ -146,21 +146,21 @@ class Groups extends CI_Controller {
 		$this->load->view('default/template',$data);
 	}
 
-	function insert_new_group()
+	function insert_new_rate_group()
 	{
 		$data['groupname']		=	$this->input->post('groupname');
-		$insert_id = $this->groups_model->insert_new_group($data['groupname']);
+		$insert_id = $this->groups_model->insert_new_rate_group($data['groupname']);
 
 		//create group table
-		$this->groups_model->create_new_group_rate_tbl($insert_id);
+		$this->groups_model->create_new_rate_group_rate_tbl($insert_id);
 	}
 
-	function update_group($group_id)
+	function update_group($rate_group_id)
 	{
-		$data['group']          =   $this->groups_model->get_single_group($group_id);
-		$group_rate_table_name  =   $this->groups_model->group_any_cell($group_id, 'group_rate_table');
+		$data['group']          =   $this->groups_model->get_single_group($rate_group_id);
+		$group_rate_table_name  =   $this->groups_model->group_any_cell($rate_group_id, 'group_rate_table');
 		$data['group_rates']    =   $this->groups_model->group_rates($group_rate_table_name);
-		$data['group_id']       =   $group_id;
+		$data['rate_group_id']       =   $rate_group_id;
 
 		$data['page_name']		=	'edit_group';
 		$data['selected']		=	'groups';
@@ -175,16 +175,16 @@ class Groups extends CI_Controller {
 	function edit_group_db()
 	{
 		$data['groupname']		=	$this->input->post('groupname');
-		$data['group_id']		=	$this->input->post('group_id');
+		$data['rate_group_id']		=	$this->input->post('rate_group_id');
 
 		$this->groups_model->edit_group_db($data);
 	}
 
 	function check_group_in_use()
 	{
-		$group_id	=	$this->input->post('group_id');
+		$rate_group_id	=	$this->input->post('rate_group_id');
 
-		$check_in_use = $this->groups_model->check_group_in_use($group_id);
+		$check_in_use = $this->groups_model->check_group_in_use($rate_group_id);
 
 		if($check_in_use->num_rows() > 0)
 		{
@@ -193,7 +193,7 @@ class Groups extends CI_Controller {
 		}
 		else
 		{
-			$this->groups_model->delete_group($group_id);
+			$this->groups_model->delete_group($rate_group_id);
 			echo "deleted";
 			exit;
 		}
@@ -201,15 +201,15 @@ class Groups extends CI_Controller {
 
 	function delete_group()
 	{
-		$group_id	=	$this->input->post('group_id');
-		$this->groups_model->delete_group($group_id);
+		$rate_group_id	=	$this->input->post('rate_group_id');
+		$this->groups_model->delete_group($rate_group_id);
 	}
 
 	//****************************rates functions******************************
 
-	function new_rate($group_id = '')
+	function new_rate($rate_group_id = '')
 	{
-		$data['group_id']		=	$group_id;
+		$data['rate_group_id']		=	$rate_group_id;
         
         $data['page_name']		=	'new_rate';
 		$data['selected']		=	'groups';
@@ -257,9 +257,7 @@ class Groups extends CI_Controller {
 		$data['country']        = $this->input->post('country');
 
 		$group_rate_table_name  = $this->groups_model->group_any_cell($data['group'], 'group_rate_table');
-
 		$check_carrier_validity = $this->carriers_model->carrier_valid_invalid($data['carrier']);
-
 
 		if($check_carrier_validity == 'VALID')
 		{
@@ -288,18 +286,18 @@ class Groups extends CI_Controller {
 	//enable or disable rate 
 	function enable_disable_rate()
 	{
-		$group_id                   = $this->input->post('group_id');
-		$group_rate_table_name      = $this->groups_model->group_any_cell($group_id, 'group_rate_table');
+		$rate_group_id                   = $this->input->post('rate_group_id');
+		$group_rate_table_name      = $this->groups_model->group_any_cell($rate_group_id, 'group_rate_table');
 		$data['rate_id']            = $this->input->post('rate_id');
 		$data['status']             = $this->input->post('status');
 		$this->groups_model->enable_disable_rate($data, $group_rate_table_name);
 	}
 
-	function update_rate($rate_id, $group_id)
+	function update_rate($rate_id, $rate_group_id)
 	{
 		$data['rate_id']        =   $rate_id;
-		$data['group_id']       =   $group_id;
-		$group_rate_table_name  =   $this->groups_model->group_any_cell($group_id, 'group_rate_table');
+		$data['rate_group_id']       =   $rate_group_id;
+		$group_rate_table_name  =   $this->groups_model->group_any_cell($rate_group_id, 'group_rate_table');
 		$data['rate']           =   $this->groups_model->get_single_rate($rate_id, $group_rate_table_name);
 
 		$data['page_name']		=	'edit_rate';
@@ -315,31 +313,30 @@ class Groups extends CI_Controller {
 	function edit_rate_db()
 	{
 		$data['rate_id']                = $this->input->post('rate_id');
-		$data['group_id']               = $this->input->post('group_id');
-		$data['group_rate_table_name']  = $this->groups_model->group_any_cell($data['group_id'], 'group_rate_table');
+		$data['rate_group_id']               = $this->input->post('rate_group_id');
+		$data['group_rate_table_name']  = $this->groups_model->group_any_cell($data['rate_group_id'], 'group_rate_table');
 
-		$data['digits']         = $this->input->post('digits');
-		$data['rate']           = $this->input->post('rate');
-		$data['costrate']       = $this->input->post('costrate');
-		$data['buyblock']       = $this->input->post('buyblock');
-		$data['sellblock']      = $this->input->post('sellblock');
-		$data['intrastate']     = $this->input->post('intrastate');
-		$data['intralata']      = $this->input->post('intralata');
-		$data['leadstrip']      = $this->input->post('leadstrip');
-		$data['trailstrip']     = $this->input->post('trailstrip');
-		$data['prefix']         = $this->input->post('prefix');
-		$data['suffix']         = $this->input->post('suffix');
-		$data['profile']        = $this->input->post('profile');
-		$data['startdate']      = $this->input->post('startdate');
-		$data['enddate']        = $this->input->post('enddate');
-		$data['quality']        = $this->input->post('quality');
-		$data['reliability']    = $this->input->post('reliability');
-		$data['lrn']            = $this->input->post('lrn');
-		$data['carrier']        = $this->input->post('carrier');
-		$data['country']        = $this->input->post('country');
-
-		$data['old_digits']        = $this->input->post('old_digits');
-		$data['old_carrier']        = $this->input->post('old_carrier');
+		$data['digits']      = $this->input->post('digits');
+		$data['rate']        = $this->input->post('rate');
+		$data['costrate']    = $this->input->post('costrate');
+		$data['buyblock']    = $this->input->post('buyblock');
+		$data['sellblock']   = $this->input->post('sellblock');
+		$data['intrastate']  = $this->input->post('intrastate');
+		$data['intralata']   = $this->input->post('intralata');
+		$data['leadstrip']   = $this->input->post('leadstrip');
+		$data['trailstrip']  = $this->input->post('trailstrip');
+		$data['prefix']      = $this->input->post('prefix');
+		$data['suffix']      = $this->input->post('suffix');
+		$data['profile']     = $this->input->post('profile');
+		$data['startdate']   = $this->input->post('startdate');
+		$data['enddate']     = $this->input->post('enddate');
+		$data['quality']     = $this->input->post('quality');
+		$data['reliability'] = $this->input->post('reliability');
+		$data['lrn']         = $this->input->post('lrn');
+		$data['carrier']     = $this->input->post('carrier');
+		$data['country']     = $this->input->post('country');
+		$data['old_digits']  = $this->input->post('old_digits');
+		$data['old_carrier'] = $this->input->post('old_carrier');
 
 		$check_carrier_validity = $this->carriers_model->carrier_valid_invalid($data['carrier']);
 
@@ -377,8 +374,8 @@ class Groups extends CI_Controller {
 
 	function delete_group_rate()
 	{
-		$group_id                   = $this->input->post('group_id');
-		$group_rate_table_name      = $this->groups_model->group_any_cell($group_id, 'group_rate_table');
+		$rate_group_id                   = $this->input->post('rate_group_id');
+		$group_rate_table_name      = $this->groups_model->group_any_cell($rate_group_id, 'group_rate_table');
 		$rate_id                    = $this->input->post('rate_id');
 		$this->groups_model->delete_group_rate($rate_id, $group_rate_table_name);
 	}
