@@ -1487,9 +1487,6 @@ sed -i "s#define('DEFAULT_DSN_PASSWORD', 'MYSQL_PASSWORD');#define('DEFAULT_DSN_
 sed -i "s#\$db\['default'\]\['username'\] = 'MYSQL_USERNAME';#\$db\['default'\]\['username'\] = '$VBILLING_DB_USER';#g" $VBILLING_HTML/application/config/database.php
 sed -i "s#\$db\['default'\]\['password'\] = 'MYSQL_PASSWORD';#\$db\['default'\]\['password'\] = '$VBILLING_MYSQL_PASSWORD';#g" $VBILLING_HTML/application/config/database.php
 sed -i "s#\$db\['default'\]\['database'\] = 'VBILLING_DB';#\$db\['default'\]\['database'\] = '$VBILLING_DB';#g" $VBILLING_HTML/application/config/database.php
-sed -i "s#DSN                          = \"VBILLING_DB\"#DSN                          = \"$VBILLING_DB\"#g" $FS_INSTALL_PATH/scripts/vBilling_conf.lua
-sed -i "s#DB_USER                      = \"MYSQL_USERNAME\"#DB_USER                      = \"$VBILLING_DB_USER\"#g" $FS_INSTALL_PATH/scripts/vBilling_conf.lua
-sed -i "s#DB_PASSWORD                  = \"MYSQL_PASSWORD\"#DB_PASSWORD                  = \"$VBILLING_MYSQL_PASSWORD\"#g" $FS_INSTALL_PATH/scripts/vBilling_conf.lua
 
 if [ -f /etc/debian_version ] ; then
 	chown -R www-data.www-data $VBILLING_HTML
