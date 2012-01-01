@@ -1525,6 +1525,9 @@ EOF
 		ln -s $VBILLING_HTML/luac/ubuntu/vBilling_conf.lua $FS_INSTALL_PATH/scripts/vBilling_conf.lua
 		ln -s $VBILLING_HTML/luac/ubuntu/vBilling_functions.luac $FS_INSTALL_PATH/scripts/vBilling_functions.luac
 	fi
+sed -i "s#DSN                          = \"VBILLING_DB\"#DSN                          = \"$VBILLING_DB\"#g" $FS_INSTALL_PATH/scripts/vBilling_conf.lua
+sed -i "s#DB_USER                      = \"MYSQL_USERNAME\"#DB_USER                      = \"$VBILLING_DB_USER\"#g" $FS_INSTALL_PATH/scripts/vBilling_conf.lua
+sed -i "s#DB_PASSWORD                  = \"MYSQL_PASSWORD\"#DB_PASSWORD                  = \"$VBILLING_MYSQL_PASSWORD\"#g" $FS_INSTALL_PATH/scripts/vBilling_conf.lua
 /etc/init.d/freeswitch start
 else [ -f /etc/redhat-release ]
 	chown -R apache.apache $VBILLING_HTML
@@ -1545,6 +1548,9 @@ EOF
 	ln -s $VBILLING_HTML/luac/centos/vBilling.luac $FS_INSTALL_PATH/scripts/vBilling.luac
 	ln -s $VBILLING_HTML/luac/centos/vBilling_conf.lua $FS_INSTALL_PATH/scripts/vBilling_conf.lua
 	ln -s $VBILLING_HTML/luac/centos/vBilling_functions.luac $FS_INSTALL_PATH/scripts/vBilling_functions.luac
+sed -i "s#DSN                          = \"VBILLING_DB\"#DSN                          = \"$VBILLING_DB\"#g" $FS_INSTALL_PATH/scripts/vBilling_conf.lua
+sed -i "s#DB_USER                      = \"MYSQL_USERNAME\"#DB_USER                      = \"$VBILLING_DB_USER\"#g" $FS_INSTALL_PATH/scripts/vBilling_conf.lua
+sed -i "s#DB_PASSWORD                  = \"MYSQL_PASSWORD\"#DB_PASSWORD                  = \"$VBILLING_MYSQL_PASSWORD\"#g" $FS_INSTALL_PATH/scripts/vBilling_conf.lua
 /etc/init.d/freeswitch start
 fi
 
