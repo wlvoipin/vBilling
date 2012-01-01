@@ -1507,7 +1507,7 @@ Port     = 3306
 Database = VBILLING_DB
 OPTION   = 67108864
 EOF
-sed -i "s#Database   = VBILLING_DB#Database   = $VBILLING_DB#g" /etc/odbc.ini
+sed -i "s#Database = VBILLING_DB#Database = $VBILLING_DB#g" /etc/odbc.ini
 sed -i "s#\[vBilling\]#\[$VBILLING_DB\]#g" /etc/odbc.ini
 
 cat << 'EOF' > /etc/odbcinst.ini
@@ -1543,7 +1543,7 @@ Port     = 3306
 Database = VBILLING_DB
 OPTION   = 67108864
 EOF
-sed -i "s#Database   = VBILLING_DB#Database   = $VBILLING_DB#g" /etc/odbc.ini
+sed -i "s#Database = VBILLING_DB#Database = $VBILLING_DB#g" /etc/odbc.ini
 sed -i "s#\[vBilling\]#\[$VBILLING_DB\]#g" /etc/odbc.ini
 ln -s $VBILLING_HTML/luac/centos/vBilling.luac $FS_INSTALL_PATH/scripts/vBilling.luac
 ln -s $VBILLING_HTML/luac/centos/vBilling_conf.lua $FS_INSTALL_PATH/scripts/vBilling_conf.lua
