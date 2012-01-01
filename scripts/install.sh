@@ -66,12 +66,12 @@ if [ $REPLY   = "y" ]; then
 		'DEBIAN')
 		export DEBIAN_FRONTEND=noninteractive
         apt-get -y update
-        apt-get -y install autoconf automake autotools-dev binutils bison build-essential cpp curl flex g++ gcc git-core libapache2-mod-php5 libaudiofile-dev libc6-dev libdb-dev libexpat1 libgdbm-dev libgnutls-dev libmcrypt-dev libncurses5-dev libnewt-dev libpcre3 libpopt-dev libsctp-dev libsqlite3-dev libtiff4 libtiff4-dev libtool libx11-dev libxml2 libxml2-dev libjpeg-dev libmyodbc libssl-dev lksctp-tools lua5.1 lynx m4 make mcrypt mysql-server ncftp nmap openssl php5 php5-dev php5-mhash php5-gd php5-mysql php5-mcrypt php-apc pkg-config sox sqlite3 ssl-cert ssl-cert unixodbc-dev unzip zip zlib1g-dev zlib1g-dev sox
+        apt-get -y install autoconf automake autotools-dev binutils bison build-essential cpp curl flex g++ gcc git-core libapache2-mod-php5 libaudiofile-dev libc6-dev libdb-dev libexpat1 libgdbm-dev libgnutls-dev libmcrypt-dev libncurses5-dev libnewt-dev libpcre3 libpopt-dev libsctp-dev libsqlite3-dev libtiff4 libtiff4-dev libtool libx11-dev libxml2 libxml2-dev libjpeg-dev libmyodbc libssl-dev lksctp-tools lua5.1 lynx m4 make mcrypt mysql-server ncftp nmap openssl php5 php5-dev php5-mhash php5-gd php5-mysql php5-mcrypt php-apc pkg-config sox sqlite3 ssl-cert ssl-cert unixodbc-dev unzip wget zip zlib1g-dev zlib1g-dev
 		;;
 		'CENTOS')
 		yum -y update
 		VERS=$(cat /etc/redhat-release | cut -d ' ' -f3 | cut -d '.' -f1)
-        COMMON_PKGS="autoconf automake bzip2 cpio curl curl-devel curl-devel expat-devel fileutils git gcc-c++ gettext-devel gnutls-devel httpd libjpeg-devel libogg-devel libtiff-devel libtool libvorbis-devel lua-devel lua-static make mysql-connector-odbc mysql-server ncurses-devel nmap openssl openssl-devel openssl-devel patch php php-bcmath php-cli php-common php-gd php-mbstring php-mysql php-pdo php-xml unixODBC unixODBC-devel unzip wget zip zlib zlib-devel bison sox"
+        COMMON_PKGS="autoconf automake bison bzip2 cpio curl curl-devel curl-devel expat-devel fileutils git gcc-c++ gettext-devel gnutls-devel httpd libjpeg-devel libogg-devel libtiff-devel libtool libvorbis-devel lua-devel lua-static make mysql-connector-odbc mysql-server ncurses-devel nmap openssl openssl-devel openssl-devel patch php php-bcmath php-cli php-common php-gd php-mbstring php-mysql php-pdo php-xml sox unixODBC unixODBC-devel unzip wget zip zlib zlib-devel"
 		if [ "$VERS" = "6" ]
 			then
 			yum -y install $COMMON_PKGS
@@ -1559,7 +1559,7 @@ clear
 # Write out current crontab
 crontab -u root -l > $TEMPDIR/root.cron
 # echo new cron into cron file
-echo "00 * * * wget --spider http://localhost/cron/generate_invoices >/dev/null 2>&1" >> $TEMPDIR/root.cron
+echo "@daily wget --spider http://localhost/cron/generate_invoices >/dev/null 2>&1" >> $TEMPDIR/root.cron
 # install new cron file
 crontab -u root $TEMPDIR/root.cron
 rm -rf $TEMPDIR/root.cron
