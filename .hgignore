@@ -15,4 +15,6 @@ syntax: glob
 
 # Git repo
 .git/
-
+vBilling.lua
+vBilling_functions.lua
+*.lua
