@@ -17,4 +17,3 @@ syntax: glob
 .git/
 vBilling.lua
 vBilling_functions.lua
-*.lua
