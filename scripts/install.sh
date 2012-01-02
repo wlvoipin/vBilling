@@ -525,7 +525,7 @@ esac
 # Generate random password (for MySQL)
 genpasswd() {
 	length=$1
-	[ $length == "" ] && length=16
+	[ "$length" == "" ] && length=16
 	tr -dc A-Za-z0-9_ < /dev/urandom | head -c ${length} | xargs
 }
 
