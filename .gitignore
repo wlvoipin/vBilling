@@ -12,4 +12,6 @@ Icon?
 # Git repo
 .hg/
 #*#
+vBilling.lua
+vBilling_functions.lua
 
