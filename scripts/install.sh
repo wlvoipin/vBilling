@@ -1492,7 +1492,7 @@ fi
 
 # Download vBilling source
 git clone ${VBILLING_REPO} ${TEMPDIR}/vBilling
-alias cp='cp -apf'
+alias cp='cp -apfr'
 cp ${TEMPDIR}/vBilling/htdocs/*  ${VBILLING_HTML}/
 cp ${TEMPDIR}/vBilling/htdocs/.htaccess  ${VBILLING_HTML}/
 
@@ -1630,7 +1630,7 @@ if [ $REPLY   = "y" ]; then
 
 # Download vBilling source (for the upgrade/update this time)
 git clone $VBILLING_REPO ${TEMPDIR}/vBilling
-alias cp=cp
+alias cp='cp -apfr'
 
 # Take a backup of configuration files before overwriting existing ones
 cp ${VBILLING_HTML}/application/config/config.php ${TEMPDIR}/config.php
