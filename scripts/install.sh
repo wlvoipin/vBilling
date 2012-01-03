@@ -1592,7 +1592,8 @@ echo ""
 echo "*** Don't forget to visit http://forum.vbilling.org/ for latest documentation and support options"
 echo "*** For premium support, send an email to support@vbilling.org with your technical queries"
 echo ""
-echo "*** For a quick start howto, please visit http://forum.vbilling.org/viewtopic.php?f=6&t=3"
+echo "*** For a quick start howto, please visit the following URL"
+echo "*** http://forum.vbilling.org/viewtopic.php?f=6&t=3"
 echo ""
 
 elif [ $REPLY = "n" ]; then
@@ -1655,7 +1656,8 @@ echo ""
 echo "*** If something went wrong, please visit our forum at http://forum.vbilling.org/ or send us an"
 echo "*** email at support@vbilling.org with all the logs of the upgrade."
 echo ""
-echo "*** For a quick start howto, please visit http://forum.vbilling.org/viewtopic.php?f=6&t=3"
+echo "*** For a quick start howto, please visit the following URL"
+echo "*** http://forum.vbilling.org/viewtopic.php?f=6&t=3"
 echo ""
 
 elif [ $REPLY = "n" ]; then
