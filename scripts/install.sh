@@ -525,7 +525,7 @@ esac
 # Generate random password (for MySQL)
 genpasswd() {
 	length=$1
-	[ $length == "" ] && length=16
+	[ "$length" == "" ] && length=16
 	tr -dc A-Za-z0-9_ < /dev/urandom | head -c ${length} | xargs
 }
 
@@ -1492,9 +1492,8 @@ fi
 
 # Download vBilling source
 git clone ${VBILLING_REPO} ${TEMPDIR}/vBilling
-alias cp='cp -apf'
-cp ${TEMPDIR}/vBilling/htdocs/*  ${VBILLING_HTML}/
-cp ${TEMPDIR}/vBilling/htdocs/.htaccess  ${VBILLING_HTML}/
+cp -apr ${TEMPDIR}/vBilling/htdocs/*  ${VBILLING_HTML}/
+cp -apr ${TEMPDIR}/vBilling/htdocs/.htaccess  ${VBILLING_HTML}/
 
 # Generate random 30 charactor password for encryption key
 ENCRYPTION_KEY=$(genpasswd 30)
@@ -1630,15 +1629,14 @@ if [ $REPLY   = "y" ]; then
 
 # Download vBilling source (for the upgrade/update this time)
 git clone $VBILLING_REPO ${TEMPDIR}/vBilling
-alias cp=cp
 
 # Take a backup of configuration files before overwriting existing ones
-cp ${VBILLING_HTML}/application/config/config.php ${TEMPDIR}/config.php
-cp ${VBILLING_HTML}/application/config/database.php ${TEMPDIR}/database.php
-cp ${VBILLING_HTML}/application/config/constants.php ${TEMPDIR}/constants.php
+cp -apr ${VBILLING_HTML}/application/config/config.php ${TEMPDIR}/config.php
+cp -apr ${VBILLING_HTML}/application/config/database.php ${TEMPDIR}/database.php
+cp -apr ${VBILLING_HTML}/application/config/constants.php ${TEMPDIR}/constants.php
 
-cp ${TEMPDIR}/vBilling/htdocs/*  ${VBILLING_HTML}/
-cp ${TEMPDIR}/vBilling/htdocs/.htaccess  ${VBILLING_HTML}/
+cp -apr ${TEMPDIR}/vBilling/htdocs/*  ${VBILLING_HTML}/
+cp -apr ${TEMPDIR}/vBilling/htdocs/.htaccess  ${VBILLING_HTML}/
 
 # Copy the configuration files containing DB login/password and other config params back to their places
 cp ${TEMPDIR}/config.php ${VBILLING_HTML}/application/config/config.php
