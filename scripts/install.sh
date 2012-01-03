@@ -1652,6 +1652,8 @@ echo ""
 echo "*** If something went wrong, please visit our forum at http://forum.vbilling.org/ or send us an"
 echo "*** email at support@vbilling.org with all the logs of the upgrade."
 echo ""
+echo "*** For a quick start howto, please visit http://forum.vbilling.org/viewtopic.php?f=6&t=3"
+echo ""
 
 elif [ $REPLY = "n" ]; then
 	clear
