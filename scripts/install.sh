@@ -1579,6 +1579,7 @@ crontab -u root ${TEMPDIR}/root.cron
 rm -rf ${TEMPDIR}/root.cron
 
 # Install finished
+clear
 echo ""
 echo "*** The script has finished the install. If everything went well, you should be able to browse vBilling at:"
 echo ""
@@ -1590,6 +1591,8 @@ echo "*** Default Password: vBilling"
 echo ""
 echo "*** Don't forget to visit http://forum.vbilling.org/ for latest documentation and support options"
 echo "*** For premium support, send an email to support@vbilling.org with your technical queries"
+echo ""
+echo "*** For a quick start howto, please visit http://forum.vbilling.org/viewtopic.php?f=6&t=3"
 echo ""
 
 elif [ $REPLY = "n" ]; then
