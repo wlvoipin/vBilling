@@ -65,23 +65,41 @@ class Manage_accounts extends CI_Controller {
 		}
 
 		$filter_enabled         = '';
+        $filter_username        = '';
+        $filter_cust_name       = '';
 		$search                 = '';
 		$msg_records_found = "Records Found";
-
-		if($this->input->get('searchFilter'))
-		{
-			$filter_enabled        = $this->input->get('filter_enabled');
-			$search                 = $this->input->get('searchFilter');
-			$msg_records_found      = "Records Found Based On Your Search Criteria";
-		}
+        
+        if($filter_account_type == 'admin')
+        {
+            if($this->input->get('searchFilter'))
+            {
+                $filter_enabled        = $this->input->get('filter_enabled');
+                $search                 = $this->input->get('searchFilter');
+                $msg_records_found      = "Records Found Based On Your Search Criteria";
+            }
+        }
+        else
+        {
+            if($this->input->get('searchFilter'))
+            {
+                $filter_enabled        = $this->input->get('filter_enabled');
+                $filter_username        = $this->input->get('filter_username');
+                $filter_cust_name        = $this->input->get('filter_cust_name');
+                $search                 = $this->input->get('searchFilter');
+                $msg_records_found      = "Records Found Based On Your Search Criteria";
+            }
+        }
 
 		$data['filter_account_type'] = $filter_account_type;
 		$data['filter_enabled']      = $filter_enabled;
+        $data['filter_username']      = $filter_username;
+        $data['filter_cust_name']      = $filter_cust_name;
 
 		//for pagging set information
 		$this->load->library('pagination');
 		$config['per_page'] = '20';
-		$config['base_url'] = base_url().'manage_accounts/index/'.$filter_account_type.'/?searchFilter='.$search.'&filter_enabled='.$filter_enabled.'';
+		$config['base_url'] = base_url().'manage_accounts/index/'.$filter_account_type.'/?searchFilter='.$search.'&filter_enabled='.$filter_enabled.'&filter_username='.$filter_username.'&filter_cust_name='.$filter_cust_name.'';
 		$config['page_query_string'] = TRUE;
 
 		$config['num_links'] = 2;
@@ -100,7 +118,7 @@ class Manage_accounts extends CI_Controller {
 		$config['first_link'] = 'first';
 		$config['last_link'] = 'last';
 
-		$data['count'] = $this->manage_accounts_model->get_all_accounts_count($filter_account_type, $filter_enabled);
+		$data['count'] = $this->manage_accounts_model->get_all_accounts_count($filter_account_type, $filter_enabled, $filter_username, $filter_cust_name);
 		$config['total_rows'] = $data['count'];
 
 		if(isset($_GET['per_page']))
@@ -122,7 +140,7 @@ class Manage_accounts extends CI_Controller {
 		$this->pagination->initialize($config);
 		$data['msg_records_found'] = "".$data['count']."&nbsp;".$msg_records_found."";
 
-		$data['accounts']      =   $this->manage_accounts_model->get_all_accounts($config['per_page'],$config['uri_segment'], $filter_account_type, $filter_enabled);
+		$data['accounts']      =   $this->manage_accounts_model->get_all_accounts($config['per_page'],$config['uri_segment'], $filter_account_type, $filter_enabled, $filter_username, $filter_cust_name);
 
 		$data['page_name']		=	'list_access_accounts';
 		$data['selected']       =   'manage_accounts';

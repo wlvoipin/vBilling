@@ -1,3 +1,8 @@
+<script type="text/javascript">
+if(!window.opener){
+window.location = '../../home/';
+}
+</script>
 <?php 
     $row = $acl_node->row();
 ?>

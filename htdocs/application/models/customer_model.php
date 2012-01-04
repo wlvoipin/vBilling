@@ -449,7 +449,7 @@ class Customer_model extends CI_Model {
 		$new_password = md5($new_password);
 
 		//insert into directory table 
-		$sql = "INSERT INTO directory (customer_id, username, domain, domain_sofia_id, added_by) VALUES ('".$customer_id."', '".$username."', '".$domain."', '".$sofia_id."', '".$added_by."')";
+		$sql = "INSERT INTO directory (customer_id, username, domain, domain_sofia_id, added_by, enabled) VALUES ('".$customer_id."', '".$username."', '".$domain."', '".$sofia_id."', '".$added_by."', '1')";
 		$query = $this->db->query($sql);
 		$inser_id = $this->db->insert_id();
 
@@ -485,6 +485,12 @@ function delete_sip_access($record_id)
 	$query = $this->db->query($sql);
 
 	$sql = "DELETE FROM directory_vars WHERE directory_id = '".$record_id."' LIMIT 1";
+	$query = $this->db->query($sql);
+}
+
+function enable_disable_sip_access($data)
+{
+    $sql = "UPDATE directory SET enabled = '".$data['status']."' WHERE id = '".$data['id']."' LIMIT 1";
 	$query = $this->db->query($sql);
 }
 

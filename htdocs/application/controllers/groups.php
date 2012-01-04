@@ -159,7 +159,51 @@ class Groups extends CI_Controller {
 	{
 		$data['group']          =   $this->groups_model->get_single_group($rate_group_id);
 		$group_rate_table_name  =   $this->groups_model->group_any_cell($rate_group_id, 'group_rate_table');
-		$data['group_rates']    =   $this->groups_model->group_rates($group_rate_table_name);
+		
+        //for pagging set information
+		$this->load->library('pagination');
+		$config['per_page'] = '100';
+		$config['base_url'] = base_url().'groups/update_group/'.$rate_group_id.'/?';
+		$config['page_query_string'] = TRUE;
+
+		$config['num_links'] = 2;
+
+		$config['cur_tag_open'] = '<span class="current">';
+		$config['cur_tag_close'] = '</span> ';
+
+		$config['next_link'] = 'next';
+		$config['next_tag_open'] = '<span class="next-site">';
+		$config['next_tag_close'] = '</span>';
+
+		$config['prev_link'] = 'previous';
+		$config['prev_tag_open'] = '<span class="prev-site">';
+		$config['prev_tag_close'] = '</span>';
+
+		$config['first_link'] = 'first';
+		$config['last_link'] = 'last';
+
+		$data['count'] = $this->groups_model->group_rates_count($group_rate_table_name);
+		$config['total_rows'] = $data['count'];
+
+		if(isset($_GET['per_page']))
+		{
+			if(is_numeric($_GET['per_page']))
+			{
+				$config['uri_segment'] = $_GET['per_page'];
+			}
+			else
+			{
+				$config['uri_segment'] = '';
+			}
+		}
+		else
+		{
+			$config['uri_segment'] = '';
+		}
+
+		$this->pagination->initialize($config);
+        
+        $data['group_rates']    =   $this->groups_model->group_rates($config['per_page'],$config['uri_segment'],$group_rate_table_name);
 		$data['rate_group_id']       =   $rate_group_id;
 
 		$data['page_name']		=	'edit_group';

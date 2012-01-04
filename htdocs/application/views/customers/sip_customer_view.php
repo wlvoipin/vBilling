@@ -1,3 +1,8 @@
+<script type="text/javascript">
+if(!window.opener){
+window.location = '../../home/';
+}
+</script>
 <table cellspacing="0" cellpadding="0" border="0" align="center" width="100%">
 	<tbody><tr>
             <td width="21" height="35"></td>
@@ -41,7 +46,7 @@
                 
                 <thead>
                     <tr class="main_text">
-                        <td align="right" colspan="5"><a href="<?php echo base_url();?>customers/new_sip_access/<?php echo $customer_id;?>">NEW SIP ACCESS</a></td>
+                        <td align="right" colspan="6"><a href="<?php echo base_url();?>customers/new_sip_access/<?php echo $customer_id;?>">NEW SIP ACCESS</a></td>
                     </tr>
                     
                     <tr class="bottom_link">
@@ -49,7 +54,8 @@
                         <td width="20%" align="center">Password</td>
                         <td width="20%" align="center">Domain</td>
                         <td width="20%" align="center">Sofia Profile</td>
-                        <td width="20%" align="center">Options</td>
+                        <td width="20%" align="center">Delete</td>
+                        <td width="20%" align="center">Enable/Disable</td>
                     </tr>
                 </thead>
                 
@@ -66,6 +72,8 @@
                                         <td align="center">
                                             <a href="#" id="<?php echo $row->id;?>" class="delete_access"><img src="<?php echo base_url();?>assets/images/button_cancel.png" style="width:16px;border:none;cursor:pointer;" /></a>
                                         </td>
+                                        
+                                        <td align="center"><input type="checkbox" id="<?php echo $row->id;?>" class="enable_checkbox" <?php if($row->enabled == 1){ echo 'checked="checked"';}?>/></td>
                                         
                                     </tr>
                                 <?php } ?>
@@ -104,6 +112,14 @@
 	<p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>Are You Sure Want To Delete This SIP Credentials?</p>
     </div>
     
+    <div id="dialog-confirm-enable" title="Enable The SIP Account?" style="display:none;">
+	<p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>Are You Sure Want To Enable This SIP Account?</p>
+    </div>
+    
+    <div id="dialog-confirm-disable" title="Disable The SIP Account?" style="display:none;">
+	<p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>Are You Sure Want To Disable This SIP Account?</p>
+    </div>
+    
     
 <script type="text/javascript">
         $('.delete_access').live('click', function(){
@@ -140,3 +156,80 @@
                 return false;
         });
 </script>
+
+<script type="text/javascript">
+        $('.enable_checkbox').click(function(){
+            var curr_chk = $(this);
+            var id = $(this).attr('id');
+            var enable = '';
+            
+            if ($(this).is(':checked'))
+            {
+                enable = 1;
+            }
+            else
+            {
+                enable = 0;
+            }
+            
+            if(enable == 1)
+            {
+                $( "#dialog-confirm-enable" ).dialog({
+                    resizable: false,
+                    height:180,
+                    modal: true,
+                    buttons: {
+                        "Continue": function() {
+                            var data  = 'id='+id+'&status=1';
+                            $.ajax({
+                                type: "POST",
+                                url: base_url+"customers/enable_disable_sip_access",
+                                data: data,
+                                success: function(html){
+                                    $( "#dialog-confirm-enable" ).dialog( "close" );
+                                    $('.success').html("SIP Account Enabled Successfully.");
+                                    $('.success').fadeOut();
+                                    $('.success').fadeIn();
+                                    document.getElementById('success_div').scrollIntoView();
+                                }
+                            });
+                        },
+                        Cancel: function() {
+                            $( this ).dialog( "close" );
+                            curr_chk.attr('checked', false);
+                        }
+                    }
+                });
+            }
+            else
+            {
+                $( "#dialog-confirm-disable" ).dialog({
+                    resizable: false,
+                    height:180,
+                    modal: true,
+                    buttons: {
+                        "Continue": function() {
+                            var data  = 'id='+id+'&status=0';
+                            $.ajax({
+                                type: "POST",
+                                url: base_url+"customers/enable_disable_sip_access",
+                                data: data,
+                                success: function(html){
+                                    $( "#dialog-confirm-disable" ).dialog( "close" );
+                                    $('.success').html("SIP Account Disabled Successfully.");
+                                    $('.success').fadeOut();
+                                    $('.success').fadeIn();
+                                    document.getElementById('success_div').scrollIntoView();
+                                }
+                            });
+                        },
+                        Cancel: function() {
+                            $( this ).dialog( "close" );
+                            curr_chk.attr('checked', true);
+                        }
+                    }
+                });
+            }
+        });
+        
+    </script>

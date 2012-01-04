@@ -104,12 +104,22 @@ class Groups_model extends CI_Model {
 	}
 
 	//get group rates 
-	function group_rates($group_table_name)
+	function group_rates($num, $offset, $group_table_name)
 	{
-		$sql = "SELECT * FROM ".$group_table_name." ";
+		if($offset == ''){$offset='0';}
+        
+        $sql = "SELECT * FROM ".$group_table_name." LIMIT $offset,$num";
 		$query = $this->db->query($sql);
 		return $query;
 	}
+    
+    function group_rates_count($group_table_name)
+    {
+        $sql = "SELECT * FROM ".$group_table_name." ";
+		$query = $this->db->query($sql);
+        $count = $query->num_rows();
+		return $count;
+    }
 
 	//edit group 
 	function edit_group_db($data)

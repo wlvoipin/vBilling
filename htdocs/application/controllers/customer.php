@@ -88,7 +88,7 @@ class Customer extends CI_Controller {
 		{
 			if($data['username'] != $data['old_username']) //if entered username not equal to previous username 
 			{
-				$check_username_availability = $this->manage_accounts_model->check_username_availability($data['username']);
+				$check_username_availability = $this->manage_accounts_model->check_username_availability($this->input->post('username'));
 				if($check_username_availability->num_rows() > 0) //username already in use
 				{
 					$check_username_availability_count = 1;

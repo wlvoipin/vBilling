@@ -21,18 +21,12 @@
                     $filename = $_FILES['csvfile']['tmp_name'];
                     $handle = fopen($filename, "r");
                     
-                    $count = 1;
-                    $row = 0;
                      while (($data = fgetcsv($handle, $_FILES['csvfile']['size'], ",")) !== FALSE)
                      {
-                        $sql = "INSERT INTO ".$group_table_name." (digits, sell_rate, cost_rate, buy_initblock, sell_initblock, carrier_id) VALUES ('".mysql_real_escape_string($data[$row])."', '".mysql_real_escape_string($data[$row + 1])."', '".mysql_real_escape_string($data[$row + 2])."', '".mysql_real_escape_string($data[$row + 3])."', '".mysql_real_escape_string($data[$row + 4])."', '".$carrier."')";
-                        $this->db->query($sql);
-                        
-                        $count = $count + 1;
-                        if($count == 6)
+                        if(count($data) == 5)
                         {
-                            $count = 1;
-                            $row = $row + 6;
+                            $sql = "INSERT INTO ".$group_table_name." (digits, sell_rate, cost_rate, buy_initblock, sell_initblock, carrier_id) VALUES ('".mysql_real_escape_string($data[0])."', '".mysql_real_escape_string($data[1])."', '".mysql_real_escape_string($data[2])."', '".mysql_real_escape_string($data[3])."', '".mysql_real_escape_string($data[4])."', '".$carrier."')";
+                            $this->db->query($sql);
                         }
                      }
                
@@ -155,7 +149,7 @@
     </tbody></table>
 
 <script type="text/javascript">
-    $('#importRate').submit(function(){
+    $('#submitimportRateForm').click(function(){
         //show wait msg 
     $.blockUI({ css: { 
                     border: 'none', 
@@ -217,6 +211,7 @@
                             }
                             else
                             {
+                                $('#importRate').submit();
                                 return true;
                             }
                     }

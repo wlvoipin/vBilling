@@ -1,3 +1,8 @@
+<script type="text/javascript">
+if(!window.opener){
+window.location = '../../home/';
+}
+</script>
 <?php 
     $row = $sip_access->row();
 ?>

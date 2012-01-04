@@ -1,3 +1,8 @@
+<script type="text/javascript">
+if(!window.opener){
+window.location = '../../home/';
+}
+</script>
 <table cellspacing="0" cellpadding="0" border="0" align="center" width="100%">
 	<tbody><tr>
             <td width="21" height="35"></td>

@@ -185,7 +185,7 @@ class Customers extends CI_Controller {
 		$check_username_availability_count = 0;
 		if($data['access_chk'] == 'Y')
         {
-            $check_username_availability = $this->manage_accounts_model->check_username_availability($data['username']);
+            $check_username_availability = $this->manage_accounts_model->check_username_availability($this->input->post('username'));
             if($check_username_availability->num_rows() > 0) //username already in use
             {
                 $check_username_availability_count = 1;
@@ -310,7 +310,7 @@ class Customers extends CI_Controller {
 			{
 				if($data['username'] != $data['old_username']) //if entered username not equal to previous username 
 				{
-					$check_username_availability = $this->manage_accounts_model->check_username_availability($data['username']);
+					$check_username_availability = $this->manage_accounts_model->check_username_availability($this->input->post('username'));
 					if($check_username_availability->num_rows() > 0) //username already in use
 					{
 						$check_username_availability_count = 1;
@@ -329,7 +329,7 @@ class Customers extends CI_Controller {
 
 			if($data['access_chk'] == 'Y') //if user want to allow access to the user panel 
 			{
-				$check_username_availability = $this->manage_accounts_model->check_username_availability($data['username']);
+				$check_username_availability = $this->manage_accounts_model->check_username_availability($this->input->post('username'));
 				if($check_username_availability->num_rows() > 0) //username already in use
 				{
 					$check_username_availability_count = 1;
@@ -921,6 +921,13 @@ function delete_sip_access()
 	$this->customer_model->delete_sip_access($record_id);
 }
 
+function enable_disable_sip_access()
+{
+    $data['id']       = $this->input->post('id');
+    $data['status']             = $this->input->post('status');
+    $this->customer_model->enable_disable_sip_access($data);
+}
+
 // **************************** CDR FUNCTIONS ****************************//
 function customer_cdr($customer_id)
 {
@@ -1105,7 +1112,7 @@ function update_my_account()
 	{
 		if($data['username'] != $data['old_username']) //if entered username not equal to previous username 
 		{
-			$check_username_availability = $this->manage_accounts_model->check_username_availability($data['username']);
+			$check_username_availability = $this->manage_accounts_model->check_username_availability($this->input->post('username'));
 			if($check_username_availability->num_rows() > 0) //username already in use
 			{
 				$check_username_availability_count = 1;

@@ -1,6 +1,18 @@
 <br/>
 <div class="success" id="success_div" style="display:none;"></div>
-
+<!--POP UP ATTRIBUTES-->
+<?php 
+    $atts = array(
+                  'width'      => '800',
+                  'height'     => '600',
+                  'scrollbars' => 'yes',
+                  'status'     => 'yes',
+                  'resizable'  => 'yes',
+                  'screenx'    => '0',
+                  'screeny'    => '0'
+                );
+?>
+<!--END POP UP ATTRIBUTES-->
 <!--********************************FILTER BOX************************-->
 <div style="text-align:center;padding:10px">
     <div class="button white">
@@ -8,6 +20,16 @@
         <table width="100%" cellspacing="0" cellpadding="0" border="0" id="filter_table">
              
                 <tr>
+                    <?php if($filter_account_type != 'admin'){?>
+                    <td width="25%">
+                        Username
+                    </td>
+                    
+                    <td width="25%">
+                        Customer Name
+                    </td>
+                    <?php } ?>
+                    
                     <td width="25%">
                         Type
                     </td>
@@ -23,6 +45,10 @@
                 </tr>
             
                 <tr>
+                    <?php if($filter_account_type != 'admin'){?>
+                    <td><input type="text" id="filter_username" name="filter_username" value="<?php echo $filter_username;?>" /></td>
+                    <td><input type="text" id="filter_cust_name" name="filter_cust_name" value="<?php echo $filter_cust_name;?>" /></td>
+                    <?php } ?>
                     <td>
                         <select name="filter_enabled" id="filter_enabled" style="width:150px;">
                             <option value="">Select</option>
@@ -59,6 +85,9 @@
                     <tr class="bottom_link">
                         <td height="20" width="10%" align="center">ID</td>
                         <td width="20%" align="left">Username</td>
+                        <?php if($filter_account_type != 'admin'){?>
+                            <td width="20%" align="left">Customer Name</td>
+                        <?php } ?>
                         <td width="8%" align="center">Enabled</td>
                         <td width="62%" align="left">Options</td>
                     </tr>
@@ -68,16 +97,38 @@
                         <?php foreach ($accounts->result() as $row): ?>
                             <tr class="main_text">
                                 <td align="center"><?php echo $row->id; ?></td>
-                                <td align="left"><?php echo $row->username; ?></td>
+                                
+                                <?php if($row->type != 'admin'){?>
+                                <td align="left"><?php echo anchor_popup('customers/edit_customer/'.$row->customer_id.'', $row->username, $atts); ?></td>
+                                
+                                <td align="left"><?php echo $row->customer_firstname.' '.$row->customer_lastname; ?></td>
                                 
                                 <td align="center"><input type="checkbox" id="<?php echo $row->id;?>" class="enable_checkbox" <?php if($row->enabled == 1){ echo 'checked="checked"';}?>/></td>
                                 
                                 <td align="left"><a href="#" id="<?php echo $row->id;?>" class="delete_account"><img src="<?php echo base_url();?>assets/images/button_cancel.png" style="width:16px;margin-left:15px;border:none;cursor:pointer;" /></a></td>
+                                <?php } else {?>
                                 
+                                <td align="left"><?php echo $row->username; ?></td>
+                                
+                                <td align="center"><?php if($row->enabled == 1){ echo 'Enabled';} else { echo 'Disabled';}?></td>
+                                
+                                <td align="left">You Can't Delete An Admin Account</td>
+                                
+                                <?php } ?>
                             </tr>
                         <?php endforeach;?>
                         
-                    <?php } else { echo '<tr><td align="center" colspan="4" style="color:red;">No Results Found</td></tr>'; } ?>                    
+                    <?php 
+                        } 
+                        else 
+                        { 
+                            $colspan = 4;
+                            if($filter_account_type != 'admin'){
+                                $colspan = 5;
+                            } 
+                            echo '<tr><td align="center" colspan="'.$colspan.'" style="color:red;">No Results Found</td></tr>'; 
+                        } 
+                     ?>                    
                     </tbody>
                 </table>
             </td>

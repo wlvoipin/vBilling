@@ -130,6 +130,18 @@
 </tr>
 
 <tr>
+            <td colspan="3" align="right"> 
+                <table>
+                    <tr>
+                        <td id="paginationWKTOP" colspan="3" style="margin-right:25px">
+                            <?php echo $this->pagination->create_links();?>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        
+<tr>
     <td>&nbsp;</td>
     <td></td>
     <td></td>
