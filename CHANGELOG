@@ -1,59 +1,1104 @@
-2011-09-04
-	* Updated README
+2012-01-07  nbhatti <nbhatti@gmail.com>
 
-2011-09-02
-	* api_installer.sh updates
-	* api_install.sh tweaks
-	* Plivo repo url changed from git to https
-	* Misc Updates to install script
-	* API_INSTALL_PATH added
-	* api_install.sh was not properly called. Fixed
-	* CHANGELOG updated
+	* README: Update README
 
-2011-08-29
-	* Tweaks
+2012-01-04  Muhammad Bhatti <naseer@digitallinx.com>
 
-2011-08-30
-	* Installer update for CentOS 6.x
+	* : commit 9b67c9198d4973c78bd3310296f9cc3f1f2972b1 Author: Muhammad
+	Bhatti <naseer@digitallinx.com> Date:   Wed Jan 4 19:59:02 2012
+	+0300
 
-2011-08-17
-	* vBilling API install script added
-	* .gitignore fixed
-	* Changed install scripts to configure FS for local config instance
+2012-01-03  Muhammad Naseer Bhatti <nbhatti@gmail.com>
 
-2011-08-15
-	* Changed freeswitch.xml to start with local configuration files
-	* Web server port changed to 8449
-	* ' added
-	* Junk removed
-	* Install script updated
+	* scripts/install.sh: Tidy
 
-2011-08-05
-	* sed bugs removed
+2012-01-03  Muhammad Naseer Bhatti <nbhatti@gmail.com>
 
-2011-07-29
-	* install script updated for mod_xml_curl
-	* .gitignore update
+	* scripts/install.sh: Banner for howto
 
-2011-07-28
-	* .gitignore updated
+2012-01-03  Muhammad Naseer Bhatti <nbhatti@gmail.com>
 
-2011-07-27
-	* Updated README
-	* minor changes in FS install script
-	* Edited scripts/freeswitch/modules.conf via GitHub
-	* Edited scripts/freeswitch/freeswitch_install.sh via GitHub
-	* Edited scripts/freeswitch/freeswitch_install.sh via GitHub
-	* Edited scripts/freeswitch/freeswitch_install.sh via GitHub
-	* Revert 0c00ee4aa9659f94b178febf1f0ab682dc214430^..HEAD
-	* Edited scripts/freeswitch/freeswitch_install.sh via GitHub
-	* Revert "Edited scripts/freeswitch/freeswitch_install.sh via GitHub"
-	* Edited scripts/freeswitch/freeswitch_install.sh via GitHub
-	* Paths redefined
-	* Install script update
-	* Typos
-	* FreeSWITCH install script created
+	* scripts/install.sh: HOWTO URL added
 
-2011-07-26
-	* Repo Created
+2012-01-03  Muhammad Naseer Bhatti <nbhatti@gmail.com>
+
+	* scripts/install.sh: cp and $length fix
+
+2012-01-02  Muhammad Bhatti <naseer@digitallinx.com>
+
+	* .gitignore, .hgignore, README,
+	htdocs/luac/centos/x32/vBilling_conf.lua,
+	htdocs/luac/centos/x64/vBilling_conf.lua,
+	htdocs/luac/debian/x32/vBilling_conf.lua,
+	htdocs/luac/debian/x64/vBilling_conf.lua,
+	htdocs/luac/ubuntu/x32/vBilling_conf.lua,
+	htdocs/luac/ubuntu/x64/vBilling_conf.lua, scripts/install.sh: LUAC
+	Add
+
+2012-01-02  Muhammad Bhatti <naseer@digitallinx.com>
+
+	* : LUAC Remove
+
+2012-01-02  Muhammad Naseer Bhatti <nbhatti@gmail.com>
+
+	* scripts/install.sh: cp not taking alias. Fixed the bug
+
+2012-01-02  nbhatti <nbhatti@gmail.com>
+
+	* scripts/install.sh: Update scripts/install.sh
+
+2012-01-02  Muhammad Bhatti <naseer@digitallinx.com>
+
+	* .hgignore: LUAC Update
+
+2012-01-02  root <root@development.my-server.co>
+
+	* : Arch specific LUA compiled files
+
+2012-01-02  root <root@development.my-server.co>
+
+	* : LUAC updated files
+
+2011-12-31  root <root@development.my-server.co>
+
+	* : luac files added
+
+2012-01-02  Muhammad Bhatti <naseer@digitallinx.com>
+
+	* scripts/install.sh:  bug
+
+2012-01-02  Muhammad Bhatti <naseer@digitallinx.com>
+
+	* .gitignore, .hgignore, README: Readme Updated
+
+2012-01-02  root <root@development.my-server.co>
+
+	* : commit 53fb9ca266c72dfe3220176944ef4cd0d85c0626 Author: root
+	<root@development.my-server.co> Date:   Mon Jan 2 06:26:17 2012
+	+0300
+
+2012-01-02  Muhammad Naseer Bhatti <nbhatti@gmail.com>
+
+	* htdocs/sql/vBilling.sql, scripts/install.sh: Upgrade is not
+	handled by the install script Upgrade is not handled by the install script
+
+2012-01-02  root <root@development.my-server.co>
+
+	* htdocs/luac/centos/index.html, htdocs/luac/centos/x32/index.html,
+	htdocs/luac/centos/x64/index.html, htdocs/luac/debian/index.html,
+	htdocs/luac/debian/x32/index.html,
+	htdocs/luac/debian/x64/index.html, htdocs/luac/ubuntu/index.html,
+	htdocs/luac/ubuntu/x32/index.html,
+	htdocs/luac/ubuntu/x64/index.html: Arch specific LUA compiled files
+
+2012-01-02  Muhammad Naseer Bhatti <nbhatti@gmail.com>
+
+	* scripts/install.sh: architecture specific install files now
+	installed for lua scripts
+
+2012-01-02  root <root@development.my-server.co>
+
+	* .gitignore: Gitignore updated
+
+2012-01-02  Muhammad Naseer Bhatti <nbhatti@gmail.com>
+
+	* : commit ccb1c19d391df512afaef817e3bbbb53295d189d Author: Muhammad
+	Naseer Bhatti <nbhatti@gmail.com> Date:   Mon Jan 2 06:10:57 2012
+	+0300
+
+2012-01-02  Muhammad Naseer Bhatti <nbhatti@gmail.com>
+
+	* htdocs/sql/vBilling.sql, scripts/install.sh: Upgrade is not
+	handled by the install script Upgrade is not handled by the install script
+
+2012-01-02  root <root@development.my-server.co>
+
+	* htdocs/luac/centos/index.html, htdocs/luac/centos/x32/index.html,
+	htdocs/luac/centos/x64/index.html, htdocs/luac/debian/index.html,
+	htdocs/luac/debian/x32/index.html,
+	htdocs/luac/debian/x64/index.html, htdocs/luac/ubuntu/index.html,
+	htdocs/luac/ubuntu/x32/index.html,
+	htdocs/luac/ubuntu/x64/index.html: Arch specific LUA compiled files
+
+2012-01-02  Muhammad Naseer Bhatti <nbhatti@gmail.com>
+
+	* scripts/install.sh: architecture specific install files now
+	installed for lua scripts
+
+2012-01-02  Muhammad Naseer Bhatti <nbhatti@gmail.com>
+
+	* scripts/install.sh: Typo
+
+2012-01-01  Muhammad Naseer Bhatti <nbhatti@gmail.com>
+
+	* scripts/install.sh: sed fixes
+
+2012-01-01  Muhammad Naseer Bhatti <nbhatti@gmail.com>
+
+	* scripts/install.sh: Logical bug sed should work after symlinks addition
+
+2012-01-01  Muhammad Naseer Bhatti <nbhatti@gmail.com>
+
+	* scripts/install.sh: Tidy
+
+2012-01-01  Muhammad Naseer Bhatti <nbhatti@gmail.com>
+
+	* scripts/install.sh: odbc.ini parsing bug
+
+2012-01-01  nbhatti <nbhatti@gmail.com>
+
+	* scripts/install.sh: index.html in web root should be removed after
+	install. It takes priority on index.php.
+
+2012-01-01  root <root@development.my-server.co>
+
+	* : commit 7377ff71be502849d132dcd723899f424d5c659b Author: root
+	<root@development.my-server.co> Date:   Sun Jan 1 23:14:46 2012
+	+0300
+
+2012-01-01  nbhatti <nbhatti@gmail.com>
+
+	* scripts/install.sh: Re-arrange packages with apt and yum
+
+2012-01-01  nbhatti <nbhatti@gmail.com>
+
+	* scripts/install.sh: Update scripts/install.sh
+
+2012-01-01  nbhatti <nbhatti@gmail.com>
+
+	* scripts/install.sh: Crontab fixed
+
+2012-01-01  root <root@development.my-server.co>
+
+	* htdocs/application/views/default/main_menu/main_menu.php,
+	htdocs/application/views/default/sub_menu/groups_sub_menu.php,
+	scripts/install.sh: Typos
+
+2012-01-01  nbhatti <nbhatti@gmail.com>
+
+	* scripts/install.sh: Updated support options banner
+
+2012-01-01  Muhammad Naseer Bhatti <nbhatti@gmail.com>
+
+	* scripts/install.sh: Enable crontab for daily invoicing
+
+2011-12-31  nbhatti <nbhatti@gmail.com>
+
+	* README: Update README
+
+2011-12-31  nbhatti <nbhatti@gmail.com>
+
+	* README: Update README
+
+2011-12-31  Muhammad Naseer Bhatti <nbhatti@gmail.com>
+
+	* scripts/install.sh: Run FreeSWITCH after install complete
+
+2011-12-31  root <root@development.my-server.co>
+
+	* htdocs/luac/index.html: luac files added
+
+2011-12-31  Muhammad Naseer Bhatti <nbhatti@gmail.com>
+
+	* scripts/install.sh: LUAC symlinks added
+
+2011-12-31  Muhammad Naseer Bhatti <nbhatti@gmail.com>
+
+	* scripts/install.sh: ODBC setup
+
+2011-12-31  Muhammad Naseer Bhatti <nbhatti@gmail.com>
+
+	* scripts/install.sh: AllowOverride All for debian/ubuntu
+
+2011-12-31  Muhammad Naseer Bhatti <nbhatti@gmail.com>
+
+	* scripts/install.sh: admin default password md5 change
+
+2011-12-31  Muhammad Naseer Bhatti <nbhatti@gmail.com>
+
+	* scripts/install.sh: Tweaks
+
+2011-12-31  Muhammad Naseer Bhatti <nbhatti@gmail.com>
+
+	* scripts/install.sh: Minor tweaks
+
+2011-12-31  Muhammad Naseer Bhatti <nbhatti@gmail.com>
+
+	* scripts/install.sh: typo again :)
+
+2011-12-31  Muhammad Naseer Bhatti <nbhatti@gmail.com>
+
+	* scripts/install.sh: typo
+
+2011-12-31  Muhammad Naseer Bhatti <nbhatti@gmail.com>
+
+	* scripts/install.sh: Install script update
+
+2011-12-31  root <root@development.my-server.co>
+
+	* .gitignore, .hgignore, htdocs/.htaccess, htdocs/COPYING,
+	htdocs/README, htdocs/application/.htaccess,
+	htdocs/application/3rdparty/tcpdf/2dbarcodes.php,
+	htdocs/application/3rdparty/tcpdf/LICENSE.TXT,
+	htdocs/application/3rdparty/tcpdf/README.TXT,
+	htdocs/application/3rdparty/tcpdf/barcodes.php,
+	htdocs/application/3rdparty/tcpdf/config/lang/afr.php,
+	htdocs/application/3rdparty/tcpdf/config/lang/ara.php,
+	htdocs/application/3rdparty/tcpdf/config/lang/aze.php,
+	htdocs/application/3rdparty/tcpdf/config/lang/bel.php,
+	htdocs/application/3rdparty/tcpdf/config/lang/bra.php,
+	htdocs/application/3rdparty/tcpdf/config/lang/cat.php,
+	htdocs/application/3rdparty/tcpdf/config/lang/ces.php,
+	htdocs/application/3rdparty/tcpdf/config/lang/chi.php,
+	htdocs/application/3rdparty/tcpdf/config/lang/cym.php,
+	htdocs/application/3rdparty/tcpdf/config/lang/dan.php,
+	htdocs/application/3rdparty/tcpdf/config/lang/eng.php,
+	htdocs/application/3rdparty/tcpdf/config/lang/est.php,
+	htdocs/application/3rdparty/tcpdf/config/lang/eus.php,
+	htdocs/application/3rdparty/tcpdf/config/lang/far.php,
+	htdocs/application/3rdparty/tcpdf/config/lang/fra.php,
+	htdocs/application/3rdparty/tcpdf/config/lang/ger.php,
+	htdocs/application/3rdparty/tcpdf/config/lang/gle.php,
+	htdocs/application/3rdparty/tcpdf/config/lang/glg.php,
+	htdocs/application/3rdparty/tcpdf/config/lang/hat.php,
+	htdocs/application/3rdparty/tcpdf/config/lang/heb.php,
+	htdocs/application/3rdparty/tcpdf/config/lang/hrv.php,
+	htdocs/application/3rdparty/tcpdf/config/lang/hun.php,
+	htdocs/application/3rdparty/tcpdf/config/lang/hye.php,
+	htdocs/application/3rdparty/tcpdf/config/lang/ind.php,
+	htdocs/application/3rdparty/tcpdf/config/lang/ita.php,
+	htdocs/application/3rdparty/tcpdf/config/lang/kat.php,
+	htdocs/application/3rdparty/tcpdf/config/lang/kor.php,
+	htdocs/application/3rdparty/tcpdf/config/lang/mkd.php,
+	htdocs/application/3rdparty/tcpdf/config/lang/mlt.php,
+	htdocs/application/3rdparty/tcpdf/config/lang/msa.php,
+	htdocs/application/3rdparty/tcpdf/config/lang/nld.php,
+	htdocs/application/3rdparty/tcpdf/config/lang/nob.php,
+	htdocs/application/3rdparty/tcpdf/config/lang/pol.php,
+	htdocs/application/3rdparty/tcpdf/config/lang/por.php,
+	htdocs/application/3rdparty/tcpdf/config/lang/ron.php,
+	htdocs/application/3rdparty/tcpdf/config/lang/rus.php,
+	htdocs/application/3rdparty/tcpdf/config/lang/slv.php,
+	htdocs/application/3rdparty/tcpdf/config/lang/spa.php,
+	htdocs/application/3rdparty/tcpdf/config/lang/sqi.php,
+	htdocs/application/3rdparty/tcpdf/config/lang/srp.php,
+	htdocs/application/3rdparty/tcpdf/config/lang/swa.php,
+	htdocs/application/3rdparty/tcpdf/config/lang/swe.php,
+	htdocs/application/3rdparty/tcpdf/config/lang/urd.php,
+	htdocs/application/3rdparty/tcpdf/config/lang/yid.php,
+	htdocs/application/3rdparty/tcpdf/config/lang/zho.php,
+	htdocs/application/3rdparty/tcpdf/config/tcpdf_config.php,
+	htdocs/application/3rdparty/tcpdf/config/tcpdf_config_alt.php,
+	htdocs/application/3rdparty/tcpdf/datamatrix.php,
+	htdocs/application/3rdparty/tcpdf/encodings_maps.php,
+	htdocs/application/3rdparty/tcpdf/fonts/aealarabiya.php,
+	htdocs/application/3rdparty/tcpdf/fonts/aefurat.php,
+	htdocs/application/3rdparty/tcpdf/fonts/cid0cs.php,
+	htdocs/application/3rdparty/tcpdf/fonts/cid0ct.php,
+	htdocs/application/3rdparty/tcpdf/fonts/cid0jp.php,
+	htdocs/application/3rdparty/tcpdf/fonts/cid0kr.php,
+	htdocs/application/3rdparty/tcpdf/fonts/courier.php,
+	htdocs/application/3rdparty/tcpdf/fonts/courierb.php,
+	htdocs/application/3rdparty/tcpdf/fonts/courierbi.php,
+	htdocs/application/3rdparty/tcpdf/fonts/courieri.php,
+	htdocs/application/3rdparty/tcpdf/fonts/dejavu-fonts-ttf-2.33/AUTHO
+	RS,
+	htdocs/application/3rdparty/tcpdf/fonts/dejavu-fonts-ttf-2.33/BUGS,
+	htdocs/application/3rdparty/tcpdf/fonts/dejavu-fonts-ttf-2.33/LICEN
+	SE,
+	htdocs/application/3rdparty/tcpdf/fonts/dejavu-fonts-ttf-2.33/NEWS,
+	htdocs/application/3rdparty/tcpdf/fonts/dejavu-fonts-ttf-2.33/READM
+	E,
+	htdocs/application/3rdparty/tcpdf/fonts/dejavu-fonts-ttf-2.33/langc
+	over.txt,
+	htdocs/application/3rdparty/tcpdf/fonts/dejavu-fonts-ttf-2.33/statu
+	s.txt,
+	htdocs/application/3rdparty/tcpdf/fonts/dejavu-fonts-ttf-2.33/unico
+	ver.txt, htdocs/application/3rdparty/tcpdf/fonts/dejavusans.php,
+	htdocs/application/3rdparty/tcpdf/fonts/dejavusansb.php,
+	htdocs/application/3rdparty/tcpdf/fonts/dejavusansbi.php,
+	htdocs/application/3rdparty/tcpdf/fonts/dejavusanscondensed.php,
+	htdocs/application/3rdparty/tcpdf/fonts/dejavusanscondensedb.php,
+	htdocs/application/3rdparty/tcpdf/fonts/dejavusanscondensedbi.php,
+	htdocs/application/3rdparty/tcpdf/fonts/dejavusanscondensedi.php,
+	htdocs/application/3rdparty/tcpdf/fonts/dejavusansextralight.php,
+	htdocs/application/3rdparty/tcpdf/fonts/dejavusansi.php,
+	htdocs/application/3rdparty/tcpdf/fonts/dejavusansmono.php,
+	htdocs/application/3rdparty/tcpdf/fonts/dejavusansmonob.php,
+	htdocs/application/3rdparty/tcpdf/fonts/dejavusansmonobi.php,
+	htdocs/application/3rdparty/tcpdf/fonts/dejavusansmonoi.php,
+	htdocs/application/3rdparty/tcpdf/fonts/dejavuserif.php,
+	htdocs/application/3rdparty/tcpdf/fonts/dejavuserifb.php,
+	htdocs/application/3rdparty/tcpdf/fonts/dejavuserifbi.php,
+	htdocs/application/3rdparty/tcpdf/fonts/dejavuserifcondensed.php,
+	htdocs/application/3rdparty/tcpdf/fonts/dejavuserifcondensedb.php,
+	htdocs/application/3rdparty/tcpdf/fonts/dejavuserifcondensedbi.php,
+	htdocs/application/3rdparty/tcpdf/fonts/dejavuserifcondensedi.php,
+	htdocs/application/3rdparty/tcpdf/fonts/dejavuserifi.php,
+	htdocs/application/3rdparty/tcpdf/fonts/freefont-20100919/AUTHORS,
+	htdocs/application/3rdparty/tcpdf/fonts/freefont-20100919/COPYING,
+	htdocs/application/3rdparty/tcpdf/fonts/freefont-20100919/CREDITS,
+	htdocs/application/3rdparty/tcpdf/fonts/freefont-20100919/ChangeLog
+	,
+	htdocs/application/3rdparty/tcpdf/fonts/freefont-20100919/INSTALL,
+	htdocs/application/3rdparty/tcpdf/fonts/freefont-20100919/README,
+	htdocs/application/3rdparty/tcpdf/fonts/freemono.php,
+	htdocs/application/3rdparty/tcpdf/fonts/freemonob.php,
+	htdocs/application/3rdparty/tcpdf/fonts/freemonobi.php,
+	htdocs/application/3rdparty/tcpdf/fonts/freemonoi.php,
+	htdocs/application/3rdparty/tcpdf/fonts/freesans.php,
+	htdocs/application/3rdparty/tcpdf/fonts/freesansb.php,
+	htdocs/application/3rdparty/tcpdf/fonts/freesansbi.php,
+	htdocs/application/3rdparty/tcpdf/fonts/freesansi.php,
+	htdocs/application/3rdparty/tcpdf/fonts/freeserif.php,
+	htdocs/application/3rdparty/tcpdf/fonts/freeserifb.php,
+	htdocs/application/3rdparty/tcpdf/fonts/freeserifbi.php,
+	htdocs/application/3rdparty/tcpdf/fonts/freeserifi.php,
+	htdocs/application/3rdparty/tcpdf/fonts/helvetica.php,
+	htdocs/application/3rdparty/tcpdf/fonts/helveticab.php,
+	htdocs/application/3rdparty/tcpdf/fonts/helveticabi.php,
+	htdocs/application/3rdparty/tcpdf/fonts/helveticai.php,
+	htdocs/application/3rdparty/tcpdf/fonts/hysmyeongjostdmedium.php,
+	htdocs/application/3rdparty/tcpdf/fonts/kozgopromedium.php,
+	htdocs/application/3rdparty/tcpdf/fonts/kozminproregular.php,
+	htdocs/application/3rdparty/tcpdf/fonts/msungstdlight.php,
+	htdocs/application/3rdparty/tcpdf/fonts/pdfacourier.php,
+	htdocs/application/3rdparty/tcpdf/fonts/pdfacourierb.php,
+	htdocs/application/3rdparty/tcpdf/fonts/pdfacourierbi.php,
+	htdocs/application/3rdparty/tcpdf/fonts/pdfacourieri.php,
+	htdocs/application/3rdparty/tcpdf/fonts/pdfahelvetica.php,
+	htdocs/application/3rdparty/tcpdf/fonts/pdfahelveticab.php,
+	htdocs/application/3rdparty/tcpdf/fonts/pdfahelveticabi.php,
+	htdocs/application/3rdparty/tcpdf/fonts/pdfahelveticai.php,
+	htdocs/application/3rdparty/tcpdf/fonts/pdfasymbol.php,
+	htdocs/application/3rdparty/tcpdf/fonts/pdfatimes.php,
+	htdocs/application/3rdparty/tcpdf/fonts/pdfatimesb.php,
+	htdocs/application/3rdparty/tcpdf/fonts/pdfatimesbi.php,
+	htdocs/application/3rdparty/tcpdf/fonts/pdfatimesi.php,
+	htdocs/application/3rdparty/tcpdf/fonts/pdfazapfdingbats.php,
+	htdocs/application/3rdparty/tcpdf/fonts/stsongstdlight.php,
+	htdocs/application/3rdparty/tcpdf/fonts/symbol.php,
+	htdocs/application/3rdparty/tcpdf/fonts/times.php,
+	htdocs/application/3rdparty/tcpdf/fonts/timesb.php,
+	htdocs/application/3rdparty/tcpdf/fonts/timesbi.php,
+	htdocs/application/3rdparty/tcpdf/fonts/timesi.php,
+	htdocs/application/3rdparty/tcpdf/fonts/uni2cid_ac15.php,
+	htdocs/application/3rdparty/tcpdf/fonts/uni2cid_ag15.php,
+	htdocs/application/3rdparty/tcpdf/fonts/uni2cid_aj16.php,
+	htdocs/application/3rdparty/tcpdf/fonts/uni2cid_ak12.php,
+	htdocs/application/3rdparty/tcpdf/fonts/zapfdingbats.php,
+	htdocs/application/3rdparty/tcpdf/htmlcolors.php,
+	htdocs/application/3rdparty/tcpdf/pdf417.php,
+	htdocs/application/3rdparty/tcpdf/qrcode.php,
+	htdocs/application/3rdparty/tcpdf/spotcolors.php,
+	htdocs/application/3rdparty/tcpdf/tcpdf.crt,
+	htdocs/application/3rdparty/tcpdf/tcpdf.php,
+	htdocs/application/3rdparty/tcpdf/tcpdf_filters.php,
+	htdocs/application/3rdparty/tcpdf/tcpdf_parser.php,
+	htdocs/application/3rdparty/tcpdf/unicode_data.php,
+	htdocs/application/cache/.htaccess,
+	htdocs/application/cache/index.html,
+	htdocs/application/config/autoload.php,
+	htdocs/application/config/config.php,
+	htdocs/application/config/constants.php,
+	htdocs/application/config/database.php,
+	htdocs/application/config/doctypes.php,
+	htdocs/application/config/foreign_chars.php,
+	htdocs/application/config/hooks.php,
+	htdocs/application/config/index.html,
+	htdocs/application/config/mimes.php,
+	htdocs/application/config/profiler.php,
+	htdocs/application/config/routes.php,
+	htdocs/application/config/smileys.php,
+	htdocs/application/config/tcpdf.php,
+	htdocs/application/config/user_agents.php,
+	htdocs/application/controllers/billing.php,
+	htdocs/application/controllers/carriers.php,
+	htdocs/application/controllers/cdr.php,
+	htdocs/application/controllers/cron/generate_invoices.php,
+	htdocs/application/controllers/customer.php,
+	htdocs/application/controllers/customers.php,
+	htdocs/application/controllers/freeswitch.php,
+	htdocs/application/controllers/groups.php,
+	htdocs/application/controllers/home.php,
+	htdocs/application/controllers/manage_accounts.php,
+	htdocs/application/core/index.html,
+	htdocs/application/errors/error_404.php,
+	htdocs/application/errors/error_db.php,
+	htdocs/application/errors/error_general.php,
+	htdocs/application/errors/error_php.php,
+	htdocs/application/errors/index.html,
+	htdocs/application/helpers/carriers_helper.php,
+	htdocs/application/helpers/esl_helper.php,
+	htdocs/application/helpers/global_helper.php,
+	htdocs/application/helpers/groups_helper.php,
+	htdocs/application/helpers/user_login_helper.php,
+	htdocs/application/hooks/index.html, htdocs/application/index.html,
+	htdocs/application/language/english/index.html,
+	htdocs/application/libraries/Esl.php,
+	htdocs/application/libraries/Spreadsheet_Excel_Writer.php,
+	htdocs/application/libraries/excel_library_files/BIFFwriter.php,
+	htdocs/application/libraries/excel_library_files/File.php,
+	htdocs/application/libraries/excel_library_files/Format.php,
+	htdocs/application/libraries/excel_library_files/OLE.php,
+	htdocs/application/libraries/excel_library_files/PPS.php,
+	htdocs/application/libraries/excel_library_files/Parser.php,
+	htdocs/application/libraries/excel_library_files/Root.php,
+	htdocs/application/libraries/excel_library_files/Validator.php,
+	htdocs/application/libraries/excel_library_files/Workbook.php,
+	htdocs/application/libraries/excel_library_files/Worksheet.php,
+	htdocs/application/libraries/excel_library_files/readme.txt,
+	htdocs/application/libraries/index.html,
+	htdocs/application/libraries/pdf.php,
+	htdocs/application/logs/index.html,
+	htdocs/application/models/billing_model.php,
+	htdocs/application/models/carriers_model.php,
+	htdocs/application/models/cdr_model.php,
+	htdocs/application/models/customer_model.php,
+	htdocs/application/models/freeswitch_model.php,
+	htdocs/application/models/groups_model.php,
+	htdocs/application/models/home_model.php,
+	htdocs/application/models/manage_accounts_model.php,
+	htdocs/application/third_party/index.html,
+	htdocs/application/views/accounts/accounts_view.php,
+	htdocs/application/views/accounts/new_account_view.php,
+	htdocs/application/views/billing/billing_view.php,
+	htdocs/application/views/billing/invoices_view.php,
+	htdocs/application/views/carriers/add_carrier_view.php,
+	htdocs/application/views/carriers/carriers_view.php,
+	htdocs/application/views/carriers/edit_carrier_view.php,
+	htdocs/application/views/cdr/call_destination_view.php,
+	htdocs/application/views/cdr/cdr_view.php,
+	htdocs/application/views/cdr/customer_stats_view.php,
+	htdocs/application/views/cdr/gateways_stats_view.php,
+	htdocs/application/views/customer/balance_customer_view.php,
+	htdocs/application/views/customer/cdr_customer_view.php,
+	htdocs/application/views/customer/dashboard.php,
+	htdocs/application/views/customer/edit_acl_node_view.php,
+	htdocs/application/views/customer/edit_customer_view.php,
+	htdocs/application/views/customer/edit_sip_view.php,
+	htdocs/application/views/customer/invoices_view.php,
+	htdocs/application/views/customer/ip_customer_view.php,
+	htdocs/application/views/customer/my_account.php,
+	htdocs/application/views/customer/new_acl_node_view.php,
+	htdocs/application/views/customer/new_sip_view.php,
+	htdocs/application/views/customer/pop_up_menu.php,
+	htdocs/application/views/customer/rate_customer_view.php,
+	htdocs/application/views/customer/sip_customer_view.php,
+	htdocs/application/views/customers/add_customer_view.php,
+	htdocs/application/views/customers/balance_customer_view.php,
+	htdocs/application/views/customers/cdr_customer_view.php,
+	htdocs/application/views/customers/customers_view.php,
+	htdocs/application/views/customers/edit_acl_node_view.php,
+	htdocs/application/views/customers/edit_customer_view.php,
+	htdocs/application/views/customers/edit_sip_view.php,
+	htdocs/application/views/customers/invoices_view.php,
+	htdocs/application/views/customers/ip_customer_view.php,
+	htdocs/application/views/customers/new_acl_node_view.php,
+	htdocs/application/views/customers/new_sip_view.php,
+	htdocs/application/views/customers/pop_up_menu.php,
+	htdocs/application/views/customers/rate_customer_view.php,
+	htdocs/application/views/customers/sip_customer_view.php,
+	htdocs/application/views/dashboard.php,
+	htdocs/application/views/default/footer.php,
+	htdocs/application/views/default/header.php,
+	htdocs/application/views/default/main_menu/main_menu.php,
+	htdocs/application/views/default/sub_menu/billing_sub_menu.php,
+	htdocs/application/views/default/sub_menu/carriers_sub_menu.php,
+	htdocs/application/views/default/sub_menu/cdr_sub_menu.php,
+	htdocs/application/views/default/sub_menu/customer_sub_menu.php,
+	htdocs/application/views/default/sub_menu/freeswitch_sub_menu.php,
+	htdocs/application/views/default/sub_menu/groups_sub_menu.php,
+	htdocs/application/views/default/sub_menu/manage_accounts_sub_menu.
+	php, htdocs/application/views/default/template.php,
+	htdocs/application/views/freeswitch/esl_view.php,
+	htdocs/application/views/freeswitch/gateway_detail_view.php,
+	htdocs/application/views/freeswitch/gateway_edit_view.php,
+	htdocs/application/views/freeswitch/new_gateway_view.php,
+	htdocs/application/views/freeswitch/new_profile_view.php,
+	htdocs/application/views/freeswitch/profile_view.php,
+	htdocs/application/views/freeswitch/sofia_detail_view.php,
+	htdocs/application/views/groups/add_group_view.php,
+	htdocs/application/views/groups/add_rate_view.php,
+	htdocs/application/views/groups/edit_group_view.php,
+	htdocs/application/views/groups/edit_rate_view.php,
+	htdocs/application/views/groups/groups_view.php,
+	htdocs/application/views/groups/import_csv_view.php,
+	htdocs/application/views/login.php,
+	htdocs/application/views/my_account.php,
+	htdocs/assets/css/Book1.csv,
+	htdocs/assets/css/jquery_ui/jquery-ui-1.8.16.custom.css,
+	htdocs/assets/css/style.css, htdocs/assets/get_xml_status.php,
+	htdocs/assets/js/blockUI.js,
+	htdocs/assets/js/jquery-ui-1.8.16.custom.min.js,
+	htdocs/assets/js/jquery.alphanumeric.pack.js,
+	htdocs/assets/js/jquery.js,
+	htdocs/assets/js/jquery.tablednd_0_5.js,
+	htdocs/assets/js/timepicker.js,
+	htdocs/freeswitch_conf/freeswitch.xml, htdocs/index.php,
+	htdocs/media/index.html, htdocs/media/invoices/index.html,
+	htdocs/sql/index.html, htdocs/system/.htaccess,
+	htdocs/system/core/Benchmark.php,
+	htdocs/system/core/CodeIgniter.php, htdocs/system/core/Common.php,
+	htdocs/system/core/Config.php, htdocs/system/core/Controller.php,
+	htdocs/system/core/Exceptions.php, htdocs/system/core/Hooks.php,
+	htdocs/system/core/Input.php, htdocs/system/core/Lang.php,
+	htdocs/system/core/Loader.php, htdocs/system/core/Model.php,
+	htdocs/system/core/Output.php, htdocs/system/core/Router.php,
+	htdocs/system/core/Security.php, htdocs/system/core/URI.php,
+	htdocs/system/core/Utf8.php, htdocs/system/core/index.html,
+	htdocs/system/database/DB.php,
+	htdocs/system/database/DB_active_rec.php,
+	htdocs/system/database/DB_cache.php,
+	htdocs/system/database/DB_driver.php,
+	htdocs/system/database/DB_forge.php,
+	htdocs/system/database/DB_result.php,
+	htdocs/system/database/DB_utility.php,
+	htdocs/system/database/drivers/index.html,
+	htdocs/system/database/drivers/mssql/index.html,
+	htdocs/system/database/drivers/mssql/mssql_driver.php,
+	htdocs/system/database/drivers/mssql/mssql_forge.php,
+	htdocs/system/database/drivers/mssql/mssql_result.php,
+	htdocs/system/database/drivers/mssql/mssql_utility.php,
+	htdocs/system/database/drivers/mysql/index.html,
+	htdocs/system/database/drivers/mysql/mysql_driver.php,
+	htdocs/system/database/drivers/mysql/mysql_forge.php,
+	htdocs/system/database/drivers/mysql/mysql_result.php,
+	htdocs/system/database/drivers/mysql/mysql_utility.php,
+	htdocs/system/database/drivers/mysqli/index.html,
+	htdocs/system/database/drivers/mysqli/mysqli_driver.php,
+	htdocs/system/database/drivers/mysqli/mysqli_forge.php,
+	htdocs/system/database/drivers/mysqli/mysqli_result.php,
+	htdocs/system/database/drivers/mysqli/mysqli_utility.php,
+	htdocs/system/database/drivers/oci8/index.html,
+	htdocs/system/database/drivers/oci8/oci8_driver.php,
+	htdocs/system/database/drivers/oci8/oci8_forge.php,
+	htdocs/system/database/drivers/oci8/oci8_result.php,
+	htdocs/system/database/drivers/oci8/oci8_utility.php,
+	htdocs/system/database/drivers/odbc/index.html,
+	htdocs/system/database/drivers/odbc/odbc_driver.php,
+	htdocs/system/database/drivers/odbc/odbc_forge.php,
+	htdocs/system/database/drivers/odbc/odbc_result.php,
+	htdocs/system/database/drivers/odbc/odbc_utility.php,
+	htdocs/system/database/drivers/postgre/index.html,
+	htdocs/system/database/drivers/postgre/postgre_driver.php,
+	htdocs/system/database/drivers/postgre/postgre_forge.php,
+	htdocs/system/database/drivers/postgre/postgre_result.php,
+	htdocs/system/database/drivers/postgre/postgre_utility.php,
+	htdocs/system/database/drivers/sqlite/index.html,
+	htdocs/system/database/drivers/sqlite/sqlite_driver.php,
+	htdocs/system/database/drivers/sqlite/sqlite_forge.php,
+	htdocs/system/database/drivers/sqlite/sqlite_result.php,
+	htdocs/system/database/drivers/sqlite/sqlite_utility.php,
+	htdocs/system/database/drivers/sqlsrv/index.html,
+	htdocs/system/database/drivers/sqlsrv/sqlsrv_driver.php,
+	htdocs/system/database/drivers/sqlsrv/sqlsrv_forge.php,
+	htdocs/system/database/drivers/sqlsrv/sqlsrv_result.php,
+	htdocs/system/database/drivers/sqlsrv/sqlsrv_utility.php,
+	htdocs/system/database/index.html, htdocs/system/fonts/index.html,
+	htdocs/system/helpers/array_helper.php,
+	htdocs/system/helpers/captcha_helper.php,
+	htdocs/system/helpers/cookie_helper.php,
+	htdocs/system/helpers/date_helper.php,
+	htdocs/system/helpers/directory_helper.php,
+	htdocs/system/helpers/download_helper.php,
+	htdocs/system/helpers/email_helper.php,
+	htdocs/system/helpers/file_helper.php,
+	htdocs/system/helpers/form_helper.php,
+	htdocs/system/helpers/html_helper.php,
+	htdocs/system/helpers/index.html,
+	htdocs/system/helpers/inflector_helper.php,
+	htdocs/system/helpers/language_helper.php,
+	htdocs/system/helpers/number_helper.php,
+	htdocs/system/helpers/path_helper.php,
+	htdocs/system/helpers/security_helper.php,
+	htdocs/system/helpers/smiley_helper.php,
+	htdocs/system/helpers/string_helper.php,
+	htdocs/system/helpers/text_helper.php,
+	htdocs/system/helpers/typography_helper.php,
+	htdocs/system/helpers/url_helper.php,
+	htdocs/system/helpers/xml_helper.php, htdocs/system/index.html,
+	htdocs/system/language/english/calendar_lang.php,
+	htdocs/system/language/english/date_lang.php,
+	htdocs/system/language/english/db_lang.php,
+	htdocs/system/language/english/email_lang.php,
+	htdocs/system/language/english/form_validation_lang.php,
+	htdocs/system/language/english/ftp_lang.php,
+	htdocs/system/language/english/imglib_lang.php,
+	htdocs/system/language/english/index.html,
+	htdocs/system/language/english/number_lang.php,
+	htdocs/system/language/english/profiler_lang.php,
+	htdocs/system/language/english/unit_test_lang.php,
+	htdocs/system/language/english/upload_lang.php,
+	htdocs/system/language/index.html,
+	htdocs/system/libraries/Cache/Cache.php,
+	htdocs/system/libraries/Cache/drivers/Cache_apc.php,
+	htdocs/system/libraries/Cache/drivers/Cache_dummy.php,
+	htdocs/system/libraries/Cache/drivers/Cache_file.php,
+	htdocs/system/libraries/Cache/drivers/Cache_memcached.php,
+	htdocs/system/libraries/Calendar.php,
+	htdocs/system/libraries/Cart.php,
+	htdocs/system/libraries/Driver.php,
+	htdocs/system/libraries/Email.php,
+	htdocs/system/libraries/Encrypt.php,
+	htdocs/system/libraries/Form_validation.php,
+	htdocs/system/libraries/Ftp.php,
+	htdocs/system/libraries/Image_lib.php,
+	htdocs/system/libraries/Javascript.php,
+	htdocs/system/libraries/Log.php,
+	htdocs/system/libraries/Pagination.php,
+	htdocs/system/libraries/Parser.php,
+	htdocs/system/libraries/Profiler.php,
+	htdocs/system/libraries/Session.php,
+	htdocs/system/libraries/Sha1.php,
+	htdocs/system/libraries/Table.php,
+	htdocs/system/libraries/Trackback.php,
+	htdocs/system/libraries/Typography.php,
+	htdocs/system/libraries/Unit_test.php,
+	htdocs/system/libraries/Upload.php,
+	htdocs/system/libraries/User_agent.php,
+	htdocs/system/libraries/Xmlrpc.php,
+	htdocs/system/libraries/Xmlrpcs.php,
+	htdocs/system/libraries/Zip.php,
+	htdocs/system/libraries/index.html,
+	htdocs/system/libraries/javascript/Jquery.php,
+	htdocs/xmlcurl/configuration/acl.conf.php,
+	htdocs/xmlcurl/configuration/console.conf.php,
+	htdocs/xmlcurl/configuration/event_socket.conf.php,
+	htdocs/xmlcurl/configuration/post_load_modules.conf.php,
+	htdocs/xmlcurl/configuration/sofia.conf.php,
+	htdocs/xmlcurl/configuration/switch.conf.php,
+	htdocs/xmlcurl/configuration/xml_cdr.conf.php,
+	htdocs/xmlcurl/fs_cdr.php, htdocs/xmlcurl/fs_configuration.php,
+	htdocs/xmlcurl/fs_curl.php, htdocs/xmlcurl/fs_directory.php,
+	htdocs/xmlcurl/index.html, htdocs/xmlcurl/index.php,
+	htdocs/xmlcurl/libs/fs_pdo.php: Initial Commit
+
+2011-12-31  Muhammad Naseer Bhatti <nbhatti@gmail.com>
+
+	* scripts/install.sh: rewrite module enable for apache
+
+2011-12-31  root <root@development.my-server.co>
+
+	* .gitignore, .hgignore, TODO, scripts/api_install.sh,
+	scripts/freeswitch/conf/freeswitch_combined_config.sh,
+	scripts/freeswitch/freeswitch.xml,
+	scripts/freeswitch/freeswitch_install.sh,
+	scripts/freeswitch/initscripts/centos/freeswitch,
+	scripts/freeswitch/initscripts/debian/freeswitch,
+	scripts/freeswitch/modules.conf, scripts/htdocs/htdocs_install.sh,
+	scripts/install.sh: Pre-release cleanup
+
+2011-12-29  Muhammad Naseer Bhatti <nbhatti@gmail.com>
+
+	* scripts/install.sh: Revert
+	3abc2426704bd3a709fb91319467f13563093d59^..HEAD
+
+2011-12-29  Muhammad Naseer Bhatti <nbhatti@gmail.com>
+
+	* scripts/api_install.sh,
+	scripts/freeswitch/conf/freeswitch_combined_config.sh,
+	scripts/freeswitch/freeswitch.xml,
+	scripts/freeswitch/freeswitch_install.sh,
+	scripts/freeswitch/initscripts/centos/freeswitch,
+	scripts/freeswitch/initscripts/debian/freeswitch,
+	scripts/freeswitch/modules.conf, scripts/htdocs/htdocs_install.sh,
+	scripts/install.sh: Revert
+	c130d80c6aa1a927f5380d618012e4cc8f183629^..HEAD
+
+2011-12-28  nbhatti <nbhatti@gmail.com>
+
+	* scripts/api_install.sh,
+	scripts/freeswitch/conf/freeswitch_combined_config.sh,
+	scripts/freeswitch/freeswitch.xml,
+	scripts/freeswitch/freeswitch_install.sh,
+	scripts/freeswitch/initscripts/centos/freeswitch,
+	scripts/freeswitch/initscripts/debian/freeswitch,
+	scripts/freeswitch/modules.conf, scripts/htdocs/htdocs_install.sh,
+	scripts/install.sh: Preparing for release
+
+2011-10-14  Bhatti <nbhatti@gmail.com>
+
+	* scripts/install.sh: removal of TEMPDIR fixed
+
+2011-10-14  Bhatti <nbhatti@gmail.com>
+
+	* scripts/api_install.sh, scripts/freeswitch/freeswitch_install.sh,
+	scripts/htdocs/htdocs_install.sh, scripts/install.sh: added export
+	DEBIAN_FRONTEND=noninteractive This enabled noninteractive install for Debian based systems
+
+2011-09-25  Muhammad Naseer Bhatti <nbhatti@gmail.com>
+
+	* scripts/install.sh: Repo URL(s) updated
+
+2011-09-25  Muhammad Naseer Bhatti <nbhatti@gmail.com>
+
+	* scripts/freeswitch/freeswitch_install.sh: :-)
+
+2011-09-25  Muhammad Naseer Bhatti <nbhatti@gmail.com>
+
+	* scripts/freeswitch/freeswitch_install.sh, scripts/install.sh: 
+	Installer rework
+
+2011-09-25  Muhammad Naseer Bhatti <nbhatti@gmail.com>
+
+	* scripts/api/LICENSE, scripts/api/MANIFEST.in, scripts/api/README,
+	scripts/api/README.rst, scripts/api/scripts/ez_setup.py,
+	scripts/api/scripts/plivo_install_beta.sh, scripts/api/setup.py,
+	scripts/api/src/bin/INFO.rst, scripts/api/src/bin/cacheserver,
+	scripts/api/src/bin/plivo, scripts/api/src/bin/plivo-cache,
+	scripts/api/src/bin/plivo-outbound,
+	scripts/api/src/bin/plivo-postinstall,
+	scripts/api/src/bin/plivo-rest, scripts/api/src/bin/wavdump.py,
+	scripts/api/src/bin/wavstream.sh,
+	scripts/api/src/config/cache.conf,
+	scripts/api/src/config/cache.conf.orig,
+	scripts/api/src/config/default.conf,
+	scripts/api/src/config/default.conf.orig,
+	scripts/api/src/initscripts/centos/plivo,
+	scripts/api/src/initscripts/centos/plivocache,
+	scripts/api/src/plivo/__init__.py,
+	scripts/api/src/plivo/core/__init__.py,
+	scripts/api/src/plivo/core/errors.py,
+	scripts/api/src/plivo/core/freeswitch/__init__.py,
+	scripts/api/src/plivo/core/freeswitch/commands.py,
+	scripts/api/src/plivo/core/freeswitch/eventsocket.py,
+	scripts/api/src/plivo/core/freeswitch/eventtypes.py,
+	scripts/api/src/plivo/core/freeswitch/inboundsocket.py,
+	scripts/api/src/plivo/core/freeswitch/outboundsocket.py,
+	scripts/api/src/plivo/core/freeswitch/transport.py,
+	scripts/api/src/plivo/core/transport.py,
+	scripts/api/src/plivo/rest/__init__.py,
+	scripts/api/src/plivo/rest/freeswitch/__init__.py,
+	scripts/api/src/plivo/rest/freeswitch/api.py,
+	scripts/api/src/plivo/rest/freeswitch/apiserver.py,
+	scripts/api/src/plivo/rest/freeswitch/cacheapi.py,
+	scripts/api/src/plivo/rest/freeswitch/cacheserver.py,
+	scripts/api/src/plivo/rest/freeswitch/cacheurls.py,
+	scripts/api/src/plivo/rest/freeswitch/elements.py,
+	scripts/api/src/plivo/rest/freeswitch/exceptions.py,
+	scripts/api/src/plivo/rest/freeswitch/helpers.py,
+	scripts/api/src/plivo/rest/freeswitch/inboundsocket.py,
+	scripts/api/src/plivo/rest/freeswitch/outboundserver.py,
+	scripts/api/src/plivo/rest/freeswitch/outboundsocket.py,
+	scripts/api/src/plivo/rest/freeswitch/urls.py,
+	scripts/api/src/plivo/utils/__init__.py,
+	scripts/api/src/plivo/utils/daemonize.py,
+	scripts/api/src/plivo/utils/encode.py,
+	scripts/api/src/plivo/utils/logger.py, scripts/api_install.sh,
+	scripts/freeswitch/freeswitch.xml,
+	scripts/freeswitch/freeswitch_install.sh,
+	scripts/freeswitch/initscripts/debian/freeswitch,
+	scripts/freeswitch/logfile.conf.xml, scripts/install.sh: Install
+	Script Update
+
+2011-09-25  Muhammad Naseer Bhatti <nbhatti@gmail.com>
+
+	* scripts/freeswitch/freeswitch_install.sh: FS Instal Script bugs -
+	2
+
+2011-09-25  Muhammad Naseer Bhatti <nbhatti@gmail.com>
+
+	* scripts/freeswitch/freeswitch_install.sh: FS Instal Script bugs -
+	2
+
+2011-09-25  Muhammad Naseer Bhatti <nbhatti@gmail.com>
+
+	* scripts/freeswitch/freeswitch_install.sh: FS Instal Script bugs
+
+2011-09-25  Muhammad Naseer Bhatti <nbhatti@gmail.com>
+
+	* scripts/freeswitch/freeswitch.xml,
+	scripts/freeswitch/freeswitch_install.sh, scripts/install.sh: 
+	Installer rework
+
+2011-09-20  Muhammad Naseer Bhatti <nbhatti@gmail.com>
+
+	* scripts/api_install.sh, scripts/freeswitch/freeswitch_install.sh: 
+	.
+
+2011-09-16  Muhammad Naseer Bhatti <nbhatti@gmail.com>
+
+	* scripts/api_install.sh: .
+
+2011-09-16  Muhammad Naseer Bhatti <nbhatti@gmail.com>
+
+	* scripts/api_install.sh: .
+
+2011-09-16  Muhammad Naseer Bhatti <nbhatti@gmail.com>
+
+	* scripts/api_install.sh, scripts/install.sh: .
+
+2011-09-16  Muhammad Naseer Bhatti <nbhatti@gmail.com>
+
+	* scripts/api_install.sh, scripts/install.sh: Local Paths
+
+2011-09-16  Muhammad Naseer Bhatti <nbhatti@gmail.com>
+
+	* scripts/api/LICENSE, scripts/api/MANIFEST.in, scripts/api/README,
+	scripts/api/README.rst, scripts/api/scripts/ez_setup.py,
+	scripts/api/scripts/plivo_install_beta.sh, scripts/api/setup.py,
+	scripts/api/src/bin/INFO.rst, scripts/api/src/bin/cacheserver,
+	scripts/api/src/bin/plivo, scripts/api/src/bin/plivo-cache,
+	scripts/api/src/bin/plivo-outbound,
+	scripts/api/src/bin/plivo-postinstall,
+	scripts/api/src/bin/plivo-rest, scripts/api/src/bin/wavdump.py,
+	scripts/api/src/bin/wavstream.sh,
+	scripts/api/src/config/cache.conf,
+	scripts/api/src/config/cache.conf.orig,
+	scripts/api/src/config/default.conf,
+	scripts/api/src/config/default.conf.orig,
+	scripts/api/src/initscripts/centos/plivo,
+	scripts/api/src/initscripts/centos/plivocache,
+	scripts/api/src/plivo/__init__.py,
+	scripts/api/src/plivo/core/__init__.py,
+	scripts/api/src/plivo/core/errors.py,
+	scripts/api/src/plivo/core/freeswitch/__init__.py,
+	scripts/api/src/plivo/core/freeswitch/commands.py,
+	scripts/api/src/plivo/core/freeswitch/eventsocket.py,
+	scripts/api/src/plivo/core/freeswitch/eventtypes.py,
+	scripts/api/src/plivo/core/freeswitch/inboundsocket.py,
+	scripts/api/src/plivo/core/freeswitch/outboundsocket.py,
+	scripts/api/src/plivo/core/freeswitch/transport.py,
+	scripts/api/src/plivo/core/transport.py,
+	scripts/api/src/plivo/rest/__init__.py,
+	scripts/api/src/plivo/rest/freeswitch/__init__.py,
+	scripts/api/src/plivo/rest/freeswitch/api.py,
+	scripts/api/src/plivo/rest/freeswitch/apiserver.py,
+	scripts/api/src/plivo/rest/freeswitch/cacheapi.py,
+	scripts/api/src/plivo/rest/freeswitch/cacheserver.py,
+	scripts/api/src/plivo/rest/freeswitch/cacheurls.py,
+	scripts/api/src/plivo/rest/freeswitch/elements.py,
+	scripts/api/src/plivo/rest/freeswitch/exceptions.py,
+	scripts/api/src/plivo/rest/freeswitch/helpers.py,
+	scripts/api/src/plivo/rest/freeswitch/inboundsocket.py,
+	scripts/api/src/plivo/rest/freeswitch/outboundserver.py,
+	scripts/api/src/plivo/rest/freeswitch/outboundsocket.py,
+	scripts/api/src/plivo/rest/freeswitch/urls.py,
+	scripts/api/src/plivo/utils/__init__.py,
+	scripts/api/src/plivo/utils/daemonize.py,
+	scripts/api/src/plivo/utils/encode.py,
+	scripts/api/src/plivo/utils/logger.py, scripts/api_install.sh,
+	scripts/conf/api/cache.conf, scripts/conf/api/default.conf,
+	scripts/freeswitch/conf/freeswitch_combined_config.sh,
+	scripts/freeswitch/freeswitch_install.sh,
+	scripts/freeswitch/initscripts/centos/freeswitch,
+	scripts/freeswitch/initscripts/debian/freeswitch,
+	scripts/install.sh: Major Rework
+
+2011-09-09  nbhatti <nbhatti@gmail.com>
+
+	* scripts/api_install.sh: Edited scripts/api_install.sh via GitHub
+
+2011-09-04  SteveW <root@debian.localdomain>
+
+	* scripts/conf/api/default.conf,
+	scripts/freeswitch/conf/freeswitch_combined_config.sh,
+	scripts/freeswitch/freeswitch.xml,
+	scripts/freeswitch/freeswitch_install.sh: Install script bugs
+	removed
+
+2011-09-03  SteveW <root@debian.localdomain>
+
+	* CHANGELOG, scripts/api_install.sh,
+	scripts/freeswitch/conf/freeswitch_combined_config.sh,
+	scripts/freeswitch/freeswitch_install.sh: Tweaks to api_install.sh.
+	vBilling install path fixed
+
+2011-09-04  nbhatti <nbhatti@gmail.com>
+
+	* README: Updated README
+
+2011-09-02  SteveW <root@debian.localdomain>
+
+	* scripts/api_install.sh, scripts/conf/api/cache.conf: 
+	api_installer.sh updates
+
+2011-09-02  root <root@debian.localdomain>
+
+	* scripts/api_install.sh, scripts/install.sh: api_install.sh tweaks
+
+2011-09-02  root <root@debian.localdomain>
+
+	* scripts/api_install.sh: Plivo repo url changed from git to https
+
+2011-09-02  root <root@debian.localdomain>
+
+	* scripts/api_install.sh, scripts/install.sh: Misc Updates to
+	install script
+
+2011-09-02  root <root@debian.localdomain>
+
+	* scripts/install.sh: API_INSTALL_PATH added
+
+2011-09-02  root <root@debian.localdomain>
+
+	* scripts/install.sh: api_install.sh was not properly called. Fixed
+
+2011-09-02  root <root@debian.localdomain>
+
+	* CHANGELOG, README, TODO, scripts/api_install.sh,
+	scripts/install.sh: CHANGELOG updated
+
+2011-08-29  root <root@debian.localdomain>
+
+	* scripts/install.sh: Tweaks
+
+2011-08-30  Muhammad Naseer Bhatti <nbhatti@gmail.com>
+
+	* scripts/freeswitch/freeswitch_install.sh: Installer update for
+	CentOS 6.x
+
+2011-08-17  Muhammad Naseer Bhatti <nbhatti@gmail.com>
+
+	* scripts/api_install.sh, scripts/conf/api/default.conf,
+	scripts/freeswitch/conf/freeswitch_combined_config.sh,
+	scripts/freeswitch/freeswitch_install.sh, scripts/install.sh: 
+	vBilling API install script added
+
+2011-08-17  Muhammad Naseer Bhatti <nbhatti@gmail.com>
+
+	* scripts/freeswitch/#freeswitch_install.sh#: .gitignore fixed
+
+2011-08-17  Muhammad Naseer Bhatti <nbhatti@gmail.com>
+
+	* CHANGELOG, TODO, scripts/freeswitch/#freeswitch_install.sh#,
+	scripts/freeswitch/conf/acl.conf.xml,
+	scripts/freeswitch/conf/event_socket.conf.xml,
+	scripts/freeswitch/conf/freeswitch_combined_config.sh,
+	scripts/freeswitch/conf/post_load_modules.conf.xml,
+	scripts/freeswitch/conf/post_load_switch.conf.xml,
+	scripts/freeswitch/conf/sofia.conf.xml,
+	scripts/freeswitch/conf/switch.conf.xml,
+	scripts/freeswitch/conf/timezones.conf.xml,
+	scripts/freeswitch/conf/xml_cdr.conf.xml,
+	scripts/freeswitch/freeswitch.xml,
+	scripts/freeswitch/freeswitch_install.sh,
+	scripts/freeswitch/logfile.conf.xml,
+	scripts/freeswitch/modules.conf: Changed install scripts to
+	configure FS for local config instance
+
+2011-08-15  Muhammad Naseer Bhatti <nbhatti@gmail.com>
+
+	* TODO, scripts/freeswitch/conf/acl.conf.xml,
+	scripts/freeswitch/conf/event_socket.conf.xml,
+	scripts/freeswitch/conf/post_load_modules.conf.xml,
+	scripts/freeswitch/conf/post_load_switch.conf.xml,
+	scripts/freeswitch/conf/sofia.conf.xml,
+	scripts/freeswitch/conf/switch.conf.xml,
+	scripts/freeswitch/conf/timezones.conf.xml,
+	scripts/freeswitch/conf/xml_cdr.conf.xml,
+	scripts/freeswitch/freeswitch.xml,
+	scripts/freeswitch/freeswitch_install.sh: Changed freeswitch.xml to
+	start with local configuration files
+
+2011-08-15  Muhammad Naseer Bhatti <nbhatti@gmail.com>
+
+	* scripts/freeswitch/freeswitch.xml: Web server port changed to 8449 We do not want to use the default pot 80
+
+2011-08-15  Muhammad Naseer Bhatti <nbhatti@gmail.com>
+
+	* scripts/freeswitch/freeswitch_install.sh, scripts/install.sh: '
+	added
+
+2011-08-15  Muhammad Naseer Bhatti <nbhatti@gmail.com>
+
+	* 1, scripts/vBilling/vBilling_install.sh: Junk removed
+
+2011-08-15  Muhammad Naseer Bhatti <nbhatti@gmail.com>
+
+	* .gitignore, 1, CHANGELOG, TODO,
+	scripts/freeswitch/freeswitch.xml,
+	scripts/freeswitch/freeswitch_install.sh,
+	scripts/freeswitch/modules.conf, scripts/install.sh,
+	scripts/vBilling/vBilling_install.sh: Install script updated Major change in install script for both FS and vBilling
+
+2011-08-06  Muhammad Naseer Bhatti <nbhatti@gmail.com>
+
+	* scripts/freeswitch/freeswitch_install.sh: sed bugs removed
+
+2011-07-29  Muhammad Naseer Bhatti <nbhatti@gmail.com>
+
+	* .gitignore, scripts/freeswitch/freeswitch_install.sh: install
+	script updated for mod_xml_curl
+
+2011-07-29  Muhammad Naseer Bhatti <nbhatti@gmail.com>
+
+	* .gitignore: .gitignore update
+
+2011-07-28  Muhammad Naseer Bhatti <nbhatti@gmail.com>
+
+	* .gitignore: .gitignore updated
+
+2011-07-28  Muhammad Naseer Bhatti <nbhatti@gmail.com>
+
+	* README, TODO: Updated README README upate
+
+2011-07-28  Muhammad Naseer Bhatti <nbhatti@gmail.com>
+
+	* .gitignore, scripts/freeswitch/freeswitch_install.sh: minor
+	changes in FS install script
+
+2011-07-28  nbhatti <nbhatti@gmail.com>
+
+	* scripts/freeswitch/modules.conf: Edited
+	scripts/freeswitch/modules.conf via GitHub
+
+2011-07-28  nbhatti <nbhatti@gmail.com>
+
+	* scripts/freeswitch/freeswitch_install.sh: Edited
+	scripts/freeswitch/freeswitch_install.sh via GitHub
+
+2011-07-28  nbhatti <nbhatti@gmail.com>
+
+	* scripts/freeswitch/freeswitch_install.sh: Edited
+	scripts/freeswitch/freeswitch_install.sh via GitHub
+
+2011-07-27  nbhatti <nbhatti@gmail.com>
+
+	* scripts/freeswitch/freeswitch_install.sh: Edited
+	scripts/freeswitch/freeswitch_install.sh via GitHub
+
+2011-07-27  Muhammad Naseer Bhatti <nbhatti@gmail.com>
+
+	* scripts/freeswitch/freeswitch_install.sh: Revert
+	0c00ee4aa9659f94b178febf1f0ab682dc214430^..HEAD
+
+2011-07-27  nbhatti <nbhatti@gmail.com>
+
+	* scripts/freeswitch/freeswitch_install.sh: Edited
+	scripts/freeswitch/freeswitch_install.sh via GitHub
+
+2011-07-27  Muhammad Naseer Bhatti <nbhatti@gmail.com>
+
+	* scripts/freeswitch/freeswitch_install.sh: Revert "Edited
+	scripts/freeswitch/freeswitch_install.sh via GitHub" This reverts commit 1275d9f7c883902b627a6b234f206aabd7f85218.
+
+2011-07-27  nbhatti <nbhatti@gmail.com>
+
+	* scripts/freeswitch/freeswitch_install.sh: Edited
+	scripts/freeswitch/freeswitch_install.sh via GitHub
+
+2011-07-27  Muhammad Naseer Bhatti <nbhatti@gmail.com>
+
+	* scripts/freeswitch/freeswitch_install.sh: Paths redefined
+
+2011-07-27  Muhammad Naseer Bhatti <nbhatti@gmail.com>
+
+	* scripts/freeswitch/freeswitch.xml,
+	scripts/freeswitch/freeswitch_install.sh,
+	scripts/freeswitch/modules.conf: Install script update New revision
+
+2011-07-27  Muhammad Naseer Bhatti <nbhatti@gmail.com>
+
+	* scripts/freeswitch/freeswitch_install.sh: Typos
+
+2011-07-27  Muhammad Naseer Bhatti <nbhatti@gmail.com>
+
+	* scripts/freeswitch/freeswitch_install.sh: FreeSWITCH install
+	script created FreeSWITCH install script created
+
+2011-07-26  Muhammad Naseer Bhatti <nbhatti@gmail.com>
+
+	* Repo Created Repo Created
 

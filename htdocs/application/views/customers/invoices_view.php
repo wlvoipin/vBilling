@@ -177,7 +177,7 @@ window.location = '../../home/';
                                 
                                 <td align="center" height="30"><a href="<?php echo base_url(); ?>billing/download_invoice/<?php echo $row->invoice_id;?>"><img src="<?php echo base_url();?>assets/images/export-pdf.gif"/> View Invoice</a></td>
                                 
-                                <td align="center" height="30"><a href="<?php echo base_url(); ?>billing/download_cdr/<?php echo $row->invoice_id;?>"><img src="<?php echo base_url();?>assets/images/export-pdf.gif"/> View CDR</a></td>
+                                <td align="center" height="30"><a href="<?php echo base_url(); ?>billing/download_cdr_admin/<?php echo $row->invoice_id;?>"><img src="<?php echo base_url();?>assets/images/export-pdf.gif"/> View CDR</a></td>
                                 
                             </tr>
                         <?php endforeach;?>

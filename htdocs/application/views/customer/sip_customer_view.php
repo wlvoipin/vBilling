@@ -49,7 +49,7 @@
                         {
                     ?>
                         <tr class="main_text">
-                            <td align="right" colspan="5">
+                            <td align="right" colspan="6">
                                 <a href="<?php echo base_url();?>customer/new_sip_access">NEW SIP ACCESS</a>
                                 <br/>
                                 You can add upto <?php echo $limit_of_sip_acc;?> SIP Accounts (<?php echo $remaining;?> Remaining)
@@ -57,13 +57,14 @@
                         </tr>
                     <?php } else {?>
                         <tr class="main_text">
-                            <td align="right" colspan="5"><a href="#">Cannot Add More SIP Accounts</a></td>
+                            <td align="right" colspan="6"><a href="#">Cannot Add More SIP Accounts</a></td>
                         </tr>
                     <?php } ?>
                     
                     <tr class="bottom_link">
                         <td width="20%" align="center">Username</td>
                         <td width="20%" align="center">Password</td>
+                        <td width="20%" align="center">CID</td>
                         <td width="20%" align="center">Domain</td>
                         <td width="20%" align="center">Sofia Profile</td>
                         <td width="20%" align="center">Options</td>
@@ -77,6 +78,7 @@
                                     <tr class="main_text">
                                         <td align="center"><?php echo $row->username; ?></td>
                                         <td align="center">******</td>
+                                        <td align="center"><?php echo $row->cid; ?></td>
                                         <td align="center"><?php echo $row->domain; ?></td>
                                         <td align="center"><?php echo sofia_profile_name($row->domain_sofia_id); ?></td>
                                         

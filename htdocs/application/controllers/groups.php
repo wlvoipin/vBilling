@@ -48,6 +48,14 @@ class Groups extends CI_Controller {
 			{
 				redirect ('customer/');
 			}
+            
+            if($this->session->userdata('user_type') == 'sub_admin')
+            {
+                if(sub_admin_access_any_cell($this->session->userdata('user_id'), 'view_rate_groups') == 0)
+                {
+                    redirect ('home/');
+                }
+            }
 		}
 	}
 
@@ -55,6 +63,7 @@ class Groups extends CI_Controller {
 	{
 		$filter_groups          = '';
 		$filter_group_type      = '';
+        $filter_sort            = '';
 		$search                 = '';
 
 		$msg_records_found = "Records Found";
@@ -63,17 +72,19 @@ class Groups extends CI_Controller {
 		{
 			$filter_groups          = $this->input->get('filter_groups');
 			$filter_group_type      = $this->input->get('filter_group_type');
+            $filter_sort            = $this->input->get('filter_sort');
 			$search                 = $this->input->get('searchFilter');
 			$msg_records_found      = "Records Found Based On Your Search Criteria";
 		}
 
 		$data['filter_groups']              = $filter_groups;
 		$data['filter_group_type']          = $filter_group_type;
+        $data['filter_sort']                = $filter_sort;
 
 		//for pagging set information
 		$this->load->library('pagination');
 		$config['per_page'] = '20';
-		$config['base_url'] = base_url().'groups/?searchFilter='.$search.'&filter_groups='.$filter_groups.'&filter_group_type='.$filter_group_type.'';
+		$config['base_url'] = base_url().'groups/?searchFilter='.$search.'&filter_groups='.$filter_groups.'&filter_group_type='.$filter_group_type.'&filter_sort='.$filter_sort.'';
 		$config['page_query_string'] = TRUE;
 
 		$config['num_links'] = 2;
@@ -114,7 +125,7 @@ class Groups extends CI_Controller {
 		$this->pagination->initialize($config);
 		$data['msg_records_found'] = "".$data['count']."&nbsp;".$msg_records_found."";
 
-		$data['groups']         =   $this->groups_model->get_all_groups($config['per_page'],$config['uri_segment'], $filter_groups, $filter_group_type);
+		$data['groups']         =   $this->groups_model->get_all_groups($config['per_page'],$config['uri_segment'], $filter_groups, $filter_group_type, $filter_sort);
 		$data['page_name']		=	'group_view';
 		$data['selected']		=	'groups';
 		$data['sub_selected']   =   'list_rate_groups';
@@ -136,7 +147,15 @@ class Groups extends CI_Controller {
 	//new group
 	function new_rate_group()
 	{
-		$data['page_name']		=	'group_view';
+		if($this->session->userdata('user_type') == 'sub_admin')
+        {
+            if(sub_admin_access_any_cell($this->session->userdata('user_id'), 'new_rate_groups') == 0)
+            {
+                redirect ('groups/');
+            }
+        }
+        
+        $data['page_name']		=	'group_view';
 		$data['selected']		=	'groups';
 		$data['sub_selected']   =   'new_rate_group';
 		$data['page_title']		=	'NEW GROUP';
@@ -157,7 +176,15 @@ class Groups extends CI_Controller {
 
 	function update_group($rate_group_id)
 	{
-		$data['group']          =   $this->groups_model->get_single_group($rate_group_id);
+		if($this->session->userdata('user_type') == 'sub_admin')
+        {
+            if(sub_admin_access_any_cell($this->session->userdata('user_id'), 'edit_rate_groups') == 0)
+            {
+                redirect ('groups/');
+            }
+        }
+        
+        $data['group']          =   $this->groups_model->get_single_group($rate_group_id);
 		$group_rate_table_name  =   $this->groups_model->group_any_cell($rate_group_id, 'group_rate_table');
 		
         //for pagging set information
@@ -253,7 +280,15 @@ class Groups extends CI_Controller {
 
 	function new_rate($rate_group_id = '')
 	{
-		$data['rate_group_id']		=	$rate_group_id;
+		if($this->session->userdata('user_type') == 'sub_admin')
+        {
+            if(sub_admin_access_any_cell($this->session->userdata('user_id'), 'new_rate') == 0)
+            {
+                redirect ('groups/');
+            }
+        }
+        
+        $data['rate_group_id']		=	$rate_group_id;
         
         $data['page_name']		=	'new_rate';
 		$data['selected']		=	'groups';
@@ -267,7 +302,15 @@ class Groups extends CI_Controller {
 
 	function import_by_csv()
 	{
-		$data['page_name']		=	'import_by_csv';
+		if($this->session->userdata('user_type') == 'sub_admin')
+        {
+            if(sub_admin_access_any_cell($this->session->userdata('user_id'), 'import_csv') == 0)
+            {
+                redirect ('groups/');
+            }
+        }
+        
+        $data['page_name']		=	'import_by_csv';
 		$data['selected']		=	'groups';
 		$data['sub_selected']   =   'import_by_csv';
 		$data['page_title']		=	'IMPORT RATE BY CSV';

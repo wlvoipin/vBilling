@@ -60,6 +60,11 @@ window.location = '../../home/';
                 </tr>
                 
                 <tr>
+                    <td align="right" width="45%"><span class="required">*</span> CID:</td>
+                    <td align="left" width="55%"><input type="text" name="cid" id="cid"  maxlength="6" class="textfield numeric" value="<?php echo $username;?>"></td>
+                </tr>
+                
+                <tr>
                     <td align="right"><span class="required">*</span> SIP IP:</td>
                     <td align="left">
                         <select  name="sip_ip" id="sip_ip" class="textfield">
@@ -121,12 +126,13 @@ window.location = '../../home/';
         var username    = $('#username').val();
         var password    = $('#password').val();
         var sip_ip      = $('#sip_ip').val();
+        var cid         = $('#cid').val();
         
         var required_error = 0;
         var password_error = 0;
         
         //common required fields check
-        if(username == '' || password == '' || sip_ip == '')
+        if(username == '' || password == '' || sip_ip == '' || cid == '')
         {
             required_error = 1;
         }
@@ -182,7 +188,7 @@ window.location = '../../home/';
         }
         return false;
     });
-    
+    $('.numeric').numeric();
    // $('.numeric').numeric({allow:"."});
     
 </script>

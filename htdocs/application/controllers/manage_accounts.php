@@ -47,6 +47,11 @@ class Manage_accounts extends CI_Controller {
 			{
 				redirect ('customer/');
 			}
+            
+            if($this->session->userdata('user_type') == 'sub_admin')
+			{
+				redirect ('home/');
+			}
 		}
 	}
 
@@ -54,13 +59,13 @@ class Manage_accounts extends CI_Controller {
 	{
 		if($filter_account_type == '')
 		{
-			$filter_account_type = 'admin';
+			$filter_account_type = 'sub_admin';
 		}
 		else
 		{
-			if($filter_account_type != 'admin' && $filter_account_type != 'customer')
+			if($filter_account_type != 'sub_admin' && $filter_account_type != 'customer')
 			{
-				$filter_account_type = 'admin';
+				$filter_account_type = 'sub_admin';
 			}
 		}
 
@@ -70,10 +75,11 @@ class Manage_accounts extends CI_Controller {
 		$search                 = '';
 		$msg_records_found = "Records Found";
         
-        if($filter_account_type == 'admin')
+        if($filter_account_type == 'sub_admin')
         {
             if($this->input->get('searchFilter'))
             {
+                $filter_username        = $this->input->get('filter_username');
                 $filter_enabled        = $this->input->get('filter_enabled');
                 $search                 = $this->input->get('searchFilter');
                 $msg_records_found      = "Records Found Based On Your Search Criteria";
@@ -144,7 +150,7 @@ class Manage_accounts extends CI_Controller {
 
 		$data['page_name']		=	'list_access_accounts';
 		$data['selected']       =   'manage_accounts';
-		if($filter_account_type == 'admin')
+		if($filter_account_type == 'sub_admin')
 		{
 			$data['sub_selected']		=	'admin_accounts';
 		}
@@ -164,72 +170,78 @@ class Manage_accounts extends CI_Controller {
 		$this->load->view('default/template',$data);
 	}
 
-	/*function new_account()
+	function new_account()
 	{
-	$account_type = $this->input->post('new_account_type');
-	if($account_type == '')
-	{
-	$account_type = 'admin';
-	}
-	else
-	{
-	if($account_type != 'admin' && $account_type != 'customer')
-	{
-	$account_type = 'admin';
-	}
-	}
+        $account_type = $this->input->post('new_account_type');
+        if($account_type == '')
+        {
+            $account_type = 'admin';
+        }
+        else
+        {
+            if($account_type != 'admin' && $account_type != 'customer')
+            {
+                $account_type = 'admin';
+            }
+        }
 
-$data['account_type'] = $account_type;
+        $data['account_type'] = $account_type;
 
-$data['customers_with_no_accounts']      =   $this->manage_accounts_model->customers_with_no_accounts();
+        $data['customers_with_no_accounts']      =   $this->manage_accounts_model->customers_with_no_accounts();
 
-$data['page_name']		=	'new_account';
-$data['selected']       =   'manage_accounts';
-$data['sub_selected']   =   '';
+        $data['page_name']		=	'new_account';
+        $data['selected']       =   'manage_accounts';
+        $data['sub_selected']   =   '';
 
-$data['page_title']		=	'NEW ACCOUNT';
-$data['main_menu']	    =	'default/main_menu/main_menu';
-$data['sub_menu']	    =	'default/sub_menu/manage_accounts_sub_menu';
-$data['main_content']	=	'accounts/new_account_view';
-$this->load->view('default/template',$data);
-}
+        $data['page_title']		=	'NEW ACCOUNT';
+        $data['main_menu']	    =	'default/main_menu/main_menu';
+        $data['sub_menu']	    =	'default/sub_menu/manage_accounts_sub_menu';
+        $data['main_content']	=	'accounts/new_account_view';
+        $this->load->view('default/template',$data);
+    }
 
-function create_new_account()
-{
-$data['account_type'] = $this->input->post('hidden_account_type');
-$data['username'] = $this->db->escape($this->input->post('username'));
-$data['password'] = md5($this->input->post('password'));
-$check_username_availability = $this->manage_accounts_model->check_username_availability($data['username']);
+    function create_new_account()
+    {
+        $data['account_type'] = $this->input->post('hidden_account_type');
+        $data['username'] = $this->db->escape($this->input->post('username'));
+        $data['password'] = md5($this->input->post('password'));
+        $check_username_availability = $this->manage_accounts_model->check_username_availability($this->input->post('username'));
 
-if($data['account_type'] == 'customer')
-{
-$data['customer_id'] = $this->input->post('customer');
-}
+        if($data['account_type'] == 'admin')
+        {
+            $access = $this->input->post('access');
+        }
 
-if($check_username_availability->num_rows() > 0) //username already in use
-{
-echo "username_in_use";
-exit;
-}
-else
-{
-$this->manage_accounts_model->create_new_account($data);
-echo "success";
-exit;
-}
-}*/
+        if($check_username_availability->num_rows() > 0) //username already in use
+        {
+            echo "username_in_use";
+            exit;
+        }
+        else
+        {
+            $insertID = $this->manage_accounts_model->create_new_account($data);
+            
+            if($data['account_type'] == 'admin')
+            {
+                $this->manage_accounts_model->insert_sub_admin_access_restrictions($access, $insertID);
+            }
+            
+            echo "success";
+            exit;
+        }
+    }
 
-function enable_disable_account()
-{
-	$account_id = $this->input->post('account_id');
-	$status = $this->input->post('status');
-	$this->manage_accounts_model->enable_disable_account($account_id, $status);
-}
+    function enable_disable_account()
+    {
+        $account_id = $this->input->post('account_id');
+        $status = $this->input->post('status');
+        $this->manage_accounts_model->enable_disable_account($account_id, $status);
+    }
 
-function delete_account()
-{
-	$account_id = $this->input->post('account_id');
-	$this->manage_accounts_model->delete_account($account_id);
-}
+    function delete_account()
+    {
+        $account_id = $this->input->post('account_id');
+        $this->manage_accounts_model->delete_account($account_id);
+    }
 
 }

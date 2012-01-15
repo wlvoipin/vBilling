@@ -1,6 +1,6 @@
 <br/>
 <div class="success" id="success_div" style="display:none;"></div>
-<table style="border: 1px groove;" width="100%" cellpadding="0" cellspacing="0">
+<table  width="100%" cellpadding="0" cellspacing="0">
         <tbody><tr>
             <td>
                 <table width="100%" border="0" cellpadding="0" cellspacing="0">
@@ -11,17 +11,55 @@
                         <td width="20%" align="center">Details</td>
                         <td width="60%" align="left">Options</td>
                     </tr>
+                    <tr><td colspan="3" id="shadowDiv" style="height:5px;margin-top:-1px"></td></tr>
                     
                     <?php if($profiles->num_rows() > 0) {?>
                         
                         <?php foreach ($profiles->result() as $row): ?>
                             <tr class="main_text">
                                 <td align="center"><?php echo $row->profile_name;?></td>
-                                <td align="center"><a href="<?php echo base_url();?>freeswitch/profile_detail/<?php echo $row->id;?>">View Details</a></td>
                                 
-                                <td align="left"><a href="#" id="<?php echo $row->id;?>" class="delete_profile"><img src="<?php echo base_url();?>assets/images/button_cancel.png" style="width:16px;margin-left:15px;border:none;cursor:pointer;" /></a></td>
+                                <?php if($this->session->userdata('user_type') == 'admin'){?>
+                                    <td align="center"><a href="<?php echo base_url();?>freeswitch/profile_detail/<?php echo $row->id;?>">View Details</a></td>
+                                <?php 
+                                    } else if($this->session->userdata('user_type') == 'sub_admin'){
+                                            if(sub_admin_access_any_cell($this->session->userdata('user_id'), 'profile_details') == 1)
+                                            {
+                                ?>
+                                                <td align="center"><a href="<?php echo base_url();?>freeswitch/profile_detail/<?php echo $row->id;?>">View Details</a></td>
+                                <?php 
+                                            }
+                                            else
+                                            {
+                                ?>
+                                                <td align="center">---</td>
+                                <?php
+                                            }
+                                        }
+                                ?>
+                                
+                                
+                                <?php if($this->session->userdata('user_type') == 'admin'){?>
+                                    <td align="left"><a href="#" id="<?php echo $row->id;?>" class="delete_profile"><img src="<?php echo base_url();?>assets/images/button_cancel.png" style="width:16px;margin-left:15px;border:none;cursor:pointer;" /></a></td>
+                                <?php 
+                                    } else if($this->session->userdata('user_type') == 'sub_admin'){
+                                            if(sub_admin_access_any_cell($this->session->userdata('user_id'), 'delete_profiles') == 1)
+                                            {
+                                ?>
+                                                <td align="left"><a href="#" id="<?php echo $row->id;?>" class="delete_profile"><img src="<?php echo base_url();?>assets/images/button_cancel.png" style="width:16px;margin-left:15px;border:none;cursor:pointer;" /></a></td>
+                                <?php 
+                                            }
+                                            else
+                                            {
+                                ?>
+                                                <td align="left">---</td>
+                                <?php
+                                            }
+                                        }
+                                ?>
                                 
                             </tr>
+                            <tr style="height:5px;"><td colspan="3" id="shadowDiv" style="height:5px;margin-top:0px;background-color:#fff"></td></tr>
                         <?php endforeach;?>
                         
                     <?php } else { echo '<tr><td align="center" colspan="3" style="color:red;">No Results Found</td></tr>'; } ?>                    

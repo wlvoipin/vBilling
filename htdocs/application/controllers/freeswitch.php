@@ -47,6 +47,13 @@ class Freeswitch extends CI_Controller {
 		// redirect ('customer/');
 		// }
 		// }
+        //if($this->session->userdata('user_type') == 'sub_admin')
+        //{
+            //if(sub_admin_access_any_cell($this->session->userdata('user_id'), 'view_profiles') == 0)
+           // {
+              //  redirect ('home/');
+          //  }
+       // }
 	}
 
 	function index()
@@ -64,7 +71,15 @@ class Freeswitch extends CI_Controller {
 
 	function new_profile()
 	{
-		$data['page_name']		=	'new_profile';
+		if($this->session->userdata('user_type') == 'sub_admin')
+        {
+            if(sub_admin_access_any_cell($this->session->userdata('user_id'), 'new_profiles') == 0)
+            {
+                redirect ('freeswitch/');
+            }
+        }
+        
+        $data['page_name']		=	'new_profile';
 		$data['selected']		=	'freeswitch';
 		$data['sub_selected']   =   'new_profile';
 		$data['page_title']		=	'NEW PROFILE';
@@ -141,7 +156,15 @@ class Freeswitch extends CI_Controller {
 
 	function profile_detail($sofia_id)
 	{
-		$type = "";
+		if($this->session->userdata('user_type') == 'sub_admin')
+        {
+            if(sub_admin_access_any_cell($this->session->userdata('user_id'), 'profile_details') == 0)
+            {
+                redirect ('freeswitch/');
+            }
+        }
+        
+        $type = "";
 		if(isset($_POST['sofia_sett_param_type']))
 		{
 			$type = $this->input->post('sofia_sett_param_type');
@@ -342,22 +365,14 @@ class Freeswitch extends CI_Controller {
 
 		if($sql->num_rows() > 0)
 		{
-			$countt = 1;
 			foreach($sql->result() as $row) {
-				if($countt % 2)
-				{
-					$bg = "bgcolor='#E6E5E5'";
-				}
-				else
-				{
-					$bg = "";
-				}
-				$data .= '<tr class="main_text" height="20px" '.$bg.'>
+				
+				$data .= '<tr class="main_text" height="20px">
 					<td align="left">'.$row->param_name.'</td>
 					<td align="left">'.$row->param_value.'</td>
 					<td align="left"><a class="delete_setting" id="'.$row->id.'" href="#"><img style="width:16px;margin-left:15px;border:none;cursor:pointer;" src="'.base_url().'assets/images/button_cancel.png"></a></td>
 				</tr>';
-				$countt++;                           
+				$data .= '<tr style="height:5px;"><td colspan="3" id="shadowDiv" style="height:5px;margin-top:0px;background-color:#fff"></td></tr>';                      
 			}												
 		}
 		else
@@ -384,7 +399,15 @@ class Freeswitch extends CI_Controller {
 
 	function new_gateway($sofia_id)
 	{
-		$data['sofia_id']       =   $sofia_id;
+		if($this->session->userdata('user_type') == 'sub_admin')
+        {
+            if(sub_admin_access_any_cell($this->session->userdata('user_id'), 'new_gateway') == 0)
+            {
+                redirect ('freeswitch/');
+            }
+        }
+        
+        $data['sofia_id']       =   $sofia_id;
 		$data['page_name']		=	'sofia_profile_new_gateway';
 		$data['selected']		=	'freeswitch';
 		$data['sub_selected']   =   '';
@@ -558,6 +581,8 @@ class Freeswitch extends CI_Controller {
 			echo '</td>';
 			echo '<td align="center"><input type="text" class="textfield gateway_value" name="gateway_value[]" value="'.$default_value_for_caller_in_from.'"></td>';
 			echo '</tr>';
+            
+            echo '<tr style="height:5px;"><td colspan="2" id="shadowDiv" style="height:5px;margin-top:0px;background-color:#fff"></td></tr>';
 		}
 		else
 		{
@@ -618,7 +643,15 @@ class Freeswitch extends CI_Controller {
 	//***************************************ESL FUNCTIONS *******************************************
 	function freeswitch_esl()
 	{
-		$data['page_name']		=	'freeswitch_esl';
+		if($this->session->userdata('user_type') == 'sub_admin')
+        {
+            if(sub_admin_access_any_cell($this->session->userdata('user_id'), 'freeswitch_status') == 0)
+            {
+                redirect ('freeswitch/');
+            }
+        }
+        
+        $data['page_name']		=	'freeswitch_esl';
 		$data['selected']		=	'freeswitch';
 		$data['sub_selected']   =   'freeswitch_esl';
 		$data['page_title']		=	'FREESWITCH ESL';

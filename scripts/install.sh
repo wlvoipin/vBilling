@@ -3,11 +3,13 @@
 #  install.sh
 #  scripts
 #  
-#  FreeSWITCH and vBilling install script v1.2
+#  FreeSWITCH and vBilling install script v1.3
 #  Copyright 2011-12 Digital Linx. All rights reserved.
 #
-
+# TODO Cleanup
+#
 # Define some variables
+#
 VBILLING_REPO=git://github.com/digitallinx/vBilling.git
 TEMPDIR=$(/bin/mktemp -d)
 FS_GIT_REPO=git://git.freeswitch.org/freeswitch.git
@@ -53,6 +55,7 @@ echo "*** This installation script *must only* run on a fresh installed OS."
 read -n 1 -p "*** Failure to do so may result in data loss and/or corruption. Press any key to continue ... "
 echo ""
 
+# Distributed setup is not supported yet through the script. Contact vbilling@digitallinx.com for a quote if required
 clear
 echo ""
 read -n 1 -p "*** Do you want to install FreeSWITCH and vBilling on the same machine? (y/n) : "
@@ -84,7 +87,7 @@ if [ ${REPLY}   = "y" ]; then
 		'DEBIAN')
 		export DEBIAN_FRONTEND=noninteractive
         apt-get -y update
-        apt-get -y install autoconf automake autotools-dev binutils bison build-essential cpp curl flex g++ gcc git-core libapache2-mod-php5 libaudiofile-dev libc6-dev libdb-dev libexpat1 libgdbm-dev libgnutls-dev libmcrypt-dev libncurses5-dev libnewt-dev libpcre3 libpopt-dev libsctp-dev libsqlite3-dev libtiff4 libtiff4-dev libtool libx11-dev libxml2 libxml2-dev libjpeg-dev libmyodbc libssl-dev lksctp-tools lua5.1 lynx m4 make mcrypt mysql-server ncftp nmap openssl php5 php5-dev php5-mhash php5-gd php5-mysql php5-mcrypt php-apc pkg-config sox sqlite3 ssl-cert ssl-cert unixodbc-dev unzip wget zip zlib1g-dev zlib1g-dev
+        apt-get -y install autoconf automake autotools-dev binutils bison build-essential chkconfig cpp curl flex g++ gcc git-core libapache2-mod-php5 libaudiofile-dev libc6-dev libdb-dev libexpat1 libgdbm-dev libgnutls-dev libmcrypt-dev libncurses5-dev libnewt-dev libpcre3 libpopt-dev libsctp-dev libsqlite3-dev libtiff4 libtiff4-dev libtool libx11-dev libxml2 libxml2-dev libjpeg-dev libmyodbc libssl-dev lksctp-tools lua5.1 lynx m4 make mcrypt mysql-server ncftp nmap openssl php5 php5-dev php5-mhash php5-gd php5-mysql php5-mcrypt php-apc pkg-config sox sqlite3 ssl-cert ssl-cert unixodbc-dev unzip wget zip zlib1g-dev zlib1g-dev
 		;;
 		'CENTOS')
 		yum -y update
@@ -93,6 +96,12 @@ if [ ${REPLY}   = "y" ]; then
 		if [ ${VERS} = "6" ]
 			then
 			yum -y install ${COMMON_PKGS}
+			# Disable SELinux
+			if [ -f /etc/selinux/config ]; then
+				sed -i "s#SELINUX=enforcing#SELINUX=disabled#g" /etc/selinux/config
+				sed -i "s#SELINUX=permissive#SELINUX=disabled#g" /etc/selinux/config
+				setenforce 0
+			fi
 		else
 			echo "CentOS version < 6 is not supported. Exiting ..."
 			exit 1
@@ -146,8 +155,7 @@ EOF
 
 make && make install
 
-# We don't need default config files. We use our own, mainly for XML_CURL :-) We have all the
-# the magic here
+# We don't need default config files. We use our own, mainly for XML_CURL :-) We have all the the magic here
 rm -rf ${FS_INSTALL_PATH}/conf
 mkdir -p ${FS_INSTALL_PATH}/conf
 
@@ -163,9 +171,9 @@ cat << 'EOF' > ${FS_INSTALL_PATH}/conf/freeswitch.xml
 	<!--
 	vBilling Custom Defines. START
 	-->
-	<X-PRE-PROCESS cmd="set" data="vBilling_xml_curl_url=http://localhost/xmlcurl/index.php"/>
+	<X-PRE-PROCESS cmd="set" data="vBilling_xml_curl_url=http://127.0.0.1/xmlcurl/index.php"/>
 	<X-PRE-PROCESS cmd="set" data="vBilling_xml_curl_binding=configuration|directory"/>
-	<X-PRE-PROCESS cmd="set" data="vBilling_xml_cdr_url=http://localhost/xmlcurl/index.php"/>
+	<X-PRE-PROCESS cmd="set" data="vBilling_xml_cdr_url=http://127.0.0.1/xmlcurl/index.php"/>
 	<X-PRE-PROCESS cmd="set" data="event_socket_listen_ip=127.0.0.1"/>
 	<X-PRE-PROCESS cmd="set" data="event_socket_listen_port=8021"/>
 	<X-PRE-PROCESS cmd="set" data="event_socket_password=ClueCon"/>
@@ -176,18 +184,26 @@ cat << 'EOF' > ${FS_INSTALL_PATH}/conf/freeswitch.xml
 	<section name="configuration" description="Various Configuration">
 		<configuration name="modules.conf" description="Modules">
 			<modules>
-				<!-- <load module="mod_console"/>
-				<load module="mod_logfile"/> -->
+				<!--
+				<load module="mod_console"/>
+				<load module="mod_logfile"/>
+				-->
 				<load module="mod_xml_curl"/>
 			</modules>
 		</configuration>
 
 		<configuration name="switch.conf" description="Modules">
 			<default-ptimes>
-				<!-- set this to override the 20ms assumption of various codecs in the sdp with no ptime defined -->
+				<!--
+					set this to override the 20ms assumption of various codecs in the sdp with no ptime defined
+				-->
 				<!--<codec name="G729" ptime="40"/>-->
 			</default-ptimes>
 			<settings>
+				<!--
+					You are welcome to increase the max-session limit. Make sure to tune MySQL and the web server for
+					large number of connections
+				-->
 				<param name="max-sessions" value="200"/>
 				<param name="sessions-per-second" value="30"/>
 				<param name="switchname" value="vBilling"/>
@@ -210,6 +226,9 @@ cat << 'EOF' > ${FS_INSTALL_PATH}/conf/freeswitch.xml
 		</configuration>
 	</section>
 
+<!--
+	The dialplan sends all calls to the lua script. Change at your own peril
+-->
 	<section name="dialplan" description="Regex/XML Dialplan">
 		<context name="default">
 			<extension name="vBilling">
@@ -227,7 +246,7 @@ useradd -c "FreeSwitch Voice Switching System" -d ${FS_INSTALL_PATH} -M -s /bin/
 
 # We lock freeswitch user password to avoid any security issues?
 passwd -l ${FS_USER}
-chown -R ${FS_USER}.${FS_USER} ${FS_INSTALL_PATH}
+chown -R ${FS_USER}:${FS_USER} ${FS_INSTALL_PATH}
 
 # Just making sure we have good and prefered binaries in our path :)
 cat << 'EOF' >> /etc/profile
@@ -243,7 +262,6 @@ source /etc/profile
 # Install FreeSWITCH init scripts
 case ${DIST} in
 	"DEBIAN")
-####################################
 cat << 'EOF' > /etc/init.d/freeswitch
 #! /bin/sh
 ### BEGIN INIT INFO
@@ -420,9 +438,15 @@ esac
 
 :
 EOF
-####################################
+
 	chmod 755 /etc/init.d/freeswitch
 	echo "FREESWITCH_ENABLED=true" > /etc/default/freeswitch
+	chkconfig --add apache2
+	chkconfig apache2 on
+	chkconfig --add freeswitch
+	chkconfig freeswitch on
+	chkconfig --add mysql
+	chkconfig mysql on
 	;;
 
 	"CENTOS")
@@ -517,7 +541,12 @@ exit $RETVAL
 EOF
 
 	chmod 755 /etc/init.d/freeswitch
+	chkconfig --add httpd
+	chkconfig httpd on
 	chkconfig --add freeswitch
+	chkconfig freeswitch on
+	chkconfig --add mysqld
+	chkconfig mysqld on
 	;;
 esac
 
@@ -566,10 +595,64 @@ CREATE TABLE IF NOT EXISTS `accounts` (
   `customer_id` int(11) NOT NULL,
   `enabled` tinyint(4) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=6 ;
 
 INSERT INTO `accounts` (`id`, `username`, `password`, `type`, `is_customer`, `customer_id`, `enabled`) VALUES
 (1, 'admin', '8051d6ba25ceab9244c28a25523291fc', 'admin', 0, 0, 1);
+
+CREATE TABLE IF NOT EXISTS `accounts_restrictions` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `view_customers` tinyint(1) NOT NULL DEFAULT '0',
+  `new_customers` tinyint(1) NOT NULL DEFAULT '0',
+  `enable_disable_customers` tinyint(1) NOT NULL DEFAULT '0',
+  `edit_customers` tinyint(1) NOT NULL DEFAULT '0',
+  `view_customers_cdr` tinyint(1) NOT NULL DEFAULT '0',
+  `view_customers_rates` tinyint(1) NOT NULL DEFAULT '0',
+  `view_customers_billing` tinyint(1) NOT NULL DEFAULT '0',
+  `view_customers_acl` tinyint(1) NOT NULL DEFAULT '0',
+  `new_acl` tinyint(1) NOT NULL DEFAULT '0',
+  `edit_acl` tinyint(1) NOT NULL DEFAULT '0',
+  `delete_acl` tinyint(1) NOT NULL DEFAULT '0',
+  `change_type_acl` tinyint(1) NOT NULL DEFAULT '0',
+  `view_customers_sip` tinyint(1) NOT NULL DEFAULT '0',
+  `new_sip` tinyint(1) NOT NULL DEFAULT '0',
+  `delete_sip` tinyint(1) NOT NULL DEFAULT '0',
+  `enable_disable_sip` tinyint(1) NOT NULL DEFAULT '0',
+  `view_customers_balance` tinyint(1) NOT NULL DEFAULT '0',
+  `add_deduct_balance` tinyint(1) NOT NULL DEFAULT '0',
+  `view_carriers` tinyint(1) NOT NULL DEFAULT '0',
+  `new_carriers` tinyint(1) NOT NULL DEFAULT '0',
+  `edit_carriers` tinyint(1) NOT NULL DEFAULT '0',
+  `enable_disable_carriers` tinyint(1) NOT NULL DEFAULT '0',
+  `delete_carriers` tinyint(1) NOT NULL DEFAULT '0',
+  `view_rate_groups` tinyint(1) NOT NULL DEFAULT '0',
+  `new_rate_groups` tinyint(1) NOT NULL DEFAULT '0',
+  `edit_rate_groups` tinyint(1) NOT NULL DEFAULT '0',
+  `enable_disable_rate_groups` tinyint(1) NOT NULL DEFAULT '0',
+  `delete_rate_groups` tinyint(1) NOT NULL DEFAULT '0',
+  `new_rate` tinyint(1) NOT NULL DEFAULT '0',
+  `import_csv` tinyint(1) NOT NULL DEFAULT '0',
+  `view_cdr` tinyint(1) NOT NULL DEFAULT '0',
+  `view_gateway_stats` tinyint(1) NOT NULL DEFAULT '0',
+  `view_customer_stats` tinyint(1) NOT NULL DEFAULT '0',
+  `view_call_destination` tinyint(1) NOT NULL DEFAULT '0',
+  `view_biling` tinyint(1) NOT NULL DEFAULT '0',
+  `view_invoices` tinyint(1) NOT NULL DEFAULT '0',
+  `generate_invoices` tinyint(1) NOT NULL DEFAULT '0',
+  `mark_invoices_paid` tinyint(1) NOT NULL DEFAULT '0',
+  `view_profiles` tinyint(1) NOT NULL DEFAULT '0',
+  `new_profiles` tinyint(1) NOT NULL DEFAULT '0',
+  `delete_profiles` tinyint(1) NOT NULL DEFAULT '0',
+  `freeswitch_status` tinyint(1) NOT NULL DEFAULT '0',
+  `profile_details` tinyint(1) NOT NULL DEFAULT '0',
+  `new_gateway` tinyint(1) NOT NULL DEFAULT '0',
+  `delete_gateway` tinyint(1) NOT NULL DEFAULT '0',
+  `edit_gateway` tinyint(1) NOT NULL DEFAULT '0',
+  `delete_settings` tinyint(1) NOT NULL DEFAULT '0',
+  `edit_settings` tinyint(1) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 CREATE TABLE IF NOT EXISTS `acl_lists` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -651,8 +734,10 @@ CREATE TABLE IF NOT EXISTS `cdr` (
   `country_id` int(11) NOT NULL,
   `rate_id` int(11) NOT NULL,
   `lcr_carrier_id` int(11) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `uuid` (`uuid`)
+  `is_multi_gateway` tinyint(1) NOT NULL DEFAULT '0',
+  `total_failed_gateways` int(11) NOT NULL DEFAULT '0',
+  `parent_id` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 CREATE TABLE IF NOT EXISTS `check_cdr_time` (
@@ -931,7 +1016,7 @@ CREATE TABLE IF NOT EXISTS `customers` (
   `customer_firstname` varchar(50) DEFAULT NULL,
   `customer_lastname` varchar(50) DEFAULT NULL,
   `customer_contact_email` varchar(100) DEFAULT NULL,
-  `customer_address` varchar(150) DEFAULT NULL,
+  `customer_address` text,
   `customer_city` varchar(45) DEFAULT NULL,
   `customer_state` varchar(45) DEFAULT NULL,
   `customer_country` varchar(45) DEFAULT NULL,
@@ -976,6 +1061,7 @@ CREATE TABLE IF NOT EXISTS `directory` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `customer_id` int(11) NOT NULL,
   `username` varchar(255) NOT NULL,
+  `cid` varchar(255) NOT NULL,
   `domain` varchar(255) NOT NULL,
   `domain_id` int(11) NOT NULL,
   `domain_sofia_id` int(11) NOT NULL,
@@ -1060,7 +1146,7 @@ CREATE TABLE IF NOT EXISTS `invoices` (
   `tax_rate` decimal(11,4) NOT NULL,
   `misc_charges` decimal(11,4) NOT NULL,
   `misc_charges_description` varchar(255) NOT NULL,
-  `ws_customer_prepaid` int(11) NOT NULL,
+  `customer_prepaid` int(11) NOT NULL,
   `invoice_generated_date` varchar(255) NOT NULL,
   `due_date` varchar(255) NOT NULL,
   `status` varchar(50) NOT NULL,
@@ -1104,6 +1190,19 @@ INSERT INTO `post_load_modules_conf` (`id`, `module_name`, `load_module`, `prior
 (12, 'mod_db', 1, 1000),
 (13, 'mod_hash', 1, 1000),
 (14, 'mod_console', 1, 1000);
+
+CREATE TABLE IF NOT EXISTS `settings` (
+  `setting_name` varchar(200) NOT NULL,
+  `value` varchar(400) NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+INSERT INTO `settings` (`setting_name`, `value`) VALUES
+('company_name', ''),
+('logo', ''),
+('invoice_logo', ''),
+('invoice_terms', ''),
+('company_logo_as_invoice_logo', ''),
+('optional_cdr_fields_include', '');
 
 CREATE TABLE IF NOT EXISTS `socket_client_conf` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -1507,20 +1606,22 @@ sed -i "s#\$db\['default'\]\['password'\] = 'MYSQL_PASSWORD';#\$db\['default'\]\
 sed -i "s#\$db\['default'\]\['database'\] = 'VBILLING_DB';#\$db\['default'\]\['database'\] = '${VBILLING_DB}';#g" ${VBILLING_HTML}/application/config/database.php
 
 if [ -f /etc/debian_version ] ; then
-	chown -R www-data.www-data ${VBILLING_HTML}
+	chown -R www-data:www-data ${VBILLING_HTML}
 	chmod -R 777 ${VBILLING_HTML}/media/
+	mkdir ${VBILLING_HTML}/application/3rdparty/tcpdf/cache/
+	chmod 777 ${VBILLING_HTML}/application/3rdparty/tcpdf/cache/
 	if [ -f ${VBILLING_HTML}/index.html ]; then
 		rm -rf ${VBILLING_HTML}/index.html
 	fi
 cat << 'EOF' > /etc/odbc.ini
 [vBilling]
 Driver   = MySQL
-Server   = localhost
+Server   = 127.0.0.1
 Port     = 3306
-Database = VBILLING_DB
+Database = __VBILLING_DB__
 OPTION   = 67108864
 EOF
-	sed -i "s#Database = VBILLING_DB#Database = ${VBILLING_DB}#g" /etc/odbc.ini
+	sed -i "s#__VBILLING_DB__#${VBILLING_DB}#g" /etc/odbc.ini
 	sed -i "s#\[vBilling\]#\[${VBILLING_DB}\]#g" /etc/odbc.ini
 cat << 'EOF' > /etc/odbcinst.ini
 [MySQL]
@@ -1540,32 +1641,34 @@ EOF
 			ln -s ${VBILLING_HTML}/luac/ubuntu/${ARCH}/vBilling_conf.lua ${FS_INSTALL_PATH}/scripts/vBilling_conf.lua
 			ln -s ${VBILLING_HTML}/luac/ubuntu/${ARCH}/vBilling_functions.luac ${FS_INSTALL_PATH}/scripts/vBilling_functions.luac
 	fi
-sed -i "s#DSN                          = \"VBILLING_DB\"#DSN                          = \"${VBILLING_DB}\"#g" ${FS_INSTALL_PATH}/scripts/vBilling_conf.lua
-sed -i "s#DB_USER                      = \"MYSQL_USERNAME\"#DB_USER                      = \"${VBILLING_DB_USER}\"#g" ${FS_INSTALL_PATH}/scripts/vBilling_conf.lua
-sed -i "s#DB_PASSWORD                  = \"MYSQL_PASSWORD\"#DB_PASSWORD                  = \"${VBILLING_MYSQL_PASSWORD}\"#g" ${FS_INSTALL_PATH}/scripts/vBilling_conf.lua
+sed -i "s#\"__VBILLING_DB__\"\"${VBILLING_DB}\"#g" ${FS_INSTALL_PATH}/scripts/vBilling_conf.lua
+sed -i "s#\"__MYSQL_USERNAME__\"#\"${VBILLING_DB_USER}\"#g" ${FS_INSTALL_PATH}/scripts/vBilling_conf.lua
+sed -i "s#\"__MYSQL_PASSWORD__\"#\"${VBILLING_MYSQL_PASSWORD}\"#g" ${FS_INSTALL_PATH}/scripts/vBilling_conf.lua
 /etc/init.d/freeswitch start
 else [ -f /etc/redhat-release ]
-	chown -R apache.apache ${VBILLING_HTML}
+	chown -R apache:apache ${VBILLING_HTML}
 	chmod -R 777 ${VBILLING_HTML}/media/
+	mkdir ${VBILLING_HTML}/application/3rdparty/tcpdf/cache/
+	chmod 777 ${VBILLING_HTML}/application/3rdparty/tcpdf/cache/
 	if [ -f ${VBILLING_HTML}/index.html ]; then
 		rm -rf ${VBILLING_HTML}/index.html
 	fi
 cat << 'EOF' > /etc/odbc.ini
 [vBilling]
 Driver   = MySQL
-Server   = localhost
+Server   = 127.0.0.1
 Port     = 3306
-Database = VBILLING_DB
+Database = __VBILLING_DB__
 OPTION   = 67108864
 EOF
-	sed -i "s#Database = VBILLING_DB#Database = $VBILLING_DB#g" /etc/odbc.ini
+	sed -i "s#__VBILLING_DB__#$VBILLING_DB#g" /etc/odbc.ini
 	sed -i "s#\[vBilling\]#\[$VBILLING_DB\]#g" /etc/odbc.ini
-		ln -s ${VBILLING_HTML}/luac/centos/${ARCH}/vBilling.luac ${FS_INSTALL_PATH}/scripts/vBilling.luac
-		ln -s ${VBILLING_HTML}/luac/centos/${ARCH}/vBilling_conf.lua ${FS_INSTALL_PATH}/scripts/vBilling_conf.lua
-		ln -s ${VBILLING_HTML}/luac/centos/${ARCH}/vBilling_functions.luac ${FS_INSTALL_PATH}/scripts/vBilling_functions.luac
-sed -i "s#DSN                          = \"VBILLING_DB\"#DSN                          = \"${VBILLING_DB}\"#g" ${FS_INSTALL_PATH}/scripts/vBilling_conf.lua
-sed -i "s#DB_USER                      = \"MYSQL_USERNAME\"#DB_USER                      = \"${VBILLING_DB_USER}\"#g" ${FS_INSTALL_PATH}/scripts/vBilling_conf.lua
-sed -i "s#DB_PASSWORD                  = \"MYSQL_PASSWORD\"#DB_PASSWORD                  = \"${VBILLING_MYSQL_PASSWORD}\"#g" ${FS_INSTALL_PATH}/scripts/vBilling_conf.lua
+	ln -s ${VBILLING_HTML}/luac/centos/${ARCH}/vBilling.luac ${FS_INSTALL_PATH}/scripts/vBilling.luac
+	ln -s ${VBILLING_HTML}/luac/centos/${ARCH}/vBilling_conf.lua ${FS_INSTALL_PATH}/scripts/vBilling_conf.lua
+	ln -s ${VBILLING_HTML}/luac/centos/${ARCH}/vBilling_functions.luac ${FS_INSTALL_PATH}/scripts/vBilling_functions.luac
+	sed -i "s#\"__VBILLING_DB__\"#\"${VBILLING_DB}\"#g" ${FS_INSTALL_PATH}/scripts/vBilling_conf.lua
+	sed -i "s#\"__MYSQL_USERNAME__\"#\"${VBILLING_DB_USER}\"#g" ${FS_INSTALL_PATH}/scripts/vBilling_conf.lua
+	sed -i "s#\"__MYSQL_PASSWORD__\"#\"${VBILLING_MYSQL_PASSWORD}\"#g" ${FS_INSTALL_PATH}/scripts/vBilling_conf.lua
 /etc/init.d/freeswitch start
 fi
 
@@ -1573,7 +1676,7 @@ fi
 # Write out current crontab
 crontab -u root -l > ${TEMPDIR}/root.cron
 # echo new cron into cron file
-echo "@daily wget --spider http://localhost/cron/generate_invoices >/dev/null 2>&1" >> ${TEMPDIR}/root.cron
+echo "@daily wget --spider http://127.0.0.1/cron/generate_invoices >/dev/null 2>&1" >> ${TEMPDIR}/root.cron
 # install new cron file
 crontab -u root ${TEMPDIR}/root.cron
 rm -rf ${TEMPDIR}/root.cron
@@ -1588,6 +1691,9 @@ echo "*** (Replace SERVER_IP_ADDRESS with your server real IP)"
 echo ""
 echo "*** Default Login: admin"
 echo "*** Default Password: vBilling"
+echo ""
+echo "*** This version of vBilling supports 100 concurrent calls with 10,000 calls per day"
+echo "*** If you need more capacity, please contact vbilling@digitallinx.com"
 echo ""
 echo "*** Don't forget to visit http://forum.vbilling.org/ for latest documentation and support options"
 echo "*** For premium support, send an email to support@vbilling.org with your technical queries"
@@ -1638,7 +1744,6 @@ git clone $VBILLING_REPO ${TEMPDIR}/vBilling
 cp -apr ${VBILLING_HTML}/application/config/config.php ${TEMPDIR}/config.php
 cp -apr ${VBILLING_HTML}/application/config/database.php ${TEMPDIR}/database.php
 cp -apr ${VBILLING_HTML}/application/config/constants.php ${TEMPDIR}/constants.php
-
 cp -apr ${TEMPDIR}/vBilling/htdocs/*  ${VBILLING_HTML}/
 cp -apr ${TEMPDIR}/vBilling/htdocs/.htaccess  ${VBILLING_HTML}/
 
@@ -1647,14 +1752,96 @@ cp ${TEMPDIR}/config.php ${VBILLING_HTML}/application/config/config.php
 cp ${TEMPDIR}/database.php ${VBILLING_HTML}/application/config/database.php
 cp ${TEMPDIR}/constants.php ${VBILLING_HTML}/application/config/constants.php
 
+# Alter MySQL tables as per the changes
+# We write all the changes required to a file, and execute the file directly
+cat << 'EOF' > ${TEMPDIR}/vBilling_upgrade.sql
+CREATE TABLE IF NOT EXISTS `accounts_restrictions` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `view_customers` tinyint(1) NOT NULL DEFAULT '0',
+  `new_customers` tinyint(1) NOT NULL DEFAULT '0',
+  `enable_disable_customers` tinyint(1) NOT NULL DEFAULT '0',
+  `edit_customers` tinyint(1) NOT NULL DEFAULT '0',
+  `view_customers_cdr` tinyint(1) NOT NULL DEFAULT '0',
+  `view_customers_rates` tinyint(1) NOT NULL DEFAULT '0',
+  `view_customers_billing` tinyint(1) NOT NULL DEFAULT '0',
+  `view_customers_acl` tinyint(1) NOT NULL DEFAULT '0',
+  `new_acl` tinyint(1) NOT NULL DEFAULT '0',
+  `edit_acl` tinyint(1) NOT NULL DEFAULT '0',
+  `delete_acl` tinyint(1) NOT NULL DEFAULT '0',
+  `change_type_acl` tinyint(1) NOT NULL DEFAULT '0',
+  `view_customers_sip` tinyint(1) NOT NULL DEFAULT '0',
+  `new_sip` tinyint(1) NOT NULL DEFAULT '0',
+  `delete_sip` tinyint(1) NOT NULL DEFAULT '0',
+  `enable_disable_sip` tinyint(1) NOT NULL DEFAULT '0',
+  `view_customers_balance` tinyint(1) NOT NULL DEFAULT '0',
+  `add_deduct_balance` tinyint(1) NOT NULL DEFAULT '0',
+  `view_carriers` tinyint(1) NOT NULL DEFAULT '0',
+  `new_carriers` tinyint(1) NOT NULL DEFAULT '0',
+  `edit_carriers` tinyint(1) NOT NULL DEFAULT '0',
+  `enable_disable_carriers` tinyint(1) NOT NULL DEFAULT '0',
+  `delete_carriers` tinyint(1) NOT NULL DEFAULT '0',
+  `view_rate_groups` tinyint(1) NOT NULL DEFAULT '0',
+  `new_rate_groups` tinyint(1) NOT NULL DEFAULT '0',
+  `edit_rate_groups` tinyint(1) NOT NULL DEFAULT '0',
+  `enable_disable_rate_groups` tinyint(1) NOT NULL DEFAULT '0',
+  `delete_rate_groups` tinyint(1) NOT NULL DEFAULT '0',
+  `new_rate` tinyint(1) NOT NULL DEFAULT '0',
+  `import_csv` tinyint(1) NOT NULL DEFAULT '0',
+  `view_cdr` tinyint(1) NOT NULL DEFAULT '0',
+  `view_gateway_stats` tinyint(1) NOT NULL DEFAULT '0',
+  `view_customer_stats` tinyint(1) NOT NULL DEFAULT '0',
+  `view_call_destination` tinyint(1) NOT NULL DEFAULT '0',
+  `view_biling` tinyint(1) NOT NULL DEFAULT '0',
+  `view_invoices` tinyint(1) NOT NULL DEFAULT '0',
+  `generate_invoices` tinyint(1) NOT NULL DEFAULT '0',
+  `mark_invoices_paid` tinyint(1) NOT NULL DEFAULT '0',
+  `view_profiles` tinyint(1) NOT NULL DEFAULT '0',
+  `new_profiles` tinyint(1) NOT NULL DEFAULT '0',
+  `delete_profiles` tinyint(1) NOT NULL DEFAULT '0',
+  `freeswitch_status` tinyint(1) NOT NULL DEFAULT '0',
+  `profile_details` tinyint(1) NOT NULL DEFAULT '0',
+  `new_gateway` tinyint(1) NOT NULL DEFAULT '0',
+  `delete_gateway` tinyint(1) NOT NULL DEFAULT '0',
+  `edit_gateway` tinyint(1) NOT NULL DEFAULT '0',
+  `delete_settings` tinyint(1) NOT NULL DEFAULT '0',
+  `edit_settings` tinyint(1) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;
+
+ALTER TABLE `cdr` ADD column `is_multi_gateway` tinyint(1) NOT NULL DEFAULT '0';
+ALTER TABLE `cdr` ADD column `total_failed_gateways` int(11) NOT NULL DEFAULT '0';
+ALTER TABLE `cdr` ADD column `parent_id` int(11) NOT NULL DEFAULT '0';
+ALTER TABLE `directory` ADD column `cid` varchar(255) NOT NULL;
+ALTER TABLE `invoices` CHANGE `ws_customer_prepaid` `customer_prepaid` int(11) NOT NULL;
+
+CREATE TABLE IF NOT EXISTS `settings` (
+  `setting_name` varchar(200) NOT NULL,
+  `value` varchar(400) NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+EOF
+
+# Capture existing MySQL username and password and execute the queries to update the DB
+if [ -f /etc/debian_version ] ; then
+	VBILLING_DB_PASSWORD=$(cat /var/www/application/config/constants.php | grep DEFAULT_DSN_PASSWORD | cut -d ',' -f 2 | cut -d \''' -f 2)
+	VBILLING_DB_USER=$(cat /var/www/application/config/constants.php | grep DEFAULT_DSN_LOGIN | cut -d ',' -f 2 | cut -d \''' -f 2)
+	mysql -u${VBILLING_DB_USER} -p${VBILLING_DB_PASSWORD} ${VBILLING_DB} < ${TEMPDIR}/vBilling_upgrade.sql
+else [ -f /etc/redhat-release ]
+	VBILLING_DB_PASSWORD=$(cat /var/www/html/application/config/constants.php | grep DEFAULT_DSN_PASSWORD | cut -d ',' -f 2 | cut -d \''' -f 2)
+	VBILLING_DB_PASSWORD=$(cat /var/www/html/application/config/constants.php | grep DEFAULT_DSN_LOGIN | cut -d ',' -f 2 | cut -d \''' -f 2)
+	mysql -u${VBILLING_DB_USER} -p${VBILLING_DB_PASSWORD} ${VBILLING_DB} < ${TEMPDIR}/vBilling_upgrade.sql
+fi
+
+# Restart FreeSWITCH. Do we really need it?
+/etc/init.d/freeswitch restart
+
 # We should be good here by now :) Notify the user
 clear
 echo ""
 echo "*** The install scrtip has performed all operations. If everything went well, you should be able"
 echo "*** to browse vBilling with your old username and password."
 echo ""
-echo "*** If something went wrong, please visit our forum at http://forum.vbilling.org/ or send us an"
-echo "*** email at support@vbilling.org with all the logs of the upgrade."
+echo "*** If something went wrong, please visit our forum at http://forum.vbilling.org/"
 echo ""
 echo "*** For a quick start howto, please visit the following URL"
 echo "*** http://forum.vbilling.org/viewtopic.php?f=6&t=3"

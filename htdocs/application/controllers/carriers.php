@@ -47,6 +47,14 @@ class Carriers extends CI_Controller {
 			{
 				redirect ('customer/');
 			}
+            
+            if($this->session->userdata('user_type') == 'sub_admin')
+            {
+                if(sub_admin_access_any_cell($this->session->userdata('user_id'), 'view_carriers') == 0)
+                {
+                    redirect ('home/');
+                }
+            }
 		}
 	}
 
@@ -54,6 +62,7 @@ class Carriers extends CI_Controller {
 	{
 		$filter_carriers        = '';
 		$filter_carrier_type    = '';
+        $filter_sort            = '';
 		$search                 = '';
 
 		$msg_records_found = "Records Found";
@@ -62,17 +71,19 @@ class Carriers extends CI_Controller {
 		{
 			$filter_carriers        = $this->input->get('filter_carriers');
 			$filter_carrier_type    = $this->input->get('filter_carrier_type');
+            $filter_sort                = $this->input->get('filter_sort');
 			$search                 = $this->input->get('searchFilter');
 			$msg_records_found      = "Records Found Based On Your Search Criteria";
 		}
 
 		$data['filter_carriers']            = $filter_carriers;
 		$data['filter_carrier_type']        = $filter_carrier_type;
+        $data['filter_sort']            = $filter_sort;
 
 		//for pagging set information
 		$this->load->library('pagination');
 		$config['per_page'] = '20';
-		$config['base_url'] = base_url().'carriers/?searchFilter='.$search.'&filter_carriers='.$filter_carriers.'&filter_carrier_type='.$filter_carrier_type.'';
+		$config['base_url'] = base_url().'carriers/?searchFilter='.$search.'&filter_carriers='.$filter_carriers.'&filter_carrier_type='.$filter_carrier_type.'&filter_sort='.$filter_sort.'';
 		$config['page_query_string'] = TRUE;
 
 		$config['num_links'] = 2;
@@ -113,7 +124,7 @@ class Carriers extends CI_Controller {
 		$this->pagination->initialize($config);
 		$data['msg_records_found'] = "".$data['count']."&nbsp;".$msg_records_found."";
 
-		$data['carriers']      =   $this->carriers_model->get_all_carriers($config['per_page'],$config['uri_segment'], $filter_carriers, $filter_carrier_type);
+		$data['carriers']      =   $this->carriers_model->get_all_carriers($config['per_page'],$config['uri_segment'], $filter_carriers, $filter_carrier_type, $filter_sort);
 		$data['page_name']		=	'carrier_view';
 		$data['selected']		=	'carriers';
 		$data['sub_selected']   =   'list_carriers';
@@ -134,7 +145,15 @@ class Carriers extends CI_Controller {
 
 	function new_carrier()
 	{
-		$data['page_name']		=	'new_carrier';
+		if($this->session->userdata('user_type') == 'sub_admin')
+        {
+            if(sub_admin_access_any_cell($this->session->userdata('user_id'), 'new_carriers') == 0)
+            {
+                redirect ('carriers/');
+            }
+        }
+        
+        $data['page_name']		=	'new_carrier';
 		$data['selected']		=	'carriers';
 		$data['sub_selected']   =   'new_carrier';
 		$data['page_title']		=	'NEW CARRIER';
@@ -168,7 +187,15 @@ class Carriers extends CI_Controller {
 
 	function update_carrier($carrier_id)
 	{
-		$data['carrier']            =   $this->carriers_model->get_single_carrier($carrier_id);
+		if($this->session->userdata('user_type') == 'sub_admin')
+        {
+            if(sub_admin_access_any_cell($this->session->userdata('user_id'), 'edit_carriers') == 0)
+            {
+                redirect ('carriers/');
+            }
+        }
+        
+        $data['carrier']            =   $this->carriers_model->get_single_carrier($carrier_id);
 		$data['carrier_gateways']   =   $this->carriers_model->carrier_gateways($carrier_id);
 		$data['carrier_id']     =   $carrier_id;
 
@@ -217,8 +244,8 @@ class Carriers extends CI_Controller {
     
     function update_gateway_priority()
     {
-        $carrier = $_REQUEST["carrier_id"];
-        $arr     = $_REQUEST["table-".$carrier.""];
+        $carrier = $_GET["carrier_id"];
+        $arr     = $_GET["table-".$carrier.""];
         
         $order = 0;
         $jump = 0;

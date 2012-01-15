@@ -42,7 +42,7 @@ class Home extends CI_Controller {
 		//validate login
 		if (user_login())
 		{
-			if($this->session->userdata('user_type') == 'admin')
+			if($this->session->userdata('user_type') == 'admin' || $this->session->userdata('user_type') == 'sub_admin')
 			{
 				redirect ('home/dashboard');
 			}
@@ -103,7 +103,7 @@ class Home extends CI_Controller {
 		//validate login
 		if (user_login())
 		{
-			if($this->session->userdata('user_type') == 'admin')
+			if($this->session->userdata('user_type') == 'admin' || $this->session->userdata('user_type') == 'sub_admin')
 			{
 				redirect ('home/dashboard');
 			}
@@ -122,7 +122,7 @@ class Home extends CI_Controller {
 		{
 			$row	=	$check_credentials->row();
 
-			if ($row->type == 'admin') //if the user is admin
+			if ($row->type == 'admin' || $row->type == 'sub_admin') //if the user is admin
 			{
 				$newdata = array(
 					'username'          =>  $row->username,
@@ -133,7 +133,7 @@ class Home extends CI_Controller {
 				$this->session->set_userdata($newdata);
 				redirect('home/dashboard');
 			}
-			if ($row->type == 'customer') //if the user is admin
+			if ($row->type == 'customer') //if the user is customer
 			{
 				$newdata = array(
 					'username'          =>  $row->username,

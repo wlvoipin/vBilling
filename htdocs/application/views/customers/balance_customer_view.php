@@ -46,39 +46,83 @@ window.location = '../../home/';
                 
                 <thead>
                     
-                    <tr class="main_text balance_form" style="display:none;">
-                        <td colspan="3">
-                            <form enctype="multipart/form-data"  method="post" action="" name="addSubtractBlnce" id="addSubtractBlnce">
-                                <input type="hidden" name="customer_id" value="<?php echo $customer_id;?>" />
-                                
-                                <table cellspacing="3" cellpadding="2" border="0" width="95%" class="search_col">
-                                    <tbody>
-                                        <tr>
-                                            <td align="right" width="45%"><span class="required">*</span> Balance to add/deduct:</td>
-                                            <td align="left" width="55%"><input type="text" value="" name="balance" id="balance" maxlength="50" class="textfield"></td>
-                                        </tr>
-                                        <tr>
-                                            <td align="right"><span class="required">*</span> Action:</td>
-                                            <td align="left">
-                                                <select  name="action" id="action" class="textfield">
-                                                    <option value="added">Add Balance</option>
-                                                    <option value="deducted">Deduct Balance</option>
-                                                </select>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td align="center" colspan="2"><input border="0" id="submitaddSubtractBlnceForm" type="image" src="<?php echo base_url();?>assets/images/btn-submit.png"></td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </form>
-                        </td>
-                    </tr>
+                   
                     
-                    <tr class="main_text">
-                        <td align="right" colspan="3"><a href="#" class="add_deduct_balance">Add/Deduct Balance</a></td>
-                    </tr>
-                    
+                    <?php if($this->session->userdata('user_type') == 'admin'){?>
+                         <tr class="main_text balance_form" style="display:none;">
+                            <td colspan="3">
+                                <form enctype="multipart/form-data"  method="post" action="" name="addSubtractBlnce" id="addSubtractBlnce">
+                                    <input type="hidden" name="customer_id" value="<?php echo $customer_id;?>" />
+                                    
+                                    <table cellspacing="3" cellpadding="2" border="0" width="95%" class="search_col">
+                                        <tbody>
+                                            <tr>
+                                                <td align="right" width="45%"><span class="required">*</span> Balance to add/deduct:</td>
+                                                <td align="left" width="55%"><input type="text" value="" name="balance" id="balance" maxlength="50" class="textfield"></td>
+                                            </tr>
+                                            <tr>
+                                                <td align="right"><span class="required">*</span> Action:</td>
+                                                <td align="left">
+                                                    <select  name="action" id="action" class="textfield">
+                                                        <option value="added">Add Balance</option>
+                                                        <option value="deducted">Deduct Balance</option>
+                                                    </select>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td align="center" colspan="2"><input border="0" id="submitaddSubtractBlnceForm" type="image" src="<?php echo base_url();?>assets/images/btn-submit.png"></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </form>
+                            </td>
+                        </tr>
+                        
+                        <tr class="main_text">
+                            <td align="right" colspan="3"><a href="#" class="add_deduct_balance">Add/Deduct Balance</a></td>
+                        </tr>
+                    <?php 
+                        } else if($this->session->userdata('user_type') == 'sub_admin'){
+                                if(sub_admin_access_any_cell($this->session->userdata('user_id'), 'add_deduct_balance') == 1)
+                                {
+                    ?>
+                                     <tr class="main_text balance_form" style="display:none;">
+                                        <td colspan="3">
+                                            <form enctype="multipart/form-data"  method="post" action="" name="addSubtractBlnce" id="addSubtractBlnce">
+                                                <input type="hidden" name="customer_id" value="<?php echo $customer_id;?>" />
+                                                
+                                                <table cellspacing="3" cellpadding="2" border="0" width="95%" class="search_col">
+                                                    <tbody>
+                                                        <tr>
+                                                            <td align="right" width="45%"><span class="required">*</span> Balance to add/deduct:</td>
+                                                            <td align="left" width="55%"><input type="text" value="" name="balance" id="balance" maxlength="50" class="textfield"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td align="right"><span class="required">*</span> Action:</td>
+                                                            <td align="left">
+                                                                <select  name="action" id="action" class="textfield">
+                                                                    <option value="added">Add Balance</option>
+                                                                    <option value="deducted">Deduct Balance</option>
+                                                                </select>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td align="center" colspan="2"><input border="0" id="submitaddSubtractBlnceForm" type="image" src="<?php echo base_url();?>assets/images/btn-submit.png"></td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr class="main_text">
+                                        <td align="right" colspan="3"><a href="#" class="add_deduct_balance">Add/Deduct Balance</a></td>
+                                    </tr>
+                    <?php 
+                                }
+                            }
+                    ?>
+                          
                     <tr class="bottom_link">
                         <td width="34%" align="center">Date</td>
                         <td width="33%" align="center">Modified Balance</td>

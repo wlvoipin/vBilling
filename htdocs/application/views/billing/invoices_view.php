@@ -46,6 +46,10 @@
                         Status
                     </td>
                     
+                    <td width="8%">
+                        Sort By
+                    </td>
+                    
                     <td width="8%" rowspan="2">
                         <input type="submit" id="searchFilter" name="searchFilter" value="SEARCH" class="button blue" style="float:right;margin-top:5px;margin-right:10px" />
                     </td>
@@ -82,6 +86,22 @@
                             <option value="over_due" <?php if($filter_status == 'over_due'){ echo "selected";}?>>Over Due</option>
                         </select>
                     </td>
+                    
+                    <td>
+                        <select name="filter_sort" id="filter_sort" style="width:124px;">
+                            <option value="">Select</option>
+                            
+                            <option value="date_asc" <?php if($filter_sort == 'date_asc'){ echo "selected";}?>>Generated Date - ASC</option>
+                            <option value="date_dec" <?php if($filter_sort == 'date_dec'){ echo "selected";}?>>Generated Date - DESC</option>
+                            
+                            <option value="totcalls_asc" <?php if($filter_sort == 'totcalls_asc'){ echo "selected";}?>>Total Calls - ASC</option>
+                            <option value="totcalls_dec" <?php if($filter_sort == 'totcalls_dec'){ echo "selected";}?>>Total Calls - DESC</option>
+                            
+                            <option value="totcharges_asc" <?php if($filter_sort == 'totcharges_asc'){ echo "selected";}?>>Total Charges - ASC</option>
+                            <option value="totcharges_dec" <?php if($filter_sort == 'totcharges_dec'){ echo "selected";}?>>Total Charges - DESC</option>
+                          
+                        </select>
+                    </td>
                 </tr>
             
         </table>
@@ -90,50 +110,105 @@
 </div>
 <!--***************** END FILTER BOX ****************************-->
 
-<div class="info">
-    * You can only generate invoices for postpaid customers having billing period Weekly, Bi-Weekly or Monthly.<br/>
-    * You can only generate invoice if last invoice generated was more than one day ago. <br/>
-    * You cannot generate invoice if last invoice was generated today.<br/>
-    * An invoice will be generated from last generated invoice to current date starting from 12:00:00 am
-    <a href="#" style="float:right" class="close">Close</a>
-</div>
 
-<div style="text-align:center;padding:10px">
-    <div class="button white">
-    
-    <form method="post" action="<?php echo base_url();?>billing/generate_manual_invoice/" id="newInvForm"> 
-        <table width="100%" cellspacing="0" cellpadding="0" border="0" id="filter_table">
-             
-                <tr>
-                    <td width="8%">
-                        Customer
-                    </td>
 
-                    <td width="8%">
-                        Misclleneous Charges
-                    </td>
-                    
-                    <td width="1%" rowspan="2">
-                        <input type="submit" id="searchFilter" name="searchFilter" value="Generate Invoice Till Today 12:00:00 am" class="button blue" style="float:right;margin-top:5px;margin-right:10px" />
-                    </td>
-                </tr>
-            
-                <tr>
-                    <td>
-                        <select name="new_inv_customer" id="new_inv_customer">
-                            <?php echo customer_drop_down_generate_invoice();?>
-                        </select>
-                    </td>
-                    
-                    <td><input type="text" name="misc_charges" id="misc_charges" class="numeric"></td>
-                </tr>
-            
-        </table>
-    </form>
+<?php if($this->session->userdata('user_type') == 'admin'){?>
+    <div class="info">
+        * You can only generate invoices for postpaid customers having billing period Weekly, Bi-Weekly or Monthly.<br/>
+        * You can only generate invoice if last invoice generated was more than one day ago. <br/>
+        * You cannot generate invoice if last invoice was generated today.<br/>
+        * An invoice will be generated from last generated invoice to current date starting from 12:00:00 am
+        <a href="#" style="float:right" class="close">Close</a>
     </div>
-</div>
 
-<table style="border: 1px groove;" width="100%" cellpadding="0" cellspacing="0">
+    <div style="text-align:center;padding:10px">
+        <div class="button white">
+        
+        <form method="post" action="<?php echo base_url();?>billing/generate_manual_invoice/" id="newInvForm"> 
+            <table width="100%" cellspacing="0" cellpadding="0" border="0" id="filter_table">
+                 
+                    <tr>
+                        <td width="8%">
+                            Customer
+                        </td>
+
+                        <td width="8%">
+                            Misclleneous Charges
+                        </td>
+                        
+                        <td width="1%" rowspan="2">
+                            <input type="submit" id="searchFilter" name="searchFilter" value="Generate Invoice Till Today 12:00:00 am" class="button blue" style="float:right;margin-top:5px;margin-right:10px" />
+                        </td>
+                    </tr>
+                
+                    <tr>
+                        <td>
+                            <select name="new_inv_customer" id="new_inv_customer">
+                                <?php echo customer_drop_down_generate_invoice();?>
+                            </select>
+                        </td>
+                        
+                        <td><input type="text" name="misc_charges" id="misc_charges" class="numeric"></td>
+                    </tr>
+                
+            </table>
+        </form>
+        </div>
+    </div>
+<?php 
+    } else if($this->session->userdata('user_type') == 'sub_admin'){
+            if(sub_admin_access_any_cell($this->session->userdata('user_id'), 'generate_invoices') == 1)
+            {
+?>
+                <div class="info">
+                    * You can only generate invoices for postpaid customers having billing period Weekly, Bi-Weekly or Monthly.<br/>
+                    * You can only generate invoice if last invoice generated was more than one day ago. <br/>
+                    * You cannot generate invoice if last invoice was generated today.<br/>
+                    * An invoice will be generated from last generated invoice to current date starting from 12:00:00 am
+                    <a href="#" style="float:right" class="close">Close</a>
+                </div>
+
+                <div style="text-align:center;padding:10px">
+                    <div class="button white">
+                    
+                    <form method="post" action="<?php echo base_url();?>billing/generate_manual_invoice/" id="newInvForm"> 
+                        <table width="100%" cellspacing="0" cellpadding="0" border="0" id="filter_table">
+                             
+                                <tr>
+                                    <td width="8%">
+                                        Customer
+                                    </td>
+
+                                    <td width="8%">
+                                        Misclleneous Charges
+                                    </td>
+                                    
+                                    <td width="1%" rowspan="2">
+                                        <input type="submit" id="searchFilter" name="searchFilter" value="Generate Invoice Till Today 12:00:00 am" class="button blue" style="float:right;margin-top:5px;margin-right:10px" />
+                                    </td>
+                                </tr>
+                            
+                                <tr>
+                                    <td>
+                                        <select name="new_inv_customer" id="new_inv_customer">
+                                            <?php echo customer_drop_down_generate_invoice();?>
+                                        </select>
+                                    </td>
+                                    
+                                    <td><input type="text" name="misc_charges" id="misc_charges" class="numeric"></td>
+                                </tr>
+                            
+                        </table>
+                    </form>
+                    </div>
+                </div>
+<?php 
+            }
+        }
+?>
+         
+                                
+<table width="100%" cellpadding="0" cellspacing="0">
         <tbody><tr>
             <td>
                 <table width="100%" border="0" cellpadding="0" cellspacing="0">
@@ -154,6 +229,7 @@
                         <td width="7%" align="center">View CDR</td>
                         <td width="7%" align="center">Mark Paid</td>
                     </tr>
+                    <tr><td colspan="13" id="shadowDiv" style="height:5px;margin-top:-1px"></td></tr>
                     
                     <?php if($invoices->num_rows() > 0) {?>
                         
@@ -215,14 +291,38 @@
                                 
                                 <td align="center" height="30"><a href="<?php echo base_url(); ?>billing/download_invoice/<?php echo $row->invoice_id;?>"><img src="<?php echo base_url();?>assets/images/export-pdf.gif"/> View Invoice</a></td>
                                 
-                                <td align="center" height="30"><a href="<?php echo base_url(); ?>billing/download_cdr/<?php echo $row->invoice_id;?>"><img src="<?php echo base_url();?>assets/images/export-pdf.gif"/> View CDR</a></td>
+                                <td align="center" height="30"><a href="<?php echo base_url(); ?>billing/download_cdr_admin/<?php echo $row->invoice_id;?>"><img src="<?php echo base_url();?>assets/images/export-pdf.gif"/> View CDR</a></td>
                                 
-                                <?php if($latest_status == 'pending' || $latest_status == 'over_due') {?>
-                                <td align="center" height="30"><a href="<?php echo base_url(); ?>billing/mark_as_paid/<?php echo $row->id; ?>">Mark as Paid</a></td>
-                                <?php } else {?>
-                                <td align="center" height="30">-</td>
-                                <?php } ?>
+                                
+                                
+                                <?php if($this->session->userdata('user_type') == 'admin'){?>
+                                    <?php if($latest_status == 'pending' || $latest_status == 'over_due') {?>
+                                    <td align="center" height="30"><a href="<?php echo base_url(); ?>billing/mark_as_paid/<?php echo $row->id; ?>">Mark as Paid</a></td>
+                                    <?php } else {?>
+                                    <td align="center" height="30">-</td>
+                                    <?php } ?>
+                                <?php 
+                                    } else if($this->session->userdata('user_type') == 'sub_admin'){
+                                            if(sub_admin_access_any_cell($this->session->userdata('user_id'), 'mark_invoices_paid') == 1)
+                                            {
+                                ?>
+                                                <?php if($latest_status == 'pending' || $latest_status == 'over_due') {?>
+                                                <td align="center" height="30"><a href="<?php echo base_url(); ?>billing/mark_as_paid/<?php echo $row->id; ?>">Mark as Paid</a></td>
+                                                <?php } else {?>
+                                                <td align="center" height="30">-</td>
+                                                <?php } ?>
+                                <?php 
+                                            }
+                                            else
+                                            {
+                                ?>
+                                                <td align="center" height="30">-</td>
+                                <?php
+                                            }
+                                        }
+                                ?>
                             </tr>
+                            <tr style="height:5px;"><td colspan="13" id="shadowDiv" style="height:5px;margin-top:0px;background-color:#fff"></td></tr>
                         <?php endforeach;?>
                            
                     <?php } else { echo '<tr><td align="center" style="color:red;" colspan="13">No Results Found</td></tr>'; } ?>

@@ -10,10 +10,64 @@ CREATE TABLE IF NOT EXISTS `accounts` (
   `customer_id` int(11) NOT NULL,
   `enabled` tinyint(4) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=6 ;
 
 INSERT INTO `accounts` (`id`, `username`, `password`, `type`, `is_customer`, `customer_id`, `enabled`) VALUES
 (1, 'admin', '8051d6ba25ceab9244c28a25523291fc', 'admin', 0, 0, 1);
+
+CREATE TABLE IF NOT EXISTS `accounts_restrictions` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `view_customers` tinyint(1) NOT NULL DEFAULT '0',
+  `new_customers` tinyint(1) NOT NULL DEFAULT '0',
+  `enable_disable_customers` tinyint(1) NOT NULL DEFAULT '0',
+  `edit_customers` tinyint(1) NOT NULL DEFAULT '0',
+  `view_customers_cdr` tinyint(1) NOT NULL DEFAULT '0',
+  `view_customers_rates` tinyint(1) NOT NULL DEFAULT '0',
+  `view_customers_billing` tinyint(1) NOT NULL DEFAULT '0',
+  `view_customers_acl` tinyint(1) NOT NULL DEFAULT '0',
+  `new_acl` tinyint(1) NOT NULL DEFAULT '0',
+  `edit_acl` tinyint(1) NOT NULL DEFAULT '0',
+  `delete_acl` tinyint(1) NOT NULL DEFAULT '0',
+  `change_type_acl` tinyint(1) NOT NULL DEFAULT '0',
+  `view_customers_sip` tinyint(1) NOT NULL DEFAULT '0',
+  `new_sip` tinyint(1) NOT NULL DEFAULT '0',
+  `delete_sip` tinyint(1) NOT NULL DEFAULT '0',
+  `enable_disable_sip` tinyint(1) NOT NULL DEFAULT '0',
+  `view_customers_balance` tinyint(1) NOT NULL DEFAULT '0',
+  `add_deduct_balance` tinyint(1) NOT NULL DEFAULT '0',
+  `view_carriers` tinyint(1) NOT NULL DEFAULT '0',
+  `new_carriers` tinyint(1) NOT NULL DEFAULT '0',
+  `edit_carriers` tinyint(1) NOT NULL DEFAULT '0',
+  `enable_disable_carriers` tinyint(1) NOT NULL DEFAULT '0',
+  `delete_carriers` tinyint(1) NOT NULL DEFAULT '0',
+  `view_rate_groups` tinyint(1) NOT NULL DEFAULT '0',
+  `new_rate_groups` tinyint(1) NOT NULL DEFAULT '0',
+  `edit_rate_groups` tinyint(1) NOT NULL DEFAULT '0',
+  `enable_disable_rate_groups` tinyint(1) NOT NULL DEFAULT '0',
+  `delete_rate_groups` tinyint(1) NOT NULL DEFAULT '0',
+  `new_rate` tinyint(1) NOT NULL DEFAULT '0',
+  `import_csv` tinyint(1) NOT NULL DEFAULT '0',
+  `view_cdr` tinyint(1) NOT NULL DEFAULT '0',
+  `view_gateway_stats` tinyint(1) NOT NULL DEFAULT '0',
+  `view_customer_stats` tinyint(1) NOT NULL DEFAULT '0',
+  `view_call_destination` tinyint(1) NOT NULL DEFAULT '0',
+  `view_biling` tinyint(1) NOT NULL DEFAULT '0',
+  `view_invoices` tinyint(1) NOT NULL DEFAULT '0',
+  `generate_invoices` tinyint(1) NOT NULL DEFAULT '0',
+  `mark_invoices_paid` tinyint(1) NOT NULL DEFAULT '0',
+  `view_profiles` tinyint(1) NOT NULL DEFAULT '0',
+  `new_profiles` tinyint(1) NOT NULL DEFAULT '0',
+  `delete_profiles` tinyint(1) NOT NULL DEFAULT '0',
+  `freeswitch_status` tinyint(1) NOT NULL DEFAULT '0',
+  `profile_details` tinyint(1) NOT NULL DEFAULT '0',
+  `new_gateway` tinyint(1) NOT NULL DEFAULT '0',
+  `delete_gateway` tinyint(1) NOT NULL DEFAULT '0',
+  `edit_gateway` tinyint(1) NOT NULL DEFAULT '0',
+  `delete_settings` tinyint(1) NOT NULL DEFAULT '0',
+  `edit_settings` tinyint(1) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 CREATE TABLE IF NOT EXISTS `acl_lists` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -95,8 +149,10 @@ CREATE TABLE IF NOT EXISTS `cdr` (
   `country_id` int(11) NOT NULL,
   `rate_id` int(11) NOT NULL,
   `lcr_carrier_id` int(11) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `uuid` (`uuid`)
+  `is_multi_gateway` tinyint(1) NOT NULL DEFAULT '0',
+  `total_failed_gateways` int(11) NOT NULL DEFAULT '0',
+  `parent_id` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 CREATE TABLE IF NOT EXISTS `check_cdr_time` (
@@ -375,7 +431,7 @@ CREATE TABLE IF NOT EXISTS `customers` (
   `customer_firstname` varchar(50) DEFAULT NULL,
   `customer_lastname` varchar(50) DEFAULT NULL,
   `customer_contact_email` varchar(100) DEFAULT NULL,
-  `customer_address` varchar(150) DEFAULT NULL,
+  `customer_address` text,
   `customer_city` varchar(45) DEFAULT NULL,
   `customer_state` varchar(45) DEFAULT NULL,
   `customer_country` varchar(45) DEFAULT NULL,
@@ -420,6 +476,7 @@ CREATE TABLE IF NOT EXISTS `directory` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `customer_id` int(11) NOT NULL,
   `username` varchar(255) NOT NULL,
+  `cid` varchar(255) NOT NULL,
   `domain` varchar(255) NOT NULL,
   `domain_id` int(11) NOT NULL,
   `domain_sofia_id` int(11) NOT NULL,
@@ -504,7 +561,7 @@ CREATE TABLE IF NOT EXISTS `invoices` (
   `tax_rate` decimal(11,4) NOT NULL,
   `misc_charges` decimal(11,4) NOT NULL,
   `misc_charges_description` varchar(255) NOT NULL,
-  `ws_customer_prepaid` int(11) NOT NULL,
+  `customer_prepaid` int(11) NOT NULL,
   `invoice_generated_date` varchar(255) NOT NULL,
   `due_date` varchar(255) NOT NULL,
   `status` varchar(50) NOT NULL,
@@ -548,6 +605,19 @@ INSERT INTO `post_load_modules_conf` (`id`, `module_name`, `load_module`, `prior
 (12, 'mod_db', 1, 1000),
 (13, 'mod_hash', 1, 1000),
 (14, 'mod_console', 1, 1000);
+
+CREATE TABLE IF NOT EXISTS `settings` (
+  `setting_name` varchar(200) NOT NULL,
+  `value` varchar(400) NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+INSERT INTO `settings` (`setting_name`, `value`) VALUES
+('company_name', ''),
+('logo', ''),
+('invoice_logo', ''),
+('invoice_terms', ''),
+('company_logo_as_invoice_logo', ''),
+('optional_cdr_fields_include', '');
 
 CREATE TABLE IF NOT EXISTS `socket_client_conf` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -916,3 +986,4 @@ INSERT INTO `xml_cdr_conf` (`id`, `param_name`, `param_value`) VALUES
 (5, 'retries', '2'),
 (6, 'delay', '5'),
 (7, 'log-http-and-disk', 'false');
+

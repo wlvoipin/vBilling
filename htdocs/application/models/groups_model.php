@@ -30,10 +30,25 @@
 class Groups_model extends CI_Model {
 
 	// list all customers
-	function get_all_groups($num, $offset, $filter_groups, $filter_group_type)
+	function get_all_groups($num, $offset, $filter_groups, $filter_group_type, $filter_sort)
 	{
 		if($offset == ''){$offset='0';}
-
+        
+        $order_by = "";
+        if($filter_sort == 'name_asc')
+        {
+            $order_by = "ORDER BY group_name ASC";
+        }
+        else if($filter_sort == 'name_dec')
+        {
+            $order_by = "ORDER BY group_name DESC";
+        }
+        else
+        {
+            $order_by = "ORDER BY id DESC";
+        }
+        
+        
 		$where = '';
 		$where .= "WHERE id != '' ";
 
@@ -53,7 +68,7 @@ class Groups_model extends CI_Model {
 			}
 		}
 
-		$sql = "SELECT * FROM groups ".$where." LIMIT $offset,$num";
+		$sql = "SELECT * FROM groups ".$where." ".$order_by." LIMIT $offset,$num";
 		$query = $this->db->query($sql);
 		return $query;
 	}

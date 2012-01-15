@@ -27,6 +27,10 @@ div.paging {
         </script>
     
         <title>:: <?php echo $page_title;?> ::</title>
+        
+        <!--[if gt IE 5]>
+        <link href="<?php echo base_url();?>assets/css/ie_fix.css" rel="stylesheet" type="text/css">
+<![endif]-->
 </head>
 
 <body>
@@ -37,7 +41,7 @@ div.paging {
     
     <div id="top-links">
         <?php 
-        if($this->session->userdata('user_type') == 'admin'){
+        if($this->session->userdata('user_type') == 'admin' || $this->session->userdata('user_type') == 'sub_admin'){
             echo '<a href="#">Welcome Admin</a>&nbsp;|&nbsp;';
             echo '<a href="'.base_url().'customers/my_account">My Account</a>&nbsp;|&nbsp;';
         }

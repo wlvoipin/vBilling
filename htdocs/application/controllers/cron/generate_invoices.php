@@ -328,15 +328,43 @@ class Generate_Invoices extends CI_Controller {
 				<td>Total Calls</td>
 					<td>Total Charges</td>
 					<td align="center">Total</td>
-					</tr>
+					</tr>';
+                    
+                    $sql99 = "SELECT SUM(total_sell_cost) as total_invoice_amount, COUNT(*) as total_calls FROM cdr WHERE customer_id = '".$customer_id."' AND (hangup_cause = 'ALLOTTED_TIMEOUT' || hangup_cause = 'NORMAL_CLEARING') AND billsec > 0 AND created_time > '".sprintf("%.0f", $cdr_from)."' AND created_time <= '".sprintf("%.0f", $cdr_to)."' GROUP BY country_id";
+                    $query99 = $this->db->query($sql99);
+                    
+                    $e_grand_total = 0;
+                    if($query99->num_rows() > 0)
+                    {
+                        
+                        foreach($query99->result() as $row99)
+                        {
+                            $e_tot_inv_amt  = $row99->total_invoice_amount;
+                            $e_grand_total = $e_grand_total + $e_tot_inv_amt;
+                            if($e_tot_inv_amt == '')
+                            {
+                                $e_tot_inv_amt = 0;
+                            }
+                            $e_total_calls_made       = $row99->total_calls;
+                            $e_destination      = country_any_cell($row99->country_id, 'countryname');
+                            
+                        $tbl .= '<tr style="background-color:#ccc">
+                            <td>'.$e_destination.'</td>
+                            <td>'.$e_total_calls_made.'</td>
+                                <td align="center">'.$e_tot_inv_amt.'</td>
+                                </tr>';
+                        }
+                    }
+                    else
+                    {
+                        $tbl .= '<tr style="background-color:#ccc">
+                            <td>--</td>
+                            <td>0</td>
+                                <td align="center">0</td>
+                                </tr>';
+                    }
 
-					<tr style="background-color:#ccc">
-				<td>'.$total_calls_made.'</td>
-					<td>'.$total_invoice_amount.'</td>
-					<td align="center">'.$total_invoice_amount.'</td>
-					</tr>
-
-					<tr style="background-color:#ccc">
+				$tbl .=	'<tr style="background-color:#ccc">
 				<td>&nbsp;</td>
 					<td>&nbsp;</td>
 					<td>&nbsp;</td>
@@ -369,7 +397,7 @@ class Generate_Invoices extends CI_Controller {
 					<tr style="background-color:#ccc">
 				<td>&nbsp;</td>
 					<td align="right" style="font-weight:bold;color:#3172C6">Total</td>
-				<td style="font-weight:bold;color:#3172C6;text-align:center">'.$total_invoice_amount.'</td>
+				<td style="font-weight:bold;color:#3172C6;text-align:center">'.$e_grand_total.'</td>
 				</tr>
 					</tbody></table>
 					</td>
@@ -515,6 +543,258 @@ class Generate_Invoices extends CI_Controller {
 
 				//Close and output PDF document
 				$objcdr->Output('media/invoices/'.$invoice_number.'_cdr.pdf', 'F');
+                
+                /*************************************************************************/
+                /********************CREATE CDR FOR ADMIN VIEW ***************************/
+                /*************************************************************************/
+                //create cdr pdf 
+
+				$admincdr = new $this->pdf;
+				// set document information
+				$admincdr->SetSubject('Invoice CDR');
+				$admincdr->SetKeywords('Digital Linx, Invoice, CDR');
+
+				// add a page
+				$admincdr->AddPage();
+
+				$admincdr->SetFont('helvetica', '', 6);
+
+				$sql11 = "SELECT * FROM cdr WHERE customer_id = '".$customer_id."' AND (hangup_cause = 'ALLOTTED_TIMEOUT' || hangup_cause = 'NORMAL_CLEARING') AND billsec > 0 AND created_time > '".sprintf("%.0f", $cdr_from)."' AND created_time <= '".sprintf("%.0f", $cdr_to)."'";
+				$query11 = $this->db->query($sql11);
+
+				$tbl_cdr = '<table width="100%" cellspacing="0" cellpadding="0" border="0" style="margin:0px;margin-left:auto;margin-right:auto;padding:5px">
+
+					<tbody>
+
+					<tr>
+					<td align="center" colspan="2">
+					<table width="100%" style="background-color:#dadada;padding:5px;border:5px solid #cccccc;">
+				<tbody><tr>
+					<td align="right" style="font-weight:bold;color:red" colspan="2">Invoice # '.$invoice_number.'</td>
+				</tr>
+
+					<tr>
+					<td align="right" style="font-weight:bold;" colspan="2">Date: '.$current_date.'</td>
+					</tr>
+
+					<tr>
+					<td align="right" style="font-weight:bold;" colspan="2">Due Date: '.date('Y-m-d H:i:s', $due_date).'</td>
+					</tr>
+					</tbody></table>
+					</td>
+					</tr>
+
+					<tr>
+					<td height="30px" colspan="2">&nbsp;</td>
+					</tr>
+
+					<tr>
+					<td height="30px" colspan="2">&nbsp;</td>
+					</tr>
+
+					<tr>
+					<td align="center">
+					<table width="100%" style="background-color:#dadada;padding:5px;border:5px solid #cccccc;">
+				<tbody>
+					<tr>
+					<td style="background-color:#777777;color:#fff;padding-left:10px" align="left">
+				Billing Period From:
+				</td>
+					</tr>
+
+					<tr>
+					<td align="left">
+					'.date('Y-m-d', $date_from).'
+					</td>
+					</tr>
+
+
+					</tbody></table>
+					</td>
+
+					<td align="center">
+					<table width="100%" style="background-color:#dadada;padding:5px;border:5px solid #cccccc;">
+				<tbody>
+					<tr>
+					<td style="background-color:#777777;color:#fff;padding-left:10px" align="left">
+				Billing Period To:
+				</td>
+					</tr>
+
+					<tr>
+					<td align="left">
+					'.$current_date.'
+					</td>
+					</tr>
+
+					</tbody></table>
+					</td>
+					</tr>
+
+					<tr>
+					<td height="30px" colspan="2">&nbsp;</td>
+					</tr>
+
+					</tbody></table>';
+                
+                $sql12 = "SELECT value FROM settings WHERE setting_name = 'optional_cdr_fields_include'";
+				$query12 = $this->db->query($sql12);
+                $row12 = $query12->row();
+                $data_array = explode(',',$row12->value);
+                
+				$tbl_cdr .= '<table cellspacing="0" cellpadding="1" border="1" width="100%">
+					<tr style="background-color:grey; color:#ffffff;">
+				<td height="20" align="center">Date/Time</td>
+					<td align="center">Destination</td>
+					<td align="center">Bill Duration</td>
+					<td align="center">Total Charges</td>';
+                    
+                    if(count($data_array) > 0)
+                    {
+                        if(in_array('caller_id_number',$data_array))
+                        {
+                            $tbl_cdr .= '<td align="center">Caller ID Num</td>';
+                        }
+                        if(in_array('duration',$data_array))
+                        {
+                            $tbl_cdr .= '<td align="center">Duration</td>';
+                        }
+                        if(in_array('network_addr',$data_array))
+                        {
+                            $tbl_cdr .= '<td align="center">Network Address</td>';
+                        }
+                        if(in_array('username',$data_array))
+                        {
+                            $tbl_cdr .= '<td align="center">Username</td>';
+                        }
+                        if(in_array('sip_user_agent',$data_array))
+                        {
+                            $tbl_cdr .= '<td align="center">SIP User Agent</td>';
+                        }
+                        if(in_array('ani',$data_array))
+                        {
+                            $tbl_cdr .= '<td align="center">ANI</td>';
+                        }
+                        if(in_array('cidr',$data_array))
+                        {
+                            $tbl_cdr .= '<td align="center">CIDR</td>';
+                        }
+                        if(in_array('sell_rate',$data_array)) 
+                        {
+                            $tbl_cdr .= '<td align="center">Sell Rate</td>';
+                        }
+                        if(in_array('cost_rate',$data_array)) 
+                        {
+                            $tbl_cdr .= '<td align="center">Cost Rate</td>';
+                        }
+                        if(in_array('buy_initblock',$data_array)) 
+                        {
+                            $tbl_cdr .= '<td align="center">Buy Init Block</td>';
+                        }
+                        if(in_array('sell_initblock',$data_array)) 
+                        {
+                            $tbl_cdr .= '<td align="center">Sell Init Block</td>';
+                        }
+                        if(in_array('total_buy_cost',$data_array)) 
+                        {
+                            $tbl_cdr .= '<td align="center">Total Buy Cost</td>';
+                        }
+                        if(in_array('gateway',$data_array)) 
+                        {
+                            $tbl_cdr .= '<td align="center">Gateway</td>';
+                        }
+                        if(in_array('total_failed_gateways',$data_array)) 
+                        {
+                            $tbl_cdr .= '<td align="center">Total Failed Gateways</td>';
+                        }
+                    }
+                    $tbl_cdr .= '</tr>';
+                  
+                
+                    
+				if($query11->num_rows() > 0)
+				{
+					foreach ($query11->result() as $row11)
+					{
+						$tbl_cdr .=   '<tr>
+							<td align="center" height="30">'.date("Y-m-d H:i:s", $row6->created_time/1000000).'</td>
+							<td align="center">'.$row11->destination_number.'</td>
+							<td align="center">'.$row11->billsec.'</td>
+							<td align="center">'.$row11->total_sell_cost.'</td>';
+                            
+                            if(count($data_array) > 0)
+                            {
+                                if(in_array('caller_id_number',$data_array))
+                                {
+                                    $tbl_cdr .= '<td align="center">'.$row11->caller_id_number.'</td>';
+                                }
+                                if(in_array('duration',$data_array))
+                                {
+                                    $tbl_cdr .= '<td align="center">'.$row11->duration.'</td>';
+                                }
+                                if(in_array('network_addr',$data_array))
+                                {
+                                    $tbl_cdr .= '<td align="center">'.$row11->network_addr.'</td>';
+                                }
+                                if(in_array('username',$data_array))
+                                {
+                                    $tbl_cdr .= '<td align="center">'.$row11->username.'</td>';
+                                }
+                                if(in_array('sip_user_agent',$data_array))
+                                {
+                                    $tbl_cdr .= '<td align="center">'.$row11->sip_user_agent.'</td>';
+                                }
+                                if(in_array('ani',$data_array))
+                                {
+                                    $tbl_cdr .= '<td align="center">'.$row11->ani.'</td>';
+                                }
+                                if(in_array('cidr',$data_array))
+                                {
+                                    $tbl_cdr .= '<td align="center">'.$row11->cidr.'</td>';
+                                }
+                                if(in_array('sell_rate',$data_array)) 
+                                {
+                                    $tbl_cdr .= '<td align="center">'.$row11->sell_rate.'</td>';
+                                }
+                                if(in_array('cost_rate',$data_array)) 
+                                {
+                                    $tbl_cdr .= '<td align="center">'.$row11->cost_rate.'</td>';
+                                }
+                                if(in_array('buy_initblock',$data_array)) 
+                                {
+                                    $tbl_cdr .= '<td align="center">'.$row11->buy_initblock.'</td>';
+                                }
+                                if(in_array('sell_initblock',$data_array)) 
+                                {
+                                    $tbl_cdr .= '<td align="center">'.$row11->sell_initblock.'</td>';
+                                }
+                                if(in_array('total_buy_cost',$data_array)) 
+                                {
+                                    $tbl_cdr .= '<td align="center">'.$row11->total_buy_cost.'</td>';
+                                }
+                                if(in_array('gateway',$data_array)) 
+                                {
+                                    $tbl_cdr .= '<td align="center">'.$row11->gateway.'</td>';
+                                }
+                                if(in_array('total_failed_gateways',$data_array)) 
+                                {
+                                    $tbl_cdr .= '<td align="center">'.$row11->total_failed_gateways.'</td>';
+                                }
+                            }
+                            $tbl_cdr .= '</tr>';   
+					}
+				}
+				else
+				{
+					$tbl_cdr .=   '<tr><td colspan="4" style="color:red;" align="center">No Calls Made During This Period</td></tr>'; 
+				}
+
+				$tbl_cdr .=  '</table>';
+
+				$admincdr->writeHTML($tbl_cdr, true, false, false, false, '');
+
+				//Close and output PDF document
+				$admincdr->Output('media/invoices/'.$invoice_number.'_cdr_admin.pdf', 'F');
 
 				//time to send email to the customer 
 

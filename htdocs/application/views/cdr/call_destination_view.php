@@ -73,7 +73,7 @@
 </div>
 <!--***************** END FILTER BOX ****************************-->
 
-<table style="border: 1px groove;" width="100%" cellpadding="0" cellspacing="0">
+<table width="100%" cellpadding="0" cellspacing="0">
         <tbody><tr>
             <td>
                 <table width="100%" border="0" cellpadding="0" cellspacing="0">
@@ -86,6 +86,8 @@
                         <td width="20%" align="center">Total Sell Cost</td>
                         <td width="20%" align="center">Total Buy Cost</td>
                     </tr>
+                    
+                     <tr><td colspan="5" id="shadowDiv" style="height:5px;margin-top:-1px"></td></tr>
                     
                     <?php if($countries->num_rows() > 0) {?>
                         
@@ -126,6 +128,7 @@
                                 <td align="center"><?php echo round($this->cdr_model->get_country_total_buy_cost($row->id, $filter_date_from, $filter_date_to), 4); ?></td>
                                 
                             </tr>
+                            <tr style="height:5px;"><td colspan="5" id="shadowDiv" style="height:5px;margin-top:0px;background-color:#fff"></td></tr>
                         <?php endforeach;?>
                            
                     <?php } else { echo '<tr><td align="center" style="color:red;" colspan="5">No Records Found</td></tr>'; } ?>

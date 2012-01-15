@@ -64,6 +64,10 @@
                     <td width="14%">
                         Display Results In
                     </td>
+                    
+                    <td width="14%">
+                        Sort By
+                    </td>
 
                     <td width="14%" rowspan="2">
                         <input type="submit" name="searchFilter" value="SEARCH" class="button blue" style="float:right;margin-top:5px;margin-right:10px" />
@@ -97,6 +101,25 @@
                         <select name="filter_display_results">
                             <option value="min" <?php if($filter_display_results == 'min'){ echo "selected";}?>>Minutes</option>
                             <option value="sec" <?php if($filter_display_results == 'sec'){ echo "selected";}?>>Seconds</option>
+                        </select>
+                    </td>
+                    
+                    <td>
+                        <select name="filter_sort" id="filter_sort" style="width:124px;">
+                            <option value="">Select</option>
+                            
+                            <option value="startdate_asc" <?php if($filter_sort == 'startdate_asc'){ echo "selected";}?>>Start Date - ASC</option>
+                            <option value="startdate_dec" <?php if($filter_sort == 'startdate_dec'){ echo "selected";}?>>Start Date - DESC</option>
+                            
+                            <option value="enddate_asc" <?php if($filter_sort == 'enddate_asc'){ echo "selected";}?>>End Date - ASC</option>
+                            <option value="enddate_dec" <?php if($filter_sort == 'enddate_dec'){ echo "selected";}?>>End Date - DESC</option>
+                            
+                            <option value="sellrate_asc" <?php if($filter_sort == 'sellrate_asc'){ echo "selected";}?>>Sell Rate - ASC</option>
+                            <option value="sellrate_dec" <?php if($filter_sort == 'sellrate_dec'){ echo "selected";}?>>Sell rate - DESC</option>
+                            
+                            <option value="sellinit_asc" <?php if($filter_sort == 'sellinit_asc'){ echo "selected";}?>>Sell Init Block - ASC</option>
+                            <option value="sellinit_dec" <?php if($filter_sort == 'sellinit_dec'){ echo "selected";}?>>Sell Init Block - DESC</option>
+                            
                         </select>
                     </td>
                     
@@ -146,21 +169,16 @@
                                     <?php 
                                         if($filter_display_results == 'min')
                                         {
-                                            $sellinitblock  = $rowRate->sell_initblock / 60; // convert to min
-                                            $sellinitblock  = round($sellinitblock, 4); 
-                                            
                                             $sellrate       = $rowRate->sell_rate; // sell rate by default is in min 
                                         }
                                         else
                                         {
-                                            $sellinitblock  = $rowRate->sell_initblock; // by default sell init block is in seconds
-                                            
                                             $sellrate       = $rowRate->sell_rate / 60; // sell rate per sec
                                             $sellrate       = round($sellrate, 4);
                                         }
                                     ?>
                                     <td align="center"><?php echo $sellrate.'&nbsp;/&nbsp;'.$filter_display_results; ?></td>
-                                    <td align="center"><?php echo $sellinitblock.'&nbsp;/&nbsp;'.$filter_display_results; ?></td>
+                                    <td align="center"><?php echo $rowRate->sell_initblock; ?></td>
                                     <td align="center"><?php echo $rowRate->date_start; ?></td>
                                     <td align="center"><?php echo $rowRate->date_end; ?></td>
                                     

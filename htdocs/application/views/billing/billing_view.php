@@ -43,7 +43,7 @@
 </div>
 <!--***************** END FILTER BOX ****************************-->
 
-<table style="border: 1px groove;" width="100%" cellpadding="0" cellspacing="0">
+<table width="100%" cellpadding="0" cellspacing="0">
         <tbody><tr>
             <td>
                 <table width="100%" border="0" cellpadding="0" cellspacing="0">
@@ -55,7 +55,7 @@
                         <td height="20" width="25%" align="center" style="font-size:10px;">Total Amount</td>
                         <td height="20" width="25%" align="center" style="font-size:10px;">Total Profit</td>
                     </tr>
-                    
+                    <tr><td colspan="4" id="shadowDiv" style="height:5px;margin-top:-1px"></td></tr>
                     <?php 
                         $m= date("m");
                         $de= date("d");
@@ -86,6 +86,7 @@
                                         <td align="center">'.$tot_amount.'</td>
                                         <td align="center">'.$tot_profit.'</td>
                                  </tr>';
+                            echo '<tr style="height:5px;"><td colspan="4" id="shadowDiv" style="height:5px;margin-top:0px;background-color:#fff"></td></tr>';
                         } 
                     ?>
                     </tbody>

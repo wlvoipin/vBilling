@@ -1,6 +1,6 @@
 <br/>
 <div class="success" id="success_div" style="display:none;"></div>
-<table style="border: 1px groove;" width="100%" cellpadding="0" cellspacing="0">
+<table width="100%" cellpadding="0" cellspacing="0">
         <tbody><tr>
             <td>
                 <table width="100%" border="0" cellpadding="0" cellspacing="0">
@@ -9,9 +9,25 @@
                         <th height="20" colspan="3" align="left" class="tbl_main_head">                        
                             <div class="left">GATEWAYS</div> 
                             
-                            <div class="right main_head_btns">
-                                <a href="<?php echo base_url();?>freeswitch/new_gateway/<?php echo $sofia_id;?>">NEW GATEWAY</a>
-                            </div>
+                            
+                            
+                            <?php if($this->session->userdata('user_type') == 'admin'){?>
+                                <div class="right main_head_btns">
+                                    <a href="<?php echo base_url();?>freeswitch/new_gateway/<?php echo $sofia_id;?>">NEW GATEWAY</a>
+                                </div>
+                            <?php 
+                                } else if($this->session->userdata('user_type') == 'sub_admin'){
+                                        if(sub_admin_access_any_cell($this->session->userdata('user_id'), 'new_gateway') == 1)
+                                        {
+                            ?>
+                                            <div class="right main_head_btns">
+                                                <a href="<?php echo base_url();?>freeswitch/new_gateway/<?php echo $sofia_id;?>">NEW GATEWAY</a>
+                                            </div>
+                            <?php 
+                                        }
+                                    }
+                            ?>
+                                          
                             
                         </th>
                     </tr>
@@ -21,6 +37,7 @@
                         <th width="20%" align="center">Details</th>
                         <th width="60%" align="left">Options</th>
                     </tr>
+                     <tr><td colspan="3" id="shadowDiv" style="height:5px;margin-top:-1px"></td></tr>
                     </thead>
                     
                     
@@ -33,9 +50,29 @@
                                 <td align="center"><?php echo $row->gateway_name;?></td>
                                 <td align="center"><a href="<?php echo base_url();?>freeswitch/gateway_detail/<?php echo $sofia_id;?>/<?php echo $row->gateway_name;?>">View Details</a></td>
                                 
-                                <td align="left"><a href="#" id="<?php echo $sofia_id.'|'.$row->gateway_name;?>" class="delete_gateway"><img src="<?php echo base_url();?>assets/images/button_cancel.png" style="width:16px;margin-left:15px;border:none;cursor:pointer;" /></a></td>
+                                
+                                
+                                <?php if($this->session->userdata('user_type') == 'admin'){?>
+                                    <td align="left"><a href="#" id="<?php echo $sofia_id.'|'.$row->gateway_name;?>" class="delete_gateway"><img src="<?php echo base_url();?>assets/images/button_cancel.png" style="width:16px;margin-left:15px;border:none;cursor:pointer;" /></a></td>
+                                <?php 
+                                    } else if($this->session->userdata('user_type') == 'sub_admin'){
+                                            if(sub_admin_access_any_cell($this->session->userdata('user_id'), 'delete_gateway') == 1)
+                                            {
+                                ?>
+                                                <td align="left"><a href="#" id="<?php echo $sofia_id.'|'.$row->gateway_name;?>" class="delete_gateway"><img src="<?php echo base_url();?>assets/images/button_cancel.png" style="width:16px;margin-left:15px;border:none;cursor:pointer;" /></a></td>
+                                <?php 
+                                            }
+                                            else
+                                            {
+                                ?>
+                                                <td align="left">---</td>
+                                <?php
+                                            }
+                                        }
+                                ?>
                                 
                             </tr>
+                            <tr style="height:5px;"><td colspan="3" id="shadowDiv" style="height:5px;margin-top:0px;background-color:#fff"></td></tr>
                         <?php endforeach;?>
                         
                     <?php } else { echo '<tr><td align="center" colspan="3" style="color:red;">No Results Found</td></tr>'; } ?>                    
@@ -47,7 +84,7 @@
     
     <br/><br/>
     <!--*****************************SETTINGS DETAILS *************************************-->
-    <table style="border: 1px groove;" width="100%" cellpadding="0" cellspacing="0" id="main-sofia">
+    <table width="100%" cellpadding="0" cellspacing="0" id="main-sofia">
         <tbody><tr>
             <td>
                 <table width="100%" border="0" cellpadding="0" cellspacing="0">
@@ -56,11 +93,26 @@
                             <th height="20" colspan="3" align="left" class="tbl_main_head">                        
                                 <div class="left">SETTINGS</div> 
                                 
-                                <div class="right main_head_btns">
-                                    <a href="#" class="back-to-sofia-set" id="<?php echo $sofia_id;?>">CONTENTS</a> |
-                                    <a href="#" class="edit-sofia-set" id="<?php echo $sofia_id;?>">EDIT</a>
-                                </div>
                                 
+                                <?php if($this->session->userdata('user_type') == 'admin'){?>
+                                    <div class="right main_head_btns">
+                                        <a href="#" class="back-to-sofia-set" id="<?php echo $sofia_id;?>">CONTENTS</a> |
+                                        <a href="#" class="edit-sofia-set" id="<?php echo $sofia_id;?>">EDIT</a>
+                                    </div>
+                                <?php 
+                                    } else if($this->session->userdata('user_type') == 'sub_admin'){
+                                            if(sub_admin_access_any_cell($this->session->userdata('user_id'), 'edit_settings') == 1)
+                                            {
+                                ?>
+                                                <div class="right main_head_btns">
+                                                    <a href="#" class="back-to-sofia-set" id="<?php echo $sofia_id;?>">CONTENTS</a> |
+                                                    <a href="#" class="edit-sofia-set" id="<?php echo $sofia_id;?>">EDIT</a>
+                                                </div>
+                                <?php 
+                                            }
+                                        }
+                                ?>
+                                              
                                 <div class="right" style="margin-top:5px; margin-right:10px;">
                                     <form method="post" action="<?php echo base_url();?>freeswitch/profile_detail/<?php echo $sofia_id;?>">
                                         <select name="sofia_sett_param_type" id="sofia_sett_param_type" class="textfield" onchange="this.form.submit();">
@@ -77,37 +129,49 @@
                             <th align="left">Parameter Value</th>
                             <th align="left">Options</th>
                         </tr>
+                        <tr><td colspan="3" id="shadowDiv" style="height:5px;margin-top:-1px"></td></tr>
                     </thead>
                     
                     <tbody id="ajax-main-content">
                     <?php if($settings->num_rows() > 0) {?>
                         
                         <?php 
-                            $count = 1;
-                            $bg = '';
                             
                             foreach ($settings->result() as $rowSet): 
                             
-                            if($count % 2)
-                            {
-                                $bg = "bgcolor='#E6E5E5'";
-                            }
-                            else
-                            {
-                                $bg = "";
-                            }
                         ?>
-                            <tr class="main_text" height="20px" <?php echo $bg; ?>>
+                            <tr class="main_text" height="20px">
                                 <td align="left"><?php echo $rowSet->param_name;?></td>
                                 <td align="left"><?php echo $rowSet->param_value;?></td>
                                 
-                                <?php if($rowSet->param_name != 'sip-ip' && $rowSet->param_name != 'sip-port' ) {?>
-                                <td align="left"><a href="#" id="<?php echo $rowSet->id;?>" class="delete_setting"><img src="<?php echo base_url();?>assets/images/button_cancel.png" style="width:16px;margin-left:15px;border:none;cursor:pointer;" /></a></td>
-                                <?php } else { echo "<td>&nbsp;</td>";} ?>
+                                
+                                
+                                <?php if($this->session->userdata('user_type') == 'admin'){?>
+                                    <?php if($rowSet->param_name != 'sip-ip' && $rowSet->param_name != 'sip-port' ) {?>
+                                    <td align="left"><a href="#" id="<?php echo $rowSet->id;?>" class="delete_setting"><img src="<?php echo base_url();?>assets/images/button_cancel.png" style="width:16px;margin-left:15px;border:none;cursor:pointer;" /></a></td>
+                                    <?php } else { echo "<td>&nbsp;</td>";} ?>
+                                <?php 
+                                    } else if($this->session->userdata('user_type') == 'sub_admin'){
+                                            if(sub_admin_access_any_cell($this->session->userdata('user_id'), 'delete_settings') == 1)
+                                            {
+                                ?>
+                                                <?php if($rowSet->param_name != 'sip-ip' && $rowSet->param_name != 'sip-port' ) {?>
+                                                <td align="left"><a href="#" id="<?php echo $rowSet->id;?>" class="delete_setting"><img src="<?php echo base_url();?>assets/images/button_cancel.png" style="width:16px;margin-left:15px;border:none;cursor:pointer;" /></a></td>
+                                                <?php } else { echo "<td>&nbsp;</td>";} ?>
+                                <?php 
+                                            }
+                                            else
+                                            {
+                                ?>
+                                                <td align="left">---</td>
+                                <?php
+                                            }
+                                        }
+                                ?>
                             </tr>
+                            <tr style="height:5px;"><td colspan="3" id="shadowDiv" style="height:5px;margin-top:0px;background-color:#fff"></td></tr>
                         <?php 
-                            $count++;
-                            endforeach;
+                             endforeach;
                         ?>
                         
                     <?php } else { echo '<tr><td align="center" colspan="3" style="color:red;">No Results Found</td></tr>'; } ?>                    

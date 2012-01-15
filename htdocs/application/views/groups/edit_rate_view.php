@@ -42,7 +42,7 @@
         <form enctype="multipart/form-data"  method="post" action="" name="addRate" id="addRate">
             <table cellspacing="3" cellpadding="2" border="0" width="95%" class="search_col">
                 <input type="hidden" name="rate_id" id="rate_id" value="<?php echo $rate_id;?>"/>
-                <input type="hidden" name="group_id" id="group_id" value="<?php echo $rate_group_id;?>"/>
+                <input type="hidden" name="rate_group_id" id="rate_group_id" value="<?php echo $rate_group_id;?>"/>
                 <tbody>
                 
                 <tr>

@@ -16,6 +16,10 @@
                     <td width="25%">
                         Type
                     </td>
+                    
+                    <td width="25%">
+                        Sort By
+                    </td>
 
                     <td width="25%" rowspan="2">
                         <input type="submit" name="searchFilter" value="SEARCH" class="button blue" style="float:right;margin-top:5px;margin-right:10px" />
@@ -42,6 +46,14 @@
                         </select>
                     </td>
                     
+                    <td>
+                        <select name="filter_sort" id="filter_sort" style="width:124px;">
+                            <option value="">Select</option>
+                            <option value="name_asc" <?php if($filter_sort == 'name_asc'){ echo "selected";}?>>Group Name - ASC</option>
+                            <option value="name_dec" <?php if($filter_sort == 'name_dec'){ echo "selected";}?>>Group Name - DESC</option>
+                        </select>
+                    </td>
+                    
                 </tr>
             
         </table>
@@ -50,7 +62,7 @@
 </div>
 <!--***************** END FILTER BOX ****************************-->
 
-<table style="border: 1px groove;" width="100%" cellpadding="0" cellspacing="0">
+<table  width="100%" cellpadding="0" cellspacing="0">
         <tbody><tr>
             <td>
                 <table width="100%" border="0" cellpadding="0" cellspacing="0">
@@ -62,18 +74,76 @@
                         <td width="8%" align="center">Enabled</td>
                         <td width="62%" align="left">Options</td>
                     </tr>
+                    <tr><td colspan="4" id="shadowDiv" style="height:5px;margin-top:-1px"></td></tr>
                     
                     <?php if($groups->num_rows() > 0) {?>
                         
                         <?php foreach ($groups->result() as $row): ?>
                             <tr class="main_text">
-                                <td align="center"><a href="<?php echo base_url();?>groups/update_group/<?php echo $row->id;?>"><?php echo $row->id; ?></a></td>
+                                
+                                <?php if($this->session->userdata('user_type') == 'admin'){?>
+                                    <td align="center"><a href="<?php echo base_url();?>groups/update_group/<?php echo $row->id;?>"><?php echo $row->id; ?></a></td>
+                                <?php 
+                                    } else if($this->session->userdata('user_type') == 'sub_admin'){
+                                            if(sub_admin_access_any_cell($this->session->userdata('user_id'), 'edit_rate_groups') == 1)
+                                            {
+                                ?>
+                                                <td align="center"><a href="<?php echo base_url();?>groups/update_group/<?php echo $row->id;?>"><?php echo $row->id; ?></a></td>
+                                <?php 
+                                            }
+                                            else
+                                            {
+                                ?>
+                                                <td align="center"><?php echo $row->id; ?></td>
+                                <?php
+                                            }
+                                        }
+                                ?>
+                                
                                 <td align="left"><?php echo $row->group_name; ?></td>
                                 
-                                <td align="center"><input type="checkbox" id="<?php echo $row->id;?>" class="enable_checkbox" <?php if($row->enabled == 1){ echo 'checked="checked"';}?>/></td>
                                 
-                                <td align="left"><a href="#" id="<?php echo $row->id;?>" class="delete_group"><img src="<?php echo base_url();?>assets/images/button_cancel.png" style="width:16px;margin-left:15px;border:none;cursor:pointer;" /></a></td>
                                 
+                                <?php if($this->session->userdata('user_type') == 'admin'){?>
+                                    <td align="center"><input type="checkbox" id="<?php echo $row->id;?>" class="enable_checkbox" <?php if($row->enabled == 1){ echo 'checked="checked"';}?>/></td>
+                                <?php 
+                                    } else if($this->session->userdata('user_type') == 'sub_admin'){
+                                            if(sub_admin_access_any_cell($this->session->userdata('user_id'), 'enable_disable_rate_groups') == 1)
+                                            {
+                                ?>
+                                                <td align="center"><input type="checkbox" id="<?php echo $row->id;?>" class="enable_checkbox" <?php if($row->enabled == 1){ echo 'checked="checked"';}?>/></td>
+                                <?php 
+                                            }
+                                            else
+                                            {
+                                ?>
+                                                <td align="center"><?php if($row->enabled == 1){ echo 'Enabled';} else { echo "Disabled";}?></td>
+                                <?php
+                                            }
+                                        }
+                                ?>
+                                
+                                
+                                
+                                <?php if($this->session->userdata('user_type') == 'admin'){?>
+                                    <td align="left"><a href="#" id="<?php echo $row->id;?>" class="delete_group"><img src="<?php echo base_url();?>assets/images/button_cancel.png" style="width:16px;margin-left:15px;border:none;cursor:pointer;" /></a></td>
+                                <?php 
+                                    } else if($this->session->userdata('user_type') == 'sub_admin'){
+                                            if(sub_admin_access_any_cell($this->session->userdata('user_id'), 'delete_rate_groups') == 1)
+                                            {
+                                ?>
+                                                <td align="left"><a href="#" id="<?php echo $row->id;?>" class="delete_group"><img src="<?php echo base_url();?>assets/images/button_cancel.png" style="width:16px;margin-left:15px;border:none;cursor:pointer;" /></a></td>
+                                <?php 
+                                            }
+                                            else
+                                            {
+                                ?>
+                                                <td align="left">---</td>
+                                <?php
+                                            }
+                                        }
+                                ?>
+                                <tr style="height:5px;"><td colspan="4" id="shadowDiv" style="height:5px;margin-top:0px;background-color:#fff"></td></tr>
                             </tr>
                         <?php endforeach;?>
                         
@@ -129,7 +199,7 @@
                     modal: true,
                     buttons: {
                         "Continue": function() {
-                            var data  = 'group_id='+id+'&status=1';
+                            var data  = 'rate_group_id='+id+'&status=1';
                             $.ajax({
                                 type: "POST",
                                 url: base_url+"groups/enable_disable_group",
@@ -158,7 +228,7 @@
                     modal: true,
                     buttons: {
                         "Continue": function() {
-                            var data  = 'group_id='+id+'&status=0';
+                            var data  = 'rate_group_id='+id+'&status=0';
                             $.ajax({
                                 type: "POST",
                                 url: base_url+"groups/enable_disable_group",
@@ -191,7 +261,7 @@
                     modal: true,
                     buttons: {
                         "Continue": function() {
-                            var data  = 'group_id='+id;
+                            var data  = 'rate_group_id='+id;
                             $.ajax({
                                 type: "POST",
                                 url: base_url+"groups/check_group_in_use",
@@ -206,7 +276,7 @@
                                                                         modal: true,
                                                                         buttons: {
                                                                             "Continue": function() {
-                                                                                var data  = 'group_id='+id;
+                                                                                var data  = 'rate_group_id='+id;
                                                                                 $.ajax({
                                                                                     type: "POST",
                                                                                     url: base_url+"groups/delete_group",

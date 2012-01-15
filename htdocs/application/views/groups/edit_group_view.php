@@ -42,7 +42,7 @@
         <div class="form-container">
         <form enctype="multipart/form-data"  method="post" action="" name="addGroup" id="addGroup">
             <table cellspacing="3" cellpadding="2" border="0" width="95%" class="search_col">
-                <input type="hidden" name="group_id" id="group_id" value="<?php echo $rate_group_id; ?>" />
+                <input type="hidden" name="rate_group_id" id="rate_group_id" value="<?php echo $rate_group_id; ?>" />
                 <tbody>
                 
                 <tr>
@@ -60,7 +60,7 @@
                 </tr>
             </tbody></table>
             
-            <table cellspacing="3" cellpadding="2" border="0" width="95%" class="search_col">
+            <table cellspacing="0" cellpadding="0" border="0" width="95%" class="search_col">
                 
                 <thead>
                     <tr class="bottom_link">
@@ -78,6 +78,7 @@
                         <td width="8%" align="center">Enabled</td>
                         <td width="8%" align="center">Options</td>
                     </tr>
+                    <tr><td colspan="13" id="shadowDiv" style="height:5px;margin-top:-1px"></td></tr>
                 </thead>
                 
                 <tbody id="dynamic">
@@ -116,6 +117,7 @@
                             
                             <td align="center"><a href="#" id="<?php echo $rowRate->id;?>" class="delete_group_rate"><img src="<?php echo base_url();?>assets/images/button_cancel.png" style="width:16px;border:none;cursor:pointer;" /></a></td>
                         </tr>
+                        <tr style="height:5px;"><td colspan="13" id="shadowDiv" style="height:5px;margin-top:0px;background-color:#fff"></td></tr>
                     <?php } ?>
                     <?php } else { ?>
                         
@@ -246,7 +248,7 @@
         $('.enable_checkbox').click(function(){
             var curr_chk = $(this);
             var id = $(this).attr('id');
-            var group_id = $('#group_id').val();
+            var rate_group_id = $('#rate_group_id').val();
             var enable = '';
             
             if ($(this).is(':checked'))
@@ -266,7 +268,7 @@
                     modal: true,
                     buttons: {
                         "Continue": function() {
-                            var data  = 'rate_id='+id+'&status=1&group_id='+group_id+'';
+                            var data  = 'rate_id='+id+'&status=1&rate_group_id='+rate_group_id+'';
                             $.ajax({
                                 type: "POST",
                                 url: base_url+"groups/enable_disable_rate",
@@ -295,7 +297,7 @@
                     modal: true,
                     buttons: {
                         "Continue": function() {
-                            var data  = 'rate_id='+id+'&status=0&group_id='+group_id+'';
+                            var data  = 'rate_id='+id+'&status=0&rate_group_id='+rate_group_id+'';
                             $.ajax({
                                 type: "POST",
                                 url: base_url+"groups/enable_disable_rate",
@@ -321,7 +323,7 @@
         //delete group rate
         $('.delete_group_rate').live('click', function(){
             var id = $(this).attr('id');
-            var group_id = $('#group_id').val();
+            var rate_group_id = $('#rate_group_id').val();
             var curr_row = $(this).parent().parent();
             
             $( "#dialog-confirm-delete" ).dialog({
@@ -330,7 +332,7 @@
                     modal: true,
                     buttons: {
                         "Continue": function() {
-                            var data  = 'rate_id='+id+'&group_id='+group_id+'';
+                            var data  = 'rate_id='+id+'&rate_group_id='+rate_group_id+'';
                             $.ajax({
                                 type: "POST",
                                 url: base_url+"groups/delete_group_rate",

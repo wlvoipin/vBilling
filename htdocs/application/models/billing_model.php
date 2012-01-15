@@ -96,10 +96,40 @@ class Billing_model extends CI_Model {
         return $query->num_rows();
     }
     
-    function get_invoices($num,$offset, $filter_date_from, $filter_date_to, $filter_customers, $filter_billing_type, $filter_status)
+    function get_invoices($num,$offset, $filter_date_from, $filter_date_to, $filter_customers, $filter_billing_type, $filter_status, $filter_sort)
 	{
 		if($offset == ''){$offset='0';}
-
+        
+        $order_by = "";
+        if($filter_sort == 'date_asc')
+        {
+            $order_by = "ORDER BY invoice_generated_date ASC";
+        }
+        else if($filter_sort == 'date_dec')
+        {
+            $order_by = "ORDER BY invoice_generated_date DESC";
+        }
+        else if($filter_sort == 'totcalls_asc')
+        {
+            $order_by = "ORDER BY total_calls ASC";
+        }
+        else if($filter_sort == 'totcalls_dec')
+        {
+            $order_by = "ORDER BY total_calls DESC";
+        }
+        else if($filter_sort == 'totcharges_asc')
+        {
+            $order_by = "ORDER BY total_charges ASC";
+        }
+        else if($filter_sort == 'totcharges_dec')
+        {
+            $order_by = "ORDER BY total_charges DESC";
+        }
+        else
+        {
+            $order_by = "ORDER BY invoice_generated_date DESC";
+        }
+        
 		$where = '';
 		$where .= "WHERE id != '' ";
 
@@ -136,7 +166,7 @@ class Billing_model extends CI_Model {
 			$where .= 'AND status = '.$this->db->escape($filter_status).' ';
 		}
 
-		$sql = "SELECT * FROM invoices ".$where." ORDER BY id DESC LIMIT $offset,$num";
+		$sql = "SELECT * FROM invoices ".$where." ".$order_by." LIMIT $offset,$num";
 		$query = $this->db->query($sql);
 		return $query;
 	}

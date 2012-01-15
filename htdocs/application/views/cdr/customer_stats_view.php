@@ -62,7 +62,7 @@
 </div>
 <!--***************** END FILTER BOX ****************************-->
 
-<table style="border: 1px groove;" width="100%" cellpadding="0" cellspacing="0">
+<table  width="100%" cellpadding="0" cellspacing="0">
         <tbody><tr>
             <td>
                 <table width="100%" border="0" cellpadding="0" cellspacing="0">
@@ -87,6 +87,7 @@
                         <td height="20" width="5%" align="center" style="font-size:10px;">Calls<br/>(Month Ago)</td>
                         <td height="20" width="5%" align="center" style="font-size:10px;">Billing<br/>(Month Ago)</td>
                     </tr>
+                    <tr><td colspan="17" id="shadowDiv" style="height:5px;margin-top:-1px"></td></tr>
                     
                     <?php if($customers->num_rows() > 0) {?>
                         
@@ -323,6 +324,7 @@
                                 
                                 
                             </tr>
+                            <tr style="height:5px;"><td colspan="17" id="shadowDiv" style="height:5px;margin-top:0px;background-color:#fff"></td></tr>
                         <?php endforeach;?>
                            
                     <?php } else { echo '<tr><td align="center" style="color:red;" colspan="17">No Customers Defined Yet</td></tr>'; } ?>

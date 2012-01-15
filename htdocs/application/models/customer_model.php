@@ -30,10 +30,33 @@
 class Customer_model extends CI_Model {
 
 	// list all customers
-	function get_all_customers($num, $offset, $filter_account_num, $filter_company, $filter_first_name, $filter_type)
+	function get_all_customers($num, $offset, $filter_account_num, $filter_company, $filter_first_name, $filter_type, $filter_sort)
 	{
 		if($offset == ''){$offset='0';}
-
+        
+        $order_by = "";
+        if($filter_sort == 'name_asc')
+        {
+            $order_by = "ORDER BY customer_firstname ASC";
+        }
+        else if($filter_sort == 'name_dec')
+        {
+            $order_by = "ORDER BY customer_firstname DESC";
+        }
+        else if($filter_sort == 'balance_asc')
+        {
+            $order_by = "ORDER BY customer_balance ASC";
+        }
+        else if($filter_sort == 'balance_dec')
+        {
+            $order_by = "ORDER BY customer_balance DESC";
+        }
+        else
+        {
+            $order_by = "ORDER BY customer_id DESC";
+        }
+        
+        
 		$where = '';
 		$where .= "WHERE customer_id != '' ";
 
@@ -63,7 +86,7 @@ class Customer_model extends CI_Model {
 			}
 		}
 
-		$sql = "SELECT * FROM customers ".$where." LIMIT $offset,$num";
+		$sql = "SELECT * FROM customers ".$where." ".$order_by." LIMIT $offset,$num";
 		$query = $this->db->query($sql);
 		return $query;
 	}
@@ -292,9 +315,47 @@ class Customer_model extends CI_Model {
 	*/
 
 	//customer rates 
-	function customer_rates($num, $offset, $tbl_name, $filter_start_date, $filter_end_date, $filter_carriers, $filter_rate_type)
+	function customer_rates($num, $offset, $tbl_name, $filter_start_date, $filter_end_date, $filter_carriers, $filter_rate_type, $filter_sort)
 	{
 		if($offset == ''){$offset='0';}
+        
+        $order_by = "";
+        if($filter_sort == 'startdate_asc')
+        {
+            $order_by = "ORDER BY date_start ASC";
+        }
+        else if($filter_sort == 'startdate_dec')
+        {
+            $order_by = "ORDER BY date_start DESC";
+        }
+        else if($filter_sort == 'enddate_asc')
+        {
+            $order_by = "ORDER BY date_end ASC";
+        }
+        else if($filter_sort == 'enddate_dec')
+        {
+            $order_by = "ORDER BY date_end DESC";
+        }
+        else if($filter_sort == 'sellrate_asc')
+        {
+            $order_by = "ORDER BY sell_rate ASC";
+        }
+        else if($filter_sort == 'sellrate_dec')
+        {
+            $order_by = "ORDER BY sell_rate DESC";
+        }
+        else if($filter_sort == 'sellinit_asc')
+        {
+            $order_by = "ORDER BY sell_initblock ASC";
+        }
+        else if($filter_sort == 'sellinit_dec')
+        {
+            $order_by = "ORDER BY sell_initblock DESC";
+        }
+        else
+        {
+            $order_by = "ORDER BY id DESC";
+        }
 
 		$where = '';
 		$where .= "WHERE id != '' ";
@@ -325,7 +386,7 @@ class Customer_model extends CI_Model {
 			}
 		}
 
-		$sql = "SELECT * FROM ".$tbl_name." ".$where." LIMIT $offset,$num";
+		$sql = "SELECT * FROM ".$tbl_name." ".$where." ".$order_by." LIMIT $offset,$num";
 		$query = $this->db->query($sql);
 		return $query;
 	}
@@ -437,7 +498,7 @@ class Customer_model extends CI_Model {
 		return $query;
 	}
 
-	function insert_new_sip_access($customer_id, $username, $password, $domain, $sofia_id)
+	function insert_new_sip_access($customer_id, $username, $password, $domain, $sofia_id, $cid)
 	{
 		$added_by = 0;
 
@@ -449,7 +510,7 @@ class Customer_model extends CI_Model {
 		$new_password = md5($new_password);
 
 		//insert into directory table 
-		$sql = "INSERT INTO directory (customer_id, username, domain, domain_sofia_id, added_by, enabled) VALUES ('".$customer_id."', '".$username."', '".$domain."', '".$sofia_id."', '".$added_by."', '1')";
+		$sql = "INSERT INTO directory (customer_id, username, domain, domain_sofia_id, added_by, enabled, cid) VALUES ('".$customer_id."', '".$username."', '".$domain."', '".$sofia_id."', '".$added_by."', '1', '".$cid."')";
 		$query = $this->db->query($sql);
 		$inser_id = $this->db->insert_id();
 
@@ -495,9 +556,87 @@ function enable_disable_sip_access($data)
 }
 
 //***************************** CDR FUNCTIONS ***************************************//
-function customer_cdr($num, $offset, $customer_id, $filter_date_from, $filter_date_to, $filter_phonenum, $filter_caller_ip, $filter_gateways, $filter_call_type)
+function customer_cdr($num, $offset, $customer_id, $filter_date_from, $filter_date_to, $filter_phonenum, $filter_caller_ip, $filter_gateways, $filter_call_type, $filter_sort)
 {
 	if($offset == ''){$offset='0';}
+    
+    $order_by = "";
+        if($filter_sort == 'date_asc')
+        {
+            $order_by = "ORDER BY created_time ASC";
+        }
+        else if($filter_sort == 'date_dec')
+        {
+            $order_by = "ORDER BY created_time DESC";
+        }
+        else if($filter_sort == 'billduration_asc')
+        {
+            $order_by = "ORDER BY billsec ASC";
+        }
+        else if($filter_sort == 'billduration_dec')
+        {
+            $order_by = "ORDER BY billsec DESC";
+        }
+        else if($filter_sort == 'failedgateways_asc')
+        {
+            $order_by = "ORDER BY total_failed_gateways ASC";
+        }
+        else if($filter_sort == 'failedgateways_dec')
+        {
+            $order_by = "ORDER BY total_failed_gateways DESC";
+        }
+        else if($filter_sort == 'sellrate_asc')
+        {
+            $order_by = "ORDER BY sell_rate ASC";
+        }
+        else if($filter_sort == 'sellrate_dec')
+        {
+            $order_by = "ORDER BY sell_rate DESC";
+        }
+        else if($filter_sort == 'costrate_asc')
+        {
+            $order_by = "ORDER BY cost_rate ASC";
+        }
+        else if($filter_sort == 'costrate_dec')
+        {
+            $order_by = "ORDER BY cost_rate DESC";
+        }
+        else if($filter_sort == 'sellinit_asc')
+        {
+            $order_by = "ORDER BY sell_initblock ASC";
+        }
+        else if($filter_sort == 'sellinit_dec')
+        {
+            $order_by = "ORDER BY sell_initblock DESC";
+        }
+        else if($filter_sort == 'buyinit_asc')
+        {
+            $order_by = "ORDER BY buy_initblock ASC";
+        }
+        else if($filter_sort == 'buyinit_dec')
+        {
+            $order_by = "ORDER BY buy_initblock DESC";
+        }
+        else if($filter_sort == 'totcharges_asc')
+        {
+            $order_by = "ORDER BY total_sell_cost ASC";
+        }
+        else if($filter_sort == 'totcharges_dec')
+        {
+            $order_by = "ORDER BY total_sell_cost DESC";
+        }
+        else if($filter_sort == 'totcost_asc')
+        {
+            $order_by = "ORDER BY total_buy_cost ASC";
+        }
+        else if($filter_sort == 'totcost_dec')
+        {
+            $order_by = "ORDER BY total_buy_cost DESC";
+        }
+        else
+        {
+            $order_by = "ORDER BY created_time DESC";
+        }
 
 	$where = '';
 
@@ -550,7 +689,7 @@ function customer_cdr($num, $offset, $customer_id, $filter_date_from, $filter_da
 		$where .= 'AND hangup_cause = '.$this->db->escape($filter_call_type).' ';
 	}
 
-	$sql = "SELECT * FROM cdr WHERE customer_id = '".$customer_id."' ".$where." LIMIT $offset,$num";
+	$sql = "SELECT * FROM cdr WHERE customer_id = '".$customer_id."' AND parent_id = '0' ".$where." ".$order_by." LIMIT $offset,$num";
 	$query = $this->db->query($sql);
 	return $query;
 }
@@ -608,7 +747,7 @@ function customer_cdr_count($customer_id, $filter_date_from, $filter_date_to, $f
 		$where .= 'AND hangup_cause = '.$this->db->escape($filter_call_type).' ';
 	}
 
-	$sql = "SELECT * FROM cdr WHERE customer_id = '".$customer_id."' ".$where."";
+	$sql = "SELECT * FROM cdr WHERE customer_id = '".$customer_id."' AND parent_id = '0' ".$where."";
 	$query = $this->db->query($sql);
 	$count = $query->num_rows();
 	return $count;

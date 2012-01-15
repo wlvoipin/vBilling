@@ -30,12 +30,90 @@
 class Cdr_model extends CI_Model {
 
 	//get all cdr data 
-	function get_all_cdr_data($num, $offset, $filter_date_from, $filter_date_to, $filter_phonenum, $filter_caller_ip, $filter_customers, $filter_groups, $filter_gateways, $filter_call_type, $duration_from, $duration_to)
+	function get_all_cdr_data($num, $offset, $filter_date_from, $filter_date_to, $filter_phonenum, $filter_caller_ip, $filter_customers, $filter_groups, $filter_gateways, $filter_call_type, $duration_from, $duration_to, $filter_sort)
 	{
 		if($offset == ''){$offset='0';}
-
+        
+        $order_by = "";
+        if($filter_sort == 'date_asc')
+        {
+            $order_by = "ORDER BY created_time ASC";
+        }
+        else if($filter_sort == 'date_dec')
+        {
+            $order_by = "ORDER BY created_time DESC";
+        }
+        else if($filter_sort == 'billduration_asc')
+        {
+            $order_by = "ORDER BY billsec ASC";
+        }
+        else if($filter_sort == 'billduration_dec')
+        {
+            $order_by = "ORDER BY billsec DESC";
+        }
+        else if($filter_sort == 'failedgateways_asc')
+        {
+            $order_by = "ORDER BY total_failed_gateways ASC";
+        }
+        else if($filter_sort == 'failedgateways_dec')
+        {
+            $order_by = "ORDER BY total_failed_gateways DESC";
+        }
+        else if($filter_sort == 'sellrate_asc')
+        {
+            $order_by = "ORDER BY sell_rate ASC";
+        }
+        else if($filter_sort == 'sellrate_dec')
+        {
+            $order_by = "ORDER BY sell_rate DESC";
+        }
+        else if($filter_sort == 'costrate_asc')
+        {
+            $order_by = "ORDER BY cost_rate ASC";
+        }
+        else if($filter_sort == 'costrate_dec')
+        {
+            $order_by = "ORDER BY cost_rate DESC";
+        }
+        else if($filter_sort == 'sellinit_asc')
+        {
+            $order_by = "ORDER BY sell_initblock ASC";
+        }
+        else if($filter_sort == 'sellinit_dec')
+        {
+            $order_by = "ORDER BY sell_initblock DESC";
+        }
+        else if($filter_sort == 'buyinit_asc')
+        {
+            $order_by = "ORDER BY buy_initblock ASC";
+        }
+        else if($filter_sort == 'buyinit_dec')
+        {
+            $order_by = "ORDER BY buy_initblock DESC";
+        }
+        else if($filter_sort == 'totcharges_asc')
+        {
+            $order_by = "ORDER BY total_sell_cost ASC";
+        }
+        else if($filter_sort == 'totcharges_dec')
+        {
+            $order_by = "ORDER BY total_sell_cost DESC";
+        }
+        else if($filter_sort == 'totcost_asc')
+        {
+            $order_by = "ORDER BY total_buy_cost ASC";
+        }
+        else if($filter_sort == 'totcost_dec')
+        {
+            $order_by = "ORDER BY total_buy_cost DESC";
+        }
+        else
+        {
+            $order_by = "ORDER BY created_time DESC";
+        }
+        
 		$where = '';
-		$where .= "WHERE id != '' ";
+		$where .= "WHERE parent_id = '0' ";
 
 		if($filter_date_from != '')
 		{
@@ -122,7 +200,7 @@ class Cdr_model extends CI_Model {
 			}
 		}
 
-		$sql = "SELECT * FROM cdr ".$where." ORDER BY created_time DESC LIMIT $offset, $num";
+		$sql = "SELECT * FROM cdr ".$where." ".$order_by." LIMIT $offset, $num";
 		$query = $this->db->query($sql);
 		return $query;
 	}
@@ -131,7 +209,7 @@ class Cdr_model extends CI_Model {
 	function get_cdr_main_count($filter_date_from, $filter_date_to, $filter_phonenum, $filter_caller_ip, $filter_customers, $filter_groups, $filter_gateways, $filter_call_type, $duration_from, $duration_to)
 	{
 		$where = '';
-		$where .= "WHERE id != '' ";
+		$where .= "WHERE parent_id = '0' ";
 
 		if($filter_date_from != '')
 		{
@@ -223,7 +301,13 @@ class Cdr_model extends CI_Model {
 		$count = $query->num_rows();
 		return $count;
 	}
-
+    
+    function get_parent_cdr_data($id)
+    {
+        $sql = "SELECT * FROM cdr WHERE parent_id = '".$id."'";
+		$query = $this->db->query($sql);
+        return $query;
+    }
 	/****************************** GATEWAYS STATS FUNCTIONS **********************************************/
 
 	//get list of all available gateways 

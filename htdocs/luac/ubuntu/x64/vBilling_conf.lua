@@ -23,7 +23,7 @@
 --
 --
 -- vBilling, LUA Script
--- version 0.1.1
+-- version 0.1.2
 --
 -- Various config elements for vBilling.lua
 --
@@ -34,17 +34,17 @@
 DSN name for the DSN to be configured with ODBC. This is required. If not configured,
 script will not work.
 ]]
-DSN                          = "VBILLING_DB"
+DSN                          = "__VBILLING_DB__"
 
 --[[
 MySQL database username
 ]]
-DB_USER                      = "MYSQL_USERNAME"
+DB_USER                      = "__MYSQL_USERNAME__"
 
 --[[
 MySQL database password
 ]]
-DB_PASSWORD                  = "MYSQL_PASSWORD"
+DB_PASSWORD                  = "__MYSQL_PASSWORD__"
 
 --[[
 Enable vBilling debug output of LUA processing
@@ -57,3 +57,4 @@ FreeSWITCH console log level for vBilling LUA output. NOTICE is nice, as it has 
 FREESWITCH_CONSOLE_LOG_LEVEL = "NOTICE"
 
 -- END of config options
+

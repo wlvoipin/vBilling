@@ -30,10 +30,25 @@
 class Carriers_model extends CI_Model {
 
 	// list all carriers
-	function get_all_carriers($num, $offset, $filter_carriers, $filter_carrier_type)
+	function get_all_carriers($num, $offset, $filter_carriers, $filter_carrier_type, $filter_sort)
 	{
 		if($offset == ''){$offset='0';}
-
+        
+        $order_by = "";
+        if($filter_sort == 'name_asc')
+        {
+            $order_by = "ORDER BY carrier_name ASC";
+        }
+        else if($filter_sort == 'name_dec')
+        {
+            $order_by = "ORDER BY carrier_name DESC";
+        }
+        else
+        {
+            $order_by = "ORDER BY id DESC";
+        }
+        
+        
 		$where = '';
 		$where .= "WHERE id != '' ";
 
@@ -53,7 +68,7 @@ class Carriers_model extends CI_Model {
 			}
 		}
 
-		$sql = "SELECT * FROM carriers ".$where." LIMIT $offset,$num";
+		$sql = "SELECT * FROM carriers ".$where." ".$order_by." LIMIT $offset,$num";
 		$query = $this->db->query($sql);
 		return $query;
 	}

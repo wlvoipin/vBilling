@@ -43,7 +43,6 @@ interface. A few of them are:
    - You can even control the maximum simultaneous calls per customer
    - Maximum simultaneous calls per gateway
    - Tons of media handling options
-   - We even support codec transcoding :)
 
 - Multiple administration levels
    - Able to create/edit/delete multiple administrators

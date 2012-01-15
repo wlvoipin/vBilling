@@ -29,7 +29,7 @@
 
 class Manage_accounts_model extends CI_Model {
 
-	function get_all_accounts($num, $offset, $filter_account_type, $filter_enabled)
+	function get_all_accounts($num, $offset, $filter_account_type, $filter_enabled, $filter_username, $filter_cust_name)
 	{
 		if($offset == ''){$offset='0';}
 
@@ -48,13 +48,30 @@ class Manage_accounts_model extends CI_Model {
 				$where .= "AND enabled = ".$this->db->escape($filter_enabled)." ";
 			}
 		}
+        
+        if($filter_username != '')
+		{
+			$where .= "AND username LIKE '%".$this->db->escape_like_str($filter_username)."%' ";
+		}
+        
+        if($filter_cust_name != '')
+		{
+			$where .= "AND (customer_firstname LIKE '%".$this->db->escape_like_str($filter_cust_name)."%' OR customer_lastname LIKE '%".$this->db->escape_like_str($filter_cust_name)."%')";
+		}
 
-		$sql = "SELECT * FROM accounts ".$where." LIMIT $offset,$num";
+        if($filter_account_type == 'sub_admin')
+        {
+            $sql = "SELECT * FROM accounts ".$where." LIMIT $offset,$num";
+        }
+        else
+        {
+            $sql = "SELECT a.*, b.customer_firstname, b.customer_lastname FROM accounts a LEFT JOIN customers b ON b.customer_id = a.customer_id ".$where." LIMIT $offset,$num";
+        }
 		$query = $this->db->query($sql);
 		return $query;
 	}
 
-	function get_all_accounts_count($filter_account_type, $filter_enabled)
+	function get_all_accounts_count($filter_account_type, $filter_enabled, $filter_username, $filter_cust_name)
 	{
 		$where = '';
 		$where .= "WHERE id != '' ";
@@ -71,8 +88,26 @@ class Manage_accounts_model extends CI_Model {
 				$where .= "AND enabled = ".$this->db->escape($filter_enabled)." ";
 			}
 		}
+        
+        if($filter_username != '')
+		{
+			$where .= "AND username LIKE '%".$this->db->escape_like_str($filter_username)."%' ";
+		}
+        
+        if($filter_cust_name != '')
+		{
+			$where .= "AND (customer_firstname LIKE '%".$this->db->escape_like_str($filter_cust_name)."%' OR customer_lastname LIKE '%".$this->db->escape_like_str($filter_cust_name)."%')";
+		}
 
-		$sql = "SELECT * FROM accounts ".$where." ";
+		
+        if($filter_account_type == 'sub_admin')
+        {
+            $sql = "SELECT * FROM accounts ".$where."";
+        }
+        else
+        {
+            $sql = "SELECT a.*, b.customer_firstname, b.customer_lastname FROM accounts a LEFT JOIN customers b ON b.customer_id = a.customer_id ".$where."";
+        }
 		$query = $this->db->query($sql);
 		$count = $query->num_rows();
 		return $count;
@@ -117,15 +152,23 @@ class Manage_accounts_model extends CI_Model {
 	{
 		if($data['account_type'] == 'admin')
 		{
-			$sql = 'INSERT INTO accounts (username, password, type, is_customer, customer_id, enabled) VALUES ('.$data['username'].', "'.$data['password'].'", "admin", "0", "0", "1") ';
+			$sql = 'INSERT INTO accounts (username, password, type, is_customer, customer_id, enabled) VALUES ('.$data['username'].', "'.$data['password'].'", "sub_admin", "0", "0", "1") ';
 			$query = $this->db->query($sql);
-		}
-		else if($data['account_type'] == 'customer')
-		{
-			$sql = 'INSERT INTO accounts (username, password, type, is_customer, customer_id, enabled) VALUES ('.$data['username'].', "'.$data['password'].'", "customer", "1", "'.$data['customer_id'].'", "1") ';
-			$query = $this->db->query($sql);
+            return $this->db->insert_id();
 		}
 	}
+    
+    function insert_sub_admin_access_restrictions($access, $user_id)
+    {
+        $sql = "INSERT INTO accounts_restrictions (user_id) VALUES ('".$user_id."') ";
+        $query = $this->db->query($sql);
+        
+        for($i=0; $i<count($access); $i++)
+        {
+            $sql = "UPDATE accounts_restrictions SET ".$access[$i]." = '1' WHERE user_id = '".$user_id."' ";
+            $query = $this->db->query($sql);
+        }
+    }
 
 	function enable_disable_account($account_id, $status)
 	{

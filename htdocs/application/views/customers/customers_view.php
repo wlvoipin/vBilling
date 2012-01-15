@@ -38,6 +38,10 @@
                         Type
                     </td>
                     
+                    <td width="17%">
+                        Sort By
+                    </td>
+                    
                     <td width="17%" rowspan="2">
                         <input type="submit" name="searchFilter" value="SEARCH" class="button blue" style="float:right;margin-top:5px;margin-right:10px" />
                     </td>
@@ -60,6 +64,15 @@
                         </select>
                     </td>
                     
+                    <td>
+                        <select name="filter_sort" id="filter_sort">
+                            <option value="">Select</option>
+                            <option value="name_asc" <?php if($filter_sort == 'name_asc'){ echo "selected";}?>>Name - ASC</option>
+                            <option value="name_dec" <?php if($filter_sort == 'name_dec'){ echo "selected";}?>>Name - DESC</option>
+                            <option value="balance_asc" <?php if($filter_sort == 'balance_asc'){ echo "selected";}?>>Balance - ASC</option>
+                            <option value="balance_dec" <?php if($filter_sort == 'balance_dec'){ echo "selected";}?>>Balance - DESC</option>
+                        </select>
+                    </td>
                 </tr>
             
         </table>
@@ -68,7 +81,7 @@
 </div>
 <!--***************** END FILTER BOX ****************************-->
 
-<table style="border: 1px groove;" width="100%" cellpadding="0" cellspacing="0">
+<table  width="100%" cellpadding="0" cellspacing="0">
         <tbody><tr>
             <td>
                 <table width="100%" border="0" cellpadding="0" cellspacing="0">
@@ -76,7 +89,7 @@
                     
                     <tr class="bottom_link">
                         <td height="13" width="8%" align="center">Account No</td>
-                        <td width="13%" align="left">Copmany</td>
+                        <td width="13%" align="left">Company</td>
                         <td width="13%" align="left">Name</td>
                         <td width="13%" align="left">Email</td>
                         <td width="6%" align="left">Country</td>
@@ -85,19 +98,60 @@
                         <td width="9%" align="center">Enabled</td>
                     </tr>
                     
+                    <tr><td colspan="8" id="shadowDiv" style="height:5px;margin-top:-1px"></td></tr>
+                    
                     <?php if($customers->num_rows() > 0) {?>
                         
                         <?php foreach ($customers->result() as $row): ?>
                             <tr class="main_text">
-                                <td height="25" align="center"><?php echo anchor_popup('customers/edit_customer/'.$row->customer_id.'', $row->customer_acc_num, $atts); ?></td>
+                                
+                                
+                                <?php if($this->session->userdata('user_type') == 'admin'){?>
+                                    <td height="25" align="center"><?php echo anchor_popup('customers/edit_customer/'.$row->customer_id.'', $row->customer_acc_num, $atts); ?></td>
+                                <?php 
+                                    } else if($this->session->userdata('user_type') == 'sub_admin'){
+                                            if(sub_admin_access_any_cell($this->session->userdata('user_id'), 'edit_customers') == 1)
+                                            {
+                                ?>
+                                                <td height="25" align="center"><?php echo anchor_popup('customers/edit_customer/'.$row->customer_id.'', $row->customer_acc_num, $atts); ?></td>
+                                <?php 
+                                            }
+                                            else
+                                            {
+                                ?>
+                                                <td height="25" align="center"><?php echo $row->customer_acc_num; ?></td>
+                                <?php
+                                            }
+                                        }
+                                ?>
+                                
                                 <td align="left"><?php echo $row->customer_company; ?></td>
                                 <td align="left"><?php echo $row->customer_firstname; ?></td>
                                 <td align="left"><?php echo $row->customer_contact_email; ?></td>
                                 <td align="left"><?php echo country_any_cell($row->customer_country, 'countryname'); ?></td>
                                 <td align="center"><?php echo $row->customer_phone; ?></td>
                                 <td align="center"><?php echo $row->customer_balance; ?></td>
-                                <td align="center"><input type="checkbox" id="<?php echo $row->customer_id;?>" class="enable_checkbox" <?php if($row->customer_enabled == 1){ echo 'checked="checked"';}?>/></td>
+                                
+                                <?php if($this->session->userdata('user_type') == 'admin'){?>
+                                    <td align="center"><input type="checkbox" id="<?php echo $row->customer_id;?>" class="enable_checkbox" <?php if($row->customer_enabled == 1){ echo 'checked="checked"';}?>/></td>
+                                <?php 
+                                    } else if($this->session->userdata('user_type') == 'sub_admin'){
+                                            if(sub_admin_access_any_cell($this->session->userdata('user_id'), 'enable_disable_customers') == 1)
+                                            {
+                                ?>
+                                                <td align="center"><input type="checkbox" id="<?php echo $row->customer_id;?>" class="enable_checkbox" <?php if($row->customer_enabled == 1){ echo 'checked="checked"';}?>/></td>
+                                <?php 
+                                            }
+                                            else
+                                            {
+                                ?>
+                                                <td align="center"><?php if($row->customer_enabled == 1){ echo 'Enabled';} else{ echo "Disabled";}?></td>
+                                <?php
+                                            }
+                                        }
+                                ?>
                             </tr>
+                            <tr style="height:5px;"><td colspan="8" id="shadowDiv" style="height:5px;margin-top:0px;background-color:#fff"></td></tr>
                         <?php endforeach;?>
                            
                     <?php } else { echo '<tr><td align="center" style="color:red;" colspan="8">No Results Found</td></tr>'; } ?>

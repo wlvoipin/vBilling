@@ -105,7 +105,7 @@
 </div>
 <!--***************** END FILTER BOX ****************************-->
 
-<table style="border: 1px groove;" width="100%" cellpadding="0" cellspacing="0">
+<table width="100%" cellpadding="0" cellspacing="0">
         <tbody><tr>
             <td>
                 <table width="100%" border="0" cellpadding="0" cellspacing="0">
@@ -121,6 +121,7 @@
                         <td width="10%" align="center">ACD</td>
                         <td width="10%" align="center">PDD</td>
                     </tr>
+                    <tr><td colspan="8" id="shadowDiv" style="height:5px;margin-top:-1px"></td></tr>
                     
                     <?php if($all_gateways->num_rows() > 0) {?>
                         
@@ -192,6 +193,7 @@
                                 
                                 <td align="center">&nbsp;</td>
                             </tr>
+                            <tr style="height:5px;"><td colspan="8" id="shadowDiv" style="height:5px;margin-top:0px;background-color:#fff"></td></tr>
                         <?php endforeach;?>
                            
                     <?php } else { echo '<tr><td align="center" style="color:red;" colspan="8">No Gateways Defined Yet</td></tr>'; } ?>

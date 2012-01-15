@@ -20,11 +20,10 @@
         <table width="100%" cellspacing="0" cellpadding="0" border="0" id="filter_table">
              
                 <tr>
-                    <?php if($filter_account_type != 'admin'){?>
                     <td width="25%">
                         Username
                     </td>
-                    
+                    <?php if($filter_account_type != 'sub_admin'){?>
                     <td width="25%">
                         Customer Name
                     </td>
@@ -45,8 +44,8 @@
                 </tr>
             
                 <tr>
-                    <?php if($filter_account_type != 'admin'){?>
                     <td><input type="text" id="filter_username" name="filter_username" value="<?php echo $filter_username;?>" /></td>
+                    <?php if($filter_account_type != 'sub_admin'){?>
                     <td><input type="text" id="filter_cust_name" name="filter_cust_name" value="<?php echo $filter_cust_name;?>" /></td>
                     <?php } ?>
                     <td>
@@ -64,19 +63,17 @@
     </div>
 </div>
 <!--***************** END FILTER BOX ****************************-->
-<!--
+
 <div style="float:right;margin-bottom:10px;">
-    <form method="post" id="new_account_type_form" action="<?php //echo base_url();?>manage_accounts/new_account">
+    <form method="post" id="new_account_type_form" action="<?php echo base_url();?>manage_accounts/new_account">
     <a href="#" style="font-weight:bold;font-size:12px;">Create New</a>
     <select style="width:150px;" class="textfield" name="new_account_type" id="new_account_type">
         <option value="">Select</option>
-        <option value="admin">Admin Account</option>
-        <option value="customer">Customer Account</option>
+        <option value="admin">Sub-Admin Account</option>
     </select>
     </form>
 </div>
--->
-<table style="border: 1px groove;" width="100%" cellpadding="0" cellspacing="0">
+<table width="100%" cellpadding="0" cellspacing="0">
         <tbody>
         <tr>
             <td>
@@ -85,12 +82,18 @@
                     <tr class="bottom_link">
                         <td height="20" width="10%" align="center">ID</td>
                         <td width="20%" align="left">Username</td>
-                        <?php if($filter_account_type != 'admin'){?>
+                        <?php if($filter_account_type != 'sub_admin'){?>
                             <td width="20%" align="left">Customer Name</td>
                         <?php } ?>
                         <td width="8%" align="center">Enabled</td>
                         <td width="62%" align="left">Options</td>
                     </tr>
+                        <?php if($filter_account_type != 'sub_admin'){?>
+                            <tr><td colspan="5" id="shadowDiv" style="height:5px;margin-top:-1px"></td></tr>
+                        <?php } else { ?>
+                            <tr><td colspan="4" id="shadowDiv" style="height:5px;margin-top:-1px"></td></tr>
+                        <?php } ?>
+                    
                     
                     <?php if($accounts->num_rows() > 0) {?>
                         
@@ -98,10 +101,10 @@
                             <tr class="main_text">
                                 <td align="center"><?php echo $row->id; ?></td>
                                 
-                                <?php if($row->type != 'admin'){?>
+                                <?php if($row->type != 'sub_admin'){?>
                                 <td align="left"><?php echo anchor_popup('customers/edit_customer/'.$row->customer_id.'', $row->username, $atts); ?></td>
                                 
-                                <td align="left"><?php echo $row->customer_firstname.' '.$row->customer_lastname; ?></td>
+                                <td align="left"><?php echo customer_full_name($row->customer_id); ?></td>
                                 
                                 <td align="center"><input type="checkbox" id="<?php echo $row->id;?>" class="enable_checkbox" <?php if($row->enabled == 1){ echo 'checked="checked"';}?>/></td>
                                 
@@ -110,12 +113,20 @@
                                 
                                 <td align="left"><?php echo $row->username; ?></td>
                                 
-                                <td align="center"><?php if($row->enabled == 1){ echo 'Enabled';} else { echo 'Disabled';}?></td>
+                                <td align="center"><input type="checkbox" id="<?php echo $row->id;?>" class="enable_checkbox" <?php if($row->enabled == 1){ echo 'checked="checked"';}?>/></td>
                                 
-                                <td align="left">You Can't Delete An Admin Account</td>
+                                <td align="left"><a href="#" id="<?php echo $row->id;?>" class="delete_account"><img src="<?php echo base_url();?>assets/images/button_cancel.png" style="width:16px;margin-left:15px;border:none;cursor:pointer;" /></a></td>
                                 
                                 <?php } ?>
                             </tr>
+                            
+                            
+                            <?php if($filter_account_type != 'sub_admin'){?>
+                                <tr style="height:5px;"><td colspan="5" id="shadowDiv" style="height:5px;margin-top:0px;background-color:#fff"></td></tr>
+                            <?php } else { ?>
+                                <tr style="height:5px;"><td colspan="4" id="shadowDiv" style="height:5px;margin-top:0px;background-color:#fff"></td></tr>
+                            <?php } ?>
+                        
                         <?php endforeach;?>
                         
                     <?php 
@@ -123,7 +134,7 @@
                         else 
                         { 
                             $colspan = 4;
-                            if($filter_account_type != 'admin'){
+                            if($filter_account_type != 'sub_admin'){
                                 $colspan = 5;
                             } 
                             echo '<tr><td align="center" colspan="'.$colspan.'" style="color:red;">No Results Found</td></tr>'; 

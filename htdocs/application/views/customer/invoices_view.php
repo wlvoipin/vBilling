@@ -61,6 +61,10 @@
                         Status
                     </td>
                     
+                    <td width="8%">
+                        Sort By
+                    </td>
+                    
                     <td width="8%" rowspan="2">
                         <input type="submit" id="searchFilter" name="searchFilter" value="SEARCH" class="button blue" style="float:right;margin-top:5px;margin-right:10px" />
                     </td>
@@ -81,6 +85,22 @@
                             <option value="paid" <?php if($filter_status == 'paid'){ echo "selected";}?>>Paid</option>
                             <option value="pending" <?php if($filter_status == 'pending'){ echo "selected";}?>>Pending</option>
                             <option value="over_due" <?php if($filter_status == 'over_due'){ echo "selected";}?>>Over Due</option>
+                        </select>
+                    </td>
+                    
+                    <td>
+                        <select name="filter_sort" id="filter_sort" style="width:124px;">
+                            <option value="">Select</option>
+                            
+                            <option value="date_asc" <?php if($filter_sort == 'date_asc'){ echo "selected";}?>>Generated Date - ASC</option>
+                            <option value="date_dec" <?php if($filter_sort == 'date_dec'){ echo "selected";}?>>Generated Date - DESC</option>
+                            
+                            <option value="totcalls_asc" <?php if($filter_sort == 'totcalls_asc'){ echo "selected";}?>>Total Calls - ASC</option>
+                            <option value="totcalls_dec" <?php if($filter_sort == 'totcalls_dec'){ echo "selected";}?>>Total Calls - DESC</option>
+                            
+                            <option value="totcharges_asc" <?php if($filter_sort == 'totcharges_asc'){ echo "selected";}?>>Total Charges - ASC</option>
+                            <option value="totcharges_dec" <?php if($filter_sort == 'totcharges_dec'){ echo "selected";}?>>Total Charges - DESC</option>
+                          
                         </select>
                     </td>
                 </tr>

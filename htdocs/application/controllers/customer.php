@@ -175,6 +175,7 @@ class Customer extends CI_Controller {
 		$filter_end_date     = '';
 		$filter_carriers     = '';
 		$filter_rate_type    = '';
+        $filter_sort         = '';
 		$search              = '';
 
 		$msg_records_found = "Records Found";
@@ -186,6 +187,7 @@ class Customer extends CI_Controller {
 			$filter_carriers        = $this->input->get('filter_carriers');
 			$filter_rate_type       = $this->input->get('filter_rate_type');
 			$filter_display_results = $this->input->get('filter_display_results');
+            $filter_sort            = $this->input->get('filter_sort');
 			$search                 = $this->input->get('searchFilter');
 			$msg_records_found      = "Records Found Based On Your Search Criteria";
 		}
@@ -215,11 +217,12 @@ class Customer extends CI_Controller {
 		$data['filter_carriers']            = $filter_carriers;
 		$data['filter_rate_type']           = $filter_rate_type;
 		$data['filter_display_results']     = $filter_display_results;
+        $data['filter_sort']                = $filter_sort;
 
 		//for pagging set information
 		$this->load->library('pagination');
 		$config['per_page'] = '20';
-		$config['base_url'] = base_url().'customer/customer_rates/?searchFilter='.$search.'&filter_start_date='.$filter_start_date.'&filter_end_date='.$filter_end_date.'&filter_carriers='.$filter_carriers.'&filter_rate_type='.$filter_rate_type.'&filter_display_results='.$filter_display_results.'';
+		$config['base_url'] = base_url().'customer/customer_rates/?searchFilter='.$search.'&filter_start_date='.$filter_start_date.'&filter_end_date='.$filter_end_date.'&filter_carriers='.$filter_carriers.'&filter_rate_type='.$filter_rate_type.'&filter_display_results='.$filter_display_results.'&filter_sort='.$filter_sort.'';
 		$config['page_query_string'] = TRUE;
 
 		$config['num_links'] = 6;
@@ -263,7 +266,7 @@ class Customer extends CI_Controller {
 		{
 			$customer_group_table   =   $this->groups_model->group_any_cell($customer_group_id, 'group_rate_table');
 			$data['count']          =   $this->customer_model->customer_rates_count($customer_group_table, $filter_start_date, $filter_end_date, $filter_carriers, $filter_rate_type);
-			$data['rates']          =   $this->customer_model->customer_rates($config['per_page'], $config['uri_segment'], $customer_group_table, $filter_start_date, $filter_end_date, $filter_carriers, $filter_rate_type);
+			$data['rates']          =   $this->customer_model->customer_rates($config['per_page'], $config['uri_segment'], $customer_group_table, $filter_start_date, $filter_end_date, $filter_carriers, $filter_rate_type, $filter_sort);
 		}
 		else
 		{
@@ -498,6 +501,7 @@ function insert_new_sip_access()
 	$customer_id    =   $this->input->post('customer_id');
 	$username       =   $this->input->post('username');
 	$password       =   $this->input->post('password');
+    $cid       =   $this->input->post('cid');
 
 	$getdomain      =   $this->input->post('sip_ip');
 	$explode = explode('|', $getdomain);
@@ -505,7 +509,7 @@ function insert_new_sip_access()
 	$domain     = $explode[0];
 	$sofia_id   = $explode[1];
 
-	$this->customer_model->insert_new_sip_access($customer_id, $username, $password, $domain, $sofia_id);
+	$this->customer_model->insert_new_sip_access($customer_id, $username, $password, $domain, $sofia_id, $cid);
 	$this->session->set_flashdata('success','SIP account added successfully.');
 }
 
@@ -581,6 +585,7 @@ function customer_cdr()
 	$filter_caller_ip   = '';
 	$filter_gateways    = '';
 	$filter_call_type   = '';
+    $filter_sort        = '';
 	$search             = '';
 
 	$msg_records_found = "Records Found";
@@ -594,6 +599,7 @@ function customer_cdr()
 		$filter_gateways        = $this->input->get('filter_gateways');
 		$filter_call_type       = $this->input->get('filter_call_type');
 		$filter_display_results = $this->input->get('filter_display_results');
+        $filter_sort            = $this->input->get('filter_sort');
 		$search                 = $this->input->get('searchFilter');
 		$msg_records_found      = "Records Found Based On Your Search Criteria";
 	}
@@ -639,11 +645,12 @@ function customer_cdr()
 	$data['filter_gateways']            = $filter_gateways;
 	$data['filter_call_type']           = $filter_call_type;
 	$data['filter_display_results']     = $filter_display_results;
+    $data['filter_sort']                = $filter_sort;
 
 	//for pagging set information
 	$this->load->library('pagination');
 	$config['per_page'] = '20';
-	$config['base_url'] = base_url().'customer/customer_cdr/?searchFilter='.$search.'&filter_date_from='.$filter_date_from.'&filter_date_to='.$filter_date_to.'&filter_phonenum='.$filter_phonenum.'&filter_caller_ip='.$filter_caller_ip.'&filter_gateways='.$filter_gateways.'&filter_call_type='.$filter_call_type.'&filter_display_results='.$filter_display_results.' ';
+	$config['base_url'] = base_url().'customer/customer_cdr/?searchFilter='.$search.'&filter_date_from='.$filter_date_from.'&filter_date_to='.$filter_date_to.'&filter_phonenum='.$filter_phonenum.'&filter_caller_ip='.$filter_caller_ip.'&filter_gateways='.$filter_gateways.'&filter_call_type='.$filter_call_type.'&filter_display_results='.$filter_display_results.'&filter_sort='.$filter_sort.'';
 	$config['page_query_string'] = TRUE;
 
 	$config['num_links'] = 6;
@@ -678,7 +685,7 @@ function customer_cdr()
 
 	$data['msg_records_found'] = "".$data['count']."&nbsp;".$msg_records_found."";
 
-	$data['cdr']            =   $this->customer_model->customer_cdr($config['per_page'],$config['uri_segment'], $customer_id, $filter_date_from, $filter_date_to, $filter_phonenum, $filter_caller_ip, $filter_gateways, $filter_call_type);
+	$data['cdr']            =   $this->customer_model->customer_cdr($config['per_page'],$config['uri_segment'], $customer_id, $filter_date_from, $filter_date_to, $filter_phonenum, $filter_caller_ip, $filter_gateways, $filter_call_type, $filter_sort);
 
 	$data['customer_id']    =   $customer_id;
 
@@ -720,6 +727,7 @@ function manage_balance()
         $filter_date_to         = '';
         $filter_customers       = $customer_id;
         $filter_status          = '';
+        $filter_sort            = '';
         $search                 = '';
 
         $msg_records_found = "Records Found";
@@ -729,6 +737,7 @@ function manage_balance()
             $filter_date_from       = $this->input->get('filter_date_from');
             $filter_date_to         = $this->input->get('filter_date_to');
             $filter_status          = $this->input->get('filter_status');
+            $filter_sort            = $this->input->get('filter_sort');
             $search                 = $this->input->get('searchFilter');
             $msg_records_found      = "Records Found Based On Your Search Criteria";
         }
@@ -752,11 +761,12 @@ function manage_balance()
         $data['filter_date_from']           = $filter_date_from;
         $data['filter_date_to']             = $filter_date_to;
         $data['filter_status']              = $filter_status;
+        $data['filter_sort']                = $filter_sort;
         
         //for pagging set information
         $this->load->library('pagination');
         $config['per_page'] = '20';
-        $config['base_url'] = base_url().'customer/invoices/?searchFilter='.$search.'&filter_date_from='.$filter_date_from.'&filter_date_to='.$filter_date_to.'&filter_status='.$filter_status.'';
+        $config['base_url'] = base_url().'customer/invoices/?searchFilter='.$search.'&filter_date_from='.$filter_date_from.'&filter_date_to='.$filter_date_to.'&filter_status='.$filter_status.'&filter_sort='.$filter_sort.'';
         $config['page_query_string'] = TRUE;
 
         $config['num_links'] = 6;
@@ -798,7 +808,7 @@ function manage_balance()
 
         $data['msg_records_found'] = "".$data['count']."&nbsp;".$msg_records_found."";
 
-        $data['invoices']       =   $this->billing_model->get_invoices($config['per_page'],$config['uri_segment'],$filter_date_from, $filter_date_to, $filter_customers, $filter_billing_type = '', $filter_status);
+        $data['invoices']       =   $this->billing_model->get_invoices($config['per_page'],$config['uri_segment'],$filter_date_from, $filter_date_to, $filter_customers, $filter_billing_type = '', $filter_status, $filter_sort);
         
         $data['page_name']		=	'customer_invoices';
         $data['selected']		=	'billing';

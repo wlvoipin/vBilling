@@ -47,6 +47,13 @@ class Billing extends CI_Controller {
 			{
 				redirect ('customer/');
 			}
+            if($this->session->userdata('user_type') == 'sub_admin')
+            {
+                if(sub_admin_access_any_cell($this->session->userdata('user_id'), 'view_biling') == 0)
+                {
+                    redirect ('home/');
+                }
+            }
 		}
 	}
 
@@ -97,12 +104,21 @@ class Billing extends CI_Controller {
 
 	function invoices()
 	{
-		//for filter & search
+		if($this->session->userdata('user_type') == 'sub_admin')
+        {
+            if(sub_admin_access_any_cell($this->session->userdata('user_id'), 'view_invoices') == 0)
+            {
+                redirect ('billing/');
+            }
+        }
+        
+        //for filter & search
 		$filter_date_from       = '';
 		$filter_date_to         = '';
 		$filter_customers       = '';
 		$filter_billing_type    = '';
 		$filter_status          = '';
+        $filter_sort            = '';
 		$search                 = '';
 
 		$msg_records_found = "Records Found";
@@ -114,6 +130,7 @@ class Billing extends CI_Controller {
 			$filter_customers       = $this->input->get('filter_customers');
 			$filter_billing_type    = $this->input->get('filter_billing_type');
 			$filter_status          = $this->input->get('filter_status');
+            $filter_sort            = $this->input->get('filter_sort');
 			$search                 = $this->input->get('searchFilter');
 			$msg_records_found      = "Records Found Based On Your Search Criteria";
 		}
@@ -139,11 +156,12 @@ class Billing extends CI_Controller {
 		$data['filter_customers']           = $filter_customers;
 		$data['filter_billing_type']        = $filter_billing_type;
 		$data['filter_status']              = $filter_status;
+        $data['filter_sort']                = $filter_sort;
 
 		//for pagging set information
 		$this->load->library('pagination');
 		$config['per_page'] = '20';
-		$config['base_url'] = base_url().'billing/invoices/?searchFilter='.$search.'&filter_date_from='.$filter_date_from.'&filter_date_to='.$filter_date_to.'&filter_customers='.$filter_customers.'&filter_billing_type='.$filter_billing_type.'&filter_status='.$filter_status.'';
+		$config['base_url'] = base_url().'billing/invoices/?searchFilter='.$search.'&filter_date_from='.$filter_date_from.'&filter_date_to='.$filter_date_to.'&filter_customers='.$filter_customers.'&filter_billing_type='.$filter_billing_type.'&filter_status='.$filter_status.'&filter_sort='.$filter_sort.'';
 		$config['page_query_string'] = TRUE;
 
 		$config['num_links'] = 6;
@@ -185,7 +203,7 @@ class Billing extends CI_Controller {
 
 		$data['msg_records_found'] = "".$data['count']."&nbsp;".$msg_records_found."";
 
-		$data['invoices']       =   $this->billing_model->get_invoices($config['per_page'],$config['uri_segment'],$filter_date_from, $filter_date_to, $filter_customers, $filter_billing_type, $filter_status);
+		$data['invoices']       =   $this->billing_model->get_invoices($config['per_page'],$config['uri_segment'],$filter_date_from, $filter_date_to, $filter_customers, $filter_billing_type, $filter_status, $filter_sort);
 
 		$data['page_name']		=	'invoices_list';
 		$data['selected']		=	'billing';
@@ -243,6 +261,33 @@ class Billing extends CI_Controller {
 			ob_clean();
 			flush();
 			readfile('media/invoices/'.$invoice_id.'_cdr.pdf');
+			exit;
+		}
+		else
+		{
+			redirect ('billing/invoices/');
+		}
+	}
+    
+    function download_cdr_admin($invoice_id = '')
+	{
+		if($invoice_id == '')
+		{
+			redirect ('billing/invoices/');
+		}
+
+		if (file_exists('media/invoices/'.$invoice_id.'_cdr_admin.pdf')) {
+			header('Content-Description: File Transfer');
+			header('Content-Type: application/octet-stream');
+			header('Content-Disposition: attachment; filename=media/invoices/'.$invoice_id.'_cdr_admin.pdf');
+			header('Content-Transfer-Encoding: binary');
+			header('Expires: 0');
+			header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+			header('Pragma: public');
+			header('Content-Length: ' . filesize('media/invoices/'.$invoice_id.'_cdr_admin.pdf'));
+			ob_clean();
+			flush();
+			readfile('media/invoices/'.$invoice_id.'_cdr_admin.pdf');
 			exit;
 		}
 		else

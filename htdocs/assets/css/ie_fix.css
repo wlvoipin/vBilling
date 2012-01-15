@@ -1,0 +1,73 @@
+#navcss a {
+	font-weight: bold;
+	color: #e7e5e5;
+	text-decoration: none;
+	display: block;
+	padding:  5px 10px 5px 5px;
+	margin: 0;
+
+	-webkit-border-radius: 1.6em;
+	-moz-border-radius: 1.6em;
+	
+	text-shadow: 0 1px 1px rgba(0,0,0, .3);
+    font:0.8em/1.5em Arial,Helvetica,sans-serif;
+    font-weight:bold;
+    
+}
+
+#navcss a span{
+	float:none;
+}
+
+#navcss .current a{
+	background: #666 url(../images/gradient.png) repeat-x 0 -40px;
+	color: #444;
+	border-top: solid 1px #f8f8f8;
+
+	-webkit-box-shadow: 0 1px 1px rgba(0,0,0, .2);
+	-moz-box-shadow: 0 1px 1px rgba(0,0,0, .2);
+	box-shadow: 0 1px 1px rgba(0,0,0, .2);
+
+	text-shadow: 0 1px 0 rgba(255,255,255, 1);
+}
+
+#navcss li a:hover{
+	background: #666 url(../images/gradient.png) repeat-x 0 -40px;
+	color: #444;
+	border-top: solid 1px #f8f8f8;
+
+	-webkit-box-shadow: 0 1px 1px rgba(0,0,0, .2);
+	-moz-box-shadow: 0 1px 1px rgba(0,0,0, .2);
+	box-shadow: 0 1px 1px rgba(0,0,0, .2);
+
+	text-shadow: 0 1px 0 rgba(255,255,255, 1);
+}
+
+.blue{
+    background:#0078A5;
+}
+
+.white{
+    background:#EDEDED;
+    color:#606060;
+    
+}
+#filter_table{width:auto;margin: 0 auto; }
+#filter_table{font:11px Arial,Helvetica,sans-serif;font-weight:bold;}
+#filter_table input{width:90%;}
+#filter_table select{background:none;border:none;width:90%;}
+
+#filter_table input.button
+{
+   width:80px;
+   height:30px;
+}
+
+#access_hirarchy span.btnspan{margin-top:-20px;margin-left:-20px;}
+
+.main_text:hover {
+    background: #dadada;
+}
+
+div.button form{display: inline-block;}
+div.button form table{display: inline-block;}

@@ -47,6 +47,14 @@ class Cdr extends CI_Controller {
 			{
 				redirect ('customer/');
 			}
+            
+            if($this->session->userdata('user_type') == 'sub_admin')
+            {
+                if(sub_admin_access_any_cell($this->session->userdata('user_id'), 'view_cdr') == 0)
+                {
+                    redirect ('home/');
+                }
+            }
 		}
 	}
 
@@ -72,6 +80,7 @@ class Cdr extends CI_Controller {
 		$filter_quick       = '';
 		$duration_from      = '';
 		$duration_to        = '';
+        $filter_sort        = '';
 		$search             = '';
 
 		$msg_records_found = "Records Found";
@@ -90,6 +99,7 @@ class Cdr extends CI_Controller {
 			$duration_from          = $this->input->get('duration_from');
 			$duration_to            = $this->input->get('duration_to');
 			$filter_display_results = $this->input->get('filter_display_results');
+            $filter_sort            = $this->input->get('filter_sort');
 			$search                 = $this->input->get('searchFilter');
 			$msg_records_found      = "Records Found Based On Your Search Criteria";
 		}
@@ -139,12 +149,13 @@ class Cdr extends CI_Controller {
 		$data['filter_quick']               = $filter_quick;
 		$data['duration_from']              = $duration_from;
 		$data['duration_to']                = $duration_to;
+        $data['filter_sort']                = $filter_sort;
 		$data['filter_display_results']     = $filter_display_results;
 
 		//for pagging set information
 		$this->load->library('pagination');
 		$config['per_page'] = '20';
-		$config['base_url'] = base_url().'cdr/?searchFilter='.$search.'&filter_date_from='.$filter_date_from.'&filter_date_to='.$filter_date_to.'&filter_phonenum='.$filter_phonenum.'&filter_caller_ip='.$filter_caller_ip.'&filter_customers='.$filter_customers.'&filter_groups='.$filter_groups.'&filter_gateways='.$filter_gateways.'&filter_call_type='.$filter_call_type.'&filter_display_results='.$filter_display_results.'&filter_quick='.$filter_quick.'&duration_from='.$duration_from.'&duration_to='.$duration_to.'';
+		$config['base_url'] = base_url().'cdr/?searchFilter='.$search.'&filter_date_from='.$filter_date_from.'&filter_date_to='.$filter_date_to.'&filter_phonenum='.$filter_phonenum.'&filter_caller_ip='.$filter_caller_ip.'&filter_customers='.$filter_customers.'&filter_groups='.$filter_groups.'&filter_gateways='.$filter_gateways.'&filter_call_type='.$filter_call_type.'&filter_display_results='.$filter_display_results.'&filter_quick='.$filter_quick.'&duration_from='.$duration_from.'&duration_to='.$duration_to.'&filter_sort='.$filter_sort.'';
 		$config['page_query_string'] = TRUE;
 
 		$config['num_links'] = 6;
@@ -186,7 +197,7 @@ class Cdr extends CI_Controller {
 
 		$data['msg_records_found'] = "".$data['count']."&nbsp;".$msg_records_found."";
 
-		$data['cdr']            =   $this->cdr_model->get_all_cdr_data($config['per_page'],$config['uri_segment'],$filter_date_from, $filter_date_to, $filter_phonenum, $filter_caller_ip, $filter_customers, $filter_groups, $filter_gateways, $filter_call_type, $duration_from, $duration_to);
+		$data['cdr']            =   $this->cdr_model->get_all_cdr_data($config['per_page'],$config['uri_segment'],$filter_date_from, $filter_date_to, $filter_phonenum, $filter_caller_ip, $filter_customers, $filter_groups, $filter_gateways, $filter_call_type, $duration_from, $duration_to, $filter_sort);
 		$data['page_name']		=	'view_cdr_data';
 		$data['selected']		=	'cdr';
 		$data['sub_selected']   =   'list_cdr';
@@ -199,7 +210,15 @@ class Cdr extends CI_Controller {
 
 	function gateways_stats()
 	{
-		$filter_display_results = 'min';
+		if($this->session->userdata('user_type') == 'sub_admin')
+        {
+            if(sub_admin_access_any_cell($this->session->userdata('user_id'), 'view_gateway_stats') == 0)
+            {
+                redirect ('cdr/');
+            }
+        }
+        
+        $filter_display_results = 'min';
 
 		//this is defualt start and end time  
 		$startTime = time() - 86400; //last 24hrs 
@@ -323,7 +342,15 @@ class Cdr extends CI_Controller {
 
 	function customer_stats()
 	{
-		$filter_display_results = 'min';
+		if($this->session->userdata('user_type') == 'sub_admin')
+        {
+            if(sub_admin_access_any_cell($this->session->userdata('user_id'), 'view_customer_stats') == 0)
+            {
+                redirect ('cdr/');
+            }
+        }
+        
+        $filter_display_results = 'min';
 
 		$filter_customers   = '';
 		$search             = '';
@@ -404,7 +431,15 @@ class Cdr extends CI_Controller {
 
 	function call_destination()
 	{
-		$filter_display_results = 'min';
+		if($this->session->userdata('user_type') == 'sub_admin')
+        {
+            if(sub_admin_access_any_cell($this->session->userdata('user_id'), 'view_call_destination') == 0)
+            {
+                redirect ('cdr/');
+            }
+        }
+        
+        $filter_display_results = 'min';
 
 		//this is defualt start and end time  
 		$startTime = time() - 86400; //last 24hrs 
@@ -918,4 +953,25 @@ class Cdr extends CI_Controller {
 			redirect('cdr/');
 		}
 	}
+    
+    function tooltip()
+    {
+        $id = $this->input->post('id');
+        $data = $this->cdr_model->get_parent_cdr_data($id);
+        
+        if($data->num_rows() > 0)
+        {
+        $txt = '<table><tr><td width="100px" style="color:#000">GATEWAY</td><td width="100px" style="color:#000">HANGUP CAUSE</td></tr>';
+        foreach($data->result() as $row)
+        {
+            $txt .= '<tr><td>'.$row->gateway.'</td><td>'.$row->hangup_cause.'</td></tr>';
+        }
+        $txt .= '<table>';
+        echo $txt;
+        }
+        else
+        {
+            echo "No Result Found";
+        }
+    }
 }

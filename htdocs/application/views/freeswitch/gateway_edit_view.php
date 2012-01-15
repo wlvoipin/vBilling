@@ -1,6 +1,6 @@
 <br/>
 <div class="success" id="success_div" style="display:none;"></div>
-<table style="border: 1px groove;" width="100%" cellpadding="0" cellspacing="0" id="main-sofia">
+<table width="100%" cellpadding="0" cellspacing="0" id="main-sofia">
         <tbody><tr>
             <td>
                 <form action="" method="post" id="edit-gateways-form">
@@ -28,6 +28,8 @@
                             <th height="20" align="center">Parameter</th>
                             <th align="center">Values</th>
                         </tr>
+                        
+                        <tr><td colspan="2" id="shadowDiv" style="height:5px;margin-top:-1px"></td></tr>
                     </thead>
                     
                     <tfoot>
@@ -65,6 +67,7 @@
                                 </td>
                                
                             </tr>
+                            <tr style="height:5px;"><td colspan="2" id="shadowDiv" style="height:5px;margin-top:0px;background-color:#fff"></td></tr>
                         <?php endforeach; ?>
                         
                     <?php } else { echo '<tr><td align="center" colspan="2" style="color:red;">No Results Found (However, You Can Add New Row)</td></tr>'; } ?>                    

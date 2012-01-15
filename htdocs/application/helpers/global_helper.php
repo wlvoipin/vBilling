@@ -275,6 +275,17 @@ function customer_access_any_cell($customer_id, $col_name)
 	return $row->$col_name;
 }
 
+function sub_admin_access_any_cell($user_id, $col_name)
+{
+	$CI = & get_instance();
+
+	$sql = "SELECT * FROM accounts_restrictions WHERE user_id = '".$user_id."' ";
+	$query = $CI->db->query($sql);
+	$row = $query->row();
+
+	return $row->$col_name;
+}
+
 function customer_full_name($customer_id)
 {
 	$CI = & get_instance();

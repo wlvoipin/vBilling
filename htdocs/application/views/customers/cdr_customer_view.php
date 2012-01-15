@@ -3,6 +3,8 @@ if(!window.opener){
 window.location = '../../home/';
 }
 </script>
+ <link href="<?php echo base_url();?>assets/css/jquery.qtip.css" rel="stylesheet" type="text/css">
+<script src="<?php echo base_url();?>assets/js/jquery.qtip.min.js" type="text/javascript"></script>
 <table cellspacing="0" cellpadding="0" border="0" align="center" width="100%">
 	<tbody>
         <tr>
@@ -166,6 +168,8 @@ window.location = '../../home/';
                         <td width="7%" align="center">Destination</td>
                         <td width="7%" align="center">Bill Duration</td>
                         <td width="7%" align="center">Hangup Cause</td>
+                        <td width="7%" align="center">Gateway</td>
+                        <td width="7%" align="center">Failed Gateways</td>
                         <td width="7%" align="center">IP Address</td>
                         <td width="7%" align="center">Username</td>
                         <td width="7%" align="center">Sell Rate</td>
@@ -207,6 +211,8 @@ window.location = '../../home/';
                                 ?>
                                 <td align="center"><?php echo $billsec.'&nbsp;'.$filter_display_results; ?></td>
                                 <td align="center"><?php echo $row->hangup_cause; ?></td>
+                                <td align="center"><?php echo $row->gateway; ?></td>
+                                <td align="center" <?php if($row->total_failed_gateways > 0) {?>class="selector" style="color:red;font-weight:bold;"<?php } ?> id="<?php echo $row->id;?>"><?php echo $row->total_failed_gateways; ?></td>
                                 <td align="center"><?php echo $row->network_addr; ?></td>
                                 <td align="center"><?php echo $row->username; ?></td>
                                 <td align="center"><?php echo $sellrate.'&nbsp;/&nbsp'.$filter_display_results; ?></td>
@@ -231,7 +237,7 @@ window.location = '../../home/';
                             </tr>
                         <?php endforeach;?>
                            
-                    <?php } else { echo '<tr><td align="center" style="color:red;" colspan="14">No Results Found</td></tr>'; } ?>
+                    <?php } else { echo '<tr><td align="center" style="color:red;" colspan="16">No Results Found</td></tr>'; } ?>
                     </tbody>
                 </table>
             </td>
@@ -262,3 +268,34 @@ window.location = '../../home/';
             return false;
         });
     </script>
+    
+    <script type="text/javascript">
+    $(".selector").each(function() {
+      $(this).qtip({
+           content: {
+              text: '<img src="'+base_url+'assets/images/loading.gif" alt="Loading..." />',
+              ajax: {
+                 type: "POST",
+                    url: base_url+"cdr/tooltip",
+                    data: 'id='+ this.id,
+                    success: function(html){
+                            this.set('content.text', html);
+                        }
+              }
+           },
+           style: {
+              classes: 'ui-tooltip-blue ui-tooltip-shadow'
+           },
+           hide: {
+              fixed: true,
+              event: 'unfocus'
+              //event: false,
+              //inactive: 3000
+           },
+           position: {
+              at: 'bottom center', // at the bottom right of...
+              my: 'top center'
+           },
+       });
+    });
+</script>

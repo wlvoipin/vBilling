@@ -45,10 +45,25 @@ window.location = '../../home/';
         <table cellspacing="3" cellpadding="2" border="0" width="95%" class="search_col">
                 
                 <thead>
-                    <tr class="main_text">
-                        <td align="right" colspan="5"><a href="<?php echo base_url();?>customers/new_acl_node/<?php echo $customer_id;?>">NEW ACL NODE</a></td>
-                    </tr>
                     
+                    
+                    <?php if($this->session->userdata('user_type') == 'admin'){?>
+                        <tr class="main_text">
+                            <td align="right" colspan="5"><a href="<?php echo base_url();?>customers/new_acl_node/<?php echo $customer_id;?>">NEW ACL NODE</a></td>
+                        </tr>
+                    <?php 
+                        } else if($this->session->userdata('user_type') == 'sub_admin'){
+                                if(sub_admin_access_any_cell($this->session->userdata('user_id'), 'new_acl') == 1)
+                                {
+                    ?>
+                                    <tr class="main_text">
+                                        <td align="right" colspan="5"><a href="<?php echo base_url();?>customers/new_acl_node/<?php echo $customer_id;?>">NEW ACL NODE</a></td>
+                                    </tr>
+                    <?php 
+                                }
+                            }       
+                    ?>
+                           
                     <tr class="bottom_link">
                         <td width="20%" align="center">CIDR</td>
                         <td width="20%" align="center">ACL List</td>
@@ -63,18 +78,83 @@ window.location = '../../home/';
                                 <?php foreach($acl_nodes->result() as $row){ ?>
                                 
                                     <tr class="main_text">
-                                        <td align="center"><a href="<?php echo base_url();?>customers/edit_acl_node/<?php echo $row->id; ?>/<?php echo $customer_id;?>"><?php echo $row->cidr; ?></a></td>
+                                        
+                                        
+                                        <?php if($this->session->userdata('user_type') == 'admin'){?>
+                                            <td align="center"><a href="<?php echo base_url();?>customers/edit_acl_node/<?php echo $row->id; ?>/<?php echo $customer_id;?>"><?php echo $row->cidr; ?></a></td>
+                                        <?php 
+                                            } else if($this->session->userdata('user_type') == 'sub_admin'){
+                                                    if(sub_admin_access_any_cell($this->session->userdata('user_id'), 'edit_acl') == 1)
+                                                    {
+                                        ?>
+                                                        <td align="center"><a href="<?php echo base_url();?>customers/edit_acl_node/<?php echo $row->id; ?>/<?php echo $customer_id;?>"><?php echo $row->cidr; ?></a></td>
+                                        <?php 
+                                                    }
+                                                    else
+                                                    {
+                                        ?>
+                                                        <td align="center"><?php echo $row->cidr; ?></td>
+                                        <?php
+                                                    }
+                                                }
+                                        ?>
+                                        
                                         <td align="center"><?php echo acl_list_any_cell($row->list_id, 'acl_name'); ?></td>
                                         <td align="center"><?php echo acl_list_any_cell($row->list_id, 'default_policy'); ?></td>
-                                        <td align="center">
-                                            <select class="node_deny_allow" id="<?php echo $row->id; ?>">
-                                                <option value="allow" <?php if($row->type == 'allow'){ echo "selected"; }?>>Allowed</option>
-                                                <option value="deny" <?php if($row->type == 'deny'){ echo "selected"; }?>>Denied</option>
-                                            </select>
-                                        </td>
-                                        <td align="center">
-                                            <a href="#" id="<?php echo $row->id;?>" class="delete_node"><img src="<?php echo base_url();?>assets/images/button_cancel.png" style="width:16px;border:none;cursor:pointer;" /></a>
-                                        </td>
+                                        
+                                        
+                                        <?php if($this->session->userdata('user_type') == 'admin'){?>
+                                            <td align="center">
+                                                <select class="node_deny_allow" id="<?php echo $row->id; ?>">
+                                                    <option value="allow" <?php if($row->type == 'allow'){ echo "selected"; }?>>Allowed</option>
+                                                    <option value="deny" <?php if($row->type == 'deny'){ echo "selected"; }?>>Denied</option>
+                                                </select>
+                                            </td>
+                                        <?php 
+                                            } else if($this->session->userdata('user_type') == 'sub_admin'){
+                                                    if(sub_admin_access_any_cell($this->session->userdata('user_id'), 'change_type_acl') == 1)
+                                                    {
+                                        ?>
+                                                        <td align="center">
+                                                            <select class="node_deny_allow" id="<?php echo $row->id; ?>">
+                                                                <option value="allow" <?php if($row->type == 'allow'){ echo "selected"; }?>>Allowed</option>
+                                                                <option value="deny" <?php if($row->type == 'deny'){ echo "selected"; }?>>Denied</option>
+                                                            </select>
+                                                        </td>
+                                        <?php 
+                                                    }
+                                                    else
+                                                    {
+                                        ?>
+                                                        <td align="center"><?php if($row->type == 'allow'){ echo "Allowed"; } else { echo "Denied";}?></td>
+                                        <?php
+                                                    }
+                                                }
+                                        ?>
+                                        
+                                        
+                                        <?php if($this->session->userdata('user_type') == 'admin'){?>
+                                            <td align="center">
+                                                <a href="#" id="<?php echo $row->id;?>" class="delete_node"><img src="<?php echo base_url();?>assets/images/button_cancel.png" style="width:16px;border:none;cursor:pointer;" /></a>
+                                            </td>
+                                        <?php 
+                                            } else if($this->session->userdata('user_type') == 'sub_admin'){
+                                                    if(sub_admin_access_any_cell($this->session->userdata('user_id'), 'delete_acl') == 1)
+                                                    {
+                                        ?>
+                                                        <td align="center">
+                                                            <a href="#" id="<?php echo $row->id;?>" class="delete_node"><img src="<?php echo base_url();?>assets/images/button_cancel.png" style="width:16px;border:none;cursor:pointer;" /></a>
+                                                        </td>
+                                        <?php 
+                                                    }
+                                                    else
+                                                    {
+                                        ?>
+                                                        <td align="center">---</td>
+                                        <?php
+                                                    }
+                                                }
+                                        ?>
                                         
                                     </tr>
                                 <?php } ?>

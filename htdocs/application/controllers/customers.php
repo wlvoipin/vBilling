@@ -49,6 +49,14 @@ class Customers extends CI_Controller {
 			{
 				redirect ('customer/');
 			}
+            
+            if($this->session->userdata('user_type') == 'sub_admin')
+			{
+				if(sub_admin_access_any_cell($this->session->userdata('user_id'), 'view_customers') == 0)
+                {
+                    redirect ('home/');
+                }
+			}
 		}
 	}
 
@@ -58,6 +66,7 @@ class Customers extends CI_Controller {
 		$filter_company         = '';
 		$filter_first_name      = '';
 		$filter_type            = '';
+        $filter_sort            = '';
 		$search                 = '';
 
 		$msg_records_found = "Records Found";
@@ -68,6 +77,7 @@ class Customers extends CI_Controller {
 			$filter_company             = $this->input->get('filter_company');
 			$filter_first_name          = $this->input->get('filter_first_name');
 			$filter_type                = $this->input->get('filter_type');
+            $filter_sort                = $this->input->get('filter_sort');
 			$search                     = $this->input->get('searchFilter');
 			$msg_records_found          = "Records Found Based On Your Search Criteria";
 		}
@@ -76,11 +86,12 @@ class Customers extends CI_Controller {
 		$data['filter_company']         = $filter_company;
 		$data['filter_first_name']      = $filter_first_name;
 		$data['filter_type']            = $filter_type;
+        $data['filter_sort']            = $filter_sort;
 
 		//for pagging set information
 		$this->load->library('pagination');
 		$config['per_page'] = '20';
-		$config['base_url'] = base_url().'customers/?searchFilter='.$search.'&filter_account_num='.$filter_account_num.'&filter_company='.$filter_company.'&filter_first_name='.$filter_first_name.'&filter_type='.$filter_type.'';
+		$config['base_url'] = base_url().'customers/?searchFilter='.$search.'&filter_account_num='.$filter_account_num.'&filter_company='.$filter_company.'&filter_first_name='.$filter_first_name.'&filter_type='.$filter_type.'&filter_sort='.$filter_sort.'';
 		$config['page_query_string'] = TRUE;
 
 		$config['num_links'] = 2;
@@ -121,7 +132,7 @@ class Customers extends CI_Controller {
 		$this->pagination->initialize($config);
 		$data['msg_records_found'] = "".$data['count']."&nbsp;".$msg_records_found."";
 
-		$data['customers']      =   $this->customer_model->get_all_customers($config['per_page'], $config['uri_segment'], $filter_account_num, $filter_company, $filter_first_name, $filter_type);
+		$data['customers']      =   $this->customer_model->get_all_customers($config['per_page'], $config['uri_segment'], $filter_account_num, $filter_company, $filter_first_name, $filter_type, $filter_sort);
 		$data['page_name']		=	'view_customers';
 		$data['selected']		=	'customers';
 		$data['sub_selected']   =   'list_customer';
@@ -134,7 +145,15 @@ class Customers extends CI_Controller {
 
 	function new_customer()
 	{
-		$data['page_name']		=	'new_customers';
+		if($this->session->userdata('user_type') == 'sub_admin')
+        {
+            if(sub_admin_access_any_cell($this->session->userdata('user_id'), 'new_customers') == 0)
+            {
+                redirect ('home/');
+            }
+        }
+        
+        $data['page_name']		=	'new_customers';
 		$data['selected']		=	'customers';
 		$data['sub_selected']   =   'new_customer';
 		$data['page_title']		=	'NEW CUSTOMER';
@@ -554,7 +573,15 @@ class Customers extends CI_Controller {
 	//customer rate view
 	function customer_rates($customer_id = '')
 	{
-		$filter_display_results = 'min';
+		if($this->session->userdata('user_type') == 'sub_admin')
+        {
+            if(sub_admin_access_any_cell($this->session->userdata('user_id'), 'view_customers_rates') == 0)
+            {
+                redirect ('customers/edit_customer/'.$customer_id.'');
+            }
+        }
+        
+        $filter_display_results = 'min';
 
 		//for filter & search
 		$filter_start_date   = '';
@@ -703,7 +730,15 @@ $this->customer_model->enable_disable_customer_rate($data);
 
 function customer_acl_nodes($customer_id = '')
 {
-	$data['acl_nodes']      =   $this->customer_model->customer_acl_nodes($customer_id);
+	if($this->session->userdata('user_type') == 'sub_admin')
+    {
+        if(sub_admin_access_any_cell($this->session->userdata('user_id'), 'view_customers_acl') == 0)
+        {
+            redirect ('customers/edit_customer/'.$customer_id.'');
+        }
+    }
+    
+    $data['acl_nodes']      =   $this->customer_model->customer_acl_nodes($customer_id);
 	$data['customer_id']    =   $customer_id;
 
 	$data['page_name']		=	'customer_acl_nodes';
@@ -747,7 +782,15 @@ function insert_new_acl_node()
 
 function edit_acl_node($node_id = '', $customer_id = '')
 {
-	$data['customer_id']    =   $customer_id;
+	if($this->session->userdata('user_type') == 'sub_admin')
+    {
+        if(sub_admin_access_any_cell($this->session->userdata('user_id'), 'edit_acl') == 0)
+        {
+            redirect ('customers/edit_customer/'.$customer_id.'');
+        }
+    }
+    
+    $data['customer_id']    =   $customer_id;
 	$data['acl_node_id']    =   $node_id;
 	$data['acl_node']       =   $this->customer_model->customer_acl_nodes_single($node_id, $customer_id);
 
@@ -812,7 +855,15 @@ function change_acl_node_type()
 
 function sip_access($customer_id)
 {
-	$data['sip_access']     =   $this->customer_model->customer_sip_access($customer_id);
+	if($this->session->userdata('user_type') == 'sub_admin')
+    {
+        if(sub_admin_access_any_cell($this->session->userdata('user_id'), 'view_customers_sip') == 0)
+        {
+            redirect ('customers/edit_customer/'.$customer_id.'');
+        }
+    }
+    
+    $data['sip_access']     =   $this->customer_model->customer_sip_access($customer_id);
 	$data['customer_id']    =   $customer_id;
 
 	$data['page_name']		=	'customer_sip_access';
@@ -827,7 +878,15 @@ function sip_access($customer_id)
 
 function new_sip_access($customer_id)
 {
-	$check = 0;
+	if($this->session->userdata('user_type') == 'sub_admin')
+    {
+        if(sub_admin_access_any_cell($this->session->userdata('user_id'), 'new_sip') == 0)
+        {
+            redirect ('customers/edit_customer/'.$customer_id.'');
+        }
+    }
+    
+    $check = 0;
 	do {
 		$username = rand(1,999).rand(1,999);
 		$check_username_existis = $this->customer_model->check_sip_username_existis($username);
@@ -857,6 +916,7 @@ function insert_new_sip_access()
 	$customer_id    =   $this->input->post('customer_id');
 	$username       =   $this->input->post('username');
 	$password       =   $this->input->post('password');
+    $cid       =   $this->input->post('cid');
 
 	$getdomain      =   $this->input->post('sip_ip');
 	$explode = explode('|', $getdomain);
@@ -864,7 +924,7 @@ function insert_new_sip_access()
 	$domain     = $explode[0];
 	$sofia_id   = $explode[1];
 
-	$this->customer_model->insert_new_sip_access($customer_id, $username, $password, $domain, $sofia_id);
+	$this->customer_model->insert_new_sip_access($customer_id, $username, $password, $domain, $sofia_id, $cid);
 }
 
 /*
@@ -931,7 +991,15 @@ function enable_disable_sip_access()
 // **************************** CDR FUNCTIONS ****************************//
 function customer_cdr($customer_id)
 {
-	$filter_display_results = 'min';
+	if($this->session->userdata('user_type') == 'sub_admin')
+    {
+        if(sub_admin_access_any_cell($this->session->userdata('user_id'), 'view_customers_cdr') == 0)
+        {
+            redirect ('customers/edit_customer/'.$customer_id.'');
+        }
+    }
+    
+    $filter_display_results = 'min';
 
 	//this is defualt start and end time  
 	$startTime = time() - 86400; //last 24hrs 
@@ -1058,7 +1126,15 @@ function customer_cdr($customer_id)
 //**************************** MANAGE BALANCE ************************************//
 function manage_balance($customer_id)
 {
-	$data['history']        =   $this->customer_model->customer_balance_history($customer_id);
+	if($this->session->userdata('user_type') == 'sub_admin')
+    {
+        if(sub_admin_access_any_cell($this->session->userdata('user_id'), 'view_customers_balance') == 0)
+        {
+            redirect ('customers/edit_customer/'.$customer_id.'');
+        }
+    }
+    
+    $data['history']        =   $this->customer_model->customer_balance_history($customer_id);
 	$data['customer_id']    =   $customer_id;
 
 	$data['page_name']		=	'customer_manage_balance';
@@ -1163,6 +1239,14 @@ function update_my_account()
 /*******************BILLING FUNCTION ***************************/
     function invoices($customer_id)
     {
+        if($this->session->userdata('user_type') == 'sub_admin')
+        {
+            if(sub_admin_access_any_cell($this->session->userdata('user_id'), 'view_customers_billing') == 0)
+            {
+                redirect ('customers/edit_customer/'.$customer_id.'');
+            }
+        }
+        
         $data['customer_id']    =   $customer_id;
         
         //for filter & search
