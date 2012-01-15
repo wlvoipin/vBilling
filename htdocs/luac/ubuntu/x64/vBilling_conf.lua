@@ -57,4 +57,3 @@ FreeSWITCH console log level for vBilling LUA output. NOTICE is nice, as it has 
 FREESWITCH_CONSOLE_LOG_LEVEL = "NOTICE"
 
 -- END of config options
-
