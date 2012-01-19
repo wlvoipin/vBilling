@@ -1828,7 +1828,7 @@ if [ -f /etc/debian_version ] ; then
 	mysql -u${VBILLING_DB_USER} -p${VBILLING_DB_PASSWORD} ${VBILLING_DB} < ${TEMPDIR}/vBilling_upgrade.sql
 else [ -f /etc/redhat-release ]
 	VBILLING_DB_PASSWORD=$(cat /var/www/html/application/config/constants.php | grep DEFAULT_DSN_PASSWORD | cut -d ',' -f 2 | cut -d \''' -f 2)
-	VBILLING_DB_PASSWORD=$(cat /var/www/html/application/config/constants.php | grep DEFAULT_DSN_LOGIN | cut -d ',' -f 2 | cut -d \''' -f 2)
+	VBILLING_DB_USER=$(cat /var/www/html/application/config/constants.php | grep DEFAULT_DSN_LOGIN | cut -d ',' -f 2 | cut -d \''' -f 2)
 	mysql -u${VBILLING_DB_USER} -p${VBILLING_DB_PASSWORD} ${VBILLING_DB} < ${TEMPDIR}/vBilling_upgrade.sql
 fi
 
