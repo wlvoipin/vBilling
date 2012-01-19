@@ -36,7 +36,14 @@ div.paging {
 <body>
 <div class="container">
   <div id="HeaderDiv">
-    <div id="logoDiv"><img src="<?php echo base_url();?>assets/images/logo.png" alt="Digital Linx" height="33" width="167"></div>
+    <div id="logoDiv">
+        <?php if(settings_any_cell('logo') != ''){ ?>
+            <img src="<?php echo base_url();?>media/images/<?php echo settings_any_cell('logo');?>" height="33" />
+        <?php } else { ?>
+            <img src="<?php echo base_url();?>assets/images/logo.png" alt="Digital Linx" height="33" width="167">
+        <?php } ?>
+    
+    </div>
     
     
     <div id="top-links">

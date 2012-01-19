@@ -321,22 +321,18 @@ class Customers extends CI_Controller {
 
 		if($has_user_access > 0) //user already has account 
 		{
-			$data['chng_username']  = $this->input->post('chng_username');
 			$data['username']       = $this->db->escape($this->input->post('username'));
 			$data['old_username']   = $this->db->escape($this->input->post('old_username'));
 
-			if($data['chng_username'] == 'Y') //if user want to change username
-			{
-				if($data['username'] != $data['old_username']) //if entered username not equal to previous username 
-				{
-					$check_username_availability = $this->manage_accounts_model->check_username_availability($this->input->post('username'));
-					if($check_username_availability->num_rows() > 0) //username already in use
-					{
-						$check_username_availability_count = 1;
-					}
-				}
-			}
-			$data['chng_password']  = $this->input->post('chng_password');
+			if($data['username'] != $data['old_username']) //if entered username not equal to previous username 
+            {
+                $check_username_availability = $this->manage_accounts_model->check_username_availability($this->input->post('username'));
+                if($check_username_availability->num_rows() > 0) //username already in use
+                {
+                    $check_username_availability_count = 1;
+                }
+            }
+			
 			$data['pass']           = $this->input->post('password');
 			$data['password']       = md5($this->input->post('password'));
 			$data['email_check']    = $this->input->post('email_check');
@@ -395,16 +391,13 @@ class Customers extends CI_Controller {
 					if($has_user_access > 0) //if user already has access 
 					{
 						$email_txt = '';
-						if($data['chng_username'] == 'Y') //if user want to change username
-						{
-							if($data['username'] != $data['old_username']) //if entered username not equal to previous username 
-							{
-								$this->customer_model->update_customer_username($data);
-								$email_txt .= '<b>Username:</b> '.$this->input->post('username').'<br/>';
-							}
-						}
+						if($data['username'] != $data['old_username']) //if entered username not equal to previous username 
+                        {
+                            $this->customer_model->update_customer_username($data);
+                            $email_txt .= '<b>Username:</b> '.$this->input->post('username').'<br/>';
+                        }
 
-						if($data['chng_password'] == 'Y') //if user want to change password
+						if($data['pass'] != '') //if user want to change password
 						{
 							$this->customer_model->update_customer_password($data);
 							$email_txt .= '<b>Password:</b> '.$data['pass'].'<br/>';
@@ -488,16 +481,13 @@ class Customers extends CI_Controller {
 				if($has_user_access > 0) //if user already has access 
 				{
 					$email_txt = '';
-					if($data['chng_username'] == 'Y') //if user want to change username
-					{
-						if($data['username'] != $data['old_username']) //if entered username not equal to previous username 
-						{
-							$this->customer_model->update_customer_username($data);
-							$email_txt .= '<b>Username:</b> '.$this->input->post('username').'<br/>';
-						}
-					}
+					if($data['username'] != $data['old_username']) //if entered username not equal to previous username 
+                    {
+                        $this->customer_model->update_customer_username($data);
+                        $email_txt .= '<b>Username:</b> '.$this->input->post('username').'<br/>';
+                    }
 
-					if($data['chng_password'] == 'Y') //if user want to change password
+					if($data['pass'] != '') //if user want to change password
 					{
 						$this->customer_model->update_customer_password($data);
 						$email_txt .= '<b>Password:</b> '.$data['pass'].'<br/>';
@@ -588,6 +578,7 @@ class Customers extends CI_Controller {
 		$filter_end_date     = '';
 		$filter_carriers     = '';
 		$filter_rate_type    = '';
+        $filter_sort         = '';
 		$search              = '';
 
 		$msg_records_found = "Records Found";
@@ -599,6 +590,7 @@ class Customers extends CI_Controller {
 			$filter_carriers        = $this->input->get('filter_carriers');
 			$filter_rate_type       = $this->input->get('filter_rate_type');
 			$filter_display_results = $this->input->get('filter_display_results');
+            $filter_sort            = $this->input->get('filter_sort');
 			$search                 = $this->input->get('searchFilter');
 			$msg_records_found      = "Records Found Based On Your Search Criteria";
 		}
@@ -628,11 +620,12 @@ class Customers extends CI_Controller {
 		$data['filter_carriers']            = $filter_carriers;
 		$data['filter_rate_type']           = $filter_rate_type;
 		$data['filter_display_results']     = $filter_display_results;
+        $data['filter_sort']                = $filter_sort;
 
 		//for pagging set information
 		$this->load->library('pagination');
 		$config['per_page'] = '20';
-		$config['base_url'] = base_url().'customers/customer_rates/'.$customer_id.'/?searchFilter='.$search.'&filter_start_date='.$filter_start_date.'&filter_end_date='.$filter_end_date.'&filter_carriers='.$filter_carriers.'&filter_rate_type='.$filter_rate_type.'&filter_display_results='.$filter_display_results.'';
+		$config['base_url'] = base_url().'customers/customer_rates/'.$customer_id.'/?searchFilter='.$search.'&filter_start_date='.$filter_start_date.'&filter_end_date='.$filter_end_date.'&filter_carriers='.$filter_carriers.'&filter_rate_type='.$filter_rate_type.'&filter_display_results='.$filter_display_results.'&filter_sort='.$filter_sort.'';
 		$config['page_query_string'] = TRUE;
 
 		$config['num_links'] = 6;
@@ -676,7 +669,7 @@ class Customers extends CI_Controller {
 		{
 			$customer_group_table   =   $this->groups_model->group_any_cell($customer_group_id, 'group_rate_table');
 			$data['count']          =   $this->customer_model->customer_rates_count($customer_group_table, $filter_start_date, $filter_end_date, $filter_carriers, $filter_rate_type);
-			$data['rates']          =   $this->customer_model->customer_rates($config['per_page'], $config['uri_segment'], $customer_group_table, $filter_start_date, $filter_end_date, $filter_carriers, $filter_rate_type);
+			$data['rates']          =   $this->customer_model->customer_rates($config['per_page'], $config['uri_segment'], $customer_group_table, $filter_start_date, $filter_end_date, $filter_carriers, $filter_rate_type, $filter_sort);
 		}
 		else
 		{
@@ -927,6 +920,27 @@ function insert_new_sip_access()
 	$this->customer_model->insert_new_sip_access($customer_id, $username, $password, $domain, $sofia_id, $cid);
 }
 
+function reset_sip_password()
+{
+    $password   =   rand(1,999).rand(1,999).rand(1,99);
+    $record_id  = $this->input->post('record_id');
+    
+    $sql = "SELECT * FROM directory WHERE id = '".$record_id."'";
+    $query = $this->db->query($sql);
+    $row = $query->row();
+    
+    $domain = $row->domain;
+    $username = $row->username;
+    
+    $new_password = $username.':'.$domain.':'.$password;
+	$new_password = md5($new_password);
+    
+    $sql2 = "UPDATE directory_vars SET var_value = '".$new_password."' WHERE directory_id = '".$record_id."' ";
+    $query2 = $this->db->query($sql2); 
+    
+    echo $password;
+}
+
 /*
 function edit_sip_access($id, $customer_id)
 {
@@ -1002,7 +1016,8 @@ function customer_cdr($customer_id)
     $filter_display_results = 'min';
 
 	//this is defualt start and end time  
-	$startTime = time() - 86400; //last 24hrs 
+	$startTime = date('Y-m-d');
+	$startTime = strtotime($startTime);
 	$endTime = time();
 
 	//for filter & search
@@ -1012,6 +1027,10 @@ function customer_cdr($customer_id)
 	$filter_caller_ip   = '';
 	$filter_gateways    = '';
 	$filter_call_type   = '';
+    $filter_quick       = '';
+    $duration_from      = '';
+    $duration_to        = '';
+    $filter_sort        = '';
 	$search             = '';
 
 	$msg_records_found = "Records Found";
@@ -1025,6 +1044,10 @@ function customer_cdr($customer_id)
 		$filter_gateways        = $this->input->get('filter_gateways');
 		$filter_call_type       = $this->input->get('filter_call_type');
 		$filter_display_results = $this->input->get('filter_display_results');
+        $filter_quick           = $this->input->get('filter_quick');
+        $duration_from          = $this->input->get('duration_from');
+        $duration_to            = $this->input->get('duration_to');
+        $filter_sort            = $this->input->get('filter_sort');
 		$search                 = $this->input->get('searchFilter');
 		$msg_records_found      = "Records Found Based On Your Search Criteria";
 	}
@@ -1070,11 +1093,15 @@ function customer_cdr($customer_id)
 	$data['filter_gateways']            = $filter_gateways;
 	$data['filter_call_type']           = $filter_call_type;
 	$data['filter_display_results']     = $filter_display_results;
+    $data['filter_quick']               = $filter_quick;
+    $data['duration_from']              = $duration_from;
+    $data['duration_to']                = $duration_to;
+    $data['filter_sort']                = $filter_sort;
 
 	//for pagging set information
 	$this->load->library('pagination');
 	$config['per_page'] = '20';
-	$config['base_url'] = base_url().'customers/customer_cdr/'.$customer_id.'/?searchFilter='.$search.'&filter_date_from='.$filter_date_from.'&filter_date_to='.$filter_date_to.'&filter_phonenum='.$filter_phonenum.'&filter_caller_ip='.$filter_caller_ip.'&filter_gateways='.$filter_gateways.'&filter_call_type='.$filter_call_type.'&filter_display_results='.$filter_display_results.' ';
+	$config['base_url'] = base_url().'customers/customer_cdr/'.$customer_id.'/?searchFilter='.$search.'&filter_date_from='.$filter_date_from.'&filter_date_to='.$filter_date_to.'&filter_phonenum='.$filter_phonenum.'&filter_caller_ip='.$filter_caller_ip.'&filter_gateways='.$filter_gateways.'&filter_call_type='.$filter_call_type.'&filter_display_results='.$filter_display_results.'&filter_quick='.$filter_quick.'&duration_from='.$duration_from.'&duration_to='.$duration_to.'&filter_sort='.$filter_sort.'';
 	$config['page_query_string'] = TRUE;
 
 	$config['num_links'] = 6;
@@ -1093,7 +1120,7 @@ function customer_cdr($customer_id)
 	$config['first_link'] = 'first';
 	$config['last_link'] = 'last';
 
-	$data['count'] = $this->customer_model->customer_cdr_count($customer_id, $filter_date_from, $filter_date_to, $filter_phonenum, $filter_caller_ip, $filter_gateways, $filter_call_type);
+	$data['count'] = $this->customer_model->customer_cdr_count($customer_id, $filter_date_from, $filter_date_to, $filter_phonenum, $filter_caller_ip, $filter_gateways, $filter_call_type, $duration_from, $duration_to);
 	$config['total_rows'] = $data['count'];
 
 	if(isset($_GET['per_page']))
@@ -1109,7 +1136,7 @@ function customer_cdr($customer_id)
 
 	$data['msg_records_found'] = "".$data['count']."&nbsp;".$msg_records_found."";
 
-	$data['cdr']            =   $this->customer_model->customer_cdr($config['per_page'],$config['uri_segment'], $customer_id, $filter_date_from, $filter_date_to, $filter_phonenum, $filter_caller_ip, $filter_gateways, $filter_call_type);
+	$data['cdr']            =   $this->customer_model->customer_cdr($config['per_page'],$config['uri_segment'], $customer_id, $filter_date_from, $filter_date_to, $filter_phonenum, $filter_caller_ip, $filter_gateways, $filter_call_type, $duration_from, $duration_to, $filter_sort);
 
 	$data['customer_id']    =   $customer_id;
 
@@ -1161,7 +1188,7 @@ function add_deduct_balance()
 
 	echo '<tr class="main_text"><td align="center">'.date('Y-m-d', $row->date).'</td>
 		<td align="center">'.$row->balance.'</td>
-		<td align="center">'.strtoupper($row->action).'</td></tr>';
+		<td align="center">'.strtoupper($row->action).'</td></tr><tr style="height:5px;"><td colspan="3" id="shadowDiv" style="height:5px;margin-top:0px;background-color:#fff"></td></tr>';
 }
 
 function my_account()
@@ -1178,24 +1205,20 @@ function my_account()
 
 function update_my_account()
 {
-	$data['chng_username']  = $this->input->post('chng_username');
 	$data['username']       = $this->db->escape($this->input->post('username'));
 	$data['old_username']   = $this->db->escape($this->input->post('old_username'));
 
 	$check_username_availability_count = 0;
 
-	if($data['chng_username'] == 'Y') //if user want to change username
-	{
-		if($data['username'] != $data['old_username']) //if entered username not equal to previous username 
-		{
-			$check_username_availability = $this->manage_accounts_model->check_username_availability($this->input->post('username'));
-			if($check_username_availability->num_rows() > 0) //username already in use
-			{
-				$check_username_availability_count = 1;
-			}
-		}
-	}
-	$data['chng_password']  = $this->input->post('chng_password');
+	if($data['username'] != $data['old_username']) //if entered username not equal to previous username 
+    {
+        $check_username_availability = $this->manage_accounts_model->check_username_availability($this->input->post('username'));
+        if($check_username_availability->num_rows() > 0) //username already in use
+        {
+            $check_username_availability_count = 1;
+        }
+    }
+	
 	$data['pass']           = $this->input->post('password');
 	$data['password']       = md5($this->input->post('password'));
 
@@ -1205,30 +1228,24 @@ function update_my_account()
 	}
 	else
 	{
-		if($data['chng_username'] == 'Y') //if user want to change username
-		{
-			if($data['username'] != $data['old_username']) //if entered username not equal to previous username 
-			{
-				$this->customer_model->update_user_username($data);
-			}
-		}
+		if($data['username'] != $data['old_username']) //if entered username not equal to previous username 
+        {
+            $this->customer_model->update_user_username($data);
+        }
 
-		if($data['chng_password'] == 'Y') //if user want to change password
+		if($data['pass'] != '') //if user want to change password
 		{
 			$this->customer_model->update_user_password($data);
 		}
 
-		if($data['chng_username'] == 'Y') //if user want to change username
-		{
-			if($data['username'] != $data['old_username']) //if entered username not equal to previous username 
-			{
-				//update session variable 
-				$data = array(
-					'username' => $this->input->post('username')
-					);
-				$this->session->set_userdata($data);
-			}
-		}
+		if($data['username'] != $data['old_username']) //if entered username not equal to previous username 
+        {
+            //update session variable 
+            $data = array(
+                'username' => $this->input->post('username')
+                );
+            $this->session->set_userdata($data);
+        }
 
 
 
@@ -1254,6 +1271,7 @@ function update_my_account()
         $filter_date_to         = '';
         $filter_customers       = $customer_id;
         $filter_status          = '';
+        $filter_sort            = '';
         $search                 = '';
 
         $msg_records_found = "Records Found";
@@ -1263,6 +1281,7 @@ function update_my_account()
             $filter_date_from       = $this->input->get('filter_date_from');
             $filter_date_to         = $this->input->get('filter_date_to');
             $filter_status          = $this->input->get('filter_status');
+            $filter_sort            = $this->input->get('filter_sort');
             $search                 = $this->input->get('searchFilter');
             $msg_records_found      = "Records Found Based On Your Search Criteria";
         }
@@ -1286,11 +1305,12 @@ function update_my_account()
         $data['filter_date_from']           = $filter_date_from;
         $data['filter_date_to']             = $filter_date_to;
         $data['filter_status']              = $filter_status;
+        $data['filter_sort']                = $filter_sort;
         
         //for pagging set information
         $this->load->library('pagination');
         $config['per_page'] = '20';
-        $config['base_url'] = base_url().'customers/invoices/'.$customer_id.'/?searchFilter='.$search.'&filter_date_from='.$filter_date_from.'&filter_date_to='.$filter_date_to.'&filter_status='.$filter_status.'';
+        $config['base_url'] = base_url().'customers/invoices/'.$customer_id.'/?searchFilter='.$search.'&filter_date_from='.$filter_date_from.'&filter_date_to='.$filter_date_to.'&filter_status='.$filter_status.'&filter_sort='.$filter_sort.'';
         $config['page_query_string'] = TRUE;
 
         $config['num_links'] = 6;
@@ -1332,7 +1352,7 @@ function update_my_account()
 
         $data['msg_records_found'] = "".$data['count']."&nbsp;".$msg_records_found."";
 
-        $data['invoices']       =   $this->billing_model->get_invoices($config['per_page'],$config['uri_segment'],$filter_date_from, $filter_date_to, $filter_customers, $filter_billing_type = '', $filter_status);
+        $data['invoices']       =   $this->billing_model->get_invoices($config['per_page'],$config['uri_segment'],$filter_date_from, $filter_date_to, $filter_customers, $filter_billing_type = '', $filter_status, $filter_sort);
         
         $data['page_name']		=	'customer_invoices';
         $data['selected']		=	'billing';

@@ -67,9 +67,15 @@ a{
 	padding:0px;
 }
 #subMenu ul li{
-	float:left;
+	/*float:left;
 	list-style:none;
 	padding:6px 10px;
+    */
+    float: left;
+    list-style: none outside none;
+    margin: 0 5px;
+    padding: 0 0 8px;
+    position: relative;
 }
 #menuDiv ul li:hover{
 	background-color:#C24140;
@@ -78,12 +84,30 @@ a{
 	color:#fff;
 }
 #subMenu ul li a{
-	color:#666;
+	/*color:#666;
 	text-decoration:none;
-	font-size:12px;
+	font-size:12px;*/
+    border-radius: 1.6em 1.6em 1.6em 1.6em;
+    color: #E7E5E5;
+    display: block;
+    float: left;
+    font: bold 0.8em/1.5em Arial,Helvetica,sans-serif;
+    margin: 0;
+    padding: 5px 10px 5px 5px;
+    text-decoration: none;
+    color:#999;
 }
 #subMenu ul li a.sub_selected{
-	font-weight:bold;text-decoration:underline;
+	/*font-weight:bold;text-decoration:underline;*/
+    background: #666 url(../images/gradient.png) repeat-x 0 -40px;
+	color: #444;
+	border-top: solid 1px #f8f8f8;
+
+	-webkit-box-shadow: 0 1px 1px rgba(0,0,0, .2);
+	-moz-box-shadow: 0 1px 1px rgba(0,0,0, .2);
+	box-shadow: 0 1px 1px rgba(0,0,0, .2);
+
+	text-shadow: 0 1px 0 rgba(255,255,255, 1);
 }
 #top-links{
 	float:right;

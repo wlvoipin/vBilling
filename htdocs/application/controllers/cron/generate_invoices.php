@@ -405,19 +405,18 @@ class Generate_Invoices extends CI_Controller {
 
 					<tr>
 					<td height="30px" colspan="2">&nbsp;</td>
-					</tr>
+					</tr>';
+                    
+                    if(settings_any_cell('invoice_terms') != '')
+                    {
+                        $tbl .='<tr>
+                        <td style="text-align: justify; font-style: italic; color: rgb(136, 136, 136); padding: 55px;" colspan="2">
+                        '.settings_any_cell('invoice_terms').'
+                        </td>
+                        </tr>';
+                    }
 
-					<tr>
-					<td style="text-align: justify; font-style: italic; color: rgb(136, 136, 136); padding: 55px;" colspan="2">
-					Please contact us if you have any concerns regarding this invoice.<br/><br/>
-
-					Thanks,<br/>
-					DigitalLinx.com
-					info@digitallinx.com
-					</td>
-					</tr>
-
-					</tbody></table>';
+					$tbl .='</tbody></table>';
 
 				$obj->writeHTML($tbl, true, false, false, false, '');
 

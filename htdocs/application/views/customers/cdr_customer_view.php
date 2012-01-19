@@ -60,6 +60,18 @@ window.location = '../../home/';
                     <td width="11%">
                         Date To
                     </td>
+                    
+                    <td width="8%">
+                        Quick Filter
+                    </td>
+                    
+                    <td width="8%">
+                        Duration From
+                    </td>
+
+                    <td width="8%">
+                        Duration To
+                    </td>
 
                     <td width="11%">
                         Phone Num
@@ -78,7 +90,11 @@ window.location = '../../home/';
                     </td>
                     
                     <td width="11%">
-                        Display Results In
+                        Results In
+                    </td>
+                    
+                    <td width="8%">
+                        Sort By
                     </td>
 
                     <td width="11%" rowspan="2">
@@ -92,8 +108,21 @@ window.location = '../../home/';
                 </tr>
             
                 <tr>
-                    <td><input type="text" name="filter_date_from" value="<?php echo $filter_date_from;?>" class="datepicker" readonly></td>
-                    <td><input type="text" name="filter_date_to" value="<?php echo $filter_date_to;?>" class="datepicker" readonly></td>
+                    <td><input type="text" name="filter_date_from" id="filter_date_from" value="<?php echo $filter_date_from;?>" class="datepicker" readonly></td>
+                    <td><input type="text" name="filter_date_to" id="filter_date_to" value="<?php echo $filter_date_to;?>" class="datepicker" readonly></td>
+                    
+                    <td>
+                        <select name="filter_quick" id="filter_quick">
+                            <option value="">Select</option>
+                            <option value="today" <?php if($filter_quick == 'today'){ echo "selected";}?>>Today</option>
+                            <option value="last_hour" <?php if($filter_quick == 'last_hour'){ echo "selected";}?>>Last Hour</option>
+                            <option value="last_24_hour" <?php if($filter_quick == 'last_24_hour'){ echo "selected";}?>>Last 24 Hour</option>
+                        </select>
+                    </td>
+                    
+                    <td><input type="text" name="duration_from" value="<?php echo $duration_from;?>" class="numeric" maxlength="4"></td>
+                    <td><input type="text" name="duration_to" value="<?php echo $duration_to;?>" class="numeric" maxlength="4"></td>
+                    
                     <td><input type="text" name="filter_phonenum" value="<?php echo $filter_phonenum;?>" class="numeric"></td>
                     <td><input type="text" name="filter_caller_ip" value="<?php echo $filter_caller_ip;?>" class="ip"></td>
                     
@@ -149,6 +178,39 @@ window.location = '../../home/';
                         </select>
                     </td>
                     
+                    <td>
+                        <select name="filter_sort" id="filter_sort" style="width:124px;">
+                            <option value="">Select</option>
+                            
+                            <option value="date_asc" <?php if($filter_sort == 'date_asc'){ echo "selected";}?>>Date - ASC</option>
+                            <option value="date_dec" <?php if($filter_sort == 'date_dec'){ echo "selected";}?>>Date - DESC</option>
+                            
+                            <option value="billduration_asc" <?php if($filter_sort == 'billduration_asc'){ echo "selected";}?>>Bill Duration - ASC</option>
+                            <option value="billduration_dec" <?php if($filter_sort == 'billduration_dec'){ echo "selected";}?>>Bill Duration - DESC</option>
+                            
+                            <option value="failedgateways_asc" <?php if($filter_sort == 'failedgateways_asc'){ echo "selected";}?>>Failed Gateways - ASC</option>
+                            <option value="failedgateways_dec" <?php if($filter_sort == 'failedgateways_dec'){ echo "selected";}?>>Failed Gateways - DESC</option>
+                            
+                            <option value="sellrate_asc" <?php if($filter_sort == 'sellrate_asc'){ echo "selected";}?>>Sell Rate - ASC</option>
+                            <option value="sellrate_dec" <?php if($filter_sort == 'sellrate_dec'){ echo "selected";}?>>Sell rate - DESC</option>
+                            
+                            <option value="costrate_asc" <?php if($filter_sort == 'costrate_asc'){ echo "selected";}?>>Cost Rate - ASC</option>
+                            <option value="costrate_dec" <?php if($filter_sort == 'costrate_dec'){ echo "selected";}?>>Cost rate - DESC</option>
+                            
+                            <option value="sellinit_asc" <?php if($filter_sort == 'sellinit_asc'){ echo "selected";}?>>Sell Init Block - ASC</option>
+                            <option value="sellinit_dec" <?php if($filter_sort == 'sellinit_dec'){ echo "selected";}?>>Sell Init Block - DESC</option>
+                            
+                            <option value="buyinit_asc" <?php if($filter_sort == 'buyinit_asc'){ echo "selected";}?>>Buy Init Block - ASC</option>
+                            <option value="buyinit_dec" <?php if($filter_sort == 'buyinit_dec'){ echo "selected";}?>>Buy Init Block - DESC</option>
+                            
+                            <option value="totcharges_asc" <?php if($filter_sort == 'totcharges_asc'){ echo "selected";}?>>Total Charges - ASC</option>
+                            <option value="totcharges_dec" <?php if($filter_sort == 'totcharges_dec'){ echo "selected";}?>>Total Charges - DESC</option>
+                            
+                            <option value="totcost_asc" <?php if($filter_sort == 'totcost_asc'){ echo "selected";}?>>Total Cost - ASC</option>
+                            <option value="totcost_dec" <?php if($filter_sort == 'totcost_dec'){ echo "selected";}?>>Total Cost - DESC</option>
+                        </select>
+                    </td>
+                    
                 </tr>
             
         </table>
@@ -181,6 +243,7 @@ window.location = '../../home/';
                         <td width="7%" align="center">Margin</td>
                         <td width="7%" align="center">Markup</td>
                     </tr>
+                    <tr><td colspan="16" id="shadowDiv" style="height:5px;margin-top:-1px"></td></tr>
                     
                     <?php if($cdr->num_rows() > 0) {?>
                         
@@ -235,6 +298,7 @@ window.location = '../../home/';
                                 <td align="center">&nbsp;</td>
                                 <td align="center">&nbsp;</td>
                             </tr>
+                            <tr style="height:5px;"><td colspan="16" id="shadowDiv" style="height:5px;margin-top:0px;background-color:#fff"></td></tr>
                         <?php endforeach;?>
                            
                     <?php } else { echo '<tr><td align="center" style="color:red;" colspan="16">No Results Found</td></tr>'; } ?>
@@ -266,6 +330,20 @@ window.location = '../../home/';
             $('#filter_table input[type="text"]').val('');
             $('#filter_table select').val('');
             return false;
+        });
+        
+        $('#filter_quick').live('change', function(){
+            var val = $(this).val();
+            $.ajax({
+                type: "POST",
+                url: base_url+"cdr/get_calculated_date_time",
+                data: 'val='+val,
+                success: function(html){
+                    var split = html.split('|');
+                    $('#filter_date_from').val(split[0]);
+                    $('#filter_date_to').val(split[1]);
+                }
+            });
         });
     </script>
     

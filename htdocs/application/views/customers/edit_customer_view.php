@@ -179,19 +179,12 @@ window.location = '../../home/';
                             <tbody>
                             
                             <tr>
-                                <td align="right">&nbsp;</td>
-                                <td align="left"><input type="checkbox" id="chng_username" value="Y" name="chng_username"/>&nbsp;Change Username</td>
-                            </tr>
-                            <tr>
                                 <td align="right" width="45%"><span class="required">*</span> Username:</td>
                                 <td align="left" width="55%"><input type="text" value="<?php echo $rowAccess->username;?>" name="username" id="username" class="textfield"></td>
                                 <input type="hidden" value="<?php echo $rowAccess->username;?>" name="old_username" id="old_username" class="textfield">
                             </tr>
                             
-                            <tr>
-                                <td align="right">&nbsp;</td>
-                                <td align="left"><input type="checkbox" id="chng_password" value="Y" name="chng_password"/>&nbsp;Change Password</td>
-                            </tr>
+                            
                             <tr>
                                 <td align="right"><span class="required">*</span> Password:</td>
                                 <td align="left"><input type="password" name="password" id="password" class="textfield"></td>
@@ -452,15 +445,12 @@ $('#addCust').submit(function(){
         }
         
         //access check
-        if($('#chng_username').is(':checked'))
+        if(username == '')
         {
-            if(username == '')
-            {
-                required_error = 1;
-            }
+            required_error = 1;
         }
         
-        if($('#chng_password').is(':checked'))
+        if(password != '' || confirmpassword != '')
         {
             if(password == '' || confirmpassword == '')
             {

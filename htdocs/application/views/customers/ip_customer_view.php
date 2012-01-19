@@ -42,13 +42,13 @@ window.location = '../../home/';
               
 <tr>
     <td align="center" height="20" colspan="3">
-        <table cellspacing="3" cellpadding="2" border="0" width="95%" class="search_col">
+        <table cellspacing="0" cellpadding="0" border="0" width="95%" class="search_col">
                 
                 <thead>
                     
                     
                     <?php if($this->session->userdata('user_type') == 'admin'){?>
-                        <tr class="main_text">
+                        <tr class="main_text" style="background:none;">
                             <td align="right" colspan="5"><a href="<?php echo base_url();?>customers/new_acl_node/<?php echo $customer_id;?>">NEW ACL NODE</a></td>
                         </tr>
                     <?php 
@@ -56,7 +56,7 @@ window.location = '../../home/';
                                 if(sub_admin_access_any_cell($this->session->userdata('user_id'), 'new_acl') == 1)
                                 {
                     ?>
-                                    <tr class="main_text">
+                                    <tr class="main_text" style="background:none;">
                                         <td align="right" colspan="5"><a href="<?php echo base_url();?>customers/new_acl_node/<?php echo $customer_id;?>">NEW ACL NODE</a></td>
                                     </tr>
                     <?php 
@@ -71,6 +71,7 @@ window.location = '../../home/';
                         <td width="20%" align="center">TYPE</td>
                         <td width="20%" align="center">Options</td>
                     </tr>
+                     <tr><td colspan="5" id="shadowDiv" style="height:5px;margin-top:-1px"></td></tr>
                 </thead>
                 
                 <tbody id="dynamic">
@@ -157,6 +158,7 @@ window.location = '../../home/';
                                         ?>
                                         
                                     </tr>
+                                    <tr style="height:5px;"><td colspan="5" id="shadowDiv" style="height:5px;margin-top:0px;background-color:#fff"></td></tr>
                                 <?php } ?>
                             <?php } else { ?>
                                 

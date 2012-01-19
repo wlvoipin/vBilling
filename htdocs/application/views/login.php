@@ -27,7 +27,14 @@
 <div class="login-style">
 	<div class="login-header">
 		<div class="logo clear">
-			<img src="<?php echo base_url();?>assets/images/logo.png" alt="" class="picture">
+			
+            
+            <?php if(settings_any_cell('logo') != ''){ ?>
+                <img src="<?php echo base_url();?>media/images/<?php echo settings_any_cell('logo');?>" class="picture" />
+            <?php } else { ?>
+                <img src="<?php echo base_url();?>assets/images/logo.png" alt="" class="picture">
+            <?php } ?>
+            
 		</div>
 	</div>
     <div class="error" id="err_div" <?php if($this->session->flashdata('error_message') == '') { echo 'style="display:none;"'; }?>><?php echo $this->session->flashdata('error_message');?> </div>

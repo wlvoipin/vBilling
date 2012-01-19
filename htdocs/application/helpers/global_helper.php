@@ -374,4 +374,15 @@ function last_invoice_generated_date($customer_id)
     
     return $last_date;
 }
+
+function settings_any_cell($col_name)
+{
+	$CI = & get_instance();
+
+	$sql = "SELECT value FROM settings WHERE setting_name = '".$col_name."' ";
+	$query = $CI->db->query($sql);
+	$row = $query->row();
+
+	return $row->value;
+}
 ?>

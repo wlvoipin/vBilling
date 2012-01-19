@@ -42,13 +42,13 @@ window.location = '../../home/';
               
 <tr>
     <td align="center" height="20" colspan="3">
-        <table cellspacing="3" cellpadding="2" border="0" width="95%" class="search_col">
+        <table cellspacing="0" cellpadding="0" border="0" width="95%" class="search_col">
                 
                 <thead>
                     
                     
                     <?php if($this->session->userdata('user_type') == 'admin'){?>
-                        <tr class="main_text">
+                        <tr class="main_text" style="background:none;">
                             <td align="right" colspan="7"><a href="<?php echo base_url();?>customers/new_sip_access/<?php echo $customer_id;?>">NEW SIP ACCESS</a></td>
                         </tr>
                     <?php 
@@ -56,7 +56,7 @@ window.location = '../../home/';
                                 if(sub_admin_access_any_cell($this->session->userdata('user_id'), 'new_sip') == 1)
                                 {
                     ?>
-                                    <tr class="main_text">
+                                    <tr class="main_text" style="background:none;">
                                         <td align="right" colspan="7"><a href="<?php echo base_url();?>customers/new_sip_access/<?php echo $customer_id;?>">NEW SIP ACCESS</a></td>
                                     </tr>
                     <?php 
@@ -74,6 +74,7 @@ window.location = '../../home/';
                         <td width="20%" align="center">Delete</td>
                         <td width="20%" align="center">Enable/Disable</td>
                     </tr>
+                    <tr><td colspan="7" id="shadowDiv" style="height:5px;margin-top:-1px"></td></tr>
                 </thead>
                 
                 <tbody id="dynamic">
@@ -82,7 +83,7 @@ window.location = '../../home/';
                                 
                                     <tr class="main_text">
                                         <td align="center"><?php echo $row->username; ?></td>
-                                        <td align="center">******</td>
+                                        <td align="center" id="reset_pass"><a class="reset_pass" href="#" id="<?php echo $row->id; ?>">Reset Password</a></td>
                                         <td align="center"><?php echo $row->cid; ?></td>
                                         <td align="center"><?php echo $row->domain; ?></td>
                                         <td align="center"><?php echo sofia_profile_name($row->domain_sofia_id); ?></td>
@@ -134,6 +135,7 @@ window.location = '../../home/';
                                         ?>
                                         
                                     </tr>
+                                    <tr style="height:5px;"><td colspan="7" id="shadowDiv" style="height:5px;margin-top:0px;background-color:#fff"></td></tr>
                                 <?php } ?>
                             <?php } else { ?>
                                 
@@ -288,6 +290,27 @@ window.location = '../../home/';
                     }
                 });
             }
+        });
+        
+        $('.reset_pass').live('click', function(){
+            var curr = $(this);
+            var id = $(this).attr('id');
+            var data  = 'record_id='+id;
+            
+            $.ajax({
+                type: "POST",
+                url: base_url+"customers/reset_sip_password",
+                data: data,
+                success: function(html){
+                        $('.error').hide();
+                        $('.success').html('Password has been reset successfully. New password is ('+html+')');
+                        $('.success').fadeOut();
+                        $('.success').fadeIn();
+                        curr.parent().html(html);
+                        document.getElementById('success_div').scrollIntoView();
+                }
+            });
+           return false;
         });
         
     </script>

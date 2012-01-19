@@ -131,6 +131,7 @@
                         <td width="7%" align="center">View Invoice</td>
                         <td width="7%" align="center">View CDR</td>
                     </tr>
+                    <tr><td colspan="12" id="shadowDiv" style="height:5px;margin-top:-1px"></td></tr>
                     
                     <?php if($invoices->num_rows() > 0) {?>
                         
@@ -195,9 +196,10 @@
                                 <td align="center" height="30"><a href="<?php echo base_url(); ?>customer/download_cdr/<?php echo $row->invoice_id;?>"><img src="<?php echo base_url();?>assets/images/export-pdf.gif"/> View CDR</a></td>
                                 
                             </tr>
+                            <tr style="height:5px;"><td colspan="12" id="shadowDiv" style="height:5px;margin-top:0px;background-color:#fff"></td></tr>
                         <?php endforeach;?>
                            
-                    <?php } else { echo '<tr><td align="center" style="color:red;" colspan="11">No Results Found</td></tr>'; } ?>
+                    <?php } else { echo '<tr><td align="center" style="color:red;" colspan="12">No Results Found</td></tr>'; } ?>
                     </tbody>
                 </table>
             </td>

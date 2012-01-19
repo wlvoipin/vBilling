@@ -78,25 +78,21 @@ class Customer extends CI_Controller {
 
 	function update_my_account()
 	{
-		$data['chng_username']  = $this->input->post('chng_username');
 		$data['username']       = $this->db->escape($this->input->post('username'));
 		$data['old_username']   = $this->db->escape($this->input->post('old_username'));
 
 		$check_username_availability_count = 0;
 
-		if($data['chng_username'] == 'Y') //if user want to change username
-		{
-			if($data['username'] != $data['old_username']) //if entered username not equal to previous username 
-			{
-				$check_username_availability = $this->manage_accounts_model->check_username_availability($this->input->post('username'));
-				if($check_username_availability->num_rows() > 0) //username already in use
-				{
-					$check_username_availability_count = 1;
-				}
-			}
-		}
-		$data['chng_password']  = $this->input->post('chng_password');
-		$data['pass']           = $this->input->post('password');
+		if($data['username'] != $data['old_username']) //if entered username not equal to previous username 
+        {
+            $check_username_availability = $this->manage_accounts_model->check_username_availability($this->input->post('username'));
+            if($check_username_availability->num_rows() > 0) //username already in use
+            {
+                $check_username_availability_count = 1;
+            }
+        }
+		
+        $data['pass']           = $this->input->post('password');
 		$data['password']       = md5($this->input->post('password'));
 
 		if($check_username_availability_count == 1)
@@ -105,23 +101,24 @@ class Customer extends CI_Controller {
 		}
 		else
 		{
-			if($data['chng_username'] == 'Y') //if user want to change username
-			{
-				if($data['username'] != $data['old_username']) //if entered username not equal to previous username 
-				{
-					$this->customer_model->update_user_username($data);
-					//update session variable 
-					$data = array(
-						'username' => $this->input->post('username')
-						);
-					$this->session->set_userdata($data);
-				}
-			}
+			if($data['username'] != $data['old_username']) //if entered username not equal to previous username 
+            {
+                $this->customer_model->update_user_username($data);
+            }
 
-			if($data['chng_password'] == 'Y') //if user want to change password
+			if($data['pass'] != '') //if user want to change password
 			{
 				$this->customer_model->update_user_password($data);
 			}
+            
+            if($data['username'] != $data['old_username']) //if entered username not equal to previous username 
+            {
+                //update session variable 
+                $data = array(
+                    'username' => $this->input->post('username')
+                    );
+                $this->session->set_userdata($data);
+            }
 
 			$this->session->set_flashdata('success','Information updated successfully');
 		}
@@ -496,6 +493,27 @@ function new_sip_access()
 	}
 }
 
+function reset_sip_password()
+{
+    $password   =   rand(1,999).rand(1,999).rand(1,99);
+    $record_id  = $this->input->post('record_id');
+    
+    $sql = "SELECT * FROM directory WHERE id = '".$record_id."'";
+    $query = $this->db->query($sql);
+    $row = $query->row();
+    
+    $domain = $row->domain;
+    $username = $row->username;
+    
+    $new_password = $username.':'.$domain.':'.$password;
+	$new_password = md5($new_password);
+    
+    $sql2 = "UPDATE directory_vars SET var_value = '".$new_password."' WHERE directory_id = '".$record_id."' ";
+    $query2 = $this->db->query($sql2); 
+    
+    echo $password;
+}
+
 function insert_new_sip_access()
 {
 	$customer_id    =   $this->input->post('customer_id');
@@ -575,7 +593,8 @@ function customer_cdr()
 	$filter_display_results = 'min';
 
 	//this is defualt start and end time  
-	$startTime = time() - 86400; //last 24hrs 
+	$startTime = date('Y-m-d');
+	$startTime = strtotime($startTime);
 	$endTime = time();
 
 	//for filter & search
@@ -585,6 +604,9 @@ function customer_cdr()
 	$filter_caller_ip   = '';
 	$filter_gateways    = '';
 	$filter_call_type   = '';
+    $filter_quick       = '';
+    $duration_from      = '';
+    $duration_to        = '';
     $filter_sort        = '';
 	$search             = '';
 
@@ -599,6 +621,9 @@ function customer_cdr()
 		$filter_gateways        = $this->input->get('filter_gateways');
 		$filter_call_type       = $this->input->get('filter_call_type');
 		$filter_display_results = $this->input->get('filter_display_results');
+        $filter_quick           = $this->input->get('filter_quick');
+        $duration_from          = $this->input->get('duration_from');
+        $duration_to            = $this->input->get('duration_to');
         $filter_sort            = $this->input->get('filter_sort');
 		$search                 = $this->input->get('searchFilter');
 		$msg_records_found      = "Records Found Based On Your Search Criteria";
@@ -645,12 +670,15 @@ function customer_cdr()
 	$data['filter_gateways']            = $filter_gateways;
 	$data['filter_call_type']           = $filter_call_type;
 	$data['filter_display_results']     = $filter_display_results;
+    $data['filter_quick']               = $filter_quick;
+    $data['duration_from']              = $duration_from;
+    $data['duration_to']                = $duration_to;
     $data['filter_sort']                = $filter_sort;
 
 	//for pagging set information
 	$this->load->library('pagination');
 	$config['per_page'] = '20';
-	$config['base_url'] = base_url().'customer/customer_cdr/?searchFilter='.$search.'&filter_date_from='.$filter_date_from.'&filter_date_to='.$filter_date_to.'&filter_phonenum='.$filter_phonenum.'&filter_caller_ip='.$filter_caller_ip.'&filter_gateways='.$filter_gateways.'&filter_call_type='.$filter_call_type.'&filter_display_results='.$filter_display_results.'&filter_sort='.$filter_sort.'';
+	$config['base_url'] = base_url().'customer/customer_cdr/?searchFilter='.$search.'&filter_date_from='.$filter_date_from.'&filter_date_to='.$filter_date_to.'&filter_phonenum='.$filter_phonenum.'&filter_caller_ip='.$filter_caller_ip.'&filter_gateways='.$filter_gateways.'&filter_call_type='.$filter_call_type.'&filter_display_results='.$filter_display_results.'&filter_quick='.$filter_quick.'&duration_from='.$duration_from.'&duration_to='.$duration_to.'&filter_sort='.$filter_sort.'';
 	$config['page_query_string'] = TRUE;
 
 	$config['num_links'] = 6;
@@ -669,7 +697,7 @@ function customer_cdr()
 	$config['first_link'] = 'first';
 	$config['last_link'] = 'last';
 
-	$data['count'] = $this->customer_model->customer_cdr_count($customer_id, $filter_date_from, $filter_date_to, $filter_phonenum, $filter_caller_ip, $filter_gateways, $filter_call_type);
+	$data['count'] = $this->customer_model->customer_cdr_count($customer_id, $filter_date_from, $filter_date_to, $filter_phonenum, $filter_caller_ip, $filter_gateways, $filter_call_type, $duration_from, $duration_to);
 	$config['total_rows'] = $data['count'];
 
 	if(isset($_GET['per_page']))
@@ -685,7 +713,7 @@ function customer_cdr()
 
 	$data['msg_records_found'] = "".$data['count']."&nbsp;".$msg_records_found."";
 
-	$data['cdr']            =   $this->customer_model->customer_cdr($config['per_page'],$config['uri_segment'], $customer_id, $filter_date_from, $filter_date_to, $filter_phonenum, $filter_caller_ip, $filter_gateways, $filter_call_type, $filter_sort);
+	$data['cdr']            =   $this->customer_model->customer_cdr($config['per_page'],$config['uri_segment'], $customer_id, $filter_date_from, $filter_date_to, $filter_phonenum, $filter_caller_ip, $filter_gateways, $filter_call_type, $duration_from, $duration_to ,$filter_sort);
 
 	$data['customer_id']    =   $customer_id;
 
@@ -873,4 +901,34 @@ function manage_balance()
             redirect ('customer/invoices/');
         }
     }
+    
+    function get_calculated_date_time()
+	{
+		$value = $this->input->post('val');
+
+		$return_val = '';
+
+		$current_date_time = date('Y-m-d H:i:s');
+		$curr_date_starting_from_12_Am = "".date('Y-m-d')." 00:00:00";
+
+		if($value == 'today' || $value == '')
+		{
+			$return_val = $curr_date_starting_from_12_Am.'|'.$current_date_time;
+		}
+		else if($value == 'last_hour')
+		{
+			$time = time();
+			$last_hour = $time - 3600;
+			$last_hour = date('Y-m-d H:i:s', $last_hour);
+			$return_val = $last_hour.'|'.$current_date_time;
+		}
+		else if($value == 'last_24_hour')
+		{
+			$time = time();
+			$last_24_hour = $time - 86400;
+			$last_24_hour = date('Y-m-d H:i:s', $last_24_hour);
+			$return_val = $last_24_hour.'|'.$current_date_time;
+		}
+		echo $return_val;
+	}
 }

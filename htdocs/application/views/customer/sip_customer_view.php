@@ -37,7 +37,7 @@
               
 <tr>
     <td align="center" height="20" colspan="3">
-        <table cellspacing="3" cellpadding="2" border="0" width="95%" class="search_col">
+        <table cellspacing="0" cellpadding="0" border="0" width="95%" class="search_col">
                 
                 <thead>
                     <?php 
@@ -48,7 +48,7 @@
                         if($used_sip_acc_count < $limit_of_sip_acc)
                         {
                     ?>
-                        <tr class="main_text">
+                        <tr class="main_text" style="background:none;">
                             <td align="right" colspan="6">
                                 <a href="<?php echo base_url();?>customer/new_sip_access">NEW SIP ACCESS</a>
                                 <br/>
@@ -56,19 +56,20 @@
                             </td>
                         </tr>
                     <?php } else {?>
-                        <tr class="main_text">
+                        <tr class="main_text" style="background:none;">
                             <td align="right" colspan="6"><a href="#">Cannot Add More SIP Accounts</a></td>
                         </tr>
                     <?php } ?>
                     
                     <tr class="bottom_link">
-                        <td width="20%" align="center">Username</td>
-                        <td width="20%" align="center">Password</td>
-                        <td width="20%" align="center">CID</td>
+                        <td width="15%" align="center">Username</td>
+                        <td width="15%" align="center">Password</td>
+                        <td width="15%" align="center">CID</td>
                         <td width="20%" align="center">Domain</td>
-                        <td width="20%" align="center">Sofia Profile</td>
-                        <td width="20%" align="center">Options</td>
+                        <td width="15%" align="center">Sofia Profile</td>
+                        <td width="15%" align="center">Options</td>
                     </tr>
+                    <tr><td colspan="6" id="shadowDiv" style="height:5px;margin-top:-1px"></td></tr>
                 </thead>
                 
                 <tbody id="dynamic">
@@ -77,7 +78,7 @@
                                 
                                     <tr class="main_text">
                                         <td align="center"><?php echo $row->username; ?></td>
-                                        <td align="center">******</td>
+                                        <td align="center" id="reset_pass"><a class="reset_pass" href="#" id="<?php echo $row->id; ?>">Reset Password</a></td>
                                         <td align="center"><?php echo $row->cid; ?></td>
                                         <td align="center"><?php echo $row->domain; ?></td>
                                         <td align="center"><?php echo sofia_profile_name($row->domain_sofia_id); ?></td>
@@ -87,10 +88,11 @@
                                         </td>
                                         
                                     </tr>
+                                    <tr style="height:5px;"><td colspan="6" id="shadowDiv" style="height:5px;margin-top:0px;background-color:#fff"></td></tr>
                                 <?php } ?>
                             <?php } else { ?>
                                 
-                                <tr class="main_text"><td align="center" colspan="5" style="color:red;">No Records Found</td></tr>
+                                <tr class="main_text"><td align="center" colspan="6" style="color:red;">No Records Found</td></tr>
                             <?php } ?>
                     
                 </tbody>
@@ -158,5 +160,26 @@
                 });
                 
                 return false;
+        });
+        
+        $('.reset_pass').live('click', function(){
+            var curr = $(this);
+            var id = $(this).attr('id');
+            var data  = 'record_id='+id;
+            
+            $.ajax({
+                type: "POST",
+                url: base_url+"customer/reset_sip_password",
+                data: data,
+                success: function(html){
+                        $('.error').hide();
+                        $('.success').html('Your password has been reset successfully. Your new password is ('+html+')');
+                        $('.success').fadeOut();
+                        $('.success').fadeIn();
+                        curr.parent().html(html);
+                        document.getElementById('success_div').scrollIntoView();
+                }
+            });
+           return false;
         });
 </script>

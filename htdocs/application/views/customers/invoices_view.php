@@ -66,6 +66,10 @@ window.location = '../../home/';
                         Status
                     </td>
                     
+                    <td width="8%">
+                        Sort By
+                    </td>
+                    
                     <td width="8%" rowspan="2">
                         <input type="submit" id="searchFilter" name="searchFilter" value="SEARCH" class="button blue" style="float:right;margin-top:5px;margin-right:10px" />
                     </td>
@@ -86,6 +90,22 @@ window.location = '../../home/';
                             <option value="paid" <?php if($filter_status == 'paid'){ echo "selected";}?>>Paid</option>
                             <option value="pending" <?php if($filter_status == 'pending'){ echo "selected";}?>>Pending</option>
                             <option value="over_due" <?php if($filter_status == 'over_due'){ echo "selected";}?>>Over Due</option>
+                        </select>
+                    </td>
+                    
+                    <td>
+                        <select name="filter_sort" id="filter_sort" style="width:124px;">
+                            <option value="">Select</option>
+                            
+                            <option value="date_asc" <?php if($filter_sort == 'date_asc'){ echo "selected";}?>>Generated Date - ASC</option>
+                            <option value="date_dec" <?php if($filter_sort == 'date_dec'){ echo "selected";}?>>Generated Date - DESC</option>
+                            
+                            <option value="totcalls_asc" <?php if($filter_sort == 'totcalls_asc'){ echo "selected";}?>>Total Calls - ASC</option>
+                            <option value="totcalls_dec" <?php if($filter_sort == 'totcalls_dec'){ echo "selected";}?>>Total Calls - DESC</option>
+                            
+                            <option value="totcharges_asc" <?php if($filter_sort == 'totcharges_asc'){ echo "selected";}?>>Total Charges - ASC</option>
+                            <option value="totcharges_dec" <?php if($filter_sort == 'totcharges_dec'){ echo "selected";}?>>Total Charges - DESC</option>
+                          
                         </select>
                     </td>
                 </tr>
@@ -116,6 +136,7 @@ window.location = '../../home/';
                         <td width="7%" align="center">View Invoice</td>
                         <td width="7%" align="center">View CDR</td>
                     </tr>
+                    <tr><td colspan="12" id="shadowDiv" style="height:5px;margin-top:-1px"></td></tr>
                     
                     <?php if($invoices->num_rows() > 0) {?>
                         
@@ -180,9 +201,10 @@ window.location = '../../home/';
                                 <td align="center" height="30"><a href="<?php echo base_url(); ?>billing/download_cdr_admin/<?php echo $row->invoice_id;?>"><img src="<?php echo base_url();?>assets/images/export-pdf.gif"/> View CDR</a></td>
                                 
                             </tr>
+                            <tr style="height:5px;"><td colspan="12" id="shadowDiv" style="height:5px;margin-top:0px;background-color:#fff"></td></tr>
                         <?php endforeach;?>
                            
-                    <?php } else { echo '<tr><td align="center" style="color:red;" colspan="11">No Results Found</td></tr>'; } ?>
+                    <?php } else { echo '<tr><td align="center" style="color:red;" colspan="12">No Results Found</td></tr>'; } ?>
                     </tbody>
                 </table>
             </td>

@@ -188,7 +188,7 @@ class Cdr_model extends CI_Model {
 		{
 			if(is_numeric($duration_from))
 			{
-				$where .= 'AND billsec >= '.$this->db->escape($duration_from).' ';
+				$where .= 'AND billsec >= '.$duration_from.' ';
 			}
 		}
 
@@ -196,7 +196,7 @@ class Cdr_model extends CI_Model {
 		{
 			if(is_numeric($duration_to))
 			{
-				$where .= 'AND billsec <= '.$this->db->escape($duration_to).' ';
+				$where .= 'AND billsec <= '.$duration_to.' ';
 			}
 		}
 
@@ -284,7 +284,7 @@ class Cdr_model extends CI_Model {
 		{
 			if(is_numeric($duration_from))
 			{
-				$where .= 'AND billsec >= '.$this->db->escape($duration_from).' ';
+				$where .= 'AND billsec >= '.$duration_from.' ';
 			}
 		}
 
@@ -292,7 +292,7 @@ class Cdr_model extends CI_Model {
 		{
 			if(is_numeric($duration_to))
 			{
-				$where .= 'AND billsec <= '.$this->db->escape($duration_to).' ';
+				$where .= 'AND billsec <= '.$duration_to.' ';
 			}
 		}
 
@@ -825,9 +825,87 @@ class Cdr_model extends CI_Model {
 	}
 
 	/*********************** EXPORT FUNCTIONS ***************************/
-	function export_cdr_data($filter_date_from, $filter_date_to, $filter_phonenum, $filter_caller_ip, $filter_customers, $filter_groups, $filter_gateways, $filter_call_type, $duration_from, $duration_to)
+	function export_cdr_data($filter_date_from, $filter_date_to, $filter_phonenum, $filter_caller_ip, $filter_customers, $filter_groups, $filter_gateways, $filter_call_type, $duration_from, $duration_to, $filter_sort)
 	{
-		$where = '';
+		$order_by = "";
+        if($filter_sort == 'date_asc')
+        {
+            $order_by = "ORDER BY created_time ASC";
+        }
+        else if($filter_sort == 'date_dec')
+        {
+            $order_by = "ORDER BY created_time DESC";
+        }
+        else if($filter_sort == 'billduration_asc')
+        {
+            $order_by = "ORDER BY billsec ASC";
+        }
+        else if($filter_sort == 'billduration_dec')
+        {
+            $order_by = "ORDER BY billsec DESC";
+        }
+        else if($filter_sort == 'failedgateways_asc')
+        {
+            $order_by = "ORDER BY total_failed_gateways ASC";
+        }
+        else if($filter_sort == 'failedgateways_dec')
+        {
+            $order_by = "ORDER BY total_failed_gateways DESC";
+        }
+        else if($filter_sort == 'sellrate_asc')
+        {
+            $order_by = "ORDER BY sell_rate ASC";
+        }
+        else if($filter_sort == 'sellrate_dec')
+        {
+            $order_by = "ORDER BY sell_rate DESC";
+        }
+        else if($filter_sort == 'costrate_asc')
+        {
+            $order_by = "ORDER BY cost_rate ASC";
+        }
+        else if($filter_sort == 'costrate_dec')
+        {
+            $order_by = "ORDER BY cost_rate DESC";
+        }
+        else if($filter_sort == 'sellinit_asc')
+        {
+            $order_by = "ORDER BY sell_initblock ASC";
+        }
+        else if($filter_sort == 'sellinit_dec')
+        {
+            $order_by = "ORDER BY sell_initblock DESC";
+        }
+        else if($filter_sort == 'buyinit_asc')
+        {
+            $order_by = "ORDER BY buy_initblock ASC";
+        }
+        else if($filter_sort == 'buyinit_dec')
+        {
+            $order_by = "ORDER BY buy_initblock DESC";
+        }
+        else if($filter_sort == 'totcharges_asc')
+        {
+            $order_by = "ORDER BY total_sell_cost ASC";
+        }
+        else if($filter_sort == 'totcharges_dec')
+        {
+            $order_by = "ORDER BY total_sell_cost DESC";
+        }
+        else if($filter_sort == 'totcost_asc')
+        {
+            $order_by = "ORDER BY total_buy_cost ASC";
+        }
+        else if($filter_sort == 'totcost_dec')
+        {
+            $order_by = "ORDER BY total_buy_cost DESC";
+        }
+        else
+        {
+            $order_by = "ORDER BY created_time DESC";
+        }
+        
+        $where = '';
 		$where .= "WHERE id != '' ";
 
 		if($filter_date_from != '')
@@ -915,14 +993,92 @@ class Cdr_model extends CI_Model {
 			}
 		}
 
-		$sql = "SELECT * FROM cdr ".$where."";
+		$sql = "SELECT * FROM cdr ".$where." ".$order_by."";
 		$query = $this->db->query($sql);
 		return $query;
 	}
 
-	function export_cdr_data_csv($filter_date_from, $filter_date_to, $filter_phonenum, $filter_caller_ip, $filter_customers, $filter_groups, $filter_gateways, $filter_call_type, $duration_from, $duration_to)
+	function export_cdr_data_csv($filter_date_from, $filter_date_to, $filter_phonenum, $filter_caller_ip, $filter_customers, $filter_groups, $filter_gateways, $filter_call_type, $duration_from, $duration_to, $filter_sort)
 	{
-		$where = '';
+		$order_by = "";
+        if($filter_sort == 'date_asc')
+        {
+            $order_by = "ORDER BY created_time ASC";
+        }
+        else if($filter_sort == 'date_dec')
+        {
+            $order_by = "ORDER BY created_time DESC";
+        }
+        else if($filter_sort == 'billduration_asc')
+        {
+            $order_by = "ORDER BY billsec ASC";
+        }
+        else if($filter_sort == 'billduration_dec')
+        {
+            $order_by = "ORDER BY billsec DESC";
+        }
+        else if($filter_sort == 'failedgateways_asc')
+        {
+            $order_by = "ORDER BY total_failed_gateways ASC";
+        }
+        else if($filter_sort == 'failedgateways_dec')
+        {
+            $order_by = "ORDER BY total_failed_gateways DESC";
+        }
+        else if($filter_sort == 'sellrate_asc')
+        {
+            $order_by = "ORDER BY sell_rate ASC";
+        }
+        else if($filter_sort == 'sellrate_dec')
+        {
+            $order_by = "ORDER BY sell_rate DESC";
+        }
+        else if($filter_sort == 'costrate_asc')
+        {
+            $order_by = "ORDER BY cost_rate ASC";
+        }
+        else if($filter_sort == 'costrate_dec')
+        {
+            $order_by = "ORDER BY cost_rate DESC";
+        }
+        else if($filter_sort == 'sellinit_asc')
+        {
+            $order_by = "ORDER BY sell_initblock ASC";
+        }
+        else if($filter_sort == 'sellinit_dec')
+        {
+            $order_by = "ORDER BY sell_initblock DESC";
+        }
+        else if($filter_sort == 'buyinit_asc')
+        {
+            $order_by = "ORDER BY buy_initblock ASC";
+        }
+        else if($filter_sort == 'buyinit_dec')
+        {
+            $order_by = "ORDER BY buy_initblock DESC";
+        }
+        else if($filter_sort == 'totcharges_asc')
+        {
+            $order_by = "ORDER BY total_sell_cost ASC";
+        }
+        else if($filter_sort == 'totcharges_dec')
+        {
+            $order_by = "ORDER BY total_sell_cost DESC";
+        }
+        else if($filter_sort == 'totcost_asc')
+        {
+            $order_by = "ORDER BY total_buy_cost ASC";
+        }
+        else if($filter_sort == 'totcost_dec')
+        {
+            $order_by = "ORDER BY total_buy_cost DESC";
+        }
+        else
+        {
+            $order_by = "ORDER BY created_time DESC";
+        }
+        
+        $where = '';
 		$where .= "WHERE id != '' ";
 
 		if($filter_date_from != '')
@@ -1010,7 +1166,7 @@ class Cdr_model extends CI_Model {
 			}
 		}
 
-		$sql = "SELECT created_time, destination_number, billsec, hangup_cause, network_addr, username, sell_rate, sell_initblock, cost_rate, buy_initblock, total_sell_cost, total_buy_cost FROM cdr ".$where."";
+		$sql = "SELECT created_time, destination_number, billsec, hangup_cause, network_addr, username, sell_rate, sell_initblock, cost_rate, buy_initblock, total_sell_cost, total_buy_cost FROM cdr ".$where." ".$order_by."";
 		$query = $this->db->query($sql);
 		return $query;
 	}

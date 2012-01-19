@@ -69,6 +69,10 @@ window.location = '../../home/';
                     <td width="14%">
                         Display Results In
                     </td>
+                    
+                    <td width="14%">
+                        Sort By
+                    </td>
 
                     <td width="14%" rowspan="2">
                         <input type="submit" name="searchFilter" value="SEARCH" class="button blue" style="float:right;margin-top:5px;margin-right:10px" />
@@ -105,6 +109,31 @@ window.location = '../../home/';
                         </select>
                     </td>
                     
+                    <td>
+                        <select name="filter_sort" id="filter_sort" style="width:124px;">
+                            <option value="">Select</option>
+                            
+                            <option value="startdate_asc" <?php if($filter_sort == 'startdate_asc'){ echo "selected";}?>>Start Date - ASC</option>
+                            <option value="startdate_dec" <?php if($filter_sort == 'startdate_dec'){ echo "selected";}?>>Start Date - DESC</option>
+                            
+                            <option value="enddate_asc" <?php if($filter_sort == 'enddate_asc'){ echo "selected";}?>>End Date - ASC</option>
+                            <option value="enddate_dec" <?php if($filter_sort == 'enddate_dec'){ echo "selected";}?>>End Date - DESC</option>
+                            
+                            <option value="sellrate_asc" <?php if($filter_sort == 'sellrate_asc'){ echo "selected";}?>>Sell Rate - ASC</option>
+                            <option value="sellrate_dec" <?php if($filter_sort == 'sellrate_dec'){ echo "selected";}?>>Sell rate - DESC</option>
+                            
+                            <option value="costrate_asc" <?php if($filter_sort == 'costrate_asc'){ echo "selected";}?>>Cost Rate - ASC</option>
+                            <option value="costrate_dec" <?php if($filter_sort == 'costrate_dec'){ echo "selected";}?>>Cost rate - DESC</option>
+                            
+                            <option value="sellinit_asc" <?php if($filter_sort == 'sellinit_asc'){ echo "selected";}?>>Sell Init Block - ASC</option>
+                            <option value="sellinit_dec" <?php if($filter_sort == 'sellinit_dec'){ echo "selected";}?>>Sell Init Block - DESC</option>
+                            
+                            <option value="buyinit_asc" <?php if($filter_sort == 'buyinit_asc'){ echo "selected";}?>>Buy Init Block - ASC</option>
+                            <option value="buyinit_dec" <?php if($filter_sort == 'buyinit_dec'){ echo "selected";}?>>Buy Init Block - DESC</option>
+                            
+                        </select>
+                    </td>
+                    
                 </tr>
             
         </table>
@@ -117,7 +146,7 @@ window.location = '../../home/';
               
 <tr>
     <td align="center" height="20" colspan="3">
-        <table cellspacing="3" cellpadding="2" border="0" width="95%" class="search_col">
+        <table cellspacing="0" cellpadding="0" border="0" width="95%" class="search_col">
                 
                 <thead>
                     <tr class="bottom_link">
@@ -133,6 +162,7 @@ window.location = '../../home/';
                         <td width="10%" align="center">carrier</td>
                         <td width="8%" align="center">Enabled</td>
                     </tr>
+                    <tr><td colspan="11" id="shadowDiv" style="height:5px;margin-top:-1px"></td></tr>
                 </thead>
                 
                 <tbody id="dynamic">
@@ -194,18 +224,19 @@ window.location = '../../home/';
                                     
                                     <td align="center"><?php if($rowRate->enabled == 1){ echo 'YES';} else { echo 'NO'; }?></td>
                                 </tr>
+                                <tr style="height:5px;"><td colspan="11" id="shadowDiv" style="height:5px;margin-top:0px;background-color:#fff"></td></tr>
                             <?php } ?>
                                 <tr>
-                                    <td  colspan="13">
+                                    <td  colspan="11">
                                         <div style="float:right;" id="paginationWKTOP"><?php echo $this->pagination->create_links();?></div>
                                     </td>
                                 </tr>
                             <?php } else { ?>
                                 
-                                <tr class="main_text"><td align="center" colspan="13" style="color:red;">No Records Found</td></tr>
+                                <tr class="main_text"><td align="center" colspan="11" style="color:red;">No Records Found</td></tr>
                             <?php } ?>
                     <?php } else {?>
-                        <tr class="main_text"><td align="center" colspan="13" style="color:red;">No Rate Group Found For This Customer</td></tr>
+                        <tr class="main_text"><td align="center" colspan="11" style="color:red;">No Rate Group Found For This Customer</td></tr>
                     <?php } ?>
                 </tbody>
             </table>

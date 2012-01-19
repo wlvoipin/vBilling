@@ -135,7 +135,7 @@
               
 <tr>
     <td align="center" height="20" colspan="3">
-        <table cellspacing="3" cellpadding="2" border="0" width="95%" class="search_col">
+        <table cellspacing="0" cellpadding="0" border="0" width="95%" class="search_col">
                 
                 <thead>
                     <tr class="bottom_link">
@@ -146,6 +146,7 @@
                         <td width="8%" align="center">End Date</td>
                         <td width="8%" align="center">Enabled</td>
                     </tr>
+                    <tr><td colspan="6" id="shadowDiv" style="height:5px;margin-top:-1px"></td></tr>
                 </thead>
                 
                 <tbody id="dynamic">
@@ -184,9 +185,10 @@
                                     
                                     <td align="center"><?php if($rowRate->enabled == 1){ echo 'YES';} else { echo 'NO'; }?></td>
                                 </tr>
+                                <tr style="height:5px;"><td colspan="6" id="shadowDiv" style="height:5px;margin-top:0px;background-color:#fff"></td></tr>
                             <?php } ?>
                                 <tr>
-                                    <td  colspan="13">
+                                    <td  colspan="6">
                                         <div style="float:right;" id="paginationWKTOP"><?php echo $this->pagination->create_links();?></div>
                                     </td>
                                 </tr>

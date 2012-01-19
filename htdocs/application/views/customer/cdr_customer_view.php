@@ -53,6 +53,18 @@
                     <td width="11%">
                         Date To
                     </td>
+                    
+                    <td width="8%">
+                        Quick Filter
+                    </td>
+                    
+                    <td width="8%">
+                        Duration From
+                    </td>
+
+                    <td width="8%">
+                        Duration To
+                    </td>
 
                     <td width="11%">
                         Phone Num
@@ -89,8 +101,21 @@
                 </tr>
             
                 <tr>
-                    <td><input type="text" name="filter_date_from" value="<?php echo $filter_date_from;?>" class="datepicker" readonly></td>
-                    <td><input type="text" name="filter_date_to" value="<?php echo $filter_date_to;?>" class="datepicker" readonly></td>
+                    <td><input type="text" name="filter_date_from" id="filter_date_from" value="<?php echo $filter_date_from;?>" class="datepicker" readonly></td>
+                    <td><input type="text" name="filter_date_to" id="filter_date_to" value="<?php echo $filter_date_to;?>" class="datepicker" readonly></td>
+                    
+                    <td>
+                        <select name="filter_quick" id="filter_quick">
+                            <option value="">Select</option>
+                            <option value="today" <?php if($filter_quick == 'today'){ echo "selected";}?>>Today</option>
+                            <option value="last_hour" <?php if($filter_quick == 'last_hour'){ echo "selected";}?>>Last Hour</option>
+                            <option value="last_24_hour" <?php if($filter_quick == 'last_24_hour'){ echo "selected";}?>>Last 24 Hour</option>
+                        </select>
+                    </td>
+                    
+                    <td><input type="text" name="duration_from" value="<?php echo $duration_from;?>" class="numeric" maxlength="4"></td>
+                    <td><input type="text" name="duration_to" value="<?php echo $duration_to;?>" class="numeric" maxlength="4"></td>
+                    
                     <td><input type="text" name="filter_phonenum" value="<?php echo $filter_phonenum;?>" class="numeric"></td>
                     <td><input type="text" name="filter_caller_ip" value="<?php echo $filter_caller_ip;?>" class="ip"></td>
                     
@@ -206,6 +231,7 @@
                         <td width="7%" align="center">Margin</td>
                         <td width="7%" align="center">Markup</td>
                     </tr>
+                    <tr><td colspan="14" id="shadowDiv" style="height:5px;margin-top:-1px"></td></tr>
                     
                     <?php if($cdr->num_rows() > 0) {?>
                         
@@ -258,6 +284,7 @@
                                 <td align="center">&nbsp;</td>
                                 <td align="center">&nbsp;</td>
                             </tr>
+                            <tr style="height:5px;"><td colspan="14" id="shadowDiv" style="height:5px;margin-top:0px;background-color:#fff"></td></tr>
                         <?php endforeach;?>
                            
                     <?php } else { echo '<tr><td align="center" style="color:red;" colspan="14">No Results Found</td></tr>'; } ?>
@@ -289,5 +316,19 @@
             $('#filter_table input[type="text"]').val('');
             $('#filter_table select').val('');
             return false;
+        });
+        
+         $('#filter_quick').live('change', function(){
+            var val = $(this).val();
+            $.ajax({
+                type: "POST",
+                url: base_url+"customer/get_calculated_date_time",
+                data: 'val='+val,
+                success: function(html){
+                    var split = html.split('|');
+                    $('#filter_date_from').val(split[0]);
+                    $('#filter_date_to').val(split[1]);
+                }
+            });
         });
     </script>

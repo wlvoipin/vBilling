@@ -41,21 +41,13 @@
             <table cellspacing="3" cellpadding="2" border="0" width="95%" class="search_col">
                 
                 <tbody>
-                
-                            <tr>
-                                <td align="right">&nbsp;</td>
-                                <td align="left"><input type="checkbox" id="chng_username" value="Y" name="chng_username"/>&nbsp;Change Username</td>
-                            </tr>
                             <tr>
                                 <td align="right" width="45%"><span class="required">*</span> Username:</td>
                                 <td align="left" width="55%"><input type="text" value="<?php echo $this->session->userdata('username');?>" name="username" id="username" class="textfield"></td>
                                 <input type="hidden" value="<?php echo $this->session->userdata('username');?>" name="old_username" id="old_username" class="textfield">
                             </tr>
                             
-                            <tr>
-                                <td align="right">&nbsp;</td>
-                                <td align="left"><input type="checkbox" id="chng_password" value="Y" name="chng_password"/>&nbsp;Change Password</td>
-                            </tr>
+                            
                             <tr>
                                 <td align="right"><span class="required">*</span>New Password:</td>
                                 <td align="left"><input type="password" name="password" id="password" class="textfield"></td>
@@ -116,21 +108,19 @@
                 });
                 
         var username = $('#username').val();
+        var old_username = $('#old_username').val();
         var password = $('#password').val();
         var confirmpassword = $('#confirmpassword').val();
         
         var required_error = 0;
         var pass_mismatched_error = 0;
         
-        if($('#chng_username').is(':checked'))
+        if(username == '')
         {
-            if(username == '')
-            {
-                required_error = 1;
-            }
+            required_error = 1;
         }
         
-        if($('#chng_password').is(':checked'))
+        if(password != '' || confirmpassword != '')
         {
             if(password == '' || confirmpassword == '')
             {

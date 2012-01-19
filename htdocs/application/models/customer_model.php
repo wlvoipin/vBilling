@@ -344,6 +344,14 @@ class Customer_model extends CI_Model {
         {
             $order_by = "ORDER BY sell_rate DESC";
         }
+        else if($filter_sort == 'costrate_asc')
+        {
+            $order_by = "ORDER BY cost_rate ASC";
+        }
+        else if($filter_sort == 'costrate_dec')
+        {
+            $order_by = "ORDER BY cost_rate DESC";
+        }
         else if($filter_sort == 'sellinit_asc')
         {
             $order_by = "ORDER BY sell_initblock ASC";
@@ -351,6 +359,14 @@ class Customer_model extends CI_Model {
         else if($filter_sort == 'sellinit_dec')
         {
             $order_by = "ORDER BY sell_initblock DESC";
+        }
+        else if($filter_sort == 'buyinit_asc')
+        {
+            $order_by = "ORDER BY buy_initblock ASC";
+        }
+        else if($filter_sort == 'buyinit_dec')
+        {
+            $order_by = "ORDER BY buy_initblock DESC";
         }
         else
         {
@@ -486,7 +502,7 @@ class Customer_model extends CI_Model {
 
 	function customer_sip_access($customer_id)
 	{
-		$sql = "SELECT a.*, b.directory_id, b.var_name, b.var_value FROM directory AS a LEFT JOIN directory_vars AS b ON b.directory_id = a.id WHERE a.customer_id = '".$customer_id."' ";
+		$sql = "SELECT a.*, b.directory_id, b.var_name, b.var_value FROM directory AS a LEFT JOIN directory_vars AS b ON b.directory_id = a.id WHERE a.customer_id = '".$customer_id."' ORDER BY a.id DESC";
 		$query = $this->db->query($sql);
 		return $query;
 	}
@@ -556,7 +572,7 @@ function enable_disable_sip_access($data)
 }
 
 //***************************** CDR FUNCTIONS ***************************************//
-function customer_cdr($num, $offset, $customer_id, $filter_date_from, $filter_date_to, $filter_phonenum, $filter_caller_ip, $filter_gateways, $filter_call_type, $filter_sort)
+function customer_cdr($num, $offset, $customer_id, $filter_date_from, $filter_date_to, $filter_phonenum, $filter_caller_ip, $filter_gateways, $filter_call_type, $duration_from, $duration_to, $filter_sort)
 {
 	if($offset == ''){$offset='0';}
     
@@ -688,13 +704,29 @@ function customer_cdr($num, $offset, $customer_id, $filter_date_from, $filter_da
 	{
 		$where .= 'AND hangup_cause = '.$this->db->escape($filter_call_type).' ';
 	}
+    
+    if($duration_from != '')
+    {
+        if(is_numeric($duration_from))
+        {
+            $where .= 'AND billsec >= '.$duration_from.' ';
+        }
+    }
+
+    if($duration_to != '')
+    {
+        if(is_numeric($duration_to))
+        {
+            $where .= 'AND billsec <= '.$duration_to.' ';
+        }
+    }
 
 	$sql = "SELECT * FROM cdr WHERE customer_id = '".$customer_id."' AND parent_id = '0' ".$where." ".$order_by." LIMIT $offset,$num";
 	$query = $this->db->query($sql);
 	return $query;
 }
 
-function customer_cdr_count($customer_id, $filter_date_from, $filter_date_to, $filter_phonenum, $filter_caller_ip, $filter_gateways, $filter_call_type)
+function customer_cdr_count($customer_id, $filter_date_from, $filter_date_to, $filter_phonenum, $filter_caller_ip, $filter_gateways, $filter_call_type, $duration_from, $duration_to)
 {
 	$where = '';
 
@@ -746,6 +778,22 @@ function customer_cdr_count($customer_id, $filter_date_from, $filter_date_to, $f
 	{
 		$where .= 'AND hangup_cause = '.$this->db->escape($filter_call_type).' ';
 	}
+    
+    if($duration_from != '')
+    {
+        if(is_numeric($duration_from))
+        {
+            $where .= 'AND billsec >= '.$duration_from.' ';
+        }
+    }
+
+    if($duration_to != '')
+    {
+        if(is_numeric($duration_to))
+        {
+            $where .= 'AND billsec <= '.$duration_to.' ';
+        }
+    }
 
 	$sql = "SELECT * FROM cdr WHERE customer_id = '".$customer_id."' AND parent_id = '0' ".$where."";
 	$query = $this->db->query($sql);

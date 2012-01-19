@@ -601,6 +601,7 @@ class Cdr extends CI_Controller {
 		$duration_from          = $this->input->get('duration_from');
 		$duration_to            = $this->input->get('duration_to');
 		$filter_display_results = $this->input->get('filter_display_results');
+        $filter_sort            = $this->input->get('filter_sort');
 
 		if($filter_date_from == '')
 		{
@@ -626,7 +627,7 @@ class Cdr extends CI_Controller {
 			}
 		}
 
-		$data_cdr   =   $this->cdr_model->export_cdr_data($filter_date_from, $filter_date_to, $filter_phonenum, $filter_caller_ip, $filter_customers, $filter_groups, $filter_gateways, $filter_call_type, $duration_from, $duration_to);
+		$data_cdr   =   $this->cdr_model->export_cdr_data($filter_date_from, $filter_date_to, $filter_phonenum, $filter_caller_ip, $filter_customers, $filter_groups, $filter_gateways, $filter_call_type, $duration_from, $duration_to, $filter_sort);
 
 		if($data_cdr->num_rows() > 0)
 		{
@@ -640,51 +641,159 @@ class Cdr extends CI_Controller {
 			$this->pdf->AddPage();
 
 			$this->pdf->SetFont('helvetica', '', 6);
-
+            
+            $sql12 = "SELECT value FROM settings WHERE setting_name = 'optional_cdr_fields_include'";
+            $query12 = $this->db->query($sql12);
+            $row12 = $query12->row();
+            $data_array = explode(',',$row12->value);
+            
 			$tbl = '<table cellspacing="0" cellpadding="1" border="1" width="100%">
 				<tr style="background-color:grey; color:#ffffff;">
-			<td height="20" width="8%" align="center">Date/Time</td>
-				<td width="7%" align="center">Destination</td>
-				<td width="7%" align="center">Bill Duration</td>
-				<td width="7%" align="center">Hangup Cause</td>
-				<td width="7%" align="center">IP Address</td>
-				<td width="7%" align="center">Username</td>
-				<td width="7%" align="center">Sell Rate</td>
-				<td width="7%" align="center">Sell Init Block</td>
-				<td width="7%" align="center">Cost Rate</td>
-				<td width="7%" align="center">Buy Init Block</td>
-				<td width="7%" align="center">Total Charges</td>
-				<td width="7%" align="center">Total Cost</td>
-				<td width="7%" align="center">Margin</td>
-				<td width="7%" align="center">Markup</td>
-				</tr>';
+                <td height="20" align="center">Date/Time</td>
+				<td align="center">Destination</td>
+				<td align="center">Bill Duration</td>
+                <td align="center">Total Charges</td>';
+            
+                if(count($data_array) > 0)
+                {
+                    if(in_array('caller_id_number',$data_array))
+                    {
+                        $tbl .= '<td align="center">Caller ID Num</td>';
+                    }
+                    if(in_array('duration',$data_array))
+                    {
+                        $tbl .= '<td align="center">Duration</td>';
+                    }
+                    if(in_array('network_addr',$data_array))
+                    {
+                        $tbl .= '<td align="center">Network Address</td>';
+                    }
+                    if(in_array('username',$data_array))
+                    {
+                        $tbl .= '<td align="center">Username</td>';
+                    }
+                    if(in_array('sip_user_agent',$data_array))
+                    {
+                        $tbl .= '<td align="center">SIP User Agent</td>';
+                    }
+                    if(in_array('ani',$data_array))
+                    {
+                        $tbl .= '<td align="center">ANI</td>';
+                    }
+                    if(in_array('cidr',$data_array))
+                    {
+                        $tbl .= '<td align="center">CIDR</td>';
+                    }
+                    if(in_array('sell_rate',$data_array)) 
+                    {
+                        $tbl .= '<td align="center">Sell Rate</td>';
+                    }
+                    if(in_array('cost_rate',$data_array)) 
+                    {
+                        $tbl .= '<td align="center">Cost Rate</td>';
+                    }
+                    if(in_array('buy_initblock',$data_array)) 
+                    {
+                        $tbl .= '<td align="center">Buy Init Block</td>';
+                    }
+                    if(in_array('sell_initblock',$data_array)) 
+                    {
+                        $tbl .= '<td align="center">Sell Init Block</td>';
+                    }
+                    if(in_array('total_buy_cost',$data_array)) 
+                    {
+                        $tbl .= '<td align="center">Total Buy Cost</td>';
+                    }
+                    if(in_array('gateway',$data_array)) 
+                    {
+                        $tbl .= '<td align="center">Gateway</td>';
+                    }
+                    if(in_array('total_failed_gateways',$data_array)) 
+                    {
+                        $tbl .= '<td align="center">Total Failed Gateways</td>';
+                    }
+                }
+                
+				
+				$tbl .= '</tr>';
 			foreach ($data_cdr->result() as $row)
 			{
 				$tbl .=   '<tr>
 					<td align="center" height="30">'.date("Y-m-d H:i:s", $row->created_time/1000000).'</td>
 					<td align="center">'.$row->destination_number.'</td>
-					<td align="center">'.$row->billsec.'</td>
-					<td align="center">'.$row->hangup_cause.'</td>
-					<td align="center">'.$row->network_addr.'</td>
-					<td align="center">'.$row->username.'</td>
-					<td align="center">'.$row->sell_rate.'</td>
-					<td align="center">'.$row->sell_initblock.'</td>
-					<td align="center">'.$row->cost_rate.'</td>
-					<td align="center">'.$row->buy_initblock.'</td>';
+					<td align="center">'.$row->billsec.'</td>';
+                    
+                    if(($row->hangup_cause == 'NORMAL_CLEARING' || $row->hangup_cause == 'ALLOTTED_TIMEOUT') && $row->billsec > 0) {
+                        $tbl .=  '<td align="center">'.$row->total_sell_cost.'</td>';
+                    } else {
+                        $tbl .= '<td align="center">0</td>';
+                    }
+                    
+					if(count($data_array) > 0)
+                    {
+                        if(in_array('caller_id_number',$data_array))
+                        {
+                            $tbl .= '<td align="center">'.$row->caller_id_number.'</td>';
+                        }
+                        if(in_array('duration',$data_array))
+                        {
+                            $tbl .= '<td align="center">'.$row->duration.'</td>';
+                        }
+                        if(in_array('network_addr',$data_array))
+                        {
+                            $tbl .= '<td align="center">'.$row->network_addr.'</td>';
+                        }
+                        if(in_array('username',$data_array))
+                        {
+                            $tbl .= '<td align="center">'.$row->username.'</td>';
+                        }
+                        if(in_array('sip_user_agent',$data_array))
+                        {
+                            $tbl .= '<td align="center">'.$row->sip_user_agent.'</td>';
+                        }
+                        if(in_array('ani',$data_array))
+                        {
+                            $tbl .= '<td align="center">'.$row->ani.'</td>';
+                        }
+                        if(in_array('cidr',$data_array))
+                        {
+                            $tbl .= '<td align="center">'.$row->cidr.'</td>';
+                        }
+                        if(in_array('sell_rate',$data_array)) 
+                        {
+                            $tbl .= '<td align="center">'.$row->sell_rate.'</td>';
+                        }
+                        if(in_array('cost_rate',$data_array)) 
+                        {
+                            $tbl .= '<td align="center">'.$row->cost_rate.'</td>';
+                        }
+                        if(in_array('buy_initblock',$data_array)) 
+                        {
+                            $tbl .= '<td align="center">'.$row->buy_initblock.'</td>';
+                        }
+                        if(in_array('sell_initblock',$data_array)) 
+                        {
+                            $tbl .= '<td align="center">'.$row->sell_initblock.'</td>';
+                        }
+                        if(in_array('total_buy_cost',$data_array)) 
+                        {
+                            if(($row->hangup_cause == 'NORMAL_CLEARING' || $row->hangup_cause == 'ALLOTTED_TIMEOUT') && $row->billsec > 0) {
+                                $tbl .=  '<td align="center">'.$row->total_buy_cost.'</td>';
+                            } else {
+                                $tbl .= '<td align="center">0</td>';
+                            }
+                        }
+                        if(in_array('gateway',$data_array)) 
+                        {
+                            $tbl .= '<td align="center">'.$row->gateway.'</td>';
+                        }
+                        if(in_array('total_failed_gateways',$data_array)) 
+                        {
+                            $tbl .= '<td align="center">'.$row->total_failed_gateways.'</td>';
+                        }
+                    }
+                    $tbl .= '</tr>';   
 
-				if(($row->hangup_cause == 'NORMAL_CLEARING' || $row->hangup_cause == 'ALLOTTED_TIMEOUT') && $row->billsec > 0) {
-					$tbl .=  '<td align="center">'.$row->total_sell_cost.'</td>';
-				} else {
-					$tbl .= '<td align="center">0</td>';
-				}
-
-				if(($row->hangup_cause == 'NORMAL_CLEARING' || $row->hangup_cause == 'ALLOTTED_TIMEOUT') && $row->billsec > 0) {
-					$tbl .=  '<td align="center">'.$row->total_buy_cost.'</td>';
-				} else {
-					$tbl .= '<td align="center">0</td>';
-				}
-
-				$tbl .= '<td align="center">&nbsp;</td><td align="center">&nbsp;</td></tr>';
 			}
 
 			$tbl .=  '</table>';
@@ -718,6 +827,7 @@ class Cdr extends CI_Controller {
 		$duration_from          = $this->input->get('duration_from');
 		$duration_to            = $this->input->get('duration_to');
 		$filter_display_results = $this->input->get('filter_display_results');
+        $filter_sort            = $this->input->get('filter_sort');
 
 		if($filter_date_from == '')
 		{
@@ -743,11 +853,16 @@ class Cdr extends CI_Controller {
 			}
 		}
 
-		$data_cdr   =   $this->cdr_model->export_cdr_data($filter_date_from, $filter_date_to, $filter_phonenum, $filter_caller_ip, $filter_customers, $filter_groups, $filter_gateways, $filter_call_type, $duration_from, $duration_to);
+		$data_cdr   =   $this->cdr_model->export_cdr_data($filter_date_from, $filter_date_to, $filter_phonenum, $filter_caller_ip, $filter_customers, $filter_groups, $filter_gateways, $filter_call_type, $duration_from, $duration_to, $filter_sort);
 
 		if($data_cdr->num_rows() > 0)
 		{
-			$this->load->library('Spreadsheet_Excel_Writer');
+			$sql12 = "SELECT value FROM settings WHERE setting_name = 'optional_cdr_fields_include'";
+            $query12 = $this->db->query($sql12);
+            $row12 = $query12->row();
+            $data_array = explode(',',$row12->value);
+            
+            $this->load->library('Spreadsheet_Excel_Writer');
 			$workbook = new Spreadsheet_Excel_Writer();
 
 			$format_bold =& $workbook->addFormat();
@@ -802,28 +917,112 @@ class Cdr extends CI_Controller {
 			$worksheet->write(1, 3, "", $format_title);
 			$worksheet->write(1, 4, "Bill Duration", $format_title);
 			$worksheet->write(1, 5, "", $format_title);
-			$worksheet->write(1, 6, "Hangup Cause", $format_title);
+            $worksheet->write(1, 6, "Total Charges", $format_title);
 			$worksheet->write(1, 7, "", $format_title);
-			$worksheet->write(1, 8, "IP Address", $format_title);
-			$worksheet->write(1, 9, "", $format_title);
-			$worksheet->write(1, 10, "Username", $format_title);
-			$worksheet->write(1, 11, "", $format_title);
-			$worksheet->write(1, 12, "Sell Rate", $format_title);
-			$worksheet->write(1, 13, "", $format_title);
-			$worksheet->write(1, 14, "Sell Init Block", $format_title);
-			$worksheet->write(1, 15, "", $format_title);
-			$worksheet->write(1, 16, "Cost Rate", $format_title);
-			$worksheet->write(1, 17, "", $format_title);
-			$worksheet->write(1, 18, "Buy Init Block", $format_title);
-			$worksheet->write(1, 19, "", $format_title);
-			$worksheet->write(1, 20, "Total Charges", $format_title);
-			$worksheet->write(1, 21, "", $format_title);
-			$worksheet->write(1, 22, "Total Cost", $format_title);
-			$worksheet->write(1, 23, "", $format_title);
-			$worksheet->write(1, 24, "Margin", $format_title);
-			$worksheet->write(1, 25, "", $format_title);
-			$worksheet->write(1, 26, "Markup", $format_title);
-			$worksheet->write(1, 27, "", $format_title);
+            
+            $increment = 7;
+            if(count($data_array) > 0)
+            {
+                if(in_array('caller_id_number',$data_array))
+                {
+                    $increment = $increment + 1;
+                    $worksheet->write(1, $increment, "Caller ID Num", $format_title);
+                    $increment = $increment + 1;
+                    $worksheet->write(1, $increment, "", $format_title);
+                }
+                if(in_array('duration',$data_array))
+                {
+                    $increment = $increment + 1;
+                    $worksheet->write(1, $increment, "Duration", $format_title);
+                    $increment = $increment + 1;
+                    $worksheet->write(1, $increment, "", $format_title);
+                }
+                if(in_array('network_addr',$data_array))
+                {
+                    $increment = $increment + 1;
+                    $worksheet->write(1, $increment, "Network Address", $format_title);
+                    $increment = $increment + 1;
+                    $worksheet->write(1, $increment, "", $format_title);
+                }
+                if(in_array('username',$data_array))
+                {
+                    $increment = $increment + 1;
+                    $worksheet->write(1, $increment, "Username", $format_title);
+                    $increment = $increment + 1;
+                    $worksheet->write(1, $increment, "", $format_title);
+                }
+                if(in_array('sip_user_agent',$data_array))
+                {
+                    $increment = $increment + 1;
+                    $worksheet->write(1, $increment, "SIP User Agent", $format_title);
+                    $increment = $increment + 1;
+                    $worksheet->write(1, $increment, "", $format_title);
+                }
+                if(in_array('ani',$data_array))
+                {
+                    $increment = $increment + 1;
+                    $worksheet->write(1, $increment, "ANI", $format_title);
+                    $increment = $increment + 1;
+                    $worksheet->write(1, $increment, "", $format_title);
+                }
+                if(in_array('cidr',$data_array))
+                {
+                    $increment = $increment + 1;
+                    $worksheet->write(1, $increment, "CIDR", $format_title);
+                    $increment = $increment + 1;
+                    $worksheet->write(1, $increment, "", $format_title);
+                }
+                if(in_array('sell_rate',$data_array)) 
+                {
+                    $increment = $increment + 1;
+                    $worksheet->write(1, $increment, "Sell Rate", $format_title);
+                    $increment = $increment + 1;
+                    $worksheet->write(1, $increment, "", $format_title);
+                }
+                if(in_array('cost_rate',$data_array)) 
+                {
+                    $increment = $increment + 1;
+                    $worksheet->write(1, $increment, "Cost Rate", $format_title);
+                    $increment = $increment + 1;
+                    $worksheet->write(1, $increment, "", $format_title);
+                }
+                if(in_array('buy_initblock',$data_array)) 
+                {
+                    $increment = $increment + 1;
+                    $worksheet->write(1, $increment, "Buy Init Block", $format_title);
+                    $increment = $increment + 1;
+                    $worksheet->write(1, $increment, "", $format_title);
+                }
+                if(in_array('sell_initblock',$data_array)) 
+                {
+                    $increment = $increment + 1;
+                    $worksheet->write(1, $increment, "Sell Init Block", $format_title);
+                    $increment = $increment + 1;
+                    $worksheet->write(1, $increment, "", $format_title);
+                }
+                if(in_array('total_buy_cost',$data_array)) 
+                {
+                    $increment = $increment + 1;
+                    $worksheet->write(1, $increment, "Total Buy Cost", $format_title);
+                    $increment = $increment + 1;
+                    $worksheet->write(1, $increment, "", $format_title);
+                }
+                if(in_array('gateway',$data_array)) 
+                {
+                    $increment = $increment + 1;
+                    $worksheet->write(1, $increment, "Gateway", $format_title);
+                    $increment = $increment + 1;
+                    $worksheet->write(1, $increment, "", $format_title);
+                }
+                if(in_array('total_failed_gateways',$data_array)) 
+                {
+                    $increment = $increment + 1;
+                    $worksheet->write(1, $increment, "Failed Gateways", $format_title);
+                    $increment = $increment + 1;
+                    $worksheet->write(1, $increment, "", $format_title);
+                }
+            }
+            
 
 			$count = 2;
 			foreach($data_cdr->result() as $row)
@@ -834,45 +1033,135 @@ class Cdr extends CI_Controller {
 				$worksheet->write($count, 3, "", $format_cell);
 				$worksheet->write($count, 4, "".$row->billsec."", $format_cell);
 				$worksheet->write($count, 5, "", $format_cell);
-				$worksheet->write($count, 6, "".$row->hangup_cause."", $format_cell);
-				$worksheet->write($count, 7, "", $format_cell);
-				$worksheet->write($count, 8, "".$row->network_addr."", $format_cell);
-				$worksheet->write($count, 9, "", $format_cell);
-				$worksheet->write($count, 10, "".$row->username."", $format_cell);
-				$worksheet->write($count, 11, "", $format_cell);
-				$worksheet->write($count, 12, "".$row->sell_rate."", $format_cell);
-				$worksheet->write($count, 13, "", $format_cell);
-				$worksheet->write($count, 14, "".$row->sell_initblock."", $format_cell);
-				$worksheet->write($count, 15, "", $format_cell);
-				$worksheet->write($count, 16, "".$row->cost_rate."", $format_cell);
-				$worksheet->write($count, 17, "", $format_cell);
-				$worksheet->write($count, 18, "".$row->buy_initblock."", $format_cell);
-				$worksheet->write($count, 19, "", $format_cell);
-
-				if(($row->hangup_cause == 'NORMAL_CLEARING' || $row->hangup_cause == 'ALLOTTED_TIMEOUT') && $row->billsec > 0) {
-					$worksheet->write($count, 20, "".$row->total_sell_cost."", $format_cell);
-					$worksheet->write($count, 21, "", $format_cell);
+                if(($row->hangup_cause == 'NORMAL_CLEARING' || $row->hangup_cause == 'ALLOTTED_TIMEOUT') && $row->billsec > 0) {
+					$worksheet->write($count, 6, "".$row->total_sell_cost."", $format_cell);
+					$worksheet->write($count, 7, "", $format_cell);
 				}
 				else{
-					$worksheet->write($count, 20, "0", $format_cell);
-					$worksheet->write($count, 21, "", $format_cell);
+					$worksheet->write($count, 6, "0", $format_cell);
+					$worksheet->write($count, 7, "", $format_cell);
 				}
-
-				if(($row->hangup_cause == 'NORMAL_CLEARING' || $row->hangup_cause == 'ALLOTTED_TIMEOUT') && $row->billsec > 0) {
-					$worksheet->write($count, 22, "".$row->total_buy_cost."", $format_cell);
-					$worksheet->write($count, 23, "", $format_cell);
-				}
-				else {
-					$worksheet->write($count, 22, "0", $format_cell);
-					$worksheet->write($count, 23, "", $format_cell);
-				}
-
-				$worksheet->write($count, 24, "-", $format_cell);
-				$worksheet->write($count, 25, "", $format_cell);
-				$worksheet->write($count, 26, "-", $format_cell);
-				$worksheet->write($count, 27, "", $format_cell);
-
-
+                
+                $increment = 7;
+				if(count($data_array) > 0)
+                {
+                    if(in_array('caller_id_number',$data_array))
+                    {
+                        $increment = $increment + 1;
+                        $worksheet->write($count, $increment, "".$row->caller_id_number."", $format_cell);
+                        $increment = $increment + 1;
+                        $worksheet->write($count, $increment, "", $format_cell);
+                    }
+                    if(in_array('duration',$data_array))
+                    {
+                        $increment = $increment + 1;
+                        $worksheet->write($count, $increment, "".$row->duration."", $format_cell);
+                        $increment = $increment + 1;
+                        $worksheet->write($count, $increment, "", $format_cell);
+                    }
+                    if(in_array('network_addr',$data_array))
+                    {
+                        $increment = $increment + 1;
+                        $worksheet->write($count, $increment, "".$row->network_addr."", $format_cell);
+                        $increment = $increment + 1;
+                        $worksheet->write($count, $increment, "", $format_cell);
+                    }
+                    if(in_array('username',$data_array))
+                    {
+                        $increment = $increment + 1;
+                        $worksheet->write($count, $increment, "".$row->username."", $format_cell);
+                        $increment = $increment + 1;
+                        $worksheet->write($count, $increment, "", $format_cell);
+                    }
+                    if(in_array('sip_user_agent',$data_array))
+                    {
+                        $increment = $increment + 1;
+                        $worksheet->write($count, $increment, "".$row->sip_user_agent."", $format_cell);
+                        $increment = $increment + 1;
+                        $worksheet->write($count, $increment, "", $format_cell);
+                    }
+                    if(in_array('ani',$data_array))
+                    {
+                        $increment = $increment + 1;
+                        $worksheet->write($count, $increment, "".$row->ani."", $format_cell);
+                        $increment = $increment + 1;
+                        $worksheet->write($count, $increment, "", $format_cell);
+                    }
+                    if(in_array('cidr',$data_array))
+                    {
+                        $increment = $increment + 1;
+                        $worksheet->write($count, $increment, "".$row->cidr."", $format_cell);
+                        $increment = $increment + 1;
+                        $worksheet->write($count, $increment, "", $format_cell);
+                    }
+                    if(in_array('sell_rate',$data_array)) 
+                    {
+                        $increment = $increment + 1;
+                        $worksheet->write($count, $increment, "".$row->sell_rate."", $format_cell);
+                        $increment = $increment + 1;
+                        $worksheet->write($count, $increment, "", $format_cell);
+                    }
+                    if(in_array('cost_rate',$data_array)) 
+                    {
+                        $increment = $increment + 1;
+                        $worksheet->write($count, $increment, "".$row->cost_rate."", $format_cell);
+                        $increment = $increment + 1;
+                        $worksheet->write($count, $increment, "", $format_cell);
+                    }
+                    if(in_array('buy_initblock',$data_array)) 
+                    {
+                        $increment = $increment + 1;
+                        $worksheet->write($count, $increment, "".$row->buy_initblock."", $format_cell);
+                        $increment = $increment + 1;
+                        $worksheet->write($count, $increment, "", $format_cell);
+                    }
+                    if(in_array('sell_initblock',$data_array)) 
+                    {
+                        $increment = $increment + 1;
+                        $worksheet->write($count, $increment, "".$row->sell_initblock."", $format_cell);
+                        $increment = $increment + 1;
+                        $worksheet->write($count, $increment, "", $format_cell);
+                    }
+                    if(in_array('total_buy_cost',$data_array)) 
+                    {
+                        if(($row->hangup_cause == 'NORMAL_CLEARING' || $row->hangup_cause == 'ALLOTTED_TIMEOUT') && $row->billsec > 0) {
+                            $increment = $increment + 1;
+                            $worksheet->write($count, $increment, "".$row->total_buy_cost."", $format_cell);
+                            $increment = $increment + 1;
+                            $worksheet->write($count, $increment, "", $format_cell);
+                        } else {
+                            $increment = $increment + 1;
+                            $worksheet->write($count, $increment, "0", $format_cell);
+                            $increment = $increment + 1;
+                            $worksheet->write($count, $increment, "", $format_cell);
+                        }
+                    }
+                    if(in_array('gateway',$data_array)) 
+                    {
+                        if($row->gateway != '')
+                        {
+                            $increment = $increment + 1;
+                            $worksheet->write($count, $increment, "".$row->gateway."", $format_cell);
+                            $increment = $increment + 1;
+                            $worksheet->write($count, $increment, "", $format_cell);
+                        }
+                        else
+                        {
+                            $increment = $increment + 1;
+                            $worksheet->write($count, $increment, "-", $format_cell);
+                            $increment = $increment + 1;
+                            $worksheet->write($count, $increment, "", $format_cell);
+                        }
+                    }
+                    if(in_array('total_failed_gateways',$data_array)) 
+                    {
+                        $increment = $increment + 1;
+                        $worksheet->write($count, $increment, "".$row->total_failed_gateways."", $format_cell);
+                        $increment = $increment + 1;
+                        $worksheet->write($count, $increment, "", $format_cell);
+                    }
+                }
+                
 				$count = $count + 1;
 			}
 			$workbook->send('test.xls');
@@ -902,6 +1191,7 @@ class Cdr extends CI_Controller {
 		$duration_from          = $this->input->get('duration_from');
 		$duration_to            = $this->input->get('duration_to');
 		$filter_display_results = $this->input->get('filter_display_results');
+        $filter_sort            = $this->input->get('filter_sort');
 
 		if($filter_date_from == '')
 		{
@@ -927,7 +1217,7 @@ class Cdr extends CI_Controller {
 			}
 		}
 
-		$data_cdr   =   $this->cdr_model->export_cdr_data_csv($filter_date_from, $filter_date_to, $filter_phonenum, $filter_caller_ip, $filter_customers, $filter_groups, $filter_gateways, $filter_call_type, $duration_from, $duration_to);
+		$data_cdr   =   $this->cdr_model->export_cdr_data_csv($filter_date_from, $filter_date_to, $filter_phonenum, $filter_caller_ip, $filter_customers, $filter_groups, $filter_gateways, $filter_call_type, $duration_from, $duration_to, $filter_sort);
 
 		if($data_cdr->num_rows() > 0)
 		{
