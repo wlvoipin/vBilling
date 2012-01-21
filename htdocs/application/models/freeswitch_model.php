@@ -101,7 +101,7 @@ class Freeswitch_model extends CI_Model {
 		$sql5 = "INSERT INTO sofia_settings (sofia_id, param_name, param_value) VALUES ('".$new_sofia_id."', 'dialplan', 'XML') ";
 		$sql6 = "INSERT INTO sofia_settings (sofia_id, param_name, param_value) VALUES ('".$new_sofia_id."', 'manual-redirect', 'false') ";
 		$sql7 = "INSERT INTO sofia_settings (sofia_id, param_name, param_value) VALUES ('".$new_sofia_id."', 'disable-transfer', 'true') ";
-		$sql8 = "INSERT INTO sofia_settings (sofia_id, param_name, param_value) VALUES ('".$new_sofia_id."', 'user-agent-string', 'vBilling - http://www.vbilling.org/') ";
+		$sql8 = "INSERT INTO sofia_settings (sofia_id, param_name, param_value) VALUES ('".$new_sofia_id."', 'user-agent-string', 'vBilling') ";
 		$sql9 = "INSERT INTO sofia_settings (sofia_id, param_name, param_value) VALUES ('".$new_sofia_id."', 'enable-100rel', 'false') ";
 		$sql10 = "INSERT INTO sofia_settings (sofia_id, param_name, param_value) VALUES ('".$new_sofia_id."', 'tls', 'false') ";
 		$sql11 = "INSERT INTO sofia_settings (sofia_id, param_name, param_value) VALUES ('".$new_sofia_id."', 'dtmf-duration', '2000') ";
