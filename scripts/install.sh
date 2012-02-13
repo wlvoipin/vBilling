@@ -1641,7 +1641,7 @@ EOF
 			ln -s ${VBILLING_HTML}/luac/ubuntu/${ARCH}/vBilling_conf.lua ${FS_INSTALL_PATH}/scripts/vBilling_conf.lua
 			ln -s ${VBILLING_HTML}/luac/ubuntu/${ARCH}/vBilling_functions.luac ${FS_INSTALL_PATH}/scripts/vBilling_functions.luac
 	fi
-sed -i "s#\"__VBILLING_DB__\"\"${VBILLING_DB}\"#g" ${FS_INSTALL_PATH}/scripts/vBilling_conf.lua
+sed -i "s#\"__VBILLING_DB__\"#\"${VBILLING_DB}\"#g" ${FS_INSTALL_PATH}/scripts/vBilling_conf.lua
 sed -i "s#\"__MYSQL_USERNAME__\"#\"${VBILLING_DB_USER}\"#g" ${FS_INSTALL_PATH}/scripts/vBilling_conf.lua
 sed -i "s#\"__MYSQL_PASSWORD__\"#\"${VBILLING_MYSQL_PASSWORD}\"#g" ${FS_INSTALL_PATH}/scripts/vBilling_conf.lua
 /etc/init.d/freeswitch start
