@@ -209,7 +209,7 @@ cat << 'EOF' > ${FS_INSTALL_PATH}/conf/freeswitch.xml
 				<param name="switchname" value="vBilling"/>
 
 				<!--RTP port range -->
-				<param name="rtp-start-port" value="16000"/>-->
+				<param name="rtp-start-port" value="16000"/>
 				<param name="rtp-end-port" value="42000"/>
 				<param name="dump-cores" value="no"/>
 				<param name="rtp-enable-zrtp" value="true"/>
