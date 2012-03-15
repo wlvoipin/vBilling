@@ -1,3 +1,32 @@
+<?php 
+/*
+ * Version: MPL 1.1
+ *
+ * The contents of this file are subject to the Mozilla Public License
+ * Version 1.1 (the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ * 
+ * Software distributed under the License is distributed on an "AS IS"
+ * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+ * License for the specific language governing rights and limitations
+ * under the License.
+ * 
+ * The Original Code is "vBilling - VoIP Billing and Routing Platform"
+ * 
+ * The Initial Developer of the Original Code is 
+ * Digital Linx [<] info at digitallinx.com [>]
+ * Portions created by Initial Developer (Digital Linx) are Copyright (C) 2011
+ * Initial Developer (Digital Linx). All Rights Reserved.
+ *
+ * Contributor(s)
+ * "Digital Linx - <vbilling at digitallinx.com>"
+ *
+ * vBilling - VoIP Billing and Routing Platform
+ * version 0.1.3
+ *
+ */
+?>
 <table cellspacing="0" cellpadding="0" border="0" align="center" width="100%">
 	<tbody><tr>
             <td width="21" height="35"></td>
@@ -62,10 +91,10 @@
                 <tr>
                     <td align="right"><span class="required">*</span> SIP IP:</td>
                     <td align="left">
-                        <?php echo customer_access_any_cell($customer_id, 'domain').' -- '.sofia_profile_name(customer_access_any_cell($customer_id, 'domain_sofia_id'));?>
                         
-                        <select  name="sip_ip" id="sip_ip" class="textfield" style="display:none;">
-                            <option value="<?php echo customer_access_any_cell($customer_id, 'domain').'|'.customer_access_any_cell($customer_id, 'domain_sofia_id');?>"><?php echo customer_access_any_cell($customer_id, 'domain').' -- '.sofia_profile_name(customer_access_any_cell($customer_id, 'domain_sofia_id'));?></option>
+                        <select  name="sip_ip" id="sip_ip" class="textfield">
+                            <option value="">Select</option>
+                            <?php echo get_all_sip_ips_customer_not_selected($this->session->userdata('customer_id'));?>
                         </select>
                     </td>
                 </tr>

@@ -1,3 +1,32 @@
+<?php 
+/*
+ * Version: MPL 1.1
+ *
+ * The contents of this file are subject to the Mozilla Public License
+ * Version 1.1 (the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ * 
+ * Software distributed under the License is distributed on an "AS IS"
+ * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+ * License for the specific language governing rights and limitations
+ * under the License.
+ * 
+ * The Original Code is "vBilling - VoIP Billing and Routing Platform"
+ * 
+ * The Initial Developer of the Original Code is 
+ * Digital Linx [<] info at digitallinx.com [>]
+ * Portions created by Initial Developer (Digital Linx) are Copyright (C) 2011
+ * Initial Developer (Digital Linx). All Rights Reserved.
+ *
+ * Contributor(s)
+ * "Digital Linx - <vbilling at digitallinx.com>"
+ *
+ * vBilling - VoIP Billing and Routing Platform
+ * version 0.1.3
+ *
+ */
+?>
 <table cellspacing="0" cellpadding="0" border="0" align="center" width="100%">
 	<tbody><tr>
             <td width="21" height="35"></td>
@@ -50,23 +79,25 @@
                     ?>
                         <tr class="main_text" style="background:none;">
                             <td align="right" colspan="5">
-                                <a href="<?php echo base_url();?>customer/new_acl_node">NEW ACL NODE</a>
+                                <a href="<?php echo base_url();?>customer/new_acl_node"><?php echo $this->lang->line('customer_view_new_acl_node');?></a>
                                 <br/>
-                                You can add upto <?php echo $limit_of_acl_nodes;?> ACL Nodes (<?php echo $remaining;?> Remaining)
+                                You can add upto <?php echo $limit_of_acl_nodes;?> <?php echo $this->lang->line('customer_view_acl_node');?> (<?php echo $remaining;?> <?php echo $this->lang->line('customer_view_acl_nodes_ramining');?>)
                             </td>
                         </tr>
                     <?php } else {?>
                         <tr class="main_text" style="background:none;">
-                            <td align="right" colspan="5"><a href="#">Cannot add more ACL Nodes</a></td>
+                            <td align="right" colspan="5"><a href="#"><?php echo $this->lang->line('customer_view_acl_cannot_add_more_acl_nodes');?></a></td>
                         </tr>
                     <?php } ?>
                     
                     <tr class="bottom_link">
-                        <td width="20%" align="center">CIDR</td>
-                        <td width="20%" align="center">ACL List</td>
+                        <td width="20%" align="center"><?php echo $this->lang->line('customer_view_ip_address');?></td>
+<!--
+                        <td width="20%" align="center">ACL List Name</td>
                         <td width="20%" align="center">ACL List Policy</td>
-                        <td width="20%" align="center">TYPE</td>
-                        <td width="20%" align="center">Options</td>
+-->
+                        <td width="20%" align="center"><?php echo $this->lang->line('customer_view_enable_disable');?></td>
+                        <td width="20%" align="center"><?php echo $this->lang->line('customer_view_action_delete_acl');?></td>
                     </tr>
                     <tr><td colspan="5" id="shadowDiv" style="height:5px;margin-top:-1px"></td></tr>
                 </thead>
@@ -77,12 +108,14 @@
                                 
                                     <tr class="main_text">
                                         <td align="center"><a href="<?php echo base_url();?>customer/edit_acl_node/<?php echo $row->id; ?>"><?php echo $row->cidr; ?></a></td>
+<!--
                                         <td align="center"><?php echo acl_list_any_cell($row->list_id, 'acl_name'); ?></td>
                                         <td align="center"><?php echo acl_list_any_cell($row->list_id, 'default_policy'); ?></td>
+-->
                                         <td align="center">
                                             <select class="node_deny_allow" id="<?php echo $row->id; ?>">
-                                                <option value="allow" <?php if($row->type == 'allow'){ echo "selected"; }?>>Allowed</option>
-                                                <option value="deny" <?php if($row->type == 'deny'){ echo "selected"; }?>>Denied</option>
+                                                <option value="allow" <?php if($row->type == 'allow'){ echo "selected"; }?>><?php echo $this->lang->line('customer_view_enable_acl');?></option>
+                                                <option value="deny" <?php if($row->type == 'deny'){ echo "selected"; }?>><?php echo $this->lang->line('customer_view_disable_acl');?></option>
                                             </select>
                                         </td>
                                         <td align="center">
@@ -94,7 +127,7 @@
                                 <?php } ?>
                             <?php } else { ?>
                                 
-                                <tr class="main_text"><td align="center" colspan="5" style="color:red;">No Records Found</td></tr>
+                                <tr class="main_text"><td align="center" colspan="5" style="color:red;"><?php echo $this->lang->line('customer_view_no_records_found');?></td></tr>
                             <?php } ?>
                     
                 </tbody>
@@ -123,12 +156,12 @@
     </tr>
     </tbody></table>
     
-    <div id="dialog-confirm-delete" title="Delete The ACL Node?" style="display:none;">
-	<p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>Are You Sure Want To Delete This ACL Node?</p>
+    <div id="dialog-confirm-delete" title="<?php echo $this->lang->line('customer_view_delte_acl_node');?>" style="display:none;">
+	<p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span><?php echo $this->lang->line('customer_view_alert_delete_acl');?></p>
     </div>
     
-    <div id="dialog-confirm-update" title="Update The ACL Node Type?" style="display:none;">
-	<p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>Are You Sure Want To Update This ACL Node type?</p>
+    <div id="dialog-confirm-update" title="<?php echo $this->lang->line('customer_view_update_acl_node_type');?>" style="display:none;">
+	<p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span><?php echo $this->lang->line('customer_view_alert_enable_disable_acl');?></p>
     </div>
     
 <script type="text/javascript">
@@ -151,7 +184,7 @@
                                     $( "#dialog-confirm-delete" ).dialog( "close" );
                                     /*
                                     curr_row.fadeOut();
-                                    $('.success').html("ACL Node Deleted Successfully.");
+                                    $('.success').html("<?php echo $this->lang->line('customer_view_acl_node_deleted');?>");
                                     $('.success').fadeOut();
                                     $('.success').fadeIn();
                                     document.getElementById('success_div').scrollIntoView();*/
@@ -185,7 +218,7 @@
                                 data: data,
                                 success: function(html){
                                     $( "#dialog-confirm-update" ).dialog( "close" );
-                                    $('.success').html("ACL Node Type Changed Successfully.");
+                                    $('.success').html("<?php echo $this->lang->line('customer_view_acl_node_changed');?>");
                                     $('.success').fadeOut();
                                     $('.success').fadeIn();
                                     document.getElementById('success_div').scrollIntoView();

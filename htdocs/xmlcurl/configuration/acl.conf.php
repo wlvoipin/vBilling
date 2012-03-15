@@ -11,10 +11,10 @@ if (basename($_SERVER['PHP_SELF']) == basename(__FILE__)) {
 /**
 * @package  FS_CURL
 * @subpackage FS_CURL_Configuration
-* @license MPL 1.1
+* @license
 * @author Raymond Chandler (intralanman) <intralanman@gmail.com>
-* @contributor Muhammad Naseer Bhatti (Goni) <nbhatti@gmail.com>
-* @version 1.1
+* @contributor Digital Linx / vBilling <vbilling@digitallinx.com>
+* @version 0.1
 * Class to write the XML for acl.conf
 */
 class acl_conf extends fs_configuration {

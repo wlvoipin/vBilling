@@ -1,9 +1,39 @@
+<?php 
+/*
+ * Version: MPL 1.1
+ *
+ * The contents of this file are subject to the Mozilla Public License
+ * Version 1.1 (the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ * 
+ * Software distributed under the License is distributed on an "AS IS"
+ * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+ * License for the specific language governing rights and limitations
+ * under the License.
+ * 
+ * The Original Code is "vBilling - VoIP Billing and Routing Platform"
+ * 
+ * The Initial Developer of the Original Code is 
+ * Digital Linx [<] info at digitallinx.com [>]
+ * Portions created by Initial Developer (Digital Linx) are Copyright (C) 2011
+ * Initial Developer (Digital Linx). All Rights Reserved.
+ *
+ * Contributor(s)
+ * "Digital Linx - <vbilling at digitallinx.com>"
+ *
+ * vBilling - VoIP Billing and Routing Platform
+ * version 0.1.3
+ *
+ */
+?>
 <table cellspacing="0" cellpadding="0" border="0" align="center" width="100%">
 	<tbody>
         <tr>
             <td width="21" height="35"></td>
             <td width="825" class="heading">
-            CDR List            </td>
+            Call Details
+		</td>
             <td width="178">
             <table cellspacing="0" cellpadding="0" width="170" height="42" class="search_col">
                 <tbody><tr>
@@ -71,14 +101,6 @@
                     </td>
 
                     <td width="11%">
-                        Caller IP
-                    </td>
-                    
-                    <td width="11%">
-                        Gateways
-                    </td>
-
-                    <td width="11%">
                         Call Type
                     </td>
                     
@@ -117,46 +139,6 @@
                     <td><input type="text" name="duration_to" value="<?php echo $duration_to;?>" class="numeric" maxlength="4"></td>
                     
                     <td><input type="text" name="filter_phonenum" value="<?php echo $filter_phonenum;?>" class="numeric"></td>
-                    <td><input type="text" name="filter_caller_ip" value="<?php echo $filter_caller_ip;?>" class="ip"></td>
-                    
-                    <td>
-                        <select name="filter_gateways">
-                            <?php 
-                                if($filter_gateways != '')
-                                {
-                                    if (strpos($filter_gateways,'|') !== false) {
-                                        $explode = explode('|', $filter_gateways);
-                                        $gateway = $explode[0];
-                                        $profile = $explode[1];
-                                        if(isset($gateway) && isset($profile))
-                                        {
-                                            if(!is_numeric($profile))
-                                            {
-                                                $gateway = '';
-                                                $profile = '';
-                                            }
-                                        }
-                                        else
-                                        {
-                                            $gateway = '';
-                                            $profile = '';
-                                        }
-                                    }
-                                    else
-                                    {
-                                        $gateway = '';
-                                        $profile = '';
-                                    }
-                                }
-                                else
-                                {
-                                    $gateway = '';
-                                    $profile = '';
-                                }
-                            ?>
-                            <?php echo gateways_drop_down($gateway, $profile);?>
-                        </select>
-                    </td>
 
                     <td>
                         <select name="filter_call_type">
@@ -184,20 +166,12 @@
                             <option value="sellrate_asc" <?php if($filter_sort == 'sellrate_asc'){ echo "selected";}?>>Sell Rate - ASC</option>
                             <option value="sellrate_dec" <?php if($filter_sort == 'sellrate_dec'){ echo "selected";}?>>Sell rate - DESC</option>
                             
-                            <option value="costrate_asc" <?php if($filter_sort == 'costrate_asc'){ echo "selected";}?>>Cost Rate - ASC</option>
-                            <option value="costrate_dec" <?php if($filter_sort == 'costrate_dec'){ echo "selected";}?>>Cost rate - DESC</option>
-                            
                             <option value="sellinit_asc" <?php if($filter_sort == 'sellinit_asc'){ echo "selected";}?>>Sell Init Block - ASC</option>
                             <option value="sellinit_dec" <?php if($filter_sort == 'sellinit_dec'){ echo "selected";}?>>Sell Init Block - DESC</option>
-                            
-                            <option value="buyinit_asc" <?php if($filter_sort == 'buyinit_asc'){ echo "selected";}?>>Buy Init Block - ASC</option>
-                            <option value="buyinit_dec" <?php if($filter_sort == 'buyinit_dec'){ echo "selected";}?>>Buy Init Block - DESC</option>
                             
                             <option value="totcharges_asc" <?php if($filter_sort == 'totcharges_asc'){ echo "selected";}?>>Total Charges - ASC</option>
                             <option value="totcharges_dec" <?php if($filter_sort == 'totcharges_dec'){ echo "selected";}?>>Total Charges - DESC</option>
                             
-                            <option value="totcost_asc" <?php if($filter_sort == 'totcost_asc'){ echo "selected";}?>>Total Cost - ASC</option>
-                            <option value="totcost_dec" <?php if($filter_sort == 'totcost_dec'){ echo "selected";}?>>Total Cost - DESC</option>
                         </select>
                     </td>
                     
@@ -216,22 +190,16 @@
                     <tbody>
                     
                     <tr class="bottom_link">
-                        <td height="20" width="8%" align="center">Date/Time</td>
-                        <td width="7%" align="center">Destination</td>
-                        <td width="7%" align="center">Bill Duration</td>
-                        <td width="7%" align="center">Hangup Cause</td>
-                        <td width="7%" align="center">IP Address</td>
-                        <td width="7%" align="center">Username</td>
-                        <td width="7%" align="center">Sell Rate</td>
-                        <td width="7%" align="center">Sell Init Block</td>
-                        <td width="7%" align="center">Cost Rate</td>
-                        <td width="7%" align="center">Buy Init Block</td>
-                        <td width="7%" align="center">Total Charges</td>
-                        <td width="7%" align="center">Total Cost</td>
-                        <td width="7%" align="center">Margin</td>
-                        <td width="7%" align="center">Markup</td>
+                        <td height="20" width="15%" align="center">Date/Time</td>
+                        <td width="15%" align="center">Destination</td>
+                        <td width="10%" align="center">Call Duration</td>
+                        <td width="20%" align="center">Hangup Cause</td>
+                        <td width="10%" align="center">Account Number</td>
+                        <td width="10%" align="center">Sell Rate</td>
+                        <td width="10%" align="center">Sell Init Block</td>
+                        <td width="10%" align="center">Total Charges</td>
                     </tr>
-                    <tr><td colspan="14" id="shadowDiv" style="height:5px;margin-top:-1px"></td></tr>
+                    <tr><td colspan="8" id="shadowDiv" style="height:5px;margin-top:-1px"></td></tr>
                     
                     <?php if($cdr->num_rows() > 0) {?>
                         
@@ -244,30 +212,21 @@
                                     if($filter_display_results == 'sec')
                                     {
                                         $billsec        = $row->billsec; // by default bill is in sec
-                                        
                                         $sellrate       = $row->sell_rate / 60; // sell rate per sec
                                         $sellrate       = round($sellrate, 4);
-                                        
-                                        $costrate       = $row->cost_rate / 60; // cost rate per sec
-                                        $costrate       = round($costrate, 4);
                                     }
                                     else
                                     {
                                         $billsec        = $row->billsec / 60; // convert to min
                                         $billsec        = round($billsec, 4);
-                                        
-                                        $sellrate       = $row->sell_rate; // sell rate by default is in min 
-                                        $costrate       = $row->cost_rate; // cost rate by default is in min
+                                        $sellrate       = $row->sell_rate; // sell rate by default is in min
                                     }
                                 ?>
                                 <td align="center"><?php echo $billsec.'&nbsp;'.$filter_display_results; ?></td>
                                 <td align="center"><?php echo $row->hangup_cause; ?></td>
-                                <td align="center"><?php echo $row->network_addr; ?></td>
-                                <td align="center"><?php echo $row->username; ?></td>
+                                <td align="center"><?php echo $row->customer_acc_num; ?></td>
                                 <td align="center"><?php echo $sellrate.'&nbsp;/&nbsp'.$filter_display_results; ?></td>
                                 <td align="center"><?php echo $row->sell_initblock; ?></td>
-                                <td align="center"><?php echo $costrate.'&nbsp;/&nbsp'.$filter_display_results; ?></td>
-                                <td align="center"><?php echo $row->buy_initblock; ?></td>
                                 
                                 <?php if(($row->hangup_cause == 'NORMAL_CLEARING' || $row->hangup_cause == 'ALLOTTED_TIMEOUT') && $row->billsec > 0) {?>
                                     <td align="center"><?php echo $row->total_sell_cost; ?></td>
@@ -275,19 +234,11 @@
                                     <td align="center">0</td>
                                 <?php } ?>
                                 
-                                <?php if(($row->hangup_cause == 'NORMAL_CLEARING' || $row->hangup_cause == 'ALLOTTED_TIMEOUT') && $row->billsec > 0) {?>
-                                    <td align="center"><?php echo $row->total_buy_cost; ?></td>
-                                <?php } else { ?>
-                                    <td align="center">0</td>
-                                <?php } ?>
-                                
-                                <td align="center">&nbsp;</td>
-                                <td align="center">&nbsp;</td>
                             </tr>
-                            <tr style="height:5px;"><td colspan="14" id="shadowDiv" style="height:5px;margin-top:0px;background-color:#fff"></td></tr>
+                            <tr style="height:5px;"><td colspan="8" id="shadowDiv" style="height:5px;margin-top:0px;background-color:#fff"></td></tr>
                         <?php endforeach;?>
                            
-                    <?php } else { echo '<tr><td align="center" style="color:red;" colspan="14">No Results Found</td></tr>'; } ?>
+                    <?php } else { echo '<tr><td align="center" style="color:red;" colspan="8">No Results Found</td></tr>'; } ?>
                     </tbody>
                 </table>
             </td>

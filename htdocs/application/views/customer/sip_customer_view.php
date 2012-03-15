@@ -1,3 +1,32 @@
+<?php 
+/*
+ * Version: MPL 1.1
+ *
+ * The contents of this file are subject to the Mozilla Public License
+ * Version 1.1 (the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ * 
+ * Software distributed under the License is distributed on an "AS IS"
+ * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+ * License for the specific language governing rights and limitations
+ * under the License.
+ * 
+ * The Original Code is "vBilling - VoIP Billing and Routing Platform"
+ * 
+ * The Initial Developer of the Original Code is 
+ * Digital Linx [<] info at digitallinx.com [>]
+ * Portions created by Initial Developer (Digital Linx) are Copyright (C) 2011
+ * Initial Developer (Digital Linx). All Rights Reserved.
+ *
+ * Contributor(s)
+ * "Digital Linx - <vbilling at digitallinx.com>"
+ *
+ * vBilling - VoIP Billing and Routing Platform
+ * version 0.1.3
+ *
+ */
+?>
 <table cellspacing="0" cellpadding="0" border="0" align="center" width="100%">
 	<tbody><tr>
             <td width="21" height="35"></td>
@@ -66,7 +95,9 @@
                         <td width="15%" align="center">Password</td>
                         <td width="15%" align="center">CID</td>
                         <td width="20%" align="center">Domain</td>
+<!--
                         <td width="15%" align="center">Sofia Profile</td>
+-->
                         <td width="15%" align="center">Options</td>
                     </tr>
                     <tr><td colspan="6" id="shadowDiv" style="height:5px;margin-top:-1px"></td></tr>
@@ -81,8 +112,9 @@
                                         <td align="center" id="reset_pass"><a class="reset_pass" href="#" id="<?php echo $row->id; ?>">Reset Password</a></td>
                                         <td align="center"><?php echo $row->cid; ?></td>
                                         <td align="center"><?php echo $row->domain; ?></td>
+<!--
                                         <td align="center"><?php echo sofia_profile_name($row->domain_sofia_id); ?></td>
-                                        
+-->                                        
                                         <td align="center">
                                             <a href="#" id="<?php echo $row->id;?>" class="delete_access"><img src="<?php echo base_url();?>assets/images/button_cancel.png" style="width:16px;border:none;cursor:pointer;" /></a>
                                         </td>

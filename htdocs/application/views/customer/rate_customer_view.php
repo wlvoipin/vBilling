@@ -1,3 +1,32 @@
+<?php 
+/*
+ * Version: MPL 1.1
+ *
+ * The contents of this file are subject to the Mozilla Public License
+ * Version 1.1 (the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ * 
+ * Software distributed under the License is distributed on an "AS IS"
+ * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+ * License for the specific language governing rights and limitations
+ * under the License.
+ * 
+ * The Original Code is "vBilling - VoIP Billing and Routing Platform"
+ * 
+ * The Initial Developer of the Original Code is 
+ * Digital Linx [<] info at digitallinx.com [>]
+ * Portions created by Initial Developer (Digital Linx) are Copyright (C) 2011
+ * Initial Developer (Digital Linx). All Rights Reserved.
+ *
+ * Contributor(s)
+ * "Digital Linx - <vbilling at digitallinx.com>"
+ *
+ * vBilling - VoIP Billing and Routing Platform
+ * version 0.1.3
+ *
+ */
+?>
 <table cellspacing="0" cellpadding="0" border="0" align="center" width="100%">
 	<tbody><tr>
             <td width="21" height="35"></td>
@@ -54,10 +83,6 @@
                     </td>
 
                     <td width="14%">
-                        Carriers
-                    </td>
-
-                    <td width="14%">
                         Type
                     </td>
                     
@@ -83,12 +108,6 @@
                     <td><input type="text" name="filter_start_date" value="<?php echo $filter_start_date;?>" class="datepicker" readonly></td>
                     <td><input type="text" name="filter_end_date" value="<?php echo $filter_end_date;?>" class="datepicker" readonly></td>
                     
-                    <td>
-                        <select name="filter_carriers">
-                            <?php echo show_carrier_select_box($filter_carriers);?>
-                        </select>
-                    </td>
-
                     <td>
                         <select name="filter_rate_type">
                             <option value="">Select</option>
@@ -117,8 +136,8 @@
                             <option value="sellrate_asc" <?php if($filter_sort == 'sellrate_asc'){ echo "selected";}?>>Sell Rate - ASC</option>
                             <option value="sellrate_dec" <?php if($filter_sort == 'sellrate_dec'){ echo "selected";}?>>Sell rate - DESC</option>
                             
-                            <option value="sellinit_asc" <?php if($filter_sort == 'sellinit_asc'){ echo "selected";}?>>Sell Init Block - ASC</option>
-                            <option value="sellinit_dec" <?php if($filter_sort == 'sellinit_dec'){ echo "selected";}?>>Sell Init Block - DESC</option>
+                            <option value="sellinit_asc" <?php if($filter_sort == 'sellinit_asc'){ echo "selected";}?>>Init Block - ASC</option>
+                            <option value="sellinit_dec" <?php if($filter_sort == 'sellinit_dec'){ echo "selected";}?>>Init Block - DESC</option>
                             
                         </select>
                     </td>
@@ -140,13 +159,14 @@
                 <thead>
                     <tr class="bottom_link">
                         <td width="8%" align="center">Country Code</td>
-                        <td width="8%" align="center">Sell Rate</td>
-                        <td width="8%" align="center">Sell Init Block</td>
+                        <td width="8%" align="center">Rate Cost</td>
+                        <td width="8%" align="center">Init Block</td>
+                        <td width="8%" align="center">Initial Block Increments</td>
                         <td width="8%" align="center">Start Date</td>
                         <td width="8%" align="center">End Date</td>
                         <td width="8%" align="center">Enabled</td>
                     </tr>
-                    <tr><td colspan="6" id="shadowDiv" style="height:5px;margin-top:-1px"></td></tr>
+                    <tr><td colspan="7" id="shadowDiv" style="height:5px;margin-top:-1px"></td></tr>
                 </thead>
                 
                 <tbody id="dynamic">
@@ -180,12 +200,13 @@
                                     ?>
                                     <td align="center"><?php echo $sellrate.'&nbsp;/&nbsp;'.$filter_display_results; ?></td>
                                     <td align="center"><?php echo $rowRate->sell_initblock; ?></td>
+                                    <td align="center"><?php echo $rowRate->sellblock_min_duration; ?></td>
                                     <td align="center"><?php echo $rowRate->date_start; ?></td>
                                     <td align="center"><?php echo $rowRate->date_end; ?></td>
                                     
                                     <td align="center"><?php if($rowRate->enabled == 1){ echo 'YES';} else { echo 'NO'; }?></td>
                                 </tr>
-                                <tr style="height:5px;"><td colspan="6" id="shadowDiv" style="height:5px;margin-top:0px;background-color:#fff"></td></tr>
+                                <tr style="height:5px;"><td colspan="7" id="shadowDiv" style="height:5px;margin-top:0px;background-color:#fff"></td></tr>
                             <?php } ?>
                                 <tr>
                                     <td  colspan="6">

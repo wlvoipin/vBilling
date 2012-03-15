@@ -51,8 +51,8 @@ define('DEFAULT_DSN', 'mysql:dbname=vBilling;host=127.0.0.1');
 define('DEFAULT_DSN_LOGIN', 'MYSQL_USERNAME');
 
 /**
- * Defines the default dsn password for the PDOclass
- */
+* Defines the default dsn password for the PDOclass
+*/
 define('DEFAULT_DSN_PASSWORD', 'MYSQL_PASSWORD');
 
 /**

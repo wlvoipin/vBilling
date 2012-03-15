@@ -1,10 +1,39 @@
+<?php 
+/*
+ * Version: MPL 1.1
+ *
+ * The contents of this file are subject to the Mozilla Public License
+ * Version 1.1 (the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ * 
+ * Software distributed under the License is distributed on an "AS IS"
+ * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+ * License for the specific language governing rights and limitations
+ * under the License.
+ * 
+ * The Original Code is "vBilling - VoIP Billing and Routing Platform"
+ * 
+ * The Initial Developer of the Original Code is 
+ * Digital Linx [<] info at digitallinx.com [>]
+ * Portions created by Initial Developer (Digital Linx) are Copyright (C) 2011
+ * Initial Developer (Digital Linx). All Rights Reserved.
+ *
+ * Contributor(s)
+ * "Digital Linx - <vbilling at digitallinx.com>"
+ *
+ * vBilling - VoIP Billing and Routing Platform
+ * version 0.1.3
+ *
+ */
+?>
 <br/>
 <div class="success" id="success_div" style="display:none;"></div>
 <!--POP UP ATTRIBUTES-->
 <?php 
     $atts = array(
-                  'width'      => '800',
-                  'height'     => '600',
+                  'width'      => '1000',
+                  'height'     => '800',
                   'scrollbars' => 'yes',
                   'status'     => 'yes',
                   'resizable'  => 'yes',
@@ -17,27 +46,27 @@
 <div style="text-align:center;padding:10px">
     <div class="button white">
     <form method="get" action="<?php echo base_url();?>manage_accounts/index/<?php echo $filter_account_type;?>/" > 
-        <table width="100%" cellspacing="0" cellpadding="0" border="0" id="filter_table">
+        <table width="612" cellspacing="0" cellpadding="0" border="0" id="filter_table">
              
                 <tr>
-                    <td width="25%">
+                    <td width="170">
                         Username
                     </td>
                     <?php if($filter_account_type != 'sub_admin'){?>
-                    <td width="25%">
+                    <td width="170">
                         Customer Name
                     </td>
                     <?php } ?>
                     
-                    <td width="25%">
+                    <td width="150">
                         Type
                     </td>
 
-                    <td width="25%" rowspan="2">
+                    <td width="76" rowspan="2">
                         <input type="submit" name="searchFilter" value="SEARCH" class="button blue" style="float:right;margin-top:5px;margin-right:10px" />
                     </td>
                     
-                    <td width="25%" rowspan="2">
+                    <td width="46" rowspan="2">
                         <a href="#" id="reset" class="button orange" style="float:left;margin-top:5px;">RESET</a>
                     </td>
                 
@@ -80,13 +109,13 @@
                 <table width="100%" border="0" cellpadding="0" cellspacing="0">
                     <tbody>
                     <tr class="bottom_link">
-                        <td height="20" width="10%" align="center">ID</td>
-                        <td width="20%" align="left">Username</td>
+                        <td height="20" width="5%" align="center">&nbsp;</td>
+                        <td width="12%" align="left">Username</td>
                         <?php if($filter_account_type != 'sub_admin'){?>
-                            <td width="20%" align="left">Customer Name</td>
+                            <td width="16%" align="left">Customer Name</td>
                         <?php } ?>
-                        <td width="8%" align="center">Enabled</td>
-                        <td width="62%" align="left">Options</td>
+                        <td width="23%" align="center"> (Enable/Disable)</td>
+                        <td width="31%" align="left">Delete</td>
                     </tr>
                         <?php if($filter_account_type != 'sub_admin'){?>
                             <tr><td colspan="5" id="shadowDiv" style="height:5px;margin-top:-1px"></td></tr>
@@ -99,7 +128,7 @@
                         
                         <?php foreach ($accounts->result() as $row): ?>
                             <tr class="main_text">
-                                <td align="center"><?php echo $row->id; ?></td>
+                                <td align="center">&nbsp;</td>
                                 
                                 <?php if($row->type != 'sub_admin'){?>
                                 <td align="left"><?php echo anchor_popup('customers/edit_customer/'.$row->customer_id.'', $row->username, $atts); ?></td>
@@ -111,11 +140,11 @@
                                 <td align="left"><a href="#" id="<?php echo $row->id;?>" class="delete_account"><img src="<?php echo base_url();?>assets/images/button_cancel.png" style="width:16px;margin-left:15px;border:none;cursor:pointer;" /></a></td>
                                 <?php } else {?>
                                 
-                                <td align="left"><?php echo $row->username; ?></td>
+                                <td width="3%" align="left"><?php echo $row->username; ?></td>
                                 
-                                <td align="center"><input type="checkbox" id="<?php echo $row->id;?>" class="enable_checkbox" <?php if($row->enabled == 1){ echo 'checked="checked"';}?>/></td>
+                                <td width="4%" align="center"><input type="checkbox" id="<?php echo $row->id;?>" class="enable_checkbox" <?php if($row->enabled == 1){ echo 'checked="checked"';}?>/></td>
                                 
-                                <td align="left"><a href="#" id="<?php echo $row->id;?>" class="delete_account"><img src="<?php echo base_url();?>assets/images/button_cancel.png" style="width:16px;margin-left:15px;border:none;cursor:pointer;" /></a></td>
+                                <td width="6%" align="left"><a href="#" id="<?php echo $row->id;?>" class="delete_account"><img src="<?php echo base_url();?>assets/images/button_cancel.png" style="width:16px;margin-left:15px;border:none;cursor:pointer;" /></a></td>
                                 
                                 <?php } ?>
                             </tr>

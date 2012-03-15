@@ -13,7 +13,7 @@ if (basename($_SERVER['PHP_SELF']) == basename(__FILE__)) {
 * @subpackage FS_CURL_Configuration
 * @license MPL 1.1
 * @author Raymond Chandler (intralanman) <intralanman@gmail.com>
-* @contributor Muhammad Naseer Bhatti (Goni) <nbhatti@gmail.com>
+* @contributor Digital Linx / vBilling <vbilling@digitallinx.com>
 * @version 1.1
 * Write XML for sofia.conf
 */
@@ -92,7 +92,7 @@ private function write_gateways($profile_id) {
 	$this -> xmlw -> startElement('gateways');
 	for ($i=0; $i<$gateway_count; $i++) {
 		$this_gateway = $gateway_array[$i]['gateway_name'];
-		if ($this_gateway != $gateway_array[$i-1]['gateway_name']) {
+		if (!array_key_exists($i-1, $gateway_array) || $this_gateway != $gateway_array[$i-1]['gateway_name']) {
 			$this -> xmlw -> startElement('gateway');
 			$this -> xmlw -> writeAttribute('name', $this_gateway);
 		}

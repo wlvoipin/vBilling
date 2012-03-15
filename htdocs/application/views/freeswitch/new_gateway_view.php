@@ -1,3 +1,32 @@
+<?php 
+/*
+ * Version: MPL 1.1
+ *
+ * The contents of this file are subject to the Mozilla Public License
+ * Version 1.1 (the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ * 
+ * Software distributed under the License is distributed on an "AS IS"
+ * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+ * License for the specific language governing rights and limitations
+ * under the License.
+ * 
+ * The Original Code is "vBilling - VoIP Billing and Routing Platform"
+ * 
+ * The Initial Developer of the Original Code is 
+ * Digital Linx [<] info at digitallinx.com [>]
+ * Portions created by Initial Developer (Digital Linx) are Copyright (C) 2011
+ * Initial Developer (Digital Linx). All Rights Reserved.
+ *
+ * Contributor(s)
+ * "Digital Linx - <vbilling at digitallinx.com>"
+ *
+ * vBilling - VoIP Billing and Routing Platform
+ * version 0.1.3
+ *
+ */
+?>
 <table cellspacing="0" cellpadding="0" border="0" align="center" width="100%">
 	<tbody><tr>
             <td width="21" height="35"></td>
@@ -51,7 +80,7 @@
                     <td align="left"><input type="text" value="vbilling" name="password" id="password" maxlength="50" class="textfield"></td>
                 </tr>
                 <tr>
-                    <td align="right"><span class="required">*</span> Proxy:</td>
+                    <td align="right"><span class="required">*</span> IP Address:</td>
                     <td align="left"><input type="text" value="" name="proxy" id="proxy" maxlength="50" class="textfield"></td>
                 </tr>
                 <tr>

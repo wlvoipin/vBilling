@@ -1,11 +1,12 @@
+<link rel="stylesheet" href="<?php echo base_url();?>assets/css/jquery.mcdropdown.css" />
 <br/>
 <div class="success" id="success_div" <?php if($this->session->flashdata('success') == '') { echo 'style="display:none;"'; }?>><?php echo $this->session->flashdata('success');?> </div>
 <div class="error" id="err_div" style="display:none;"></div>
 <!--POP UP ATTRIBUTES-->
 <?php 
     $atts = array(
-                  'width'      => '800',
-                  'height'     => '600',
+                  'width'      => '1000',
+                  'height'     => '800',
                   'scrollbars' => 'yes',
                   'status'     => 'yes',
                   'resizable'  => 'yes',
@@ -65,9 +66,17 @@
                     <td><input type="text" name="filter_date_to" id="filter_date_to" value="<?php echo $filter_date_to;?>" class="datepicker" readonly></td>
                     
                     <td>
-                        <select name="filter_customers">
-                            <?php echo customer_drop_down($filter_customers);?>
-                        </select>
+                        <?php 
+                            if($filter_contents == 'all')
+                            {
+                                echo admin_cdr_cust_select_all();
+                            }
+                            else if($filter_contents == 'my')
+                            {
+                                echo admin_cdr_cust_select_my();
+                            }
+                        ?>
+                        <input type="text" name="filter_customers" id="filter_customers" value="" />
                     </td>
                     
                     <td>
@@ -103,7 +112,8 @@
                         </select>
                     </td>
                 </tr>
-            
+                <!--***hidden field for filter contents *******-->
+                <input type="hidden" name="filter_contents" id="filter_contents" value="<?php echo $filter_contents;?>"/>
         </table>
     </form>
     </div>
@@ -137,7 +147,7 @@
                         </td>
                         
                         <td width="1%" rowspan="2">
-                            <input type="submit" id="searchFilter" name="searchFilter" value="Generate Invoice Till Today 12:00:00 am" class="button blue" style="float:right;margin-top:5px;margin-right:10px" />
+                            <input type="submit" id="sssearchFilter" name="sssearchFilter" value="Generate Invoice Till Today 12:00:00 am" class="button blue" style="float:right;margin-top:5px;margin-right:10px" />
                         </td>
                     </tr>
                 
@@ -184,7 +194,7 @@
                                     </td>
                                     
                                     <td width="1%" rowspan="2">
-                                        <input type="submit" id="searchFilter" name="searchFilter" value="Generate Invoice Till Today 12:00:00 am" class="button blue" style="float:right;margin-top:5px;margin-right:10px" />
+                                        <input type="submit" id="ssssearchFilter" name="ssssearchFilter" value="Generate Invoice Till Today 12:00:00 am" class="button blue" style="float:right;margin-top:5px;margin-right:10px" />
                                     </td>
                                 </tr>
                             
@@ -214,6 +224,26 @@
                 <table width="100%" border="0" cellpadding="0" cellspacing="0">
                     <tbody>
                     
+                    <style>
+                        .sbHolder{
+                            width:250px;
+                        }
+                        .sbOptions{
+                            width:250px;
+                        }
+                    </style>
+                    <tr>
+                        <td colspan="13">
+                            <div style="float:right;height:55px">
+							    <div class="button white">
+                            <select id="filter_contents_select">
+                                <option value="all" <?php if($filter_contents == 'all'){ echo "selected";}?>>All Customers / Resellers</option>
+                                <option value="my" <?php if($filter_contents == 'my'){ echo "selected";}?>>My Customers / Resellers</option>
+                            </select>
+                            </div>
+                        </td>
+                    </tr>
+                    
                     <tr class="bottom_link">
                         <td height="20" width="8%" align="center">Generated Date</td>
                         <td width="8%" align="center">Due Date</td>
@@ -234,7 +264,6 @@
                     <?php if($invoices->num_rows() > 0) {?>
                         
                         <?php foreach ($invoices->result() as $row): ?>
-                        
                         <?php 
                             /*****CHECK FOR DUE DATE ****/
                             
@@ -291,9 +320,10 @@
                                 
                                 <td align="center" height="30"><a href="<?php echo base_url(); ?>billing/download_invoice/<?php echo $row->invoice_id;?>"><img src="<?php echo base_url();?>assets/images/export-pdf.gif"/> View Invoice</a></td>
                                 
-                                <td align="center" height="30"><a href="<?php echo base_url(); ?>billing/download_cdr_admin/<?php echo $row->invoice_id;?>"><img src="<?php echo base_url();?>assets/images/export-pdf.gif"/> View CDR</a></td>
+                                <td align="center" height="30"><a href="<?php echo base_url(); ?>billing/download_cdr/<?php echo $row->invoice_id;?>"><img src="<?php echo base_url();?>assets/images/export-pdf.gif"/> View CDR</a></td>
                                 
                                 
+                                <?php if($row->parent_id == '0'){?>
                                 
                                 <?php if($this->session->userdata('user_type') == 'admin'){?>
                                     <?php if($latest_status == 'pending' || $latest_status == 'over_due') {?>
@@ -321,6 +351,10 @@
                                             }
                                         }
                                 ?>
+                                
+                                <?php } else {?>
+                                    <td align="center" height="30">-</td>
+                                <?php } ?>
                             </tr>
                             <tr style="height:5px;"><td colspan="13" id="shadowDiv" style="height:5px;margin-top:0px;background-color:#fff"></td></tr>
                         <?php endforeach;?>
@@ -375,3 +409,43 @@
             }
         });
     </script>
+    
+    <!--****FILTER CONTENTS CHANGE BEHAVIOR ***********-->
+		<script type="text/javascript">
+		$(function () {
+			$("#filter_contents_select").selectbox({
+                onChange: function (val, inst) {
+                    
+                    //reset the searach form 
+                    $('#filter_table input[type="text"]').val('');
+                    $('#filter_table select').val('');
+                    
+                    //put the selected value in the hidden search form field 
+                    $('#filter_contents').val(val);
+                    
+                    //click the submit button of search form
+                    $('#searchFilter').click();
+                }
+            });
+		});
+		</script>
+    
+    <!--**************************Multi DropDown Select Box ************************-->
+         <script src="<?php echo base_url();?>assets/js/jquery.mcdropdown.js" type="text/javascript"></script>
+         <script src="<?php echo base_url();?>assets/js/jquery.bgiframe.js" type="text/javascript"></script>
+         <script type="text/javascript">
+        <!--//
+        // on DOM ready
+        $(document).ready(function (){
+            $("#filter_customers").mcDropdown("#quick_customer_filter_list");
+            
+            //this is to make the option selected 
+            var dd = $("#filter_customers").mcDropdown();
+            dd.setValue(<?php echo $filter_customers;?>);
+            
+            //woraround for fixing the input width of mcDropDown
+            $('div.mcdropdown input[type="text"]').css("width","129px");
+        });
+        //-->
+        </script>
+        <!--************************END*************************-->

@@ -1,8 +1,37 @@
+<?php 
+/*
+ * Version: MPL 1.1
+ *
+ * The contents of this file are subject to the Mozilla Public License
+ * Version 1.1 (the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ * 
+ * Software distributed under the License is distributed on an "AS IS"
+ * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+ * License for the specific language governing rights and limitations
+ * under the License.
+ * 
+ * The Original Code is "vBilling - VoIP Billing and Routing Platform"
+ * 
+ * The Initial Developer of the Original Code is 
+ * Digital Linx [<] info at digitallinx.com [>]
+ * Portions created by Initial Developer (Digital Linx) are Copyright (C) 2011
+ * Initial Developer (Digital Linx). All Rights Reserved.
+ *
+ * Contributor(s)
+ * "Digital Linx - <vbilling at digitallinx.com>"
+ *
+ * vBilling - VoIP Billing and Routing Platform
+ * version 0.1.3
+ *
+ */
+?>
 <!--POP UP ATTRIBUTES-->
 <?php 
     $atts = array(
-                  'width'      => '800',
-                  'height'     => '600',
+                  'width'      => '1000',
+                  'height'     => '800',
                   'scrollbars' => 'yes',
                   'status'     => 'yes',
                   'resizable'  => 'yes',
@@ -39,7 +68,7 @@
                     </td>
 
                     <td width="14%" rowspan="2">
-                        <input type="submit" name="searchFilter" value="SEARCH" class="button blue" style="float:right;margin-top:5px;margin-right:10px" />
+                        <input type="submit" name="searchFilter" id="searchFilter" value="SEARCH" class="button blue" style="float:right;margin-top:5px;margin-right:10px" />
                     </td>
                     
                     <td width="9%" rowspan="2">
@@ -66,7 +95,8 @@
                     </td>
                     
                 </tr>
-            
+                <!--***hidden field for filter contents *******-->
+                <input type="hidden" name="filter_contents" id="filter_contents" value="<?php echo $filter_contents;?>"/>
         </table>
     </form>
     </div>
@@ -78,6 +108,26 @@
             <td>
                 <table width="100%" border="0" cellpadding="0" cellspacing="0">
                     <tbody>
+                    
+                    <style>
+                        .sbHolder{
+                            width:250px;
+                        }
+                        .sbOptions{
+                            width:250px;
+                        }
+                    </style>
+                    <tr>
+                        <td colspan="5">
+                            <div style="float:right;height:55px">
+								    <div class="button white">
+                            <select id="filter_contents_select">
+                                <option value="all" <?php if($filter_contents == 'all'){ echo "selected";}?>>All Customers/Resellers Countries</option>
+                                <option value="my" <?php if($filter_contents == 'my'){ echo "selected";}?>>My Customers/Resellers Countries</option>
+                            </select>
+                            </div>
+                        </td>
+                    </tr>
                     
                     <tr class="bottom_link">
                         <td height="20" width="20%" align="center">Country</td>
@@ -158,3 +208,22 @@
             dateFormat: 'yy-mm-dd'
         });
     </script>
+    
+     <!--****FILTER CONTENTS CHANGE BEHAVIOR ***********-->
+		<script type="text/javascript">
+		$(function () {
+			$("#filter_contents_select").selectbox({
+                onChange: function (val, inst) {
+                    
+                    //reset the searach form 
+                    $('#filter_countries').val('');
+                    
+                    //put the selected value in the hidden search form field 
+                    $('#filter_contents').val(val);
+                    
+                    //click the submit button of search form
+                    $('#searchFilter').click();
+                }
+            });
+		});
+		</script>

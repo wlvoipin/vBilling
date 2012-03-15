@@ -1,0 +1,374 @@
+<?php 
+/*
+ * Version: MPL 1.1
+ *
+ * The contents of this file are subject to the Mozilla Public License
+ * Version 1.1 (the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ * 
+ * Software distributed under the License is distributed on an "AS IS"
+ * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+ * License for the specific language governing rights and limitations
+ * under the License.
+ * 
+ * The Original Code is "vBilling - VoIP Billing and Routing Platform"
+ * 
+ * The Initial Developer of the Original Code is 
+ * Digital Linx [<] info at digitallinx.com [>]
+ * Portions created by Initial Developer (Digital Linx) are Copyright (C) 2011
+ * Initial Developer (Digital Linx). All Rights Reserved.
+ *
+ * Contributor(s)
+ * "Digital Linx - <vbilling at digitallinx.com>"
+ *
+ * vBilling - VoIP Billing and Routing Platform
+ * version 0.1.3
+ *
+ */
+?>
+    <link type="text/css" href="<?php echo base_url();?>assets/css/ui.multiselect.css" rel="stylesheet" />
+	<script type="text/javascript" src="<?php echo base_url();?>assets/js/ui.multiselect.js"></script>
+	<script type="text/javascript">
+		$(function(){
+			$(".multiselect").multiselect({sortable: false, searchable: false});
+		});
+	</script>
+    
+<table cellspacing="0" cellpadding="0" border="0" align="center" width="100%">
+	<tbody><tr>
+            <td width="21" height="35"></td>
+            <td width="825" class="heading">
+            GENERAL SETTINGS            </td>
+            <td width="178">
+            <table cellspacing="0" cellpadding="0" width="170" height="42" class="search_col">
+                <tbody><tr>
+                    <td align="center" width="53" valign="bottom">&nbsp;</td>
+                </tr>
+                
+                <tr>
+                    <td align="center" width="53" valign="top">&nbsp;</td>
+                </tr>
+            </tbody></table>
+            </td>
+        </tr>
+        <tr>
+        <td background="<?php echo base_url();?>assets/images/line.png" height="7" colspan="3"></td>
+        </tr>
+                <tr>
+            <td height="10"></td>
+            <td></td>
+            <td></td>
+        </tr>
+        
+        <tr>
+        <td colspan="3"><div class="error" id="err_div" <?php if($this->session->flashdata('error') == '') { echo 'style="display:none;"'; }?>><?php echo $this->session->flashdata('error');?></div></td>
+        </tr>
+        
+        <tr>
+        <td colspan="3"><div class="success" id="success_div" <?php if($this->session->flashdata('success') == '') { echo 'style="display:none;"'; }?>><?php echo $this->session->flashdata('success');?></div></td>
+        </tr>
+        
+        <?php
+            $sql = "SELECT * FROM settings WHERE customer_id = '".$this->session->userdata('customer_id')."'";
+            $query = $this->db->query($sql);
+            
+            $company_name = '';
+            $logo = '';
+            $company_logo_as_invoice_logo = '';
+            $invoice_logo = '';
+            $invoice_terms = '';
+            $optional_cdr_fields_include = '';
+            
+            if($query->num_rows() > 0)
+            {
+                $row = $query->row();
+                $company_name = $row->company_name;
+                $logo = $row->logo;
+                $company_logo_as_invoice_logo = $row->company_logo_as_invoice_logo;
+                $invoice_logo = $row->invoice_logo;
+                $invoice_terms = $row->invoice_terms;
+                $optional_cdr_fields_include = $row->optional_cdr_fields_include;
+            }
+        ?>
+              
+<tr>
+    <td align="center" height="20" colspan="3">
+        <form enctype="multipart/form-data"  method="post" action="<?php echo base_url();?>reseller/settings/update_settings" name="updateSettings" id="updateSettings">
+            <table cellspacing="3" cellpadding="2" border="0" width="95%" class="search_col">
+                
+                <tbody>
+                            <tr>
+                                <td align="right" width="45%"><span class="required">*</span> Company Name:</td>
+                                <td align="left" width="55%"><input type="text" value="<?php echo $company_name;?>" name="company_name" id="company_name" class="textfield"></td>
+                            </tr>
+                            
+                            <tr>
+                                <td align="right"><span class="required">*</span>Company Logo:</td>
+                                <td align="left"><input type="file"  name="userfile" id="userfile" class="textfield"></td>
+                                <input type="hidden" id="hidden_logo" value="<?php echo $logo;?>"/>
+                            </tr>
+                            <tr>
+                                <td align="right">&nbsp;</td>
+                                <td align="left">Max File Size: 1 MB, Max Width:500px, Max Height:50px</td>
+                            </tr>
+                            <tr>
+                                <td align="right"></td>
+                                <td align="left"><img src="<?php echo base_url();?>media/images/<?php echo $logo;?>" height="30px"/> </td>
+                            </tr>
+                            
+                <tr>
+                    <td align="right" colspan="2">&nbsp;</td>
+                </tr>
+                <tr>
+                    <td align="center" colspan="2"><input border="0" id="submitupdateSettingsForm" type="image" src="<?php echo base_url();?>assets/images/btn-submit.png"></td>
+                    
+                    
+                </tr>
+            </tbody></table>
+        </form>
+    </td>
+</tr>
+<tr>
+            <td width="21" height="35"></td>
+            <td width="825" class="heading">
+            INVOICE SETTINGS            </td>
+            <td width="178">
+            <table cellspacing="0" cellpadding="0" width="170" height="42" class="search_col">
+                <tbody><tr>
+                    <td align="center" width="53" valign="bottom">&nbsp;</td>
+                </tr>
+                
+                <tr>
+                    <td align="center" width="53" valign="top">&nbsp;</td>
+                </tr>
+            </tbody></table>
+            </td>
+        </tr>
+<tr><td background="http://localhost/vb2/htdocs/assets/images/line.png" height="7" colspan="3"></td></tr>
+<tr>
+            <td height="10"></td>
+            <td></td>
+            <td></td>
+        </tr>
+        
+        <tr>
+        <td colspan="3"><div class="error" id="err_div_inv" <?php if($this->session->flashdata('error_inv') == '') { echo 'style="display:none;"'; }?>><?php echo $this->session->flashdata('error_inv');?></div></td>
+        </tr>
+        
+        <tr>
+        <td colspan="3"><div class="success" id="success_div_inv" <?php if($this->session->flashdata('success_inv') == '') { echo 'style="display:none;"'; }?>><?php echo $this->session->flashdata('success_inv');?></div></td>
+        </tr>
+<tr>
+    <td align="center" height="20" colspan="3">
+        <form enctype="multipart/form-data"  method="post" action="<?php echo base_url();?>reseller/settings/update_inv_settings" name="updateInvSettings" id="updateInvSettings">
+            <table cellspacing="3" cellpadding="2" border="0" width="95%" class="search_col">
+                
+                <tbody>
+                            <tr>
+                                <td align="right">&nbsp;</td>
+                                <td align="left"><input type="checkbox" id="same_logo" value="1" name="same_logo" <?php if($company_logo_as_invoice_logo == '1'){ echo "checked"; }?>/>&nbsp;Use Site Logo For Invoices</td>
+                            </tr>
+                            
+                            
+                            <tr class="inv_logo_tr" <?php if($company_logo_as_invoice_logo == '1'){ echo 'style="display:none;"'; }?>>
+                                <td align="right"><span class="required">*</span>Invoice Logo:</td>
+                                <td align="left"><input type="file"  name="userfile" id="userfile_inv" class="textfield"></td>
+                                <input type="hidden" id="hidden_inv_logo" value="<?php echo $invoice_logo;?>"/>
+                            </tr>
+                            
+                            <tr class="inv_logo_tr" <?php if($company_logo_as_invoice_logo == '1'){ echo 'style="display:none;"'; }?>>
+                                <td align="right"></td>
+                                
+                                <?php if($company_logo_as_invoice_logo == '0'){?>
+                                <td align="left"><img src="<?php echo base_url();?>media/images/<?php echo $invoice_logo;?>" height="30px"/> </td>
+                                <?php  } else {?>
+                                <td align="left"></td>
+                                <?php } ?>
+                            </tr>
+                            
+                            <tr>
+                                <td align="right" width="45%">Invoice Terms & Conditions:</td>
+                                <td align="left" width="55%">
+                                <textarea name="inv_footer" id="inv_footer" rows="10" cols="50"><?php echo $invoice_terms;?></textarea>
+                            </tr>
+                            
+                            <tr>
+                                <td align="right" width="45%">CDR Invoice Fields To Show (Optional):</td>
+                                <td align="left" width="55%">
+                                <select size="5" multiple="multiple" name="extra_cdr[]" id="extra_cdr" class="field multiselect">
+                                
+                                <?php 
+                                    $extra_cdr = $optional_cdr_fields_include;
+                                    $data_array = explode(',', $extra_cdr);
+                                ?>
+                                    
+                                    <option value="sell_rate" <?php if(in_array('sell_rate',$data_array)) { echo "selected";} ?>>Sell Rate</option>
+                                    <option value="cost_rate" <?php if(in_array('cost_rate',$data_array)) { echo "selected";} ?>>Cost Rate</option>
+                                    <option value="buy_initblock" <?php if(in_array('buy_initblock',$data_array)) { echo "selected";} ?>>Buy Init Block</option>
+                                    <option value="sell_initblock" <?php if(in_array('sell_initblock',$data_array)) { echo "selected";} ?>>Sell Init Block</option>
+                                    <option value="total_buy_cost" <?php if(in_array('total_buy_cost',$data_array)) { echo "selected";} ?>>Total Buy Cost</option>
+                                    
+                                </select>
+                            </tr>
+                            
+                <tr>
+                    <td align="right" colspan="2">&nbsp;</td>
+                </tr>
+                <tr>
+                    <td align="center" colspan="2"><input border="0" id="submitupdateInvSettingsForm" type="image" src="<?php echo base_url();?>assets/images/btn-submit.png"></td>
+                    
+                    
+                </tr>
+            </tbody></table>
+        </form>
+    </td>
+</tr>
+
+
+<tr>
+    <td>&nbsp;</td>
+    <td></td>
+    <td></td>
+</tr>
+
+<tr>
+    <td height="5"></td>
+    <td></td>
+    <td></td>
+</tr>
+
+
+<tr>
+    <td height="20" colspan="3">&nbsp;</td>
+</tr>
+    <tr>
+        <td colspan="3">&nbsp;</td>
+    </tr>
+    </tbody></table>
+
+<script type="text/javascript">
+    
+    /*****************GENERAL SETTINGS VALIDATION ********************************/
+    $('#updateSettings').submit(function(){
+        //show wait msg 
+    $.blockUI({ css: { 
+                    border: 'none', 
+                    padding: '15px', 
+                    backgroundColor: '#000', 
+                    '-webkit-border-radius': '10px', 
+                    '-moz-border-radius': '10px', 
+                    opacity: .5, 
+                    color: '#fff' 
+                    } 
+                });
+                
+        var company_name = $('#company_name').val();
+        var userfile = $('#userfile').val();
+        var hidden_logo = $('#hidden_logo').val();
+        
+        var required_error = 0;
+        
+        if(company_name == '')
+        {
+            required_error = 1;
+        }
+        
+        if(hidden_logo == '')
+        {
+            if(userfile == '')
+            {
+                required_error = 1;
+            }
+        }
+        
+        var text = "";
+        
+        if(required_error == 1)
+        {
+            text += "Fields With * Are Required Fields<br/>";
+        }
+        
+        if(text != '')
+        {
+            $('.success').hide();
+            $('#err_div').html(text);
+            $('.error').fadeOut();
+            $('#err_div').fadeIn();
+            document.getElementById('err_div').scrollIntoView();
+            $.unblockUI();
+            return false;
+        }
+        else
+        {
+           return true;
+        }
+        return false;
+    });
+    
+    /*****************INVOICE SETTINGS VALIDATION ********************************/
+    $('#updateInvSettings').submit(function(){
+        //show wait msg 
+    $.blockUI({ css: { 
+                    border: 'none', 
+                    padding: '15px', 
+                    backgroundColor: '#000', 
+                    '-webkit-border-radius': '10px', 
+                    '-moz-border-radius': '10px', 
+                    opacity: .5, 
+                    color: '#fff' 
+                    } 
+                });
+                
+       // var inv_footer = $('#inv_footer').val();
+        var userfile_inv = $('#userfile_inv').val();
+        var hidden_inv_logo = $('#hidden_inv_logo').val();
+        var required_error = 0;
+        
+        if(!$('#same_logo').is(':checked'))
+        {
+            if(hidden_inv_logo == '')
+            {
+                if(userfile_inv == '')
+                {
+                    required_error = 1;
+                }
+            }
+        }
+        
+        var text = "";
+        
+        if(required_error == 1)
+        {
+            text += "Fields With * Are Required Fields<br/>";
+        }
+        
+        if(text != '')
+        {
+            $('.success').hide();
+            $('#err_div_inv').html(text);
+            $('.error').fadeOut();
+            $('#err_div_inv').fadeIn();
+            document.getElementById('err_div_inv').scrollIntoView();
+            $.unblockUI();
+            return false;
+        }
+        else
+        {
+           return true;
+        }
+        return false;
+    });
+    
+    $('#same_logo').click(function(){
+        if ($(this).is(':checked'))
+        {
+            $('.inv_logo_tr').hide();
+        }
+        else
+        {
+            $('.inv_logo_tr').show();
+        }
+    });
+    
+</script>

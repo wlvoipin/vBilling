@@ -1,3 +1,32 @@
+<?php 
+/*
+ * Version: MPL 1.1
+ *
+ * The contents of this file are subject to the Mozilla Public License
+ * Version 1.1 (the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ * 
+ * Software distributed under the License is distributed on an "AS IS"
+ * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+ * License for the specific language governing rights and limitations
+ * under the License.
+ * 
+ * The Original Code is "vBilling - VoIP Billing and Routing Platform"
+ * 
+ * The Initial Developer of the Original Code is 
+ * Digital Linx [<] info at digitallinx.com [>]
+ * Portions created by Initial Developer (Digital Linx) are Copyright (C) 2011
+ * Initial Developer (Digital Linx). All Rights Reserved.
+ *
+ * Contributor(s)
+ * "Digital Linx - <vbilling at digitallinx.com>"
+ *
+ * vBilling - VoIP Billing and Routing Platform
+ * version 0.1.3
+ *
+ */
+?>
 <script type="text/javascript">
 if(!window.opener){
 window.location = '../../home/';
@@ -50,13 +79,14 @@ window.location = '../../home/';
                 <tbody>
                 
                 <tr>
-                    <td align="right" width="45%"><span class="required">*</span> IP:</td>
-                    <td align="left" width="55%"><input type="text" name="ip" id="ip" maxlength="50" class="textfield numeric"></td>
+                    <td align="right" width="45%"><span class="required">*</span> IP Address:</td>
+                    <td align="left" onmouseover="return overlib('<?php echo $this->lang->line('admin_new_acl_node_view_acl_node');?>', HAUTO, VAUTO, STICKY)" onmouseout="return nd()" width="55%"><input name="ip" type="text" class="textfield numeric" id="ip" onkeypress="validate_input_digits_only(event)" maxlength="15"></td>
                 </tr>
                 <tr>
+<!--
                     <td align="right"><span class="required">*</span> CIDR:</td>
                     <td align="left">
-                        <select  name="cdr" id="cdr" class="textfield">
+                        <select  name="cidr" id="cidr" class="textfield">
                             <?php 
                             for($i=0; $i<=32; $i++){
                                 if($i == 32)
@@ -72,6 +102,7 @@ window.location = '../../home/';
                                
                         </select>
                     </td>
+-->
                 </tr>
                 
                 <tr>
@@ -125,15 +156,17 @@ window.location = '../../home/';
                 });
                 
         var ip = $('#ip').val();
-        var cdr = $('#cdr').val();
-        
+<!--
+        var cidr = $('#cidr').val();
+-->
+		var cidr = "32"
         var pattern = /^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$/;
         
         var required_error = 0;
         var ip_error = 0;
         
         //common required fields check
-        if(ip == '' || cdr == '')
+        if(ip == '' || cidr == '')
         {
             required_error = 1;
         }

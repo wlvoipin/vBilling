@@ -111,17 +111,17 @@ if (!defined('K_TCPDF_EXTERNAL_CONFIG')) {
 	/**
 	 * document creator
 	 */
-	define ('PDF_CREATOR', 'TCPDF');
+	define ('PDF_CREATOR', 'vBilling');
 
 	/**
 	 * document author
 	 */
-	define ('PDF_AUTHOR', 'TCPDF');
+	define ('PDF_AUTHOR', 'vBilling');
 
 	/**
 	 * header title
 	 */
-	define ('PDF_HEADER_TITLE', '');
+	define ('PDF_HEADER_TITLE', 'vBilling');
 
 	/**
 	 * header description string

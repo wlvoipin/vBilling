@@ -1,3 +1,32 @@
+<?php 
+/*
+ * Version: MPL 1.1
+ *
+ * The contents of this file are subject to the Mozilla Public License
+ * Version 1.1 (the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ * 
+ * Software distributed under the License is distributed on an "AS IS"
+ * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+ * License for the specific language governing rights and limitations
+ * under the License.
+ * 
+ * The Original Code is "vBilling - VoIP Billing and Routing Platform"
+ * 
+ * The Initial Developer of the Original Code is 
+ * Digital Linx [<] info at digitallinx.com [>]
+ * Portions created by Initial Developer (Digital Linx) are Copyright (C) 2011
+ * Initial Developer (Digital Linx). All Rights Reserved.
+ *
+ * Contributor(s)
+ * "Digital Linx - <vbilling at digitallinx.com>"
+ *
+ * vBilling - VoIP Billing and Routing Platform
+ * version 0.1.3
+ *
+ */
+?>
 <script type="text/javascript">
 if(!window.opener){
 window.location = '../../home/';
@@ -278,25 +307,61 @@ window.location = '../../home/';
                                 <td align="center" <?php if($row->total_failed_gateways > 0) {?>class="selector" style="color:red;font-weight:bold;"<?php } ?> id="<?php echo $row->id;?>"><?php echo $row->total_failed_gateways; ?></td>
                                 <td align="center"><?php echo $row->network_addr; ?></td>
                                 <td align="center"><?php echo $row->username; ?></td>
-                                <td align="center"><?php echo $sellrate.'&nbsp;/&nbsp'.$filter_display_results; ?></td>
-                                <td align="center"><?php echo $row->sell_initblock; ?></td>
-                                <td align="center"><?php echo $costrate.'&nbsp;/&nbsp'.$filter_display_results; ?></td>
-                                <td align="center"><?php echo $row->buy_initblock; ?></td>
                                 
-                                <?php if(($row->hangup_cause == 'NORMAL_CLEARING' || $row->hangup_cause == 'ALLOTTED_TIMEOUT') && $row->billsec > 0) {?>
-                                    <td align="center"><?php echo $row->total_sell_cost; ?></td>
+                                <?php if($row->parent_reseller_id == '0'){ ?>
+                                    <td align="center"><?php echo $sellrate.'&nbsp;/&nbsp'.$filter_display_results; ?></td>
+                                    <td align="center"><?php echo $row->sell_initblock; ?></td>
+                                    <td align="center"><?php echo $costrate.'&nbsp;/&nbsp'.$filter_display_results; ?></td>
+                                    <td align="center"><?php echo $row->buy_initblock; ?></td>
+                                    
+                                    <?php if(($row->hangup_cause == 'NORMAL_CLEARING' || $row->hangup_cause == 'ALLOTTED_TIMEOUT') && $row->billsec > 0) {?>
+                                        <td align="center"><?php echo $row->total_sell_cost; ?></td>
+                                    <?php } else { ?>
+                                        <td align="center">0</td>
+                                    <?php } ?>
+                                    
+                                    <?php if(($row->hangup_cause == 'NORMAL_CLEARING' || $row->hangup_cause == 'ALLOTTED_TIMEOUT') && $row->billsec > 0) {?>
+                                        <td align="center"><?php echo $row->total_buy_cost; ?></td>
+                                    <?php } else { ?>
+                                        <td align="center">0</td>
+                                    <?php } ?>
+                                    
+                                    
+                                    <td align="center">&nbsp;</td>
+                                    <td align="center">&nbsp;</td>
                                 <?php } else { ?>
-                                    <td align="center">0</td>
+                                    <!--get admin rates -->
+                                            <?php 
+                                                $getRate = $this->groups_model->get_single_rate($row->admin_rate_id , $row->admin_rate_group);
+                                                $getRateRow = $getRate->row();
+                                                
+                                                if($filter_display_results == 'sec')
+                                                {
+                                                    $sellrate       = $getRateRow->sell_rate / 60; // sell rate per sec
+                                                    $sellrate       = round($sellrate, 4);
+                                                    
+                                                    $costrate       = $getRateRow->cost_rate / 60; // cost rate per sec
+                                                    $costrate       = round($costrate, 4);
+                                                }
+                                                else
+                                                {
+                                                    $sellrate       = $getRateRow->sell_rate; // sell rate by default is in min 
+                                                    $costrate       = $getRateRow->cost_rate; // cost rate by default is in min
+                                                }
+                                            ?>
+                                            
+                                            <td align="center"><?php echo $sellrate.'&nbsp;/&nbsp'.$filter_display_results; ?></td>
+                                            <td align="center"><?php echo $getRateRow->sell_initblock; ?></td>
+                                            <td align="center"><?php echo $costrate.'&nbsp;/&nbsp'.$filter_display_results; ?></td>
+                                            <td align="center"><?php echo $getRateRow->buy_initblock; ?></td>
+                                            
+                                            <td align="center"><?php echo $row->total_admin_sell_cost; ?></td>
+                                            <td align="center"><?php echo $row->total_admin_buy_cost; ?></td>
+                                        
+                                            <td align="center">&nbsp;</td>
+                                            <td align="center">&nbsp;</td>
+                                                
                                 <?php } ?>
-                                
-                                <?php if(($row->hangup_cause == 'NORMAL_CLEARING' || $row->hangup_cause == 'ALLOTTED_TIMEOUT') && $row->billsec > 0) {?>
-                                    <td align="center"><?php echo $row->total_buy_cost; ?></td>
-                                <?php } else { ?>
-                                    <td align="center">0</td>
-                                <?php } ?>
-                                
-                                <td align="center">&nbsp;</td>
-                                <td align="center">&nbsp;</td>
                             </tr>
                             <tr style="height:5px;"><td colspan="16" id="shadowDiv" style="height:5px;margin-top:0px;background-color:#fff"></td></tr>
                         <?php endforeach;?>

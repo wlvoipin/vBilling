@@ -1,3 +1,32 @@
+<?php 
+/*
+ * Version: MPL 1.1
+ *
+ * The contents of this file are subject to the Mozilla Public License
+ * Version 1.1 (the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ * 
+ * Software distributed under the License is distributed on an "AS IS"
+ * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+ * License for the specific language governing rights and limitations
+ * under the License.
+ * 
+ * The Original Code is "vBilling - VoIP Billing and Routing Platform"
+ * 
+ * The Initial Developer of the Original Code is 
+ * Digital Linx [<] info at digitallinx.com [>]
+ * Portions created by Initial Developer (Digital Linx) are Copyright (C) 2011
+ * Initial Developer (Digital Linx). All Rights Reserved.
+ *
+ * Contributor(s)
+ * "Digital Linx - <vbilling at digitallinx.com>"
+ *
+ * vBilling - VoIP Billing and Routing Platform
+ * version 0.1.3
+ *
+ */
+?>
 <script type="text/javascript">
 if(!window.opener){
 window.location = '../../home/';
@@ -47,7 +76,7 @@ window.location = '../../home/';
                 <thead>
                     
                    
-                    
+                 <?php if(customer_any_cell($customer_id, 'parent_id') == $this->session->userdata('customer_id')){?>   
                     <?php if($this->session->userdata('user_type') == 'admin'){?>
                          <tr class="main_text balance_form" style="display:none;">
                             <td colspan="3">
@@ -122,7 +151,7 @@ window.location = '../../home/';
                                 }
                             }
                     ?>
-                          
+                <?php } ?>          
                     <tr class="bottom_link">
                         <td width="34%" align="center">Date</td>
                         <td width="33%" align="center">Modified Balance</td>

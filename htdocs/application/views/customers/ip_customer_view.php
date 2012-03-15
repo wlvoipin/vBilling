@@ -1,3 +1,32 @@
+<?php 
+/*
+ * Version: MPL 1.1
+ *
+ * The contents of this file are subject to the Mozilla Public License
+ * Version 1.1 (the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ * 
+ * Software distributed under the License is distributed on an "AS IS"
+ * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+ * License for the specific language governing rights and limitations
+ * under the License.
+ * 
+ * The Original Code is "vBilling - VoIP Billing and Routing Platform"
+ * 
+ * The Initial Developer of the Original Code is 
+ * Digital Linx [<] info at digitallinx.com [>]
+ * Portions created by Initial Developer (Digital Linx) are Copyright (C) 2011
+ * Initial Developer (Digital Linx). All Rights Reserved.
+ *
+ * Contributor(s)
+ * "Digital Linx - <vbilling at digitallinx.com>"
+ *
+ * vBilling - VoIP Billing and Routing Platform
+ * version 0.1.3
+ *
+ */
+?>
 <script type="text/javascript">
 if(!window.opener){
 window.location = '../../home/';
@@ -46,30 +75,29 @@ window.location = '../../home/';
                 
                 <thead>
                     
-                    
-                    <?php if($this->session->userdata('user_type') == 'admin'){?>
-                        <tr class="main_text" style="background:none;">
-                            <td align="right" colspan="5"><a href="<?php echo base_url();?>customers/new_acl_node/<?php echo $customer_id;?>">NEW ACL NODE</a></td>
-                        </tr>
-                    <?php 
-                        } else if($this->session->userdata('user_type') == 'sub_admin'){
-                                if(sub_admin_access_any_cell($this->session->userdata('user_id'), 'new_acl') == 1)
-                                {
-                    ?>
-                                    <tr class="main_text" style="background:none;">
-                                        <td align="right" colspan="5"><a href="<?php echo base_url();?>customers/new_acl_node/<?php echo $customer_id;?>">NEW ACL NODE</a></td>
-                                    </tr>
-                    <?php 
-                                }
-                            }       
-                    ?>
+                    <?php if(customer_any_cell($customer_id, 'parent_id') == $this->session->userdata('customer_id')){?>
+                        <?php if($this->session->userdata('user_type') == 'admin'){?>
+                            <tr class="main_text" style="background:none;">
+                                <td align="right" colspan="5"><a href="<?php echo base_url();?>customers/new_acl_node/<?php echo $customer_id;?>"><?php echo $this->lang->line('customers_popup_new_acl_node');?></a></td>
+                            </tr>
+                        <?php 
+                            } else if($this->session->userdata('user_type') == 'sub_admin'){
+                                    if(sub_admin_access_any_cell($this->session->userdata('user_id'), 'new_acl') == 1)
+                                    {
+                        ?>
+                                        <tr class="main_text" style="background:none;">
+                                        <td align="right" colspan="5"><a href="<?php echo base_url();?>customers/new_acl_node/<?php echo $customer_id;?>"><?php echo $this->lang->line('customers_popup_new_acl_node');?></a></td>
+                                        </tr>
+                        <?php 
+                                    }
+                                }       
+                        ?>
+                    <?php } ?>
                            
                     <tr class="bottom_link">
-                        <td width="20%" align="center">CIDR</td>
-                        <td width="20%" align="center">ACL List</td>
-                        <td width="20%" align="center">ACL List Policy</td>
-                        <td width="20%" align="center">TYPE</td>
-                        <td width="20%" align="center">Options</td>
+                        <td width="20%" align="center"><?php echo $this->lang->line('customers_popup_acl_cidr');?></td>
+                        <td width="20%" align="center"><?php echo $this->lang->line('customers_popup_enable_disable');?></td>
+                        <td width="20%" align="center"><?php echo $this->lang->line('customers_popup_action_delete_acl');?></td>
                     </tr>
                      <tr><td colspan="5" id="shadowDiv" style="height:5px;margin-top:-1px"></td></tr>
                 </thead>
@@ -80,89 +108,102 @@ window.location = '../../home/';
                                 
                                     <tr class="main_text">
                                         
-                                        
-                                        <?php if($this->session->userdata('user_type') == 'admin'){?>
-                                            <td align="center"><a href="<?php echo base_url();?>customers/edit_acl_node/<?php echo $row->id; ?>/<?php echo $customer_id;?>"><?php echo $row->cidr; ?></a></td>
-                                        <?php 
-                                            } else if($this->session->userdata('user_type') == 'sub_admin'){
-                                                    if(sub_admin_access_any_cell($this->session->userdata('user_id'), 'edit_acl') == 1)
-                                                    {
-                                        ?>
-                                                        <td align="center"><a href="<?php echo base_url();?>customers/edit_acl_node/<?php echo $row->id; ?>/<?php echo $customer_id;?>"><?php echo $row->cidr; ?></a></td>
-                                        <?php 
+                                        <?php if(customer_any_cell($customer_id, 'parent_id') == $this->session->userdata('customer_id')){?>
+                                            <?php if($this->session->userdata('user_type') == 'admin'){?>
+                                                <td align="center"><a href="<?php echo base_url();?>customers/edit_acl_node/<?php echo $row->id; ?>/<?php echo $customer_id;?>"><?php echo $row->cidr; ?></a></td>
+                                            <?php 
+                                                } else if($this->session->userdata('user_type') == 'sub_admin'){
+                                                        if(sub_admin_access_any_cell($this->session->userdata('user_id'), 'edit_acl') == 1)
+                                                        {
+                                            ?>
+                                                            <td align="center"><a href="<?php echo base_url();?>customers/edit_acl_node/<?php echo $row->id; ?>/<?php echo $customer_id;?>"><?php echo $row->cidr; ?></a></td>
+                                            <?php 
+                                                        }
+                                                        else
+                                                        {
+                                            ?>
+                                                            <td align="center"><?php echo $row->cidr; ?></td>
+                                            <?php
+                                                        }
                                                     }
-                                                    else
-                                                    {
-                                        ?>
-                                                        <td align="center"><?php echo $row->cidr; ?></td>
-                                        <?php
-                                                    }
-                                                }
-                                        ?>
+                                            ?>
+                                        <?php } else {?>
+                                            <td align="center"><?php echo $row->cidr; ?></td>
+                                        <?php } ?>
                                         
+<!--
                                         <td align="center"><?php echo acl_list_any_cell($row->list_id, 'acl_name'); ?></td>
                                         <td align="center"><?php echo acl_list_any_cell($row->list_id, 'default_policy'); ?></td>
+-->                                        
+                                        
+                                        <?php if(customer_any_cell($customer_id, 'parent_id') == $this->session->userdata('customer_id')){?>
+                                        
+                                            <?php if($this->session->userdata('user_type') == 'admin'){?>
+                                                <td align="center">
+                                                    <select class="node_deny_allow" id="<?php echo $row->id; ?>">
+<option value="allow" <?php if($row->type == 'allow'){ echo "selected"; }?>><?php echo $this->lang->line('customers_popup_enable_acl');?></option>
+<option value="deny" <?php if($row->type == 'deny'){ echo "selected"; }?>><?php echo $this->lang->line('customers_popup_disable_acl');?></option>
+                                                    </select>
+                                                </td>
+                                            <?php 
+                                                } else if($this->session->userdata('user_type') == 'sub_admin'){
+                                                        if(sub_admin_access_any_cell($this->session->userdata('user_id'), 'change_type_acl') == 1)
+                                                        {
+                                            ?>
+                                                            <td align="center">
+                                                                <select class="node_deny_allow" id="<?php echo $row->id; ?>">
+                                                                    <option value="allow" <?php if($row->type == 'allow'){ echo "selected"; }?>><?php echo $this->lang->line('customers_popup_enable_acl');?></option>
+                                                                    <option value="deny" <?php if($row->type == 'deny'){ echo "selected"; }?>><?php echo $this->lang->line('customers_popup_disable_acl');?></option>
+                                                                </select>
+                                                            </td>
+                                            <?php 
+                                                        }
+                                                        else
+                                                        {
+                                            ?>
+<td align="center"><?php if($row->type == 'allow'){ echo "$this->lang->line('customers_popup_enable_acl')"; } else { echo "$this->lang->line('customers_popup_disable_acl')";}?></td>
+                                            <?php
+                                                        }
+                                                    }
+                                            ?>
+                                        <?php } else {?>
+                                            <td align="center"><?php if($row->type == 'allow'){ echo "$this->lang->line('customers_popup_enable_acl')"; } else { echo "$this->lang->line('customers_popup_disable_acl')";}?></td>
+                                        <?php } ?>
                                         
                                         
-                                        <?php if($this->session->userdata('user_type') == 'admin'){?>
-                                            <td align="center">
-                                                <select class="node_deny_allow" id="<?php echo $row->id; ?>">
-                                                    <option value="allow" <?php if($row->type == 'allow'){ echo "selected"; }?>>Allowed</option>
-                                                    <option value="deny" <?php if($row->type == 'deny'){ echo "selected"; }?>>Denied</option>
-                                                </select>
-                                            </td>
-                                        <?php 
-                                            } else if($this->session->userdata('user_type') == 'sub_admin'){
-                                                    if(sub_admin_access_any_cell($this->session->userdata('user_id'), 'change_type_acl') == 1)
-                                                    {
-                                        ?>
-                                                        <td align="center">
-                                                            <select class="node_deny_allow" id="<?php echo $row->id; ?>">
-                                                                <option value="allow" <?php if($row->type == 'allow'){ echo "selected"; }?>>Allowed</option>
-                                                                <option value="deny" <?php if($row->type == 'deny'){ echo "selected"; }?>>Denied</option>
-                                                            </select>
-                                                        </td>
-                                        <?php 
+                                        <?php if(customer_any_cell($customer_id, 'parent_id') == $this->session->userdata('customer_id')){?>
+                                            <?php if($this->session->userdata('user_type') == 'admin'){?>
+                                                <td align="center">
+                                                    <a href="#" id="<?php echo $row->id;?>" class="delete_node"><img src="<?php echo base_url();?>assets/images/button_cancel.png" style="width:16px;border:none;cursor:pointer;" /></a>
+                                                </td>
+                                            <?php 
+                                                } else if($this->session->userdata('user_type') == 'sub_admin'){
+                                                        if(sub_admin_access_any_cell($this->session->userdata('user_id'), 'delete_acl') == 1)
+                                                        {
+                                            ?>
+                                                            <td align="center">
+                                                                <a href="#" id="<?php echo $row->id;?>" class="delete_node"><img src="<?php echo base_url();?>assets/images/button_cancel.png" style="width:16px;border:none;cursor:pointer;" /></a>
+                                                            </td>
+                                            <?php 
+                                                        }
+                                                        else
+                                                        {
+                                            ?>
+                                                            <td align="center">---</td>
+                                            <?php
+                                                        }
                                                     }
-                                                    else
-                                                    {
-                                        ?>
-                                                        <td align="center"><?php if($row->type == 'allow'){ echo "Allowed"; } else { echo "Denied";}?></td>
-                                        <?php
-                                                    }
-                                                }
-                                        ?>
-                                        
-                                        
-                                        <?php if($this->session->userdata('user_type') == 'admin'){?>
-                                            <td align="center">
-                                                <a href="#" id="<?php echo $row->id;?>" class="delete_node"><img src="<?php echo base_url();?>assets/images/button_cancel.png" style="width:16px;border:none;cursor:pointer;" /></a>
-                                            </td>
-                                        <?php 
-                                            } else if($this->session->userdata('user_type') == 'sub_admin'){
-                                                    if(sub_admin_access_any_cell($this->session->userdata('user_id'), 'delete_acl') == 1)
-                                                    {
-                                        ?>
-                                                        <td align="center">
-                                                            <a href="#" id="<?php echo $row->id;?>" class="delete_node"><img src="<?php echo base_url();?>assets/images/button_cancel.png" style="width:16px;border:none;cursor:pointer;" /></a>
-                                                        </td>
-                                        <?php 
-                                                    }
-                                                    else
-                                                    {
-                                        ?>
-                                                        <td align="center">---</td>
-                                        <?php
-                                                    }
-                                                }
-                                        ?>
+                                            ?>
+                                        <?php } else {?>
+                                            <td align="center">---</td>
+                                        <?php } ?>
                                         
                                     </tr>
                                     <tr style="height:5px;"><td colspan="5" id="shadowDiv" style="height:5px;margin-top:0px;background-color:#fff"></td></tr>
                                 <?php } ?>
                             <?php } else { ?>
                                 
-                                <tr class="main_text"><td align="center" colspan="5" style="color:red;">No Records Found</td></tr>
+                                <tr class="main_text"><td align="center" colspan="5" style="color:red;"><?php echo $this->lang->line('customers_popup_no_records_found');?></td></tr>
                             <?php } ?>
                     
                 </tbody>
@@ -191,12 +232,12 @@ window.location = '../../home/';
     </tr>
     </tbody></table>
     
-    <div id="dialog-confirm-delete" title="Delete The ACL Node?" style="display:none;">
-	<p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>Are You Sure Want To Delete This ACL Node?</p>
+    <div id="dialog-confirm-delete" title="<?php echo $this->lang->line('customers_popup_dialog_confirm_delete');?>" style="display:none;">
+	<p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span><?php echo $this->lang->line('customers_popup_alert_delete_acl');?></p>
     </div>
     
-    <div id="dialog-confirm-update" title="Update The ACL Node Type?" style="display:none;">
-	<p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>Are You Sure Want To Update This ACL Node type?</p>
+    <div id="dialog-confirm-update" title="<?php echo $this->lang->line('customers_popup_dialog_confirm_update');?>" style="display:none;">
+	<p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span><?php echo $this->lang->line('customers_popup_alert_enable_disable_acl');?></p>
     </div>
     
 <script type="text/javascript">
@@ -218,7 +259,7 @@ window.location = '../../home/';
                                 success: function(html){
                                     $( "#dialog-confirm-delete" ).dialog( "close" );
                                     curr_row.fadeOut();
-                                    $('.success').html("ACL Node Deleted Successfully.");
+                                    $('.success').html("<?php echo $this->lang->line('customers_popup_acl_node_deleted');?>");
                                     $('.success').fadeOut();
                                     $('.success').fadeIn();
                                     document.getElementById('success_div').scrollIntoView();
@@ -251,7 +292,7 @@ window.location = '../../home/';
                                 data: data,
                                 success: function(html){
                                     $( "#dialog-confirm-update" ).dialog( "close" );
-                                    $('.success').html("ACL Node Type Changed Successfully.");
+                                    $('.success').html("<?php echo $this->lang->line('customers_popup_acl_node_changed');?>");
                                     $('.success').fadeOut();
                                     $('.success').fadeIn();
                                     document.getElementById('success_div').scrollIntoView();

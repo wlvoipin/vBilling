@@ -12,7 +12,7 @@ if (basename($_SERVER['PHP_SELF']) == basename(__FILE__)) {
 * @package FS_CURL
 * @license BSD
 * @author Raymond Chandler (intralanman) <intralanman@gmail.com>
-* @contributor Muhammad Naseer Bhatti (Goni) <nbhatti@gmail.com>
+* @contributor Digital Linx / vBilling <vbilling@digitallinx.com>
 * @version 1.1
 *
 * FreeSWITCH CURL base class
@@ -113,7 +113,7 @@ private function generate_request_array() {
 		if (!defined('FS_CURL_DEBUG') && $req_key == 'fs_curl_debug') {
 			define('FS_CURL_DEBUG', $req_val);
 		}
-		$this -> comment("$req_key => $req_val");
+		//$this -> comment("$req_key => $req_val");
 		$this -> request[$req_key] = $req_val;
 	}
 }
@@ -209,22 +209,23 @@ private function close_xml() {
 */
 public function output_xml() {
 	// $this->comment(
-	// 		sprintf('Total # of Queries Run: %d', $this->db->counter)
-	// 	);
-	// 	$this -> comment(sprintf("Estimated Execution Time Is: %s"
-	// 	, (preg_replace(
-	// 			'/^0\.(\d+) (\d+)$/', '\2.\1', microtime()) - START_TIME)
-	// 			));
+	// 	sprintf('Total # of Queries Run: %d', $this->db->counter)
+	// );
+	// $this -> comment(sprintf("Estimated Execution Time Is: %s"
+	// , (preg_replace(
+	// 	'/^0\.(\d+) (\d+)$/', '\2.\1', microtime()) - START_TIME)
+	// 	));
 
-			$this -> comments2xml($this -> xmlw, $this -> comments);
-			$this -> close_xml();
-			$xml_out = $this -> xmlw -> outputMemory();
-			$this -> debug('---- Start XML Output ----');
-			$this -> debug(explode("\n", $xml_out));
-			$this -> debug('---- End XML Output ----');
-			echo $xml_out;
-			exit();
-		}
+	$this -> comments2xml($this -> xmlw, $this -> comments);
+	$this -> close_xml();
+	$xml_out = $this -> xmlw -> outputMemory();
+	// $this -> debug('---- Start XML Output ----');
+	// $this -> debug(explode("\n", $xml_out));
+	// $this -> debug('---- End XML Output ----');
+	// $this -> debug ("----");
+	echo $xml_out;
+	exit();
+}
 
 /**
 * Recursive method to add an array of comments
@@ -354,4 +355,3 @@ public function debug($input, $debug_level=-1, $spaces=0) {
 	}
 }
 }
-

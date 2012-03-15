@@ -1,36 +1,36 @@
 <?php 
 /*
-* Version: MPL 1.1
-*
-* The contents of this file are subject to the Mozilla Public License
-* Version 1.1 (the "License"); you may not use this file except in
-* compliance with the License. You may obtain a copy of the License at
-* http://www.mozilla.org/MPL/
-* 
-* Software distributed under the License is distributed on an "AS IS"
-* basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
-* License for the specific language governing rights and limitations
-* under the License.
-* 
-* The Original Code is "vBilling - VoIP Billing and Routing Platform"
-* 
-* The Initial Developer of the Original Code is 
-* Digital Linx [<] info at digitallinx.com [>]
-* Portions created by Initial Developer (Digital Linx) are Copyright (C) 2011
-* Initial Developer (Digital Linx). All Rights Reserved.
-*
-* Contributor(s)
-* "Muhammad Naseer Bhatti <nbhatti at gmail.com>"
-*
-* vBilling - VoIP Billing and Routing Platform
-* version 0.1.1
-*
-*/
+ * Version: MPL 1.1
+ *
+ * The contents of this file are subject to the Mozilla Public License
+ * Version 1.1 (the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ * 
+ * Software distributed under the License is distributed on an "AS IS"
+ * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+ * License for the specific language governing rights and limitations
+ * under the License.
+ * 
+ * The Original Code is "vBilling - VoIP Billing and Routing Platform"
+ * 
+ * The Initial Developer of the Original Code is 
+ * Digital Linx [<] info at digitallinx.com [>]
+ * Portions created by Initial Developer (Digital Linx) are Copyright (C) 2011
+ * Initial Developer (Digital Linx). All Rights Reserved.
+ *
+ * Contributor(s)
+ * "Digital Linx - <vbilling at digitallinx.com>"
+ *
+ * vBilling - VoIP Billing and Routing Platform
+ * version 0.1.3
+ *
+ */
 
 class Customer_model extends CI_Model {
 
 	// list all customers
-	function get_all_customers($num, $offset, $filter_account_num, $filter_company, $filter_first_name, $filter_type, $filter_sort)
+	function get_all_customers($num, $offset, $filter_account_num, $filter_company, $filter_first_name, $filter_type, $filter_sort, $filter_contents)
 	{
 		if($offset == ''){$offset='0';}
         
@@ -58,7 +58,18 @@ class Customer_model extends CI_Model {
         
         
 		$where = '';
-		$where .= "WHERE customer_id != '' ";
+		if($filter_contents == 'all') //get all customers and resellers which belongs to him 
+        {
+            $where .= "WHERE customer_id != '' ";
+        }
+        else if($filter_contents == 'my') //only get those which are created by him 
+        {
+            $where .= "WHERE parent_id = '0' ";
+        }
+        else //show all 
+        {
+            $where .= "WHERE customer_id != '' ";
+        }
 
 		if($filter_account_num != '')
 		{
@@ -91,10 +102,21 @@ class Customer_model extends CI_Model {
 		return $query;
 	}
 
-	function get_all_customers_count($filter_account_num, $filter_company, $filter_first_name, $filter_type)
+	function get_all_customers_count($filter_account_num, $filter_company, $filter_first_name, $filter_type, $filter_contents)
 	{
 		$where = '';
-		$where .= "WHERE customer_id != '' ";
+		if($filter_contents == 'all') //get all customers and resellers which belongs to him 
+        {
+            $where .= "WHERE customer_id != '' ";
+        }
+        else if($filter_contents == 'my') //only get those which are created by him 
+        {
+            $where .= "WHERE parent_id = '0' ";
+        }
+        else //show all 
+        {
+            $where .= "WHERE customer_id != '' ";
+        }
 
 		if($filter_account_num != '')
 		{
@@ -146,7 +168,7 @@ class Customer_model extends CI_Model {
 		return $row->$col_name;
 	}
 
-	//check customer email in use 
+	//check customer email already in use
 	function check_email_in_use($email)
 	{
 		$sql = "SELECT * FROM customers WHERE customer_contact_email = '".$email."' ";
@@ -185,7 +207,7 @@ class Customer_model extends CI_Model {
         }
         
         
-        $sql = "INSERT INTO customers (customer_acc_num, customer_company, customer_firstname, customer_lastname, customer_contact_email, customer_address, customer_city, customer_state, customer_country, customer_phone_prefix, customer_phone, customer_zip, customer_prepaid, customer_credit_limit, customer_enabled, customer_max_calls, customer_send_cdr, customer_billing_email, customer_timezone, customer_rate_group, customer_billing_cycle, next_invoice_date) VALUES ('".$data['account_no']."', '".$data['companyname']."', '".$data['firstname']."', '".$data['lastname']."', '".$data['email']."', '".$data['address']."', '".$data['city']."', '".$data['state']."', '".$data['country']."', '".$data['prefix']."', '".$data['phone']."', '".$data['zipcode']."', '".$data['account_type']."', '".$data['creditlimit']."', '1', '".$data['maxcalls']."', '".$data['cdr_check']."', '".$data['cdr_email']."', '".$data['timezone']."', '".$data['group']."', '".$data['billing_cycle']."', '".$next_invoice_date."') ";
+        $sql = "INSERT INTO customers (customer_acc_num, customer_company, customer_firstname, customer_lastname, customer_contact_email, customer_address, customer_city, customer_state, customer_country, customer_phone_prefix, customer_phone, customer_zip, customer_prepaid, customer_credit_limit, customer_enabled, customer_max_calls, customer_send_cdr, customer_billing_email, customer_timezone, customer_rate_group, customer_billing_cycle, next_invoice_date, reseller_level) VALUES ('".$data['account_no']."', '".$data['companyname']."', '".$data['firstname']."', '".$data['lastname']."', '".$data['email']."', '".$data['address']."', '".$data['city']."', '".$data['state']."', '".$data['country']."', '".$data['prefix']."', '".$data['phone']."', '".$data['zipcode']."', '".$data['account_type']."', '".$data['creditlimit']."', '1', '".$data['maxcalls']."', '".$data['cdr_check']."', '".$data['cdr_email']."', '".$data['timezone']."', '".$data['group']."', '".$data['billing_cycle']."', '".$next_invoice_date."', '".$data['type']."') ";
 		$query = $this->db->query($sql);
 		return $this->db->insert_id();
 	}
@@ -193,35 +215,79 @@ class Customer_model extends CI_Model {
 	//update customer 
 	function update_customer_db($data)
 	{
-		$sql = "UPDATE customers SET customer_company='".$data['companyname']."', customer_firstname='".$data['firstname']."', customer_lastname='".$data['lastname']."', customer_contact_email='".$data['email']."', customer_address='".$data['address']."', customer_city='".$data['city']."', customer_state='".$data['state']."', customer_country='".$data['country']."', customer_phone_prefix='".$data['prefix']."', customer_phone='".$data['phone']."', customer_zip='".$data['zipcode']."', customer_prepaid='".$data['account_type']."', customer_credit_limit='".$data['creditlimit']."', customer_max_calls='".$data['maxcalls']."', customer_send_cdr='".$data['cdr_check']."', customer_billing_email='".$data['cdr_email']."', customer_timezone='".$data['timezone']."', customer_rate_group='".$data['group']."', customer_billing_cycle='".$data['billing_cycle']."' WHERE customer_id='".$data['customer_id']."'";
+		$sql = "UPDATE customers SET customer_company='".$data['companyname']."', customer_firstname='".$data['firstname']."', customer_lastname='".$data['lastname']."', customer_contact_email='".$data['email']."', customer_address='".$data['address']."', customer_city='".$data['city']."', customer_state='".$data['state']."', customer_country='".$data['country']."', customer_phone_prefix='".$data['prefix']."', customer_phone='".$data['phone']."', customer_zip='".$data['zipcode']."', customer_prepaid='".$data['account_type']."', customer_credit_limit='".$data['creditlimit']."', customer_max_calls='".$data['maxcalls']."', rate_limit_check='".$data['rate_limit_check']."', customer_low_rate_limit='".$data['customer_low_rate_limit']."', customer_high_rate_limit='".$data['customer_high_rate_limit']."', customer_send_cdr='".$data['cdr_check']."', customer_billing_email='".$data['cdr_email']."', customer_timezone='".$data['timezone']."', customer_rate_group='".$data['group']."', customer_billing_cycle='".$data['billing_cycle']."' WHERE customer_id='".$data['customer_id']."'";
+
 		$query = $this->db->query($sql);
 	}
 
 	function update_customer_access_limitations($data, $customer_id)
 	{
-		$explode = explode('|', $data['sip_ip']);
-        $domain     = $explode[0];
-        $sofia_id   = $explode[1];
-        
-        $sql = "UPDATE customer_access_limitations SET total_sip_accounts = '".$data['tot_sip_acc']."', total_acl_nodes = '".$data['tot_acl_nodes']."', domain = '".$domain."', domain_sofia_id = '".$sofia_id."' WHERE customer_id ='".$customer_id."' ";
+		$sql = "UPDATE customer_access_limitations SET total_sip_accounts = '".$data['tot_sip_acc']."', total_acl_nodes = '".$data['tot_acl_nodes']."' WHERE customer_id ='".$customer_id."' ";
 		$query = $this->db->query($sql);
+        
+        //delete previous sips
+        $sql2 = "DELETE FROM customer_sip WHERE customer_id = '".$customer_id."' ";
+		$query2 = $this->db->query($sql2);
+        
+        //insert new sips 
+        $sip = $data['sip_ip'];
+        if(is_array($sip)){ //multi select box
+            if(count($sip) > 0)
+            {
+                foreach($sip as $row):
+                    $explode = explode('|', $row);
+                    $domain     = $explode[0];
+                    $sofia_id   = $explode[1];
+                    
+                    $sql = 'INSERT INTO customer_sip (customer_id, domain, domain_sofia_id) VALUES ("'.$customer_id.'", "'.$domain.'", "'.$sofia_id.'") ';
+                    $query = $this->db->query($sql);
+                    
+                endforeach; 
+            }
+		}
 	}
 
 	//insert customer userpanel access
 	function insert_customer_user_panel_access($data, $customer_id)
 	{
-		$sql = 'INSERT INTO accounts (username, password, type, is_customer, customer_id, enabled) VALUES ('.$data['username'].', "'.$data['password'].'", "customer", "1", "'.$customer_id.'", "1") ';
+		$type = "customer";
+        if($data['type'] != '0')
+        {
+            $type = "reseller";
+        }
+        
+        $sql = 'INSERT INTO accounts (username, password, type, is_customer, customer_id, enabled) VALUES ('.$data['username'].', "'.$data['password'].'", "'.$type.'", "1", "'.$customer_id.'", "1") ';
 		$query = $this->db->query($sql);
+        
+        //insert blank entry into settings table .. later we will just update it 
+        if($data['type'] != '0')
+        {
+            $sql2 = "INSERT INTO settings (customer_id,company_logo_as_invoice_logo ) VALUES ('".$customer_id."', '0') ";
+            $query2 = $this->db->query($sql2);
+        }
 	}
 
 	function insert_customer_access_limitations($data, $customer_id)
 	{
-		$explode = explode('|', $data['sip_ip']);
-        $domain     = $explode[0];
-        $sofia_id   = $explode[1];
-        
-        $sql = 'INSERT INTO customer_access_limitations (customer_id, total_sip_accounts, total_acl_nodes, domain, domain_sofia_id) VALUES ("'.$customer_id.'", "'.$data['tot_sip_acc'].'", "'.$data['tot_acl_nodes'].'", "'.$domain.'", "'.$sofia_id.'") ';
+		$sql = 'INSERT INTO customer_access_limitations (customer_id, total_sip_accounts, total_acl_nodes) VALUES ("'.$customer_id.'", "'.$data['tot_sip_acc'].'", "'.$data['tot_acl_nodes'].'") ';
 		$query = $this->db->query($sql);
+        
+        //sip ip 
+        $sip = $data['sip_ip'];
+        if(is_array($sip)){ //multi select box
+            if(count($sip) > 0)
+            {
+                foreach($sip as $row):
+                    $explode = explode('|', $row);
+                    $domain     = $explode[0];
+                    $sofia_id   = $explode[1];
+                    
+                    $sql = 'INSERT INTO customer_sip (customer_id, domain, domain_sofia_id) VALUES ("'.$customer_id.'", "'.$domain.'", "'.$sofia_id.'") ';
+                    $query = $this->db->query($sql);
+                    
+                endforeach; 
+            }
+		}
 	}
 
 	function customer_access($customer_id)
@@ -452,7 +518,7 @@ class Customer_model extends CI_Model {
 		return $query;
 	}
 
-	function insert_new_acl_node($customer_id, $ip, $cdr)
+	function insert_new_acl_node($customer_id, $ip, $cidr)
 	{
 		$added_by = 0;
 
@@ -461,9 +527,10 @@ class Customer_model extends CI_Model {
 			$added_by = $this->session->userdata('customer_id');
 		}
 
-		$cidr = $ip.'/'.$cdr;
-
-		$sql = "INSERT INTO acl_nodes (customer_id, cidr, type, list_id, added_by) VALUES ('".$customer_id."', '".$cidr."', 'allow', '1', '".$added_by."') ";
+		// $ip_addr = $ip.'/'.$cidr;
+		// We temporarily only allow /32 until CIDR issue is resolved in lua scripts
+		$ip_addr = $ip.'/32';
+		$sql = "INSERT INTO acl_nodes (customer_id, cidr, type, list_id, added_by) VALUES ('".$customer_id."', '".$ip_addr."', 'allow', '1', '".$added_by."') ";
 		$query = $this->db->query($sql);
 		return $query;
 	}
@@ -475,11 +542,11 @@ class Customer_model extends CI_Model {
 		return $query;
 	}
 
-	function update_acl_node_db($node_id, $ip, $cdr)
+	function update_acl_node_db($node_id, $ip, $cidr)
 	{
-		$cidr = $ip.'/'.$cdr;
-
-		$sql = "UPDATE acl_nodes SET cidr='".$cidr."' WHERE id='".$node_id."' ";
+		// $ip_addr = $ip.'/'.$cidr;
+		$ip_addr = $ip.'/32';
+		$sql = "UPDATE acl_nodes SET cidr='".$ip_addr."' WHERE id='".$node_id."' ";
 		$query = $this->db->query($sql);
 		return $query;
 	}
@@ -502,14 +569,14 @@ class Customer_model extends CI_Model {
 
 	function customer_sip_access($customer_id)
 	{
-		$sql = "SELECT a.*, b.directory_id, b.var_name, b.var_value FROM directory AS a LEFT JOIN directory_vars AS b ON b.directory_id = a.id WHERE a.customer_id = '".$customer_id."' ORDER BY a.id DESC";
+		$sql = "SELECT a.*, b.directory_id, b.param_name, b.param_value FROM directory AS a LEFT JOIN directory_params AS b ON b.directory_id = a.id WHERE a.customer_id = '".$customer_id."' ORDER BY a.id DESC";
 		$query = $this->db->query($sql);
 		return $query;
 	}
 
 	function single_sip_access_data($id)
 	{
-		$sql = "SELECT a.*, b.directory_id, b.var_name, b.var_value FROM directory AS a LEFT JOIN directory_vars AS b ON b.directory_id = a.id WHERE a.id = '".$id."' ";
+		$sql = "SELECT a.*, b.directory_id, b.param_name, b.param_value FROM directory AS a LEFT JOIN directory_params AS b ON b.directory_id = a.id WHERE a.id = '".$id."' ";
 		$query = $this->db->query($sql);
 		return $query;
 	}
@@ -530,8 +597,8 @@ class Customer_model extends CI_Model {
 		$query = $this->db->query($sql);
 		$inser_id = $this->db->insert_id();
 
-		//insert into directory_vars table 
-		$sql = "INSERT INTO directory_vars (directory_id, var_name, var_value) VALUES ('".$inser_id."', 'a1-hash', '".$new_password."')";
+		//insert into directory_params table 
+		$sql = "INSERT INTO directory_params (directory_id, param_name, param_value) VALUES ('".$inser_id."', 'a1-hash', '".$new_password."')";
 		$query = $this->db->query($sql); 
 	}
 
@@ -544,8 +611,8 @@ class Customer_model extends CI_Model {
 $sql = "UPDATE directory SET username = '".$username."', domain = '".$domain."' WHERE id = '".$record_id."' ";
 $query = $this->db->query($sql);
 
-//update into directory_vars table 
-$sql = "UPDATE directory_vars SET var_value = '".$new_password."' WHERE directory_id = '".$record_id."' ";
+//update into directory_params table 
+$sql = "UPDATE directory_params SET param_value = '".$new_password."' WHERE directory_id = '".$record_id."' ";
 $query = $this->db->query($sql); 
 }*/
 
@@ -561,7 +628,7 @@ function delete_sip_access($record_id)
 	$sql = "DELETE FROM directory WHERE id = '".$record_id."' LIMIT 1";
 	$query = $this->db->query($sql);
 
-	$sql = "DELETE FROM directory_vars WHERE directory_id = '".$record_id."' LIMIT 1";
+	$sql = "DELETE FROM directory_params WHERE directory_id = '".$record_id."' LIMIT 1";
 	$query = $this->db->query($sql);
 }
 

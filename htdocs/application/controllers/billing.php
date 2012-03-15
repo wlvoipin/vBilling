@@ -1,31 +1,31 @@
 <?php 
 /*
-* Version: MPL 1.1
-*
-* The contents of this file are subject to the Mozilla Public License
-* Version 1.1 (the "License"); you may not use this file except in
-* compliance with the License. You may obtain a copy of the License at
-* http://www.mozilla.org/MPL/
-* 
-* Software distributed under the License is distributed on an "AS IS"
-* basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
-* License for the specific language governing rights and limitations
-* under the License.
-* 
-* The Original Code is "vBilling - VoIP Billing and Routing Platform"
-* 
-* The Initial Developer of the Original Code is 
-* Digital Linx [<] info at digitallinx.com [>]
-* Portions created by Initial Developer (Digital Linx) are Copyright (C) 2011
-* Initial Developer (Digital Linx). All Rights Reserved.
-*
-* Contributor(s)
-* "Muhammad Naseer Bhatti <nbhatti at gmail.com>"
-*
-* vBilling - VoIP Billing and Routing Platform
-* version 0.1.1
-*
-*/
+ * Version: MPL 1.1
+ *
+ * The contents of this file are subject to the Mozilla Public License
+ * Version 1.1 (the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ * 
+ * Software distributed under the License is distributed on an "AS IS"
+ * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+ * License for the specific language governing rights and limitations
+ * under the License.
+ * 
+ * The Original Code is "vBilling - VoIP Billing and Routing Platform"
+ * 
+ * The Initial Developer of the Original Code is 
+ * Digital Linx [<] info at digitallinx.com [>]
+ * Portions created by Initial Developer (Digital Linx) are Copyright (C) 2011
+ * Initial Developer (Digital Linx). All Rights Reserved.
+ *
+ * Contributor(s)
+ * "Digital Linx - <vbilling at digitallinx.com>"
+ *
+ * vBilling - VoIP Billing and Routing Platform
+ * version 0.1.3
+ *
+ */
 
 if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
@@ -47,6 +47,12 @@ class Billing extends CI_Controller {
 			{
 				redirect ('customer/');
 			}
+            
+            if($this->session->userdata('user_type') == 'reseller')
+			{
+				redirect ('reseller/');
+			}
+            
             if($this->session->userdata('user_type') == 'sub_admin')
             {
                 if(sub_admin_access_any_cell($this->session->userdata('user_id'), 'view_biling') == 0)
@@ -119,6 +125,7 @@ class Billing extends CI_Controller {
 		$filter_billing_type    = '';
 		$filter_status          = '';
         $filter_sort            = '';
+        $filter_contents        = 'all';
 		$search                 = '';
 
 		$msg_records_found = "Records Found";
@@ -132,7 +139,8 @@ class Billing extends CI_Controller {
 			$filter_status          = $this->input->get('filter_status');
             $filter_sort            = $this->input->get('filter_sort');
 			$search                 = $this->input->get('searchFilter');
-			$msg_records_found      = "Records Found Based On Your Search Criteria";
+            $filter_contents        = $this->input->get('filter_contents');
+			$msg_records_found      = "Records Found Based On Search Criteria";
 		}
 
 		if($filter_date_from != '')
@@ -150,6 +158,11 @@ class Billing extends CI_Controller {
 				//$filter_date_to   = '';
 			}
 		}
+        
+        if($filter_contents == '' || ($filter_contents != 'all' && $filter_contents != 'my'))
+        {
+            $filter_contents = "all";
+        }
 
 		$data['filter_date_from']           = $filter_date_from;
 		$data['filter_date_to']             = $filter_date_to;
@@ -157,11 +170,12 @@ class Billing extends CI_Controller {
 		$data['filter_billing_type']        = $filter_billing_type;
 		$data['filter_status']              = $filter_status;
         $data['filter_sort']                = $filter_sort;
+        $data['filter_contents']            = $filter_contents;
 
 		//for pagging set information
 		$this->load->library('pagination');
 		$config['per_page'] = '20';
-		$config['base_url'] = base_url().'billing/invoices/?searchFilter='.$search.'&filter_date_from='.$filter_date_from.'&filter_date_to='.$filter_date_to.'&filter_customers='.$filter_customers.'&filter_billing_type='.$filter_billing_type.'&filter_status='.$filter_status.'&filter_sort='.$filter_sort.'';
+		$config['base_url'] = base_url().'billing/invoices/?searchFilter='.$search.'&filter_date_from='.$filter_date_from.'&filter_date_to='.$filter_date_to.'&filter_customers='.$filter_customers.'&filter_billing_type='.$filter_billing_type.'&filter_status='.$filter_status.'&filter_sort='.$filter_sort.'&filter_contents='.$filter_contents.'';
 		$config['page_query_string'] = TRUE;
 
 		$config['num_links'] = 6;
@@ -180,7 +194,7 @@ class Billing extends CI_Controller {
 		$config['first_link'] = 'first';
 		$config['last_link'] = 'last';
 
-		$data['count'] = $this->billing_model->get_invoices_count($filter_date_from, $filter_date_to, $filter_customers, $filter_billing_type, $filter_status);
+		$data['count'] = $this->billing_model->get_invoices_count($filter_date_from, $filter_date_to, $filter_customers, $filter_billing_type, $filter_status, $filter_contents);
 		$config['total_rows'] = $data['count'];
 
 		if(isset($_GET['per_page']))
@@ -203,7 +217,7 @@ class Billing extends CI_Controller {
 
 		$data['msg_records_found'] = "".$data['count']."&nbsp;".$msg_records_found."";
 
-		$data['invoices']       =   $this->billing_model->get_invoices($config['per_page'],$config['uri_segment'],$filter_date_from, $filter_date_to, $filter_customers, $filter_billing_type, $filter_status, $filter_sort);
+		$data['invoices']       =   $this->billing_model->get_invoices($config['per_page'],$config['uri_segment'],$filter_date_from, $filter_date_to, $filter_customers, $filter_billing_type, $filter_status, $filter_sort, $filter_contents);
 
 		$data['page_name']		=	'invoices_list';
 		$data['selected']		=	'billing';
@@ -269,7 +283,7 @@ class Billing extends CI_Controller {
 		}
 	}
     
-    function download_cdr_admin($invoice_id = '')
+    /*function download_cdr_admin($invoice_id = '')
 	{
 		if($invoice_id == '')
 		{
@@ -294,7 +308,7 @@ class Billing extends CI_Controller {
 		{
 			redirect ('billing/invoices/');
 		}
-	}
+	}*/
 
 	function generate_manual_invoice()
 	{
@@ -872,6 +886,11 @@ class Billing extends CI_Controller {
 		{
 			redirect ('billing/invoices/');
 		}
+        
+        if(invoices_any_cell($id, 'parent_id') != '0')
+        {
+            redirect ('billing/invoices/');
+        }
 
 		$this->billing_model->mark_as_paid($id);
 		$this->session->set_flashdata('success','Invoice Paid Successfully.');

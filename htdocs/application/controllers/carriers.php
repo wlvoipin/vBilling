@@ -1,31 +1,31 @@
 <?php 
 /*
-* Version: MPL 1.1
-*
-* The contents of this file are subject to the Mozilla Public License
-* Version 1.1 (the "License"); you may not use this file except in
-* compliance with the License. You may obtain a copy of the License at
-* http://www.mozilla.org/MPL/
-* 
-* Software distributed under the License is distributed on an "AS IS"
-* basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
-* License for the specific language governing rights and limitations
-* under the License.
-* 
-* The Original Code is "vBilling - VoIP Billing and Routing Platform"
-* 
-* The Initial Developer of the Original Code is 
-* Digital Linx [<] info at digitallinx.com [>]
-* Portions created by Initial Developer (Digital Linx) are Copyright (C) 2011
-* Initial Developer (Digital Linx). All Rights Reserved.
-*
-* Contributor(s)
-* "Muhammad Naseer Bhatti <nbhatti at gmail.com>"
-*
-* vBilling - VoIP Billing and Routing Platform
-* version 0.1.1
-*
-*/
+ * Version: MPL 1.1
+ *
+ * The contents of this file are subject to the Mozilla Public License
+ * Version 1.1 (the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ * 
+ * Software distributed under the License is distributed on an "AS IS"
+ * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+ * License for the specific language governing rights and limitations
+ * under the License.
+ * 
+ * The Original Code is "vBilling - VoIP Billing and Routing Platform"
+ * 
+ * The Initial Developer of the Original Code is 
+ * Digital Linx [<] info at digitallinx.com [>]
+ * Portions created by Initial Developer (Digital Linx) are Copyright (C) 2011
+ * Initial Developer (Digital Linx). All Rights Reserved.
+ *
+ * Contributor(s)
+ * "Digital Linx - <vbilling at digitallinx.com>"
+ *
+ * vBilling - VoIP Billing and Routing Platform
+ * version 0.1.3
+ *
+ */
 
 if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
@@ -46,6 +46,11 @@ class Carriers extends CI_Controller {
 			if($this->session->userdata('user_type') == 'customer')
 			{
 				redirect ('customer/');
+			}
+            
+            if($this->session->userdata('user_type') == 'reseller')
+			{
+				redirect ('reseller/');
 			}
             
             if($this->session->userdata('user_type') == 'sub_admin')
@@ -73,7 +78,7 @@ class Carriers extends CI_Controller {
 			$filter_carrier_type    = $this->input->get('filter_carrier_type');
             $filter_sort                = $this->input->get('filter_sort');
 			$search                 = $this->input->get('searchFilter');
-			$msg_records_found      = "Records Found Based On Your Search Criteria";
+			$msg_records_found      = "Records Found Based On Search Criteria";
 		}
 
 		$data['filter_carriers']            = $filter_carriers;
@@ -166,10 +171,10 @@ class Carriers extends CI_Controller {
 	function insert_new_carrier()
 	{
 		$carriername = $this->input->post('carriername');
-		$prefix = $this->input->post('prefix'); // gateway
-		$suffix = $this->input->post('suffix');
-		$codec = $this->input->post('codec');
-		$pre = $this->input->post('pre');
+		$prefix      = $this->input->post('prefix');	// Gateway
+		$suffix      = $this->input->post('suffix');
+		$codec       = $this->input->post('codec');
+		$pre         = $this->input->post('pre');
 
 		$insert_id = $this->carriers_model->insert_new_carrier($carriername);
         

@@ -2,7 +2,6 @@
 #
 # configure install script to run and configure vBilling instance to run on separate machine than FS
 # mod_xml_curl to use HTTPS
-# Reseller Support (work in progress) 
 # Online payment solutions
 #
 # and a lots of other things :-)

@@ -1,8 +1,37 @@
+<?php 
+/*
+ * Version: MPL 1.1
+ *
+ * The contents of this file are subject to the Mozilla Public License
+ * Version 1.1 (the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ * 
+ * Software distributed under the License is distributed on an "AS IS"
+ * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+ * License for the specific language governing rights and limitations
+ * under the License.
+ * 
+ * The Original Code is "vBilling - VoIP Billing and Routing Platform"
+ * 
+ * The Initial Developer of the Original Code is 
+ * Digital Linx [<] info at digitallinx.com [>]
+ * Portions created by Initial Developer (Digital Linx) are Copyright (C) 2011
+ * Initial Developer (Digital Linx). All Rights Reserved.
+ *
+ * Contributor(s)
+ * "Digital Linx - <vbilling at digitallinx.com>"
+ *
+ * vBilling - VoIP Billing and Routing Platform
+ * version 0.1.3
+ *
+ */
+?>
 <table cellspacing="0" cellpadding="0" border="0" align="center" width="100%">
 	<tbody><tr>
             <td width="21" height="35"></td>
             <td width="825" class="heading">
-            MY ACCOUNT            </td>
+            <?php echo $this->lang->line('my_account_title_bar');?>            </td>
             <td width="178">
             <table cellspacing="0" cellpadding="0" width="170" height="42" class="search_col">
                 <tbody><tr>
@@ -40,17 +69,17 @@
                 <tbody>
                 
                             <tr>
-                                <td align="right" width="45%"><span class="required">*</span> Username:</td>
+                                <td align="right" width="45%"><span class="required">*</span><?php echo $this->lang->line('my_account_username');?></td>
                                 <td align="left" width="55%"><input type="text" value="<?php echo $this->session->userdata('username');?>" name="username" id="username" class="textfield"></td>
                                 <input type="hidden" value="<?php echo $this->session->userdata('username');?>" name="old_username" id="old_username" class="textfield">
                             </tr>
                             
                             <tr>
-                                <td align="right"><span class="required">*</span>New Password:</td>
+                                <td align="right"><span class="required">*</span><?php echo $this->lang->line('my_account_new_password');?></td>
                                 <td align="left"><input type="password" name="password" id="password" class="textfield"></td>
                             </tr>
                             <tr>
-                                <td align="right"><span class="required">*</span>Confirm Password:</td>
+                                <td align="right"><span class="required">*</span><?php echo $this->lang->line('my_account_confirm_password');?></td>
                                 <td align="left"><input type="password"  name="confirmpassword" id="confirmpassword" class="textfield"></td>
                             </tr>
                 
@@ -134,12 +163,12 @@
         
         if(required_error == 1)
         {
-            text += "Fields With * Are Required Fields<br/>";
+            text += "<?php echo $this->lang->line('my_account_fields_are_required');?><br/>";
         }
         
         if(pass_mismatched_error == 1)
         {
-            text += "Password and Confirm Password did not match<br/>";
+            text += "<?php echo $this->lang->line('my_account_password_confirm_do_not_match');?><br/>";
         }
         
         

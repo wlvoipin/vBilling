@@ -1,33 +1,65 @@
+<?php 
+/*
+ * Version: MPL 1.1
+ *
+ * The contents of this file are subject to the Mozilla Public License
+ * Version 1.1 (the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ * 
+ * Software distributed under the License is distributed on an "AS IS"
+ * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+ * License for the specific language governing rights and limitations
+ * under the License.
+ * 
+ * The Original Code is "vBilling - VoIP Billing and Routing Platform"
+ * 
+ * The Initial Developer of the Original Code is 
+ * Digital Linx [<] info at digitallinx.com [>]
+ * Portions created by Initial Developer (Digital Linx) are Copyright (C) 2011
+ * Initial Developer (Digital Linx). All Rights Reserved.
+ *
+ * Contributor(s)
+ * "Digital Linx - <vbilling at digitallinx.com>"
+ *
+ * vBilling - VoIP Billing and Routing Platform
+ * version 0.1.3
+ *
+ */
+?>
 <br/>
 <div class="info">Drag the rows of carrier details to set their priorities</div>
-<div class="success" id="success_div" <?php if($this->session->flashdata('success') == '') { echo 'style="display:none;"'; }?>><?php echo $this->session->flashdata('success');?> </div>
+<div class="success" id="success_div" <?php if($this->session->flashdata('success') == '') { echo 'style="display:none;"'; }?>>
+<?php echo $this->session->flashdata('success');?>
+</div>
 
 <script src="<?php echo base_url();?>assets/js/jquery.tablednd_0_5.js" type="text/javascript"></script>
 <!--********************************FILTER BOX************************-->
 <div style="text-align:center;padding:10px">
     <div class="button white">
-    <div style="color:green; font-weight:bold;"><?php echo $msg_records_found;?></div>
+    <div style="color:green; font-weight:bold;">
+<?php echo $msg_records_found;?>
+</div>
     <form method="get" action="<?php echo base_url();?>carriers/" > 
-        <table width="100%" cellspacing="0" cellpadding="0" border="0" id="filter_table">
+        <table width="729" cellspacing="0" cellpadding="0" border="0" id="filter_table">
              
                 <tr>
-                    <td width="25%">
+                    <td width="150">
                         Carriers
                     </td>
-.
-                    <td width="25%">
+                    <td width="150">
                         Type
                     </td>
                     
-                    <td width="25%">
+                    <td width="143">
                         Sort By
                     </td>
 
-                    <td width="25%" rowspan="2">
+                    <td width="143" rowspan="2">
                         <input type="submit" name="searchFilter" value="SEARCH" class="button blue" style="float:right;margin-top:5px;margin-right:10px" />
                     </td>
                     
-                    <td width="25%" rowspan="2">
+                    <td width="143" rowspan="2">
                         <a href="#" id="reset" class="button orange" style="float:left;margin-top:5px;">RESET</a>
                     </td>
                 
@@ -72,10 +104,9 @@
                     
                     <tr class="bottom_link">
                         <td height="20" width="10%" align="center">&nbsp;</td>
-                        <td height="20" width="10%" align="center">ID</td>
-                        <td width="20%" align="left">Carrier Name</td>
-                        <td width="20%" align="center">Enabled</td>
-                        <td width="30%" align="center">Options</td>
+                        <td width="20%" align="center">Carrier Name</td>
+                        <td width="20%" align="center">Action (Disable)</td>
+                        <td width="30%" align="center">Action (Delete)</td>
                     </tr>
                     
                     <tr><td colspan="5" id="shadowDiv" style="height:5px;margin-top:-1px"></td></tr>
@@ -88,28 +119,24 @@
                             
                             
                             <?php if($this->session->userdata('user_type') == 'admin'){?>
-                                <td align="center"><a href="<?php echo base_url();?>carriers/update_carrier/<?php echo $row->id;?>"><?php echo $row->id; ?></a></td>
+                                <td align="center"><a href="<?php echo base_url();?>carriers/update_carrier/<?php echo $row->id;?>"><?php echo $row->carrier_name; ?></a></td>
                             <?php 
                                 } else if($this->session->userdata('user_type') == 'sub_admin'){
                                         if(sub_admin_access_any_cell($this->session->userdata('user_id'), 'edit_carriers') == 1)
                                         {
                             ?>
-                                            <td align="center"><a href="<?php echo base_url();?>carriers/update_carrier/<?php echo $row->id;?>"><?php echo $row->id; ?></a></td>
+                                            <td align="center"><a href="<?php echo base_url();?>carriers/update_carrier/<?php echo $row->id;?>"><?php echo $row->carrier_name; ?></a></td>
                             <?php 
                                         }
                                         else
                                         {
                             ?>
-                                            <td align="center"><?php echo $row->id; ?></td>
+                                            <td align="center"><?php echo $row->carrier_name; ?></td>
                             <?php
                                         }
                                     }
                             ?>
                                 
-                            <td align="left"><?php echo $row->carrier_name; ?></td>
-                            
-                            
-                            
                             <?php if($this->session->userdata('user_type') == 'admin'){?>
                                 <td align="center"><input type="checkbox" id="<?php echo $row->id;?>" class="enable_checkbox" <?php if($row->enabled == 1){ echo 'checked="checked"';}?>/></td>
                             <?php 

@@ -47,7 +47,7 @@
 $active_group = 'default';
 $active_record = TRUE;
 
-$db['default']['hostname'] = 'localhost';
+$db['default']['hostname'] = '127.0.0.1';
 $db['default']['username'] = 'MYSQL_USERNAME';
 $db['default']['password'] = 'MYSQL_PASSWORD';
 $db['default']['database'] = 'VBILLING_DB';
@@ -55,7 +55,7 @@ $db['default']['dbdriver'] = 'mysql';
 $db['default']['dbprefix'] = '';
 $db['default']['pconnect'] = TRUE;
 $db['default']['db_debug'] = FALSE;
-$db['default']['cache_on'] = FALSE;
+$db['default']['cache_on'] = TRUE;
 $db['default']['cachedir'] = '';
 $db['default']['char_set'] = 'utf8';
 $db['default']['dbcollat'] = 'utf8_general_ci';

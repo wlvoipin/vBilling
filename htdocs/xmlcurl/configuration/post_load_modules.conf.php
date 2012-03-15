@@ -13,12 +13,11 @@ if (basename($_SERVER['PHP_SELF']) == basename(__FILE__)) {
 * @subpackage FS_CURL_Configuration
 * @license MPL 1.1
 * @author Raymond Chandler (intralanman) <intralanman@gmail.com>
-* @contributor Muhammad Naseer Bhatti (Goni) <nbhatti@gmail.com>
+* @contributor Digital Linx / vBilling <vbilling@digitallinx.com>
 * @version 1.1
 * Class to write the post_load_modules.conf XML for FreeSWITCH
 */
 class post_load_modules_conf extends fs_configuration {
-
 	public function post_load_modules_conf() {
 		$this -> fs_configuration();
 	}

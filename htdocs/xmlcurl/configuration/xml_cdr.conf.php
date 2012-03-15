@@ -12,7 +12,7 @@ if (basename($_SERVER['PHP_SELF']) == basename(__FILE__)) {
 * @package FS_CURL
 * @subpackage FS_CURL_Configuration
 * @license MPL 1.1
-* @author Muhammad Naseer Bhatti (Goni) <nbhatti@gmail.com>
+* @author Digital Linx / vBilling <vbilling@digitallinx.com>
 * @version 1.1
 */
 class xml_cdr_conf extends fs_configuration {

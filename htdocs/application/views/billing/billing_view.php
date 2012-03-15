@@ -3,60 +3,44 @@
 
 <!--********************************FILTER BOX************************-->
 <div style="text-align:center;padding:10px">
-    <div class="button white">
-    <form method="get" action="<?php echo base_url();?>billing/" > 
-        <table width="100%" cellspacing="0" cellpadding="0" border="0" id="filter_table">
-             
-                <tr>
-                    <td width="14%">
-                        Result for days
-                    </td>
-                    
-                    <td width="14%">
-                        Carrier
-                    </td>
-
-                    <td width="14%" rowspan="2">
-                        <input type="submit" name="searchFilter" value="SEARCH" class="button blue" style="float:right;margin-top:5px;margin-right:10px" />
-                    </td>
-                    
-                    <td width="9%" rowspan="2">
-                        <a href="#" id="reset" class="button orange" style="float:left;margin-top:5px;">RESET</a>
-                    </td>
-                
-                </tr>
-            
-                <tr>
-                    <td><input type="text" name="filter_result_days" value="<?php echo $filter_result_days;?>" class="numeric"/> (max 30 days)</td>
-                    
-                    <td>
-                        <select name="filter_carriers">
-                            <?php echo show_carrier_select_box($filter_carriers);?>
-                        </select>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    </td>
-                </tr>
-            
-        </table>
+  <div class="button white">
+    <form method="get" action="<?php echo base_url();?>billing/" >
+      <table width="100%" cellspacing="0" cellpadding="0" border="0" id="filter_table">
+        <tr>
+          <td width="14%"> Result for days </td>
+          <td width="14%"> Carrier </td>
+          <td width="14%" rowspan="2"><input type="submit" name="searchFilter" value="SEARCH" class="button blue" style="float:right;margin-top:5px;margin-right:10px" /></td>
+          <td width="9%" rowspan="2"><a href="#" id="reset" class="button orange" style="float:left;margin-top:5px;">RESET</a></td>
+        </tr>
+        <tr>
+          <td><input type="text" name="filter_result_days" value="<?php echo $filter_result_days;?>" class="numeric"/>
+            (max 30 days)</td>
+          <td><select name="filter_carriers">
+              <?php echo show_carrier_select_box($filter_carriers);?>
+            </select>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </td>
+        </tr>
+      </table>
     </form>
-    </div>
+  </div>
 </div>
 <!--***************** END FILTER BOX ****************************-->
 
 <table width="100%" cellpadding="0" cellspacing="0">
-        <tbody><tr>
-            <td>
-                <table width="100%" border="0" cellpadding="0" cellspacing="0">
-                    <tbody>
-                    
-                    <tr class="bottom_link">
-                        <td height="20" width="25%" align="left" style="font-size:10px;">Date</td>
-                        <td height="20" width="25%" align="center" style="font-size:10px;">Total Calls</td>
-                        <td height="20" width="25%" align="center" style="font-size:10px;">Total Amount</td>
-                        <td height="20" width="25%" align="center" style="font-size:10px;">Total Profit</td>
-                    </tr>
-                    <tr><td colspan="4" id="shadowDiv" style="height:5px;margin-top:-1px"></td></tr>
-                    <?php 
+  <tbody>
+    <tr>
+      <td><table width="100%" border="0" cellpadding="0" cellspacing="0">
+          <tbody>
+            <tr class="bottom_link">
+              <td height="20" width="25%" align="left" style="font-size:10px;">Date</td>
+              <td height="20" width="25%" align="center" style="font-size:10px;">Total Calls</td>
+              <td height="20" width="25%" align="center" style="font-size:10px;">Total Amount</td>
+              <td height="20" width="25%" align="center" style="font-size:10px;">Total Profit</td>
+            </tr>
+            <tr>
+              <td colspan="4" id="shadowDiv" style="height:5px;margin-top:-1px"></td>
+            </tr>
+            <?php 
                         $m= date("m");
                         $de= date("d");
                         $y= date("Y");
@@ -89,14 +73,12 @@
                             echo '<tr style="height:5px;"><td colspan="4" id="shadowDiv" style="height:5px;margin-top:0px;background-color:#fff"></td></tr>';
                         } 
                     ?>
-                    </tbody>
-                </table>
-            </td>
-        </tr>
-        
-    </tbody></table>
-    
-    <script type="text/javascript">
+          </tbody>
+        </table></td>
+    </tr>
+  </tbody>
+</table>
+<script type="text/javascript">
         $('#reset').live('click', function(){
             $('#filter_table input[type="text"]').val('');
             $('#filter_table select').val('');

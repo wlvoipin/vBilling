@@ -1,3 +1,32 @@
+<?php 
+/*
+ * Version: MPL 1.1
+ *
+ * The contents of this file are subject to the Mozilla Public License
+ * Version 1.1 (the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ * 
+ * Software distributed under the License is distributed on an "AS IS"
+ * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+ * License for the specific language governing rights and limitations
+ * under the License.
+ * 
+ * The Original Code is "vBilling - VoIP Billing and Routing Platform"
+ * 
+ * The Initial Developer of the Original Code is 
+ * Digital Linx [<] info at digitallinx.com [>]
+ * Portions created by Initial Developer (Digital Linx) are Copyright (C) 2011
+ * Initial Developer (Digital Linx). All Rights Reserved.
+ *
+ * Contributor(s)
+ * "Digital Linx - <vbilling at digitallinx.com>"
+ *
+ * vBilling - VoIP Billing and Routing Platform
+ * version 0.1.3
+ *
+ */
+?>
 <script type="text/javascript">
 if(!window.opener){
 window.location = '../../home/';
@@ -151,14 +180,11 @@ window.location = '../../home/';
                 <thead>
                     <tr class="bottom_link">
                         <td width="8%" align="center">Country Code</td>
-                        <td width="8%" align="center">Sell Rate</td>
-                        <td width="8%" align="center">Cost Rate</td>
-                        <td width="8%" align="center">Buy Init Block</td>
-                        <td width="8%" align="center">Sell Init Block</td>
+                        <td width="8%" align="center">Rate Price</td>
+                        <td width="8%" align="center">Initial Block Increments</td>
+                        <td width="8%" align="center">Init Block</td>
                         <td width="8%" align="center">Start Date</td>
                         <td width="8%" align="center">End Date</td>
-                        <td width="8%" align="center">quality</td>
-                        <td width="10%" align="center">reliability</td>
                         <td width="10%" align="center">carrier</td>
                         <td width="8%" align="center">Enabled</td>
                     </tr>
@@ -208,13 +234,10 @@ window.location = '../../home/';
                                         }
                                     ?>
                                     <td align="center"><?php echo $sellrate.'&nbsp;/&nbsp;'.$filter_display_results; ?></td>
-                                    <td align="center"><?php echo $costrate.'&nbsp;/&nbsp;'.$filter_display_results; ?></td>
-                                    <td align="center"><?php echo $buyinitblock.'&nbsp;/&nbsp;'.$filter_display_results; ?></td>
+                                    <td align="center"><?php echo $rowRate->sellblock_min_duration; ?></td>
                                     <td align="center"><?php echo $sellinitblock.'&nbsp;/&nbsp;'.$filter_display_results; ?></td>
                                     <td align="center"><?php echo $rowRate->date_start; ?></td>
                                     <td align="center"><?php echo $rowRate->date_end; ?></td>
-                                    <td align="center"><?php echo $rowRate->quality; ?></td>
-                                    <td align="center"><?php echo $rowRate->reliability; ?></td>
                                     
                                     <?php if($check_carrier_exists != 0){?>
                                         <td align="center"><a href="<?php echo base_url();?>carriers/update_carrier/<?php echo $rowRate->carrier_id;?>"><?php echo carrier_any_cell($rowRate->carrier_id, 'carrier_name');?></a></td>

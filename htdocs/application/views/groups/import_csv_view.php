@@ -1,6 +1,35 @@
 <?php 
+/*
+ * Version: MPL 1.1
+ *
+ * The contents of this file are subject to the Mozilla Public License
+ * Version 1.1 (the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ * 
+ * Software distributed under the License is distributed on an "AS IS"
+ * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+ * License for the specific language governing rights and limitations
+ * under the License.
+ * 
+ * The Original Code is "vBilling - VoIP Billing and Routing Platform"
+ * 
+ * The Initial Developer of the Original Code is 
+ * Digital Linx [<] info at digitallinx.com [>]
+ * Portions created by Initial Developer (Digital Linx) are Copyright (C) 2011
+ * Initial Developer (Digital Linx). All Rights Reserved.
+ *
+ * Contributor(s)
+ * "Digital Linx - <vbilling at digitallinx.com>"
+ *
+ * vBilling - VoIP Billing and Routing Platform
+ * version 0.1.3
+ *
+ */
+?>
+<?php 
     $allowedExtensions = array("csv","CSV"); //allowed extensions
-    $maxSize = 512000; // 500 kb
+    $maxSize = 4096000; // ~4 MB
     $msg = "";
     $err = "";
     if(isset($_POST['group']) && isset($_POST['carrier']))
@@ -9,8 +38,7 @@
         $group = $_POST['group'];
         $carrier = $_POST['carrier'];
         $group_table_name = $this->groups_model->group_any_cell($group, 'group_rate_table');
-        
-        $ext = pathinfo($fname);
+		$ext = pathinfo($fname);
         
         if($group_table_name != '')
         {
@@ -25,7 +53,7 @@
                      {
                         if(count($data) == 5)
                         {
-                            $sql = "INSERT INTO ".$group_table_name." (digits, sell_rate, cost_rate, buy_initblock, sell_initblock, carrier_id) VALUES ('".mysql_real_escape_string($data[0])."', '".mysql_real_escape_string($data[1])."', '".mysql_real_escape_string($data[2])."', '".mysql_real_escape_string($data[3])."', '".mysql_real_escape_string($data[4])."', '".$carrier."')";
+							$sql = "INSERT INTO ".$group_table_name." (digits, sell_rate, cost_rate, buy_initblock, sell_initblock, carrier_id, lcr_profile, quality, reliability, enabled, lrn) VALUES ('".mysql_real_escape_string($data[0])."', '".mysql_real_escape_string($data[1])."', '".mysql_real_escape_string($data[2])."', '".mysql_real_escape_string($data[3])."', '".mysql_real_escape_string($data[4])."', '".$carrier."', '0', '0', '0', '0', '0')";
                             $this->db->query($sql);
                         }
                      }
@@ -35,7 +63,7 @@
                  }
                  else
                  {
-                    $err = "ERROR: File size is grater than 500 KB.";
+                    $err = "ERROR: File size is greater than 4 MB";
                  }
             }
             else
@@ -45,7 +73,7 @@
         }
         else
         {
-            $err = "ERROR: This group does not have rate table associated with it.";
+            $err = "ERROR: This rate group does not have rate table associated with it.";
         }
     }
 ?>
@@ -87,13 +115,13 @@
 <tr>
     <td align="center" height="20" colspan="3">
         <form enctype="multipart/form-data"  method="post" action="" name="importRate" id="importRate">
-            <table cellspacing="3" cellpadding="2" border="0" width="95%" class="search_col">
+            <table cellspacing="3" cellpadding="2" border="0" width="100%" class="search_col">
                 
                 <tbody>
                 
                 <tr>
-                    <td align="right" width="45%"><span class="required">*</span> CSV File:</td>
-                    <td align="left" width="55%"><input type="file" name="csvfile" id="csvfile" class="textfield"><a href="<?php echo base_url();?>assets/css/Book1.csv" style="margin-left:10px; font-size:10px;" >Dowload Sample CSV</a></td>
+                    <td align="right" width="312"><span class="required">*</span> CSV File:</td>
+                    <td align="left" width="383"><input type="file" name="csvfile" id="csvfile" class="textfield"><a href="<?php echo base_url();?>assets/css/Book1.csv" style="margin-left:10px; font-size:10px;" >Dowload Sample CSV</a></td>
                 </tr>
                 
                 <tr>
@@ -105,7 +133,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <td align="right"><span class="required">*</span> Group:</td>
+                    <td align="right"><span class="required">*</span> Rate Group:</td>
                     <td align="left">
                         <select id="group" name="group" class="textfield">
                             <?php echo show_group_select_box();?>

@@ -33,6 +33,7 @@ class CI_Output {
 	protected $headers            = array();
 	protected $mime_types         = array();
 	protected $enable_profiler    = FALSE;
+	// protected $enable_profiler    = TRUE;
 	protected $_zlib_oc           = FALSE;
 	protected $_profiler_sections = array();
 	protected $parse_exec_vars    = TRUE;	// whether or not to parse variables like {elapsed_time} and {memory_usage}

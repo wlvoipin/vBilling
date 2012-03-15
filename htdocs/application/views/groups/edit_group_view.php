@@ -1,4 +1,33 @@
 <?php 
+/*
+ * Version: MPL 1.1
+ *
+ * The contents of this file are subject to the Mozilla Public License
+ * Version 1.1 (the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ * 
+ * Software distributed under the License is distributed on an "AS IS"
+ * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+ * License for the specific language governing rights and limitations
+ * under the License.
+ * 
+ * The Original Code is "vBilling - VoIP Billing and Routing Platform"
+ * 
+ * The Initial Developer of the Original Code is 
+ * Digital Linx [<] info at digitallinx.com [>]
+ * Portions created by Initial Developer (Digital Linx) are Copyright (C) 2011
+ * Initial Developer (Digital Linx). All Rights Reserved.
+ *
+ * Contributor(s)
+ * "Digital Linx - <vbilling at digitallinx.com>"
+ *
+ * vBilling - VoIP Billing and Routing Platform
+ * version 0.1.3
+ *
+ */
+?>
+<?php 
     $row = $group->row();
 ?>
 
@@ -6,7 +35,7 @@
 	<tbody><tr>
             <td width="21" height="35"></td>
             <td width="825" class="heading">
-            Update Group            </td>
+            Update Rate Group            </td>
             <td width="178">
             <table cellspacing="0" cellpadding="0" width="170" height="42" class="search_col">
                 <tbody><tr>
@@ -46,7 +75,7 @@
                 <tbody>
                 
                 <tr>
-                    <td align="left" width="10%"><span class="required">*</span> Group Name:</td>
+                    <td align="left" width="10%"><span class="required">*</span> Rate Group Name:</td>
                     <td align="left"><input type="text" value="<?php echo $row->group_name;?>" name="groupname" id="groupname" maxlength="50" class="textfield"></td>
                 </tr>
                 
@@ -64,18 +93,16 @@
                 
                 <thead>
                     <tr class="bottom_link">
-                        <td height="20" width="8%" align="center">ID</td>
+
                         <td width="8%" align="center">Country Code</td>
+                        <td width="8%" align="center">Buy Rate</td>
                         <td width="8%" align="center">Sell Rate</td>
-                        <td width="8%" align="center">Cost Rate</td>
-                        <td width="8%" align="center">buy_initblock</td>
-                        <td width="8%" align="center">sell_initblock</td>
-                        <td width="8%" align="center">intrastate_rate</td>
-                        <td width="8%" align="center">intralata_rate</td>
-                        <td width="8%" align="center">quality</td>
-                        <td width="10%" align="center">reliability</td>
+                        <td width="8%" align="center">Buy Init Block</td>
+                        <td width="8%" align="center">Minimum Buying Block</td>
+                        <td width="8%" align="center">Sell Init Block</td>
+                        <td width="8%" align="center">Minimum Selling Block</td>
                         <td width="8%" align="center">Carrier</td>
-                        <td width="8%" align="center">Enabled</td>
+                        <td width="8%" align="center">Enabled / Disable</td>
                         <td width="8%" align="center">Options</td>
                     </tr>
                     <tr><td colspan="13" id="shadowDiv" style="height:5px;margin-top:-1px"></td></tr>
@@ -94,19 +121,14 @@
                         }
                     ?>
                         <tr class="main_text" <?php echo $bg;?>>
-                            <td align="center"><a href="<?php echo base_url();?>groups/update_rate/<?php echo $rowRate->id;?>/<?php echo $rate_group_id;?>"><?php echo $rowRate->id; ?></a></td>
-                            <td align="center"><?php echo $rowRate->digits; ?></td>
-                            <td align="center"><?php echo $rowRate->sell_rate; ?></td>
+                            <td align="center"><a href="<?php echo base_url();?>groups/update_rate/<?php echo $rowRate->id;?>/<?php echo $rate_group_id;?>"><?php echo $rowRate->digits; ?></a></td>
                             <td align="center"><?php echo $rowRate->cost_rate; ?></td>
+                            <td align="center"><?php echo $rowRate->sell_rate; ?></td>
                             <td align="center"><?php echo $rowRate->buy_initblock; ?></td>
+                            <td align="center"><?php echo $rowRate->buyblock_min_duration; ?></td>
                             <td align="center"><?php echo $rowRate->sell_initblock; ?></td>
-                            <td align="center"><?php echo $rowRate->intrastate_rate; ?></td>
-                            <td align="center"><?php echo $rowRate->intralata_rate; ?></td>
-                            <td align="center"><?php echo $rowRate->quality; ?></td>
-                            <td align="center"><?php echo $rowRate->reliability; ?></td>
-                            
-                            
-                            
+                            <td align="center"><?php echo $rowRate->sellblock_min_duration; ?></td>
+
                             <?php if($check_carrier_exists != 0){?>
                                 <td align="center"><a href="<?php echo base_url();?>carriers/update_carrier/<?php echo $rowRate->carrier_id;?>"><?php echo carrier_any_cell($rowRate->carrier_id, 'carrier_name');?></a></td>
                             <?php } else { ?>

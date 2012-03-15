@@ -24,12 +24,12 @@ class fs_configuration extends fs_curl {
 function fs_configuration() {
 	$this -> fs_curl();
 	$conf_file = $this->request['key_value'];
-	$this->debug("RECEIVED REQUEST FOR $conf_file");
+	// $this->debug("RECEIVED REQUEST FOR $conf_file");
 	$mod_name = sprintf('mod_%s', str_replace('.conf', '', $conf_file));
-	$this -> comment("module name is $mod_name");
+	// $this -> comment("module name is $mod_name");
 	if (!($this -> is_mod_enabled($mod_name))
 	&& !($this -> is_modless_conf($this -> request['key_value']))) {
-		$this -> comment('module not enabled and not modless config file');
+		// $this -> comment('module not enabled and not modless config file');
 		$this -> file_not_found();
 	}
 	$this -> xmlw -> startElement('section');
@@ -54,8 +54,8 @@ function is_mod_enabled($mod_name) {
 		);
 	$res = $this -> db -> query($query);
 	if ($this->db->errorCode() !== FS_SQL_SUCCESS) {
-		$this -> comment($query);
-		$this -> comment($this->db->errorCode());
+		// $this -> comment($query);
+		// $this -> comment($this->db->errorCode());
 		return true; //default allow policy
 		return false; //comment previous line to default deny
 	} elseif ($res -> rowCount() == 1) {
@@ -72,14 +72,14 @@ function is_mod_enabled($mod_name) {
 * @return bool
 */
 private function is_modless_conf($conf) {
-	$this -> comment("conf is $conf");
+	// $this -> comment("conf is $conf");
 	$query = sprintf(
 		"SELECT COUNT(*) cnt FROM modless_conf WHERE conf_name = '$conf';"
 		);
 	$res = $this -> db -> query($query);
 	if (FS_PDO::isError($res)) {
-		$this -> comment($query);
-		$this -> comment($res -> getMessage());
+		// $this -> comment($query);
+		// $this -> comment($res -> getMessage());
 		return true; //default allow policy
 		return false; //comment previous line to default deny
 	}

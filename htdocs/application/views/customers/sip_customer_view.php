@@ -1,3 +1,32 @@
+<?php 
+/*
+ * Version: MPL 1.1
+ *
+ * The contents of this file are subject to the Mozilla Public License
+ * Version 1.1 (the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ * 
+ * Software distributed under the License is distributed on an "AS IS"
+ * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+ * License for the specific language governing rights and limitations
+ * under the License.
+ * 
+ * The Original Code is "vBilling - VoIP Billing and Routing Platform"
+ * 
+ * The Initial Developer of the Original Code is 
+ * Digital Linx [<] info at digitallinx.com [>]
+ * Portions created by Initial Developer (Digital Linx) are Copyright (C) 2011
+ * Initial Developer (Digital Linx). All Rights Reserved.
+ *
+ * Contributor(s)
+ * "Digital Linx - <vbilling at digitallinx.com>"
+ *
+ * vBilling - VoIP Billing and Routing Platform
+ * version 0.1.3
+ *
+ */
+?>
 <script type="text/javascript">
 if(!window.opener){
 window.location = '../../home/';
@@ -46,24 +75,24 @@ window.location = '../../home/';
                 
                 <thead>
                     
-                    
-                    <?php if($this->session->userdata('user_type') == 'admin'){?>
-                        <tr class="main_text" style="background:none;">
-                            <td align="right" colspan="7"><a href="<?php echo base_url();?>customers/new_sip_access/<?php echo $customer_id;?>">NEW SIP ACCESS</a></td>
-                        </tr>
-                    <?php 
-                        } else if($this->session->userdata('user_type') == 'sub_admin'){
-                                if(sub_admin_access_any_cell($this->session->userdata('user_id'), 'new_sip') == 1)
-                                {
-                    ?>
-                                    <tr class="main_text" style="background:none;">
-                                        <td align="right" colspan="7"><a href="<?php echo base_url();?>customers/new_sip_access/<?php echo $customer_id;?>">NEW SIP ACCESS</a></td>
-                                    </tr>
-                    <?php 
-                                }
-                          }
-                    ?>
-                               
+                    <?php if(customer_any_cell($customer_id, 'parent_id') == $this->session->userdata('customer_id')){?>
+                        <?php if($this->session->userdata('user_type') == 'admin'){?>
+                            <tr class="main_text" style="background:none;">
+                                <td align="right" colspan="7"><a href="<?php echo base_url();?>customers/new_sip_access/<?php echo $customer_id;?>">NEW SIP ACCESS</a></td>
+                            </tr>
+                        <?php 
+                            } else if($this->session->userdata('user_type') == 'sub_admin'){
+                                    if(sub_admin_access_any_cell($this->session->userdata('user_id'), 'new_sip') == 1)
+                                    {
+                        ?>
+                                        <tr class="main_text" style="background:none;">
+                                            <td align="right" colspan="7"><a href="<?php echo base_url();?>customers/new_sip_access/<?php echo $customer_id;?>">NEW SIP ACCESS</a></td>
+                                        </tr>
+                        <?php 
+                                    }
+                              }
+                        ?>
+                     <?php } ?>          
                     
                     <tr class="bottom_link">
                         <td width="20%" align="center">Username</td>
@@ -83,56 +112,67 @@ window.location = '../../home/';
                                 
                                     <tr class="main_text">
                                         <td align="center"><?php echo $row->username; ?></td>
-                                        <td align="center" id="reset_pass"><a class="reset_pass" href="#" id="<?php echo $row->id; ?>">Reset Password</a></td>
+                                        
+                                        <?php if(customer_any_cell($customer_id, 'parent_id') == $this->session->userdata('customer_id')){?>
+                                            <td align="center" id="reset_pass"><a class="reset_pass" href="#" id="<?php echo $row->id; ?>">Reset Password</a></td>
+                                        <?php } else { ?>
+                                            <td align="center">******</td>
+                                        <?php } ?>
                                         <td align="center"><?php echo $row->cid; ?></td>
                                         <td align="center"><?php echo $row->domain; ?></td>
                                         <td align="center"><?php echo sofia_profile_name($row->domain_sofia_id); ?></td>
                                         
                                         
-                                        
-                                        <?php if($this->session->userdata('user_type') == 'admin'){?>
-                                            <td align="center">
-                                                <a href="#" id="<?php echo $row->id;?>" class="delete_access"><img src="<?php echo base_url();?>assets/images/button_cancel.png" style="width:16px;border:none;cursor:pointer;" /></a>
-                                            </td>
-                                        <?php 
-                                            } else if($this->session->userdata('user_type') == 'sub_admin'){
-                                                    if(sub_admin_access_any_cell($this->session->userdata('user_id'), 'delete_sip') == 1)
-                                                    {
-                                        ?>
-                                                        <td align="center">
-                                                            <a href="#" id="<?php echo $row->id;?>" class="delete_access"><img src="<?php echo base_url();?>assets/images/button_cancel.png" style="width:16px;border:none;cursor:pointer;" /></a>
-                                                        </td>
-                                        <?php 
+                                        <?php if(customer_any_cell($customer_id, 'parent_id') == $this->session->userdata('customer_id')){?>
+                                            <?php if($this->session->userdata('user_type') == 'admin'){?>
+                                                <td align="center">
+                                                    <a href="#" id="<?php echo $row->id;?>" class="delete_access"><img src="<?php echo base_url();?>assets/images/button_cancel.png" style="width:16px;border:none;cursor:pointer;" /></a>
+                                                </td>
+                                            <?php 
+                                                } else if($this->session->userdata('user_type') == 'sub_admin'){
+                                                        if(sub_admin_access_any_cell($this->session->userdata('user_id'), 'delete_sip') == 1)
+                                                        {
+                                            ?>
+                                                            <td align="center">
+                                                                <a href="#" id="<?php echo $row->id;?>" class="delete_access"><img src="<?php echo base_url();?>assets/images/button_cancel.png" style="width:16px;border:none;cursor:pointer;" /></a>
+                                                            </td>
+                                            <?php 
+                                                        }
+                                                        else
+                                                        {
+                                            ?>
+                                                            <td align="center">---</td>
+                                            <?php
+                                                        }
                                                     }
-                                                    else
-                                                    {
-                                        ?>
-                                                        <td align="center">---</td>
-                                        <?php
-                                                    }
-                                                }
-                                        ?>
+                                            ?>
+                                        <?php } else { ?>
+                                            <td align="center">---</td>
+                                        <?php } ?>
                                         
                                         
-                                        
-                                        <?php if($this->session->userdata('user_type') == 'admin'){?>
-                                            <td align="center"><input type="checkbox" id="<?php echo $row->id;?>" class="enable_checkbox" <?php if($row->enabled == 1){ echo 'checked="checked"';}?>/></td>
-                                        <?php 
-                                            } else if($this->session->userdata('user_type') == 'sub_admin'){
-                                                    if(sub_admin_access_any_cell($this->session->userdata('user_id'), 'enable_disable_sip') == 1)
-                                                    {
-                                        ?>
-                                                        <td align="center"><input type="checkbox" id="<?php echo $row->id;?>" class="enable_checkbox" <?php if($row->enabled == 1){ echo 'checked="checked"';}?>/></td>
-                                        <?php 
+                                        <?php if(customer_any_cell($customer_id, 'parent_id') == $this->session->userdata('customer_id')){?>
+                                            <?php if($this->session->userdata('user_type') == 'admin'){?>
+                                                <td align="center"><input type="checkbox" id="<?php echo $row->id;?>" class="enable_checkbox" <?php if($row->enabled == 1){ echo 'checked="checked"';}?>/></td>
+                                            <?php 
+                                                } else if($this->session->userdata('user_type') == 'sub_admin'){
+                                                        if(sub_admin_access_any_cell($this->session->userdata('user_id'), 'enable_disable_sip') == 1)
+                                                        {
+                                            ?>
+                                                            <td align="center"><input type="checkbox" id="<?php echo $row->id;?>" class="enable_checkbox" <?php if($row->enabled == 1){ echo 'checked="checked"';}?>/></td>
+                                            <?php 
+                                                        }
+                                                        else
+                                                        {
+                                            ?>
+                                                            <td align="center"><?php if($row->enabled == 1){ echo 'Enabled';} else { echo "Disabled";}?></td>
+                                            <?php
+                                                        }
                                                     }
-                                                    else
-                                                    {
-                                        ?>
-                                                        <td align="center"><?php if($row->enabled == 1){ echo 'Enabled';} else { echo "Disabled";}?></td>
-                                        <?php
-                                                    }
-                                                }
-                                        ?>
+                                            ?>
+                                        <?php } else { ?>
+                                            <td align="center"><?php if($row->enabled == 1){ echo 'Enabled';} else { echo "Disabled";}?></td>
+                                        <?php } ?>
                                         
                                     </tr>
                                     <tr style="height:5px;"><td colspan="7" id="shadowDiv" style="height:5px;margin-top:0px;background-color:#fff"></td></tr>

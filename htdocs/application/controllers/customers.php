@@ -1,31 +1,31 @@
 <?php 
 /*
-* Version: MPL 1.1
-*
-* The contents of this file are subject to the Mozilla Public License
-* Version 1.1 (the "License"); you may not use this file except in
-* compliance with the License. You may obtain a copy of the License at
-* http://www.mozilla.org/MPL/
-* 
-* Software distributed under the License is distributed on an "AS IS"
-* basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
-* License for the specific language governing rights and limitations
-* under the License.
-* 
-* The Original Code is "vBilling - VoIP Billing and Routing Platform"
-* 
-* The Initial Developer of the Original Code is 
-* Digital Linx [<] info at digitallinx.com [>]
-* Portions created by Initial Developer (Digital Linx) are Copyright (C) 2011
-* Initial Developer (Digital Linx). All Rights Reserved.
-*
-* Contributor(s)
-* "Muhammad Naseer Bhatti <nbhatti at gmail.com>"
-*
-* vBilling - VoIP Billing and Routing Platform
-* version 0.1.1
-*
-*/
+ * Version: MPL 1.1
+ *
+ * The contents of this file are subject to the Mozilla Public License
+ * Version 1.1 (the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ * 
+ * Software distributed under the License is distributed on an "AS IS"
+ * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+ * License for the specific language governing rights and limitations
+ * under the License.
+ * 
+ * The Original Code is "vBilling - VoIP Billing and Routing Platform"
+ * 
+ * The Initial Developer of the Original Code is 
+ * Digital Linx [<] info at digitallinx.com [>]
+ * Portions created by Initial Developer (Digital Linx) are Copyright (C) 2011
+ * Initial Developer (Digital Linx). All Rights Reserved.
+ *
+ * Contributor(s)
+ * "Digital Linx - <vbilling at digitallinx.com>"
+ *
+ * vBilling - VoIP Billing and Routing Platform
+ * version 0.1.3
+ *
+ */
 
 if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
@@ -50,6 +50,11 @@ class Customers extends CI_Controller {
 				redirect ('customer/');
 			}
             
+            if($this->session->userdata('user_type') == 'reseller')
+			{
+				redirect ('reseller/');
+			}
+            
             if($this->session->userdata('user_type') == 'sub_admin')
 			{
 				if(sub_admin_access_any_cell($this->session->userdata('user_id'), 'view_customers') == 0)
@@ -67,9 +72,10 @@ class Customers extends CI_Controller {
 		$filter_first_name      = '';
 		$filter_type            = '';
         $filter_sort            = '';
+        $filter_contents        = 'all';
 		$search                 = '';
 
-		$msg_records_found = "Records Found";
+		// $msg_records_found = "Records Found";
 
 		if($this->input->get('searchFilter'))
 		{
@@ -78,20 +84,27 @@ class Customers extends CI_Controller {
 			$filter_first_name          = $this->input->get('filter_first_name');
 			$filter_type                = $this->input->get('filter_type');
             $filter_sort                = $this->input->get('filter_sort');
+            $filter_contents        = $this->input->get('filter_contents');
 			$search                     = $this->input->get('searchFilter');
-			$msg_records_found          = "Records Found Based On Your Search Criteria";
+			$msg_records_found          = "Records Found Based On Search Criteria";
 		}
+        
+        if($filter_contents == '' || ($filter_contents != 'all' && $filter_contents != 'my'))
+        {
+            $filter_contents = "all";
+        }
 
 		$data['filter_account_num']     = $filter_account_num;
 		$data['filter_company']         = $filter_company;
 		$data['filter_first_name']      = $filter_first_name;
 		$data['filter_type']            = $filter_type;
         $data['filter_sort']            = $filter_sort;
+        $data['filter_contents']        = $filter_contents;
 
 		//for pagging set information
 		$this->load->library('pagination');
 		$config['per_page'] = '20';
-		$config['base_url'] = base_url().'customers/?searchFilter='.$search.'&filter_account_num='.$filter_account_num.'&filter_company='.$filter_company.'&filter_first_name='.$filter_first_name.'&filter_type='.$filter_type.'&filter_sort='.$filter_sort.'';
+		$config['base_url'] = base_url().'customers/?searchFilter='.$search.'&filter_account_num='.$filter_account_num.'&filter_company='.$filter_company.'&filter_first_name='.$filter_first_name.'&filter_type='.$filter_type.'&filter_sort='.$filter_sort.'&filter_contents='.$filter_contents.'';
 		$config['page_query_string'] = TRUE;
 
 		$config['num_links'] = 2;
@@ -110,7 +123,7 @@ class Customers extends CI_Controller {
 		$config['first_link'] = 'first';
 		$config['last_link'] = 'last';
 
-		$data['count'] = $this->customer_model->get_all_customers_count($filter_account_num, $filter_company, $filter_first_name, $filter_type);
+		$data['count'] = $this->customer_model->get_all_customers_count($filter_account_num, $filter_company, $filter_first_name, $filter_type, $filter_contents);
 		$config['total_rows'] = $data['count'];
 
 		if(isset($_GET['per_page']))
@@ -130,9 +143,19 @@ class Customers extends CI_Controller {
 		}
 
 		$this->pagination->initialize($config);
+
+		if ($data['count'] <= 1)
+		{
+			$msg_records_found = "Record Found";
+		}
+		else
+		{
+			$msg_records_found = "Records Found";			
+		}
+		
 		$data['msg_records_found'] = "".$data['count']."&nbsp;".$msg_records_found."";
 
-		$data['customers']      =   $this->customer_model->get_all_customers($config['per_page'], $config['uri_segment'], $filter_account_num, $filter_company, $filter_first_name, $filter_type, $filter_sort);
+		$data['customers']      =   $this->customer_model->get_all_customers($config['per_page'], $config['uri_segment'], $filter_account_num, $filter_company, $filter_first_name, $filter_type, $filter_sort, $filter_contents);
 		$data['page_name']		=	'view_customers';
 		$data['selected']		=	'customers';
 		$data['sub_selected']   =   'list_customer';
@@ -165,8 +188,7 @@ class Customers extends CI_Controller {
 
 	function insert_new_customer()
 	{
-		$data['account_no']     = rand(1,999).rand(1,999);
-
+		$data['account_no']     = rand(1,9999).rand(1,9999);	// Random generated username
 		$data['firstname']      = $this->input->post('firstname');
 		$data['lastname']       = $this->input->post('lastname');
 		$data['companyname']    = $this->input->post('companyname');
@@ -194,12 +216,12 @@ class Customers extends CI_Controller {
 		$data['tot_sip_acc']    = $this->input->post('tot_sip_acc');
         $data['sip_ip']         = $this->input->post('sip_ip');
 		$data['group']          = $this->input->post('group');
-        $data['billing_cycle'] = $this->input->post('billing_cycle');
-
-		$group_rate_table_name      = $this->groups_model->group_any_cell($data['group'], 'group_rate_table');
-
-		$check_email_in_use = $this->customer_model->check_email_in_use($data['email']);
-		$check_group_validity = $this->groups_model->group_valid_invalid($group_rate_table_name);
+        $data['billing_cycle']  = $this->input->post('billing_cycle');
+        $data['type']           = $this->input->post('type');
+        
+		$group_rate_table_name = $this->groups_model->group_any_cell($data['group'], 'group_rate_table');
+		$check_email_in_use    = $this->customer_model->check_email_in_use($data['email']);
+		$check_group_validity  = $this->groups_model->group_valid_invalid($group_rate_table_name);
 
 		$check_username_availability_count = 0;
 		if($data['access_chk'] == 'Y')
@@ -284,37 +306,41 @@ class Customers extends CI_Controller {
 		$data['main_menu']	    =	'';
 		$data['sub_menu']	    =	'';
 		$data['main_content']	=	'customers/edit_customer_view';
+        $data['dont_show_this'] = 1;
 		$this->load->view('default/template',$data);
 	}
 
 	//update customer db
 	function update_customer_db()
 	{
-		$data['customer_id']      = $this->input->post('customer_id');
-
-		$data['firstname']      = $this->input->post('firstname');
-		$data['lastname']       = $this->input->post('lastname');
-		$data['companyname']    = $this->input->post('companyname');
-		$data['email']          = $this->input->post('email');
-		$data['oldemail']          = $this->input->post('oldemail');
-		$data['account_type']   = $this->input->post('account_type');
-		$data['maxcalls']       = $this->input->post('maxcalls');
-		$data['address']        = $this->input->post('address');
-		$data['city']           = $this->input->post('city');
-		$data['state']          = $this->input->post('state');
-		$data['zipcode']        = $this->input->post('zipcode');
-		$data['country']        = $this->input->post('country');
-		$data['prefix']          = $this->input->post('prefix');
-		$data['phone']          = $this->input->post('phone');
-		$data['timezone']       = $this->input->post('timezone');
-		$data['billingcycle']   = $this->input->post('billingcycle');
-		$data['creditlimit']    = $this->input->post('creditlimit');
-		$data['cdr_check']      = $this->input->post('cdr_check');
-		$data['cdr_email']      = $this->input->post('cdr_email');
-		$data['tot_acl_nodes']  = $this->input->post('tot_acl_nodes');
-		$data['tot_sip_acc']    = $this->input->post('tot_sip_acc');
-        $data['sip_ip']         = $this->input->post('sip_ip');
-        $data['billing_cycle'] = $this->input->post('billing_cycle');
+		$data['customer_id']              = $this->input->post('customer_id');
+		$data['firstname']                = $this->input->post('firstname');
+		$data['lastname']                 = $this->input->post('lastname');
+		$data['companyname']              = $this->input->post('companyname');
+		$data['email']                    = $this->input->post('email');
+		$data['oldemail']                 = $this->input->post('oldemail');
+		$data['account_type']             = $this->input->post('account_type');
+		$data['maxcalls']                 = $this->input->post('maxcalls');
+		$data['address']                  = $this->input->post('address');
+		$data['city']                     = $this->input->post('city');
+		$data['state']                    = $this->input->post('state');
+		$data['zipcode']                  = $this->input->post('zipcode');
+		$data['country']                  = $this->input->post('country');
+		$data['prefix']                   = $this->input->post('prefix');
+		$data['phone']                    = $this->input->post('phone');
+		$data['timezone']                 = $this->input->post('timezone');
+		$data['billingcycle']             = $this->input->post('billingcycle');
+		$data['creditlimit']              = $this->input->post('creditlimit');
+		$data['cdr_check']                = $this->input->post('cdr_check');
+		$data['rate_limit_check']         = $this->input->post('rate_limit_check');
+		$data['customer_low_rate_limit']  = $this->input->post('customer_low_rate_limit');
+		$data['customer_high_rate_limit'] = $this->input->post('customer_high_rate_limit');
+		$data['cdr_email']                = $this->input->post('cdr_email');
+		$data['tot_acl_nodes']            = $this->input->post('tot_acl_nodes');
+		$data['tot_sip_acc']              = $this->input->post('tot_sip_acc');
+		$data['sip_ip']                   = $this->input->post('sip_ip');
+		$data['billing_cycle']            = $this->input->post('billing_cycle');
+		$data['type']                     = $this->input->post('type');
 
 		$has_user_access = $this->input->post('has_user_access');
 		$check_username_availability_count = 0;
@@ -592,7 +618,7 @@ class Customers extends CI_Controller {
 			$filter_display_results = $this->input->get('filter_display_results');
             $filter_sort            = $this->input->get('filter_sort');
 			$search                 = $this->input->get('searchFilter');
-			$msg_records_found      = "Records Found Based On Your Search Criteria";
+			$msg_records_found      = "Records Found Based On Search Criteria";
 		}
 
 		if($filter_display_results   == '')
@@ -660,9 +686,6 @@ class Customers extends CI_Controller {
 			$config['uri_segment'] = '';
 		}
 
-
-
-
 		$customer_group_id      =   $this->customer_model->customer_any_cell($customer_id, 'customer_rate_group');
 
 		if($customer_group_id != '' && $customer_group_id != '0')
@@ -677,25 +700,21 @@ class Customers extends CI_Controller {
 			$data['count']  = 0;
 		}
 
-
 		$config['total_rows'] = $data['count'];
 		$this->pagination->initialize($config);
 
 		$data['msg_records_found'] = "".$data['count']."&nbsp;".$msg_records_found."";
 
-
-
-
-		$data['customer_id']    =   $customer_id;
-		$data['tbl_name']       =   $customer_group_table;
-
-		$data['page_name']		=	'rates_customer';
-		$data['selected']		=	'customers_rate';
-		$data['sub_selected']   =   '';
-		$data['page_title']		=	'CUSTOMER RATES';
-		$data['main_menu']	    =	'';
-		$data['sub_menu']	    =	'';
-		$data['main_content']	=	'customers/rate_customer_view';
+		$data['customer_id']          = $customer_id;
+		$data['tbl_name']             = $customer_group_table;
+		$data['page_name']            = 'rates_customer';
+		$data['selected']             = 'customers_rate';
+		$data['sub_selected']         = '';
+		$data['page_title']           = 'CUSTOMER RATES';
+		$data['main_menu']            = '';
+		$data['sub_menu']             = '';
+		$data['main_content']         = 'customers/rate_customer_view';
+        $data['dont_show_this'] = 1;
 		$this->load->view('default/template',$data);
 	}
 
@@ -704,21 +723,7 @@ class Customers extends CI_Controller {
 		$id = $this->input->post('id');
 		echo country_any_cell($id, 'countryprefix');
 	}
-	/*
-	//enable or disable customer rate 
-	function enable_disable_customer_rate()
-	{
-	$data['rate_id']            = $this->input->post('rate_id');
-	$data['status']             = $this->input->post('status');
-	$data['tbl_name']           = $this->input->post('tbl_name');
-
-if($data['tbl_name'] != '')
-{
-$this->customer_model->enable_disable_customer_rate($data);
-}
-}
-*/
-
+	
 //*********************** CUSTOMER ACL NODES FUNCTION ****************************************//
 
 function customer_acl_nodes($customer_id = '')
@@ -741,6 +746,7 @@ function customer_acl_nodes($customer_id = '')
 	$data['main_menu']	    =	'';
 	$data['sub_menu']	    =	'';
 	$data['main_content']	=	'customers/ip_customer_view';
+    $data['dont_show_this'] = 1;
 	$this->load->view('default/template',$data);
 }
 
@@ -755,6 +761,7 @@ function new_acl_node($customer_id = '')
 	$data['main_menu']	    =	'';
 	$data['sub_menu']	    =	'';
 	$data['main_content']	=	'customers/new_acl_node_view';
+    $data['dont_show_this'] = 1;
 	$this->load->view('default/template',$data);
 }
 
@@ -762,8 +769,8 @@ function insert_new_acl_node()
 {
 	$customer_id = $this->input->post('customer_id');
 	$ip = $this->input->post('ip');
-	$cdr = $this->input->post('cdr');
-	$this->customer_model->insert_new_acl_node($customer_id, $ip, $cdr);
+	$cidr = $this->input->post('cidr');
+	$this->customer_model->insert_new_acl_node($customer_id, $ip, $cidr);
 
 	//relaod acl
 	$fp = $this->esl->event_socket_create($this->esl->ESL_host, $this->esl->ESL_port, $this->esl->ESL_password);
@@ -799,6 +806,7 @@ function edit_acl_node($node_id = '', $customer_id = '')
 	$data['main_menu']	    =	'';
 	$data['sub_menu']	    =	'';
 	$data['main_content']	=	'customers/edit_acl_node_view';
+    $data['dont_show_this'] = 1;
 	$this->load->view('default/template',$data);
 }
 
@@ -806,8 +814,8 @@ function update_acl_node_db()
 {
 	$node_id = $this->input->post('node_id');
 	$ip = $this->input->post('ip');
-	$cdr = $this->input->post('cdr');
-	$this->customer_model->update_acl_node_db($node_id, $ip, $cdr);
+	$cidr = $this->input->post('cidr');
+	$this->customer_model->update_acl_node_db($node_id, $ip, $cidr);
 
 	//relaod acl
 	$fp = $this->esl->event_socket_create($this->esl->ESL_host, $this->esl->ESL_port, $this->esl->ESL_password);
@@ -866,6 +874,7 @@ function sip_access($customer_id)
 	$data['main_menu']	    =	'';
 	$data['sub_menu']	    =	'';
 	$data['main_content']	=	'customers/sip_customer_view';
+    $data['dont_show_this'] = 1;
 	$this->load->view('default/template',$data);
 }
 
@@ -901,21 +910,20 @@ function new_sip_access($customer_id)
 	$data['main_menu']	    =	'';
 	$data['sub_menu']	    =	'';
 	$data['main_content']	=	'customers/new_sip_view';
+    $data['dont_show_this'] = 1;
 	$this->load->view('default/template',$data);
 }
 
 function insert_new_sip_access()
 {
-	$customer_id    =   $this->input->post('customer_id');
-	$username       =   $this->input->post('username');
-	$password       =   $this->input->post('password');
-    $cid       =   $this->input->post('cid');
-
-	$getdomain      =   $this->input->post('sip_ip');
-	$explode = explode('|', $getdomain);
-
-	$domain     = $explode[0];
-	$sofia_id   = $explode[1];
+	$customer_id = $this->input->post('customer_id');
+	$username    = $this->input->post('username');
+	$password    = $this->input->post('password');
+	$cid         = $this->input->post('cid');
+	$getdomain   = $this->input->post('sip_ip');
+	$explode     = explode('|', $getdomain);
+	$domain      = $explode[0];
+	$sofia_id    = $explode[1];
 
 	$this->customer_model->insert_new_sip_access($customer_id, $username, $password, $domain, $sofia_id, $cid);
 }
@@ -935,58 +943,11 @@ function reset_sip_password()
     $new_password = $username.':'.$domain.':'.$password;
 	$new_password = md5($new_password);
     
-    $sql2 = "UPDATE directory_vars SET var_value = '".$new_password."' WHERE directory_id = '".$record_id."' ";
+    $sql2 = "UPDATE directory_params SET param_value = '".$new_password."' WHERE directory_id = '".$record_id."' ";
     $query2 = $this->db->query($sql2); 
     
     echo $password;
 }
-
-/*
-function edit_sip_access($id, $customer_id)
-{
-$data['sip_access']     =   $this->customer_model->single_sip_access_data($id);
-$data['customer_id']    =   $customer_id;
-$data['record_id']      =   $id;
-
-$data['page_name']		=	'edit_sip_access';
-$data['selected']		=	'sip_access';
-$data['sub_selected']   =   '';
-$data['page_title']		=	'UPDATE SIP CREDENTIALS';
-$data['main_menu']	    =	'';
-$data['sub_menu']	    =	'';
-$data['main_content']	=	'customers/edit_sip_view';
-$this->load->view('default/template',$data);
-}
-
-function update_sip_access()
-{
-$customer_id    =   $this->input->post('customer_id');
-$record_id      =   $this->input->post('record_id');
-
-$username       =   $this->input->post('username');
-$old_username   =   $this->input->post('old_username');
-$password       =   $this->input->post('password');
-$domain         =   $this->input->post('sip_ip');
-
-if($old_username != $username)
-{
-$check_username_availability = $this->customer_model->check_sip_username_existis($username);
-
-if($check_username_availability == 0)
-{
-$this->customer_model->update_sip_access($record_id, $username, $password, $domain);
-}
-else
-{
-echo "username_not_available";
-exit;
-}
-}
-else
-{
-$this->customer_model->update_sip_access($record_id, $username, $password, $domain);
-}
-}*/
 
 function delete_sip_access()
 {
@@ -1049,7 +1010,7 @@ function customer_cdr($customer_id)
         $duration_to            = $this->input->get('duration_to');
         $filter_sort            = $this->input->get('filter_sort');
 		$search                 = $this->input->get('searchFilter');
-		$msg_records_found      = "Records Found Based On Your Search Criteria";
+		$msg_records_found      = "Records Found Based On Search Criteria";
 	}
 
 	if($filter_display_results   == '')
@@ -1147,6 +1108,7 @@ function customer_cdr($customer_id)
 	$data['main_menu']	    =	'';
 	$data['sub_menu']	    =	'';
 	$data['main_content']	=	'customers/cdr_customer_view';
+    $data['dont_show_this'] = 1;
 	$this->load->view('default/template',$data);
 }
 
@@ -1171,6 +1133,7 @@ function manage_balance($customer_id)
 	$data['main_menu']	    =	'';
 	$data['sub_menu']	    =	'';
 	$data['main_content']	=	'customers/balance_customer_view';
+    $data['dont_show_this'] = 1;
 	$this->load->view('default/template',$data);
 }
 
@@ -1283,7 +1246,7 @@ function update_my_account()
             $filter_status          = $this->input->get('filter_status');
             $filter_sort            = $this->input->get('filter_sort');
             $search                 = $this->input->get('searchFilter');
-            $msg_records_found      = "Records Found Based On Your Search Criteria";
+            $msg_records_found      = "Records Found Based On Search Criteria";
         }
 
         if($filter_date_from != '')
@@ -1361,6 +1324,7 @@ function update_my_account()
         $data['main_menu']	    =	'';
         $data['sub_menu']	    =	'';
         $data['main_content']	=	'customers/invoices_view';
+        $data['dont_show_this'] = 1;
         $this->load->view('default/template',$data);
     }
 }

@@ -884,3 +884,51 @@ html[xmlns] #navcss {
 * html #navcss {
 	height: 1%;
 }
+
+/**********************/
+#breadcrumb
+{
+    font: 11px Arial, Helvetica, sans-serif;
+    background-image:url('../images/bc_bg.png'); 
+    background-repeat:repeat-x;
+    height:20px;
+    line-height:30px;
+    color:#3B5998;
+    border:solid 1px #cacaca;
+    width:50%;
+    overflow:hidden;
+    margin:0px;
+    padding:0px;
+    margin-left:auto;
+    margin-right:auto;
+    margin-top:10px;
+    font-weight:bold;
+}
+#breadcrumb li 
+{
+    list-style-type:none;
+    float:left;
+    padding-left:10px;
+    margin-top:-4px;
+}
+#breadcrumb a
+{
+    height:30px;
+    display:block;
+    background-image:url('../images/bc_separator.png'); 
+    background-repeat:no-repeat; 
+    background-position:right;
+    padding-right: 15px;
+    text-decoration: none;
+    color:#454545;
+}
+.home
+{
+    border:none;
+    margin: 8px 0px;
+}
+
+#breadcrumb a:hover
+{
+	color:#35acc5;
+}

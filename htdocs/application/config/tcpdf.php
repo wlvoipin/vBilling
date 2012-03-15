@@ -75,7 +75,7 @@
 	 * ADD TRAILING SLASH!
 	 ***********************************************************/
 	
-	
+	$tcpdf['image_directory'] = $tcpdf['base_directory'].'images/';
 	
 	
 	/************************************************************
@@ -213,32 +213,7 @@
 	$tcpdf['header_margin'] = 5;
 	$tcpdf['header_title'] = '';
 	$tcpdf['header_string'] = "";
-	
-    $CI =& get_instance();
-     if(settings_any_cell('company_logo_as_invoice_logo') == '' || settings_any_cell('company_logo_as_invoice_logo') == '0'){
-        if(settings_any_cell('invoice_logo') != '')
-        {
-            $tcpdf['image_directory'] = $CI->config->item('base_url').'media/images/';
-            $tcpdf['header_logo'] = ''.$CI->config->item('base_url').'media/images/'.settings_any_cell('invoice_logo').'';
-        }
-        else
-        {
-            $tcpdf['image_directory'] = $tcpdf['base_directory'].'images/';
-            $tcpdf['header_logo'] = 'logo.png';
-        }
-     }
-     else {
-        if(settings_any_cell('logo') != '')
-        {
-            $tcpdf['image_directory'] = $CI->config->item('base_url').'media/images/';
-            $tcpdf['header_logo'] = ''.$CI->config->item('base_url').'media/images/'.settings_any_cell('logo').'';
-        }
-        else
-        {
-            $tcpdf['image_directory'] = $tcpdf['base_directory'].'images/';
-            $tcpdf['header_logo'] = 'logo.png';
-        }
-     }
+	$tcpdf['header_logo'] = 'logo.png';
 	$tcpdf['header_logo_width'] = 30;
 	
 	

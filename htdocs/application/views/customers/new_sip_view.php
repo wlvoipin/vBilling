@@ -1,3 +1,32 @@
+<?php 
+/*
+ * Version: MPL 1.1
+ *
+ * The contents of this file are subject to the Mozilla Public License
+ * Version 1.1 (the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ * 
+ * Software distributed under the License is distributed on an "AS IS"
+ * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+ * License for the specific language governing rights and limitations
+ * under the License.
+ * 
+ * The Original Code is "vBilling - VoIP Billing and Routing Platform"
+ * 
+ * The Initial Developer of the Original Code is 
+ * Digital Linx [<] info at digitallinx.com [>]
+ * Portions created by Initial Developer (Digital Linx) are Copyright (C) 2011
+ * Initial Developer (Digital Linx). All Rights Reserved.
+ *
+ * Contributor(s)
+ * "Digital Linx - <vbilling at digitallinx.com>"
+ *
+ * vBilling - VoIP Billing and Routing Platform
+ * version 0.1.3
+ *
+ */
+?>
 <script type="text/javascript">
 if(!window.opener){
 window.location = '../../home/';
@@ -51,7 +80,7 @@ window.location = '../../home/';
                 
                 <tr>
                     <td align="right" width="45%"><span class="required">*</span> Username:</td>
-                    <td align="left" width="55%"><input type="text" name="username" id="username" readonly maxlength="6" class="textfield" value="<?php echo $username;?>"></td>
+                    <td align="left" onmouseover="return overlib('<?php echo $this->lang->line('admin_new_sip_view_username');?>', HAUTO, VAUTO, STICKY)" onmouseout="return nd()" width="55%"><input type="text" name="username" id="username" readonly maxlength="6" class="textfield" value="<?php echo $username;?>"></td>
                 </tr>
                 
                 <tr>
@@ -61,12 +90,12 @@ window.location = '../../home/';
                 
                 <tr>
                     <td align="right" width="45%"><span class="required">*</span> CID:</td>
-                    <td align="left" width="55%"><input type="text" name="cid" id="cid"  maxlength="6" class="textfield numeric" value="<?php echo $username;?>"></td>
+                    <td align="left" onmouseover="return overlib('<?php echo $this->lang->line('admin_new_sip_view_cid');?>', HAUTO, VAUTO, STICKY)" onmouseout="return nd()" width="55%"><input name="cid" type="text" class="textfield numeric" id="cid" value="<?php echo $username;?>"  maxlength="20"></td>
                 </tr>
                 
                 <tr>
                     <td align="right"><span class="required">*</span> SIP IP:</td>
-                    <td align="left">
+                    <td align="left" onmouseover="return overlib('<?php echo $this->lang->line('admin_new_sip_view_sip_ip');?>', HAUTO, VAUTO, STICKY)" onmouseout="return nd()" >
                         <select  name="sip_ip" id="sip_ip" class="textfield">
                             <?php echo get_all_sip_ips(); ?>
                         </select>

@@ -1,31 +1,31 @@
 <?php 
 /*
-* Version: MPL 1.1
-*
-* The contents of this file are subject to the Mozilla Public License
-* Version 1.1 (the "License"); you may not use this file except in
-* compliance with the License. You may obtain a copy of the License at
-* http://www.mozilla.org/MPL/
-* 
-* Software distributed under the License is distributed on an "AS IS"
-* basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
-* License for the specific language governing rights and limitations
-* under the License.
-* 
-* The Original Code is "vBilling - VoIP Billing and Routing Platform"
-* 
-* The Initial Developer of the Original Code is 
-* Digital Linx [<] info at digitallinx.com [>]
-* Portions created by Initial Developer (Digital Linx) are Copyright (C) 2011
-* Initial Developer (Digital Linx). All Rights Reserved.
-*
-* Contributor(s)
-* "Muhammad Naseer Bhatti <nbhatti at gmail.com>"
-*
-* vBilling - VoIP Billing and Routing Platform
-* version 0.1.1
-*
-*/
+ * Version: MPL 1.1
+ *
+ * The contents of this file are subject to the Mozilla Public License
+ * Version 1.1 (the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ * 
+ * Software distributed under the License is distributed on an "AS IS"
+ * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+ * License for the specific language governing rights and limitations
+ * under the License.
+ * 
+ * The Original Code is "vBilling - VoIP Billing and Routing Platform"
+ * 
+ * The Initial Developer of the Original Code is 
+ * Digital Linx [<] info at digitallinx.com [>]
+ * Portions created by Initial Developer (Digital Linx) are Copyright (C) 2011
+ * Initial Developer (Digital Linx). All Rights Reserved.
+ *
+ * Contributor(s)
+ * "Digital Linx - <vbilling at digitallinx.com>"
+ *
+ * vBilling - VoIP Billing and Routing Platform
+ * version 0.1.3
+ *
+ */
 
 if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
@@ -46,6 +46,11 @@ class Settings extends CI_Controller {
 			if($this->session->userdata('user_type') == 'customer')
 			{
 				redirect ('customer/');
+			}
+            
+            if($this->session->userdata('user_type') == 'reseller')
+			{
+				redirect ('reseller/');
 			}
             
             if($this->session->userdata('user_type') == 'sub_admin')
@@ -84,7 +89,8 @@ class Settings extends CI_Controller {
     {
         $company_name = ucwords(strtolower($this->input->post('company_name')));
         $this->settings_model->update_settings('company_name', $company_name);
-        
+        $this->settings_model->update_settings('enable_rate_limits', $this->input->post('enable_rate_limits'));
+
         $full_img_name = '';
         if(isset($_FILES['userfile']['tmp_name']) && !empty($_FILES['userfile']['tmp_name']))
         {

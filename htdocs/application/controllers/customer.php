@@ -1,31 +1,31 @@
 <?php 
 /*
-* Version: MPL 1.1
-*
-* The contents of this file are subject to the Mozilla Public License
-* Version 1.1 (the "License"); you may not use this file except in
-* compliance with the License. You may obtain a copy of the License at
-* http://www.mozilla.org/MPL/
-* 
-* Software distributed under the License is distributed on an "AS IS"
-* basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
-* License for the specific language governing rights and limitations
-* under the License.
-* 
-* The Original Code is "vBilling - VoIP Billing and Routing Platform"
-* 
-* The Initial Developer of the Original Code is 
-* Digital Linx [<] info at digitallinx.com [>]
-* Portions created by Initial Developer (Digital Linx) are Copyright (C) 2011
-* Initial Developer (Digital Linx). All Rights Reserved.
-*
-* Contributor(s)
-* "Muhammad Naseer Bhatti <nbhatti at gmail.com>"
-*
-* vBilling - VoIP Billing and Routing Platform
-* version 0.1.1
-*
-*/
+ * Version: MPL 1.1
+ *
+ * The contents of this file are subject to the Mozilla Public License
+ * Version 1.1 (the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ * 
+ * Software distributed under the License is distributed on an "AS IS"
+ * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+ * License for the specific language governing rights and limitations
+ * under the License.
+ * 
+ * The Original Code is "vBilling - VoIP Billing and Routing Platform"
+ * 
+ * The Initial Developer of the Original Code is 
+ * Digital Linx [<] info at digitallinx.com [>]
+ * Portions created by Initial Developer (Digital Linx) are Copyright (C) 2011
+ * Initial Developer (Digital Linx). All Rights Reserved.
+ *
+ * Contributor(s)
+ * "Digital Linx - <vbilling at digitallinx.com>"
+ *
+ * vBilling - VoIP Billing and Routing Platform
+ * version 0.1.3
+ *
+ */
 
 if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
@@ -186,7 +186,7 @@ class Customer extends CI_Controller {
 			$filter_display_results = $this->input->get('filter_display_results');
             $filter_sort            = $this->input->get('filter_sort');
 			$search                 = $this->input->get('searchFilter');
-			$msg_records_found      = "Records Found Based On Your Search Criteria";
+			$msg_records_found      = "Records Found Based On Search Criteria";
 		}
 
 		if($filter_display_results   == '')
@@ -361,8 +361,8 @@ function insert_new_acl_node()
 {
 	$customer_id = $this->input->post('customer_id');
 	$ip = $this->input->post('ip');
-	$cdr = $this->input->post('cdr');
-	$this->customer_model->insert_new_acl_node($customer_id, $ip, $cdr);
+	$cidr = $this->input->post('cidr');
+	$this->customer_model->insert_new_acl_node($customer_id, $ip, $cidr);
 	$this->session->set_flashdata('success','ACL Node added successfully.');
 
 	//relaod acl
@@ -398,8 +398,8 @@ function update_acl_node_db()
 {
 	$node_id = $this->input->post('node_id');
 	$ip = $this->input->post('ip');
-	$cdr = $this->input->post('cdr');
-	$this->customer_model->update_acl_node_db($node_id, $ip, $cdr);
+	$cidr = $this->input->post('cidr');
+	$this->customer_model->update_acl_node_db($node_id, $ip, $cidr);
 
 	//relaod acl
 	$fp = $this->esl->event_socket_create($this->esl->ESL_host, $this->esl->ESL_port, $this->esl->ESL_password);
@@ -508,7 +508,7 @@ function reset_sip_password()
     $new_password = $username.':'.$domain.':'.$password;
 	$new_password = md5($new_password);
     
-    $sql2 = "UPDATE directory_vars SET var_value = '".$new_password."' WHERE directory_id = '".$record_id."' ";
+    $sql2 = "UPDATE directory_params SET param_value = '".$new_password."' WHERE directory_id = '".$record_id."' ";
     $query2 = $this->db->query($sql2); 
     
     echo $password;
@@ -626,7 +626,7 @@ function customer_cdr()
         $duration_to            = $this->input->get('duration_to');
         $filter_sort            = $this->input->get('filter_sort');
 		$search                 = $this->input->get('searchFilter');
-		$msg_records_found      = "Records Found Based On Your Search Criteria";
+		$msg_records_found      = "Records Found Based On Search Criteria";
 	}
 
 	if($filter_display_results   == '')
@@ -767,7 +767,7 @@ function manage_balance()
             $filter_status          = $this->input->get('filter_status');
             $filter_sort            = $this->input->get('filter_sort');
             $search                 = $this->input->get('searchFilter');
-            $msg_records_found      = "Records Found Based On Your Search Criteria";
+            $msg_records_found      = "Records Found Based On Search Criteria";
         }
 
         if($filter_date_from != '')

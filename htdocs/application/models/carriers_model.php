@@ -1,31 +1,31 @@
 <?php 
 /*
-* Version: MPL 1.1
-*
-* The contents of this file are subject to the Mozilla Public License
-* Version 1.1 (the "License"); you may not use this file except in
-* compliance with the License. You may obtain a copy of the License at
-* http://www.mozilla.org/MPL/
-* 
-* Software distributed under the License is distributed on an "AS IS"
-* basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
-* License for the specific language governing rights and limitations
-* under the License.
-* 
-* The Original Code is "vBilling - VoIP Billing and Routing Platform"
-* 
-* The Initial Developer of the Original Code is 
-* Digital Linx [<] info at digitallinx.com [>]
-* Portions created by Initial Developer (Digital Linx) are Copyright (C) 2011
-* Initial Developer (Digital Linx). All Rights Reserved.
-*
-* Contributor(s)
-* "Muhammad Naseer Bhatti <nbhatti at gmail.com>"
-*
-* vBilling - VoIP Billing and Routing Platform
-* version 0.1.1
-*
-*/
+ * Version: MPL 1.1
+ *
+ * The contents of this file are subject to the Mozilla Public License
+ * Version 1.1 (the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ * 
+ * Software distributed under the License is distributed on an "AS IS"
+ * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+ * License for the specific language governing rights and limitations
+ * under the License.
+ * 
+ * The Original Code is "vBilling - VoIP Billing and Routing Platform"
+ * 
+ * The Initial Developer of the Original Code is 
+ * Digital Linx [<] info at digitallinx.com [>]
+ * Portions created by Initial Developer (Digital Linx) are Copyright (C) 2011
+ * Initial Developer (Digital Linx). All Rights Reserved.
+ *
+ * Contributor(s)
+ * "Digital Linx - <vbilling at digitallinx.com>"
+ *
+ * vBilling - VoIP Billing and Routing Platform
+ * version 0.1.3
+ *
+ */
 
 class Carriers_model extends CI_Model {
 
@@ -77,7 +77,7 @@ class Carriers_model extends CI_Model {
 	{
 		$where = '';
 		$where .= "WHERE id != '' ";
-
+	
 		if($filter_carriers != '')
 		{
 			if(is_numeric($filter_carriers))
@@ -85,7 +85,7 @@ class Carriers_model extends CI_Model {
 				$where .= 'AND id = '.$this->db->escape($filter_carriers).' ';
 			}
 		}
-
+	
 		if($filter_carrier_type != '')
 		{
 			if(is_numeric($filter_carrier_type))
@@ -93,7 +93,7 @@ class Carriers_model extends CI_Model {
 				$where .= "AND enabled = ".$this->db->escape($filter_carrier_type)." ";
 			}
 		}
-
+	
 		$sql = "SELECT * FROM carriers ".$where." ";
 		$query = $this->db->query($sql);
 		$count = $query->num_rows();
@@ -251,7 +251,6 @@ class Carriers_model extends CI_Model {
 
 		$data = '';
 
-
 		if($query->num_rows() > 0)
 		{
 			foreach($query->result() as $row)
@@ -266,8 +265,15 @@ class Carriers_model extends CI_Model {
 				}
 			}
 		}
-
 		return $data;
+	}
+
+	function sofia_name($sofia_id)
+	{
+		$sql = "SELECT profile_name FROM sofia_conf WHERE id = '".$sofia_id."' ";
+		$query = $this->db->query($sql);
+		$row = $query->row();
+		return $row->profile_name;
 	}
 
 	function gateway_use_count($gateway_name, $sofia_id)
@@ -276,14 +282,6 @@ class Carriers_model extends CI_Model {
 		$query = $this->db->query($sql);
 		$row = $query->row();
 		return $row->count_gateway;
-	}
-
-	function sofia_name($sofia_id)
-	{
-		$sql = "SELECT * FROM sofia_conf WHERE id = '".$sofia_id."' ";
-		$query = $this->db->query($sql);
-		$row = $query->row();
-		return $row->profile_name;
 	}
 
 	function delete_carrier($carrier_id)
