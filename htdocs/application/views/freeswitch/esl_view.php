@@ -108,7 +108,7 @@
 <br/><br/>
 
 <!--*****************************SETTINGS DETAILS *************************************-->
-<table style="border: 1px groove;" width="100%" cellpadding="0" cellspacing="0">
+<!-- <table style="border: 1px groove;" width="100%" cellpadding="0" cellspacing="0">
 	<tbody><tr>
 		<td>
 			<table width="100%" border="0" cellpadding="0" cellspacing="0">
@@ -134,7 +134,7 @@
 			</table>
 		</td>
 	</tr>
-</tbody></table>
+</tbody></table> -->
 
 <script type="text/javascript" >
 $('.run_command').click(function(){
