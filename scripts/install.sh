@@ -1913,7 +1913,6 @@ fi
 # This can only be done with some dirty hacks
 
 mysql -u${VBILLING_DB_USER} -p${VBILLING_DB_PASSWORD} ${VBILLING_DB} -e "\
-drop procedure AddColumnUnlessExists;
 delimiter '//'
 create procedure AddColumnUnlessExists(
 IN dbName tinytext,
@@ -1942,20 +1941,20 @@ for lcr_table_name in $(mysql -u${VBILLING_DB_USER} -p${VBILLING_DB_PASSWORD} ${
 do
 # Update lcr_group_(id) schema for all LCR tables
 
+mysql -u${VBILLING_DB_USER} -p${VBILLING_DB_PASSWORD} ${VBILLING_DB} -e "ALTER TABLE $lcr_table_name DROP COLUMN intrastate_rate"
+mysql -u${VBILLING_DB_USER} -p${VBILLING_DB_PASSWORD} ${VBILLING_DB} -e "ALTER TABLE $lcr_table_name DROP COLUMN intralata_rate"
+mysql -u${VBILLING_DB_USER} -p${VBILLING_DB_PASSWORD} ${VBILLING_DB} -e "ALTER TABLE $lcr_table_name MODIFY COLUMN country_id int(4) NOT NULL, MODIFY COLUMN buy_initblock int(4) NOT NULL, MODIFY COLUMN sell_initblock int(4) NOT NULL , MODIFY COLUMN lcr_profile int(3) NULL, MODIFY COLUMN quality int(5) NOT NULL, MODIFY COLUMN reliability int(5) NOT NULL;"
 mysql -u${VBILLING_DB_USER} -p${VBILLING_DB_PASSWORD} ${VBILLING_DB} -e "\
-ALTER TABLE $lcr_table_name DROP COLUMN intrastate_rate, DROP COLUMN intralata_rate, MODIFY COLUMN country_id int(4) NOT NULL, MODIFY COLUMN buy_initblock int(4) NOT NULL, MODIFY COLUMN sell_initblock int(4) NOT NULL , MODIFY COLUMN lcr_profile int(3) NULL, MODIFY COLUMN quality int(5) NOT NULL, MODIFY COLUMN reliability int(5) NOT NULL;"
-
-mysql -u${VBILLING_DB_USER} -p${VBILLING_DB_PASSWORD} ${VBILLING_DB} -e "\
-call AddColumnUnlessExists(Database(), $lcr_table_name, 'sellblock_min_duration', 'cost_rate' ,'int(4) NULL');
-call AddColumnUnlessExists(Database(), $lcr_table_name, 'buyblock_min_duration', 'sellblock_min_duration' ,'int(4) NULL');
-call AddColumnUnlessExists(Database(), $lcr_table_name, 'remove_rate_prefix', 'sell_initblock' ,'int(15) NULL');
-call AddColumnUnlessExists(Database(), $lcr_table_name, 'remove_rate_suffix', 'remove_rate_prefix' ,'int(15) NULL');
-call AddColumnUnlessExists(Database(), $lcr_table_name, 'admin_rate_group', 'lrn' ,'varchar(50) NULL');
-call AddColumnUnlessExists(Database(), $lcr_table_name, 'admin_rate_id', 'admin_rate_group' ,'int(11) NULL DEFAULT 0');
-call AddColumnUnlessExists(Database(), $lcr_table_name, 'reseller_rate_group', 'admin_rate_id' ,'varchar(50) NULL');
-call AddColumnUnlessExists(Database(), $lcr_table_name, 'reseller_rate_id', 'reseller_rate_group' ,'int(11) NULL DEFAULT 0');
-drop procedure AddColumnUnlessExists;"
+call AddColumnUnlessExists(Database(), '${lcr_table_name}', 'sellblock_min_duration', 'cost_rate' ,'int(4) NULL');
+call AddColumnUnlessExists(Database(), '${lcr_table_name}', 'buyblock_min_duration', 'sellblock_min_duration' ,'int(4) NULL');
+call AddColumnUnlessExists(Database(), '${lcr_table_name}', 'remove_rate_prefix', 'sell_initblock' ,'int(15) NULL');
+call AddColumnUnlessExists(Database(), '${lcr_table_name}', 'remove_rate_suffix', 'remove_rate_prefix' ,'int(15) NULL');
+call AddColumnUnlessExists(Database(), '${lcr_table_name}', 'admin_rate_group', 'lrn' ,'varchar(50) NULL');
+call AddColumnUnlessExists(Database(), '${lcr_table_name}', 'admin_rate_id', 'admin_rate_group' ,'int(11) NULL DEFAULT 0');
+call AddColumnUnlessExists(Database(), '${lcr_table_name}', 'reseller_rate_group', 'admin_rate_id' ,'varchar(50) NULL');
+call AddColumnUnlessExists(Database(), '${lcr_table_name}', 'reseller_rate_id', 'reseller_rate_group' ,'int(11) NULL DEFAULT 0');"
 done
+mysql -u${VBILLING_DB_USER} -p${VBILLING_DB_PASSWORD} ${VBILLING_DB} -e "drop procedure AddColumnUnlessExists;"
 
 # Restart FreeSWITCH. Do we really need it?
 /etc/init.d/freeswitch restart
