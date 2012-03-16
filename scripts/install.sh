@@ -1909,6 +1909,22 @@ else [ -f /etc/redhat-release ]
 	mysql -u${VBILLING_DB_USER} -p${VBILLING_DB_PASSWORD} ${VBILLING_DB} < ${TEMPDIR}/vBilling_upgrade.sql
 fi
 
+if [ -f /etc/debian_version ] ; then
+	if [ $(cat /etc/debian_version | cut -d "." -f 1) == 6 ]; then
+		mv ${FS_INSTALL_PATH}/scripts/vBilling_conf.lua ${FS_INSTALL_PATH}/scripts/vBilling.cfg
+		ln -s ${VBILLING_HTML}/bin/debian/${ARCH}/vBilling.bin ${FS_INSTALL_PATH}/scripts/vBilling.bin
+		ln -s ${VBILLING_HTML}/bin/debian/${ARCH}/vBilling_functions.bin ${FS_INSTALL_PATH}/scripts/vBilling_functions.bin
+	else
+		mv ${FS_INSTALL_PATH}/scripts/vBilling_conf.lua ${FS_INSTALL_PATH}/scripts/vBilling.cfg
+		ln -s ${VBILLING_HTML}/bin/ubuntu/${ARCH}/vBilling.bin ${FS_INSTALL_PATH}/scripts/vBilling.bin
+		ln -s ${VBILLING_HTML}/bin/ubuntu/${ARCH}/vBilling_functions.bin ${FS_INSTALL_PATH}/scripts/vBilling_functions.bin
+	fi
+else [ -f /etc/redhat-release ]
+	mv ${FS_INSTALL_PATH}/scripts/vBilling_conf.lua ${FS_INSTALL_PATH}/scripts/vBilling.cfg
+	ln -s ${VBILLING_HTML}/bin/centos/${ARCH}/vBilling.bin ${FS_INSTALL_PATH}/scripts/vBilling.bin
+	ln -s ${VBILLING_HTML}/bin/centos/${ARCH}/vBilling_functions.bin ${FS_INSTALL_PATH}/scripts/vBilling_functions.bin
+fi
+
 # Now this one is tricky. We need to know the lcr_group_* tables created already and update the structure as required.
 # This can only be done with some dirty hacks
 
