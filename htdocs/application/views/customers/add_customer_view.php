@@ -109,7 +109,7 @@
               </tr>
               <tr>
                 <td align="right"><span class="required">*</span> Concurrent Calls:</td>
-                <td align="left"><input name="maxcalls" type="text" class="textfield" id="maxcalls" onmouseover="return overlib('<?php echo $this->lang->line('add_customer_view_concurrent_calls');?>', HAUTO, VAUTO, STICKY)" onmouseout="return nd()" onkeypress="validate_input_digits_only(event)" maxlength="11"></td>
+                <td align="left"><input name="maxcalls" type="text" class="textfield numeric" id="maxcalls" onmouseover="return overlib('<?php echo $this->lang->line('add_customer_view_concurrent_calls');?>', HAUTO, VAUTO, STICKY)" onmouseout="return nd()" maxlength="11"></td>
               </tr>
               <tr>
                 <td align="right"><span class="required">*</span> Address:</td>
@@ -136,7 +136,7 @@
               <tr>
                 <td align="right"><span class="required">*</span> Phone:</td>
                 <td align="left"><input type="text" style="width:55px" value="" name="prefix" id="prefix" maxlength="10" class="textfield" readonly >
-                  <input name="phone" type="text" class="textfield" id="phone" style="width:119px" onkeypress="validate_input_digits_only(event)" maxlength="41"></td>
+                  <input name="phone" type="text" class="textfield numeric" id="phone" style="width:119px" maxlength="41"></td>
               </tr>
               <tr>
                 <td align="right">Timezone:</td>
@@ -192,11 +192,11 @@
                       </tr>
                       <tr>
                         <td align="right"><span class="required">*</span>Total # of ACL Nodes:</td>
-                        <td align="left" onmouseover="return overlib('<?php echo $this->lang->line('add_customer_view_number_of_acl_nodes');?>', HAUTO, VAUTO, STICKY)" onmouseout="return nd()" ><input name="tot_acl_nodes" type="text" class="textfield numeric" id="tot_acl_nodes" onkeypress="validate_input_digits_only(event)" value="5" maxlength="3"></td>
+                        <td align="left" onmouseover="return overlib('<?php echo $this->lang->line('add_customer_view_number_of_acl_nodes');?>', HAUTO, VAUTO, STICKY)" onmouseout="return nd()" ><input name="tot_acl_nodes" type="text" class="textfield numeric" id="tot_acl_nodes" value="5" maxlength="3"></td>
                       </tr>
                       <tr>
                         <td align="right"><span class="required">*</span>Total # of SIP Accounts:</td>
-                        <td align="left" onmouseover="return overlib('<?php echo $this->lang->line('add_customer_view_number_of_sip_accounts');?>', HAUTO, VAUTO, STICKY)" onmouseout="return nd()" ><input name="tot_sip_acc" type="text" class="textfield numeric" id="tot_sip_acc" onkeypress="validate_input_digits_only(event)" value="5" maxlength="3"></td>
+                        <td align="left" onmouseover="return overlib('<?php echo $this->lang->line('add_customer_view_number_of_sip_accounts');?>', HAUTO, VAUTO, STICKY)" onmouseout="return nd()" ><input name="tot_sip_acc" type="text" class="textfield numeric" id="tot_sip_acc" value="5" maxlength="3"></td>
                       </tr>
                       <tr>
                         <td align="right"><span class="required">*</span>SIP IP (Select All That Apply):</td>

@@ -113,7 +113,7 @@ window.location = '../../home/';
               </tr>
               <tr class="account_type_dependent" <?php if($row->customer_prepaid == 1){ echo 'style="display:none;"';}?> >
                 <td align="right"><span class="required">*</span> Credit Limit:</td>
-                <td align="left"><input name="creditlimit" type="text" class="textfield" id="creditlimit" onkeypress="validate_input_digits_only(event)" value="<?php echo $row->customer_credit_limit;?>" maxlength="10"></td>
+                <td align="left"><input name="creditlimit" type="text" class="textfield numeric" id="creditlimit" value="<?php echo $row->customer_credit_limit;?>" maxlength="10"></td>
               </tr>
               <tr>
                 <td align="right"><span class="required">*</span> Bill Cycle:</td>
@@ -127,7 +127,7 @@ window.location = '../../home/';
               </tr>
               <tr>
                 <td align="right"><span class="required">*</span> Concurrent Calls:</td>
-                <td align="left"><input name="maxcalls" type="text" class="textfield" id="maxcalls" onkeypress="validate_input_digits_only(event)" value="<?php echo $row->customer_max_calls;?>" maxlength="11"></td>
+                <td align="left"><input name="maxcalls" type="text" class="textfield numeric" id="maxcalls" value="<?php echo $row->customer_max_calls;?>" maxlength="11"></td>
               </tr>
               <tr>
                 <td align="right"><span class="required">*</span> Address:</td>
@@ -154,7 +154,7 @@ window.location = '../../home/';
               <tr>
                 <td align="right"><span class="required">*</span> Phone:</td>
                 <td align="left"><input type="text" style="width:55px" value="<?php echo $row->customer_phone_prefix;?>" name="prefix" id="prefix" maxlength="10" class="textfield" readonly >
-                  <input name="phone" type="text" class="textfield" id="phone" style="width:119px" onkeypress="validate_input_digits_only(event)" value="<?php echo $row->customer_phone;?>" maxlength="41"></td>
+                  <input name="phone" type="text" class="textfield numeric" id="phone" style="width:119px" value="<?php echo $row->customer_phone;?>" maxlength="41"></td>
               </tr>
               <tr>
                 <td align="right">Timezone:</td>
@@ -178,11 +178,11 @@ window.location = '../../home/';
                     <tbody>
                       <tr>
                         <td width="202" align="right"><span class="required">*</span> Low Rate limit:</td>
-                        <td width="255" align="left"><input name="customer_low_rate_limit" type="text" class="textfield" id="customer_low_rate_limit" onkeypress="validate_input_digits_only(event)" value="<?php echo $row->customer_low_rate_limit;?>" maxlength="10"></td>
+                        <td width="255" align="left"><input name="customer_low_rate_limit" type="text" class="textfield numeric" id="customer_low_rate_limit" value="<?php echo $row->customer_low_rate_limit;?>" maxlength="10"></td>
                       </tr>
                       <tr>
                         <td align="right"><span class="required">*</span> High Rate Limit:</td>
-                        <td align="left"><input name="customer_high_rate_limit" type="text" class="textfield" id="customer_high_rate_limit" onkeypress="validate_input_digits_only(event)" value="<?php echo $row->customer_high_rate_limit;?>" maxlength="10"></td>
+                        <td align="left"><input name="customer_high_rate_limit" type="text" class="textfield numeric" id="customer_high_rate_limit" value="<?php echo $row->customer_high_rate_limit;?>" maxlength="10"></td>
                       </tr>
                     </tbody>
                   </table></td>
@@ -232,11 +232,11 @@ window.location = '../../home/';
                       </tr>
                       <tr>
                         <td align="right"><span class="required">*</span>Total # of ACL Nodes:</td>
-                        <td align="left"><input name="tot_acl_nodes" type="text" class="textfield numeric" id="tot_acl_nodes" onkeypress="validate_input_digits_only(event)" value="<?php echo customer_access_any_cell($customer_id, 'total_acl_nodes');?>" maxlength="5"></td>
+                        <td align="left"><input name="tot_acl_nodes" type="text" class="textfield numeric" id="tot_acl_nodes" value="<?php echo customer_access_any_cell($customer_id, 'total_acl_nodes');?>" maxlength="5"></td>
                       </tr>
                       <tr>
                         <td align="right"><span class="required">*</span>Total # of SIP Accounts:</td>
-                        <td align="left"><input name="tot_sip_acc" type="text" class="textfield numeric" id="tot_sip_acc" onkeypress="validate_input_digits_only(event)" value="<?php echo customer_access_any_cell($customer_id, 'total_sip_accounts');?>" maxlength="5"></td>
+                        <td align="left"><input name="tot_sip_acc" type="text" class="textfield numeric" id="tot_sip_acc" value="<?php echo customer_access_any_cell($customer_id, 'total_sip_accounts');?>" maxlength="5"></td>
                       </tr>
                       <tr style="display:none;">
                         <td align="right"><span class="required">*</span> SIP IP: (Select All That Apply)</td>
@@ -275,11 +275,11 @@ window.location = '../../home/';
                       </tr>
                       <tr>
                         <td align="right"><span class="required">*</span>Total # of ACL Nodes:</td>
-                        <td align="left"><input name="tot_acl_nodes" type="text" class="textfield numeric" id="tot_acl_nodes" onkeypress="validate_input_digits_only(event)" value="5" maxlength="2"></td>
+                        <td align="left"><input name="tot_acl_nodes" type="text" class="textfield numeric" id="tot_acl_nodes" value="5" maxlength="2"></td>
                       </tr>
                       <tr>
                         <td align="right"><span class="required">*</span>Total # of SIP Accounts:</td>
-                        <td align="left"><input name="tot_sip_acc" type="text" class="textfield numeric" id="tot_sip_acc" onkeypress="validate_input_digits_only(event)" value="5" maxlength="5"></td>
+                        <td align="left"><input name="tot_sip_acc" type="text" class="textfield numeric" id="tot_sip_acc" value="5" maxlength="5"></td>
                       </tr>
                       <tr>
                         <td align="right"><span class="required">*</span> SIP IP:</td>
