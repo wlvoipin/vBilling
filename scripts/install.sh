@@ -1925,6 +1925,9 @@ else [ -f /etc/redhat-release ]
 	ln -s ${VBILLING_HTML}/bin/centos/${ARCH}/vBilling_functions.bin ${FS_INSTALL_PATH}/scripts/vBilling_functions.bin
 fi
 
+# We need to update freeswitch.xml accordingly as well
+sed -i "s#vBilling.luac#vBilling.bin#g" ${FS_INSTALL_PATH}/conf/freeswitch.xml
+
 # Now this one is tricky. We need to know the lcr_group_* tables created already and update the structure as required.
 # This can only be done with some dirty hacks
 
