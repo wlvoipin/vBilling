@@ -208,7 +208,7 @@ cat << 'EOF' > ${FS_INSTALL_PATH}/conf/freeswitch.xml
 					You are welcome to increase the max-session limit. Make sure to tune MySQL and the web server for
 					large number of connections
 				-->
-				<param name="max-sessions" value="200"/>
+				<param name="max-sessions" value="250"/>
 				<param name="sessions-per-second" value="30"/>
 				<param name="switchname" value="vBilling"/>
                 
@@ -1974,6 +1974,19 @@ call AddColumnUnlessExists(Database(), '${lcr_table_name}', 'reseller_rate_group
 call AddColumnUnlessExists(Database(), '${lcr_table_name}', 'reseller_rate_id', 'reseller_rate_group' ,'int(11) NULL DEFAULT 0');"
 done
 mysql -u${VBILLING_DB_USER} -p${VBILLING_DB_PASSWORD} ${VBILLING_DB} -e "drop procedure AddColumnUnlessExists;"
+
+# Fix permission on php files
+if [ -f /etc/debian_version ] ; then
+	chown -R www-data:www-data ${VBILLING_HTML}
+	chmod -R 777 ${VBILLING_HTML}/media/
+	mkdir ${VBILLING_HTML}/application/3rdparty/tcpdf/cache/
+	chmod 777 ${VBILLING_HTML}/application/3rdparty/tcpdf/cache/
+elif [ -f /etc/redhat-release ]
+	chown -R apache:apache ${VBILLING_HTML}
+	chmod -R 777 ${VBILLING_HTML}/media/
+	mkdir ${VBILLING_HTML}/application/3rdparty/tcpdf/cache/
+	chmod 777 ${VBILLING_HTML}/application/3rdparty/tcpdf/cache/
+fi
 
 # Restart FreeSWITCH. Do we really need it?
 /etc/init.d/freeswitch restart
