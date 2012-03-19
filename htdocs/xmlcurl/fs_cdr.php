@@ -61,29 +61,29 @@ public function calculate_costs($buyrate, $buyrateinitblock, $buyrateincrement, 
 	// If user called less than minimum call duration, we set initial call duration equal to minimum duration of the call. Hint (30/30)
 	if ((float)$callduration < (float)$buyrateinitblock)	// for some reason, it has to be float .. can't understand realy :-<
 	{
-		$callduration = $buyrateinitblock;
+		(float)$callduration = (float)$buyrateinitblock;
 	}
 
 	// Calculate actual buying cost
 	if (((float)$buyrateincrement > 0) && ((float)$callduration > (float)$buyrateinitblock)) {
-		$mod_sec = $callduration % $buyrateincrement;
-		if ($mod_sec>0) $callduration += ($buyrateincrement - $mod_sec);
+		$mod_sec = (float)$callduration % (float)$buyrateincrement;
+		if ($mod_sec>0) (float)$callduration += ((float)$buyrateincrement - $mod_sec);
 	}
-	$buycost = ($callduration/60) * $buyrate;
+	(float)$buycost = ((float)$callduration/60) * (float)$buyrate;
 
 	// Calculate our selling cost
 	if ((float)$callduration < (float)$initblock) {
-		$callduration = $initblock;
+		(float)$callduration = (float)$initblock;
 	}
 
 	// Calculate actual selling cost
 	if (((float)$billingblock > 0) && ((float)$callduration > (float)$initblock)) {
-		$mod_sec = $callduration % $billingblock;
+		$mod_sec = (float)$callduration % (float)$billingblock;
 		if ($mod_sec>0) {
-			$callduration += ($billingblock - $mod_sec);
+			(float)$callduration += ((float)$billingblock - $mod_sec);
 		}
 	}
-	$sellcost = ($callduration/60) * $rateinitial;
+	(float)$sellcost = ((float)$callduration/60) * (float)$rateinitial;
 	// $this->debug("BUY COST total_buy_cost: ".$this->v_round($buycost));
 	// $this->debug("SELL COST total_sell_cost: ".$this->v_round($sellcost));
 	return array('buycost'=>$this->v_round($buycost), 'sellcost'=>$this->v_round($sellcost));	// For admin only ??
