@@ -1242,6 +1242,9 @@ CREATE TABLE IF NOT EXISTS `settings` (
   `optional_cdr_fields_include` text NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
+INSERT INTO `settings` (`id`, `customer_id`, `company_name`, `enable_rate_limits`, `logo`, `invoice_logo`, `invoice_terms`, `company_logo_as_invoice_logo`, `optional_cdr_fields_include`) VALUES
+(0, 0, 'Digital Linx', 0, '', '', '', 0, '');
+
 CREATE TABLE IF NOT EXISTS `socket_client_conf` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `param_name` varchar(100) NOT NULL,
