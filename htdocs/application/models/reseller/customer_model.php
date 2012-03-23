@@ -540,6 +540,14 @@ class Customer_model extends CI_Model {
 		return $query;
 	}
 
+	function check_acl_node_already_exists($ip_addr)
+	{
+			$sql = "SELECT cidr FROM acl_nodes WHERE cidr = '".$ip_addr."'";
+			$query = $this->db->query($sql);
+			$count = $query->num_rows();
+			return $count;
+	}
+
 	function customer_acl_nodes_single($node_id, $customer_id)
 	{
 		$sql = "SELECT * FROM acl_nodes WHERE id = '".$node_id."' && customer_id = '".$customer_id."' ";

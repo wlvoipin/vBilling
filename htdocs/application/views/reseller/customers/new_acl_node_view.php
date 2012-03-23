@@ -207,12 +207,24 @@ window.location = '../../home/';
 					url: base_url+"reseller/customers/insert_new_acl_node",
 					data: form,
                     success: function(html){
+                    	if (html == 'success')
+                    	{
                         $('.error').hide();
                         $('.success').html("Customer ACL Node Added Successfully.");
                         $('.success').fadeOut();
                         $('.success').fadeIn();
                         document.getElementById('success_div').scrollIntoView();
                         $.unblockUI();
+                       }
+                       else if (html == 'acl_node_exists')
+                       {
+                        $('.success').hide();
+                        $('.error').html("ACL Node already exists in the database");
+                        $('.error').fadeOut();
+                        $('.error').fadeIn();
+                        document.getElementById('err_div').scrollIntoView();
+                        $.unblockUI();                       	
+                       }
                     }
 				});
                 

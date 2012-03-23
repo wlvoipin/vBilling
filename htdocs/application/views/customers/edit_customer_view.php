@@ -184,6 +184,10 @@ window.location = '../../home/';
                         <td align="right"><span class="required">*</span> High Rate Limit:</td>
                         <td align="left"><input name="customer_high_rate_limit" type="text" class="textfield numeric" id="customer_high_rate_limit" value="<?php echo $row->customer_high_rate_limit;?>" maxlength="10"></td>
                       </tr>
+                      <tr>
+                        <td width="202" align="right"><span class="required">*</span> Apply Flat Rate:</td>
+                        <td width="255" align="left"><input name="customer_flat_rate" type="text" class="textfield numeric" id="customer_flat_rate" value="<?php echo $row->customer_flat_rate;?>" maxlength="10"></td>
+                      </tr>
                     </tbody>
                   </table></td>
               </tr>
@@ -604,32 +608,31 @@ $('#addCust').submit(function(){
                     } 
                 });
                 
-        var firstname = $('#firstname').val();
-        var lastname = $('#lastname').val();
-        var companyname = $('#companyname').val();
-        var email = $('#email').val();
-        var maxcalls = $('#maxcalls').val();
-        var address = $('#address').val();
-        var city = $('#city').val();
-        var state = $('#state').val();
-        var zipcode = $('#zipcode').val();
-        var country = $('#country').val();
-        var prefix = $('#prefix').val();
-        var phone = $('#phone').val();
-        var timezone = $('#timezone').val();
-        var billingcycle = $('#billingcycle').val();
-        var creditlimit = $('#creditlimit').val();
-        var accounttype = $('#account_type').val();
-        var cdr_email = $('#cdr_email').val();
-        var group = $('#group').val();
-        var billing_cycle = $('#billing_cycle').val();
-        
-        var username = $('#username').val();
-        var password = $('#password').val();
+        var firstname       = $('#firstname').val();
+        var lastname        = $('#lastname').val();
+        var companyname     = $('#companyname').val();
+        var email           = $('#email').val();
+        var maxcalls        = $('#maxcalls').val();
+        var address         = $('#address').val();
+        var city            = $('#city').val();
+        var state           = $('#state').val();
+        var zipcode         = $('#zipcode').val();
+        var country         = $('#country').val();
+        var prefix          = $('#prefix').val();
+        var phone           = $('#phone').val();
+        var timezone        = $('#timezone').val();
+        var billingcycle    = $('#billingcycle').val();
+        var creditlimit     = $('#creditlimit').val();
+        var accounttype     = $('#account_type').val();
+        var cdr_email       = $('#cdr_email').val();
+        var group           = $('#group').val();
+        var billing_cycle   = $('#billing_cycle').val();        
+        var username        = $('#username').val();
+        var password        = $('#password').val();
         var confirmpassword = $('#confirmpassword').val();
-        var tot_acl_nodes = $('#tot_acl_nodes').val();
-        var tot_sip_acc = $('#tot_sip_acc').val();
-        var sip_ip = $('#sip_ip').val();
+        var tot_acl_nodes   = $('#tot_acl_nodes').val();
+        var tot_sip_acc     = $('#tot_sip_acc').val();
+        var sip_ip          = $('#sip_ip').val();
         
         var pattern = new RegExp(/^(("[\w-\s]+")|([\w-]+(?:\.[\w-]+)*)|("[\w-\s]+")([\w-]+(?:\.[\w-]+)*))(@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$)|(@\[?((25[0-5]\.|2[0-4][0-9]\.|1[0-9]{2}\.|[0-9]{1,2}\.))((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\.){2}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\]?$)/i);
         

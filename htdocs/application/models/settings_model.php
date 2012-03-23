@@ -71,6 +71,5 @@ class Settings_model extends CI_Model {
         $sql = "UPDATE settings SET optional_cdr_fields_include = '".$comma_seperated_values."' WHERE customer_id = '0' ";
         $query = $this->db->query($sql);
     }
-    
 }
 ?>

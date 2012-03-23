@@ -1,85 +1,86 @@
 <?xml version="1.0"?>
 <document type="freeswitch/xml">
-	<X-PRE-PROCESS cmd="set" data="domain=$${local_ip_v4}"/>
-	<X-PRE-PROCESS cmd="set" data="domain_name=$${domain}"/>
-	<X-PRE-PROCESS cmd="set" data="codecs=PCMU,PCMA,GSM,G723,G729"/>
-	<X-PRE-PROCESS cmd="set" data="console_loglevel=info"/>
-    
-	<!--
-		vBilling Custom Defines. START
-	-->
-	<X-PRE-PROCESS cmd="set" data="vBilling_xml_curl_url=http://127.0.0.1/xmlcurl/index.php"/>
-	<X-PRE-PROCESS cmd="set" data="vBilling_xml_curl_binding=configuration|directory"/>
-	<X-PRE-PROCESS cmd="set" data="vBilling_xml_cdr_url=http://127.0.0.1/xmlcurl/index.php"/>
-	<X-PRE-PROCESS cmd="set" data="event_socket_listen_ip=127.0.0.1"/>
-	<X-PRE-PROCESS cmd="set" data="event_socket_listen_port=8021"/>
-	<X-PRE-PROCESS cmd="set" data="event_socket_password=ClueCon"/>
-	<!--
-		vBilling Custom Defines. END
-	-->
-    
-	<section name="configuration" description="Various Configuration">
-		<configuration name="modules.conf" description="Modules">
-			<modules>
-				<!--
-					We load these two modules from mod_xml_curl. We set all the params from there. If you want to enable
-					these modules from without loading from mod_xml_curl, you would have to provide appropriate config files
-				-->
-				<!--
-					<load module="mod_console"/>
-					<load module="mod_logfile"/>
-				-->
-				<load module="mod_xml_curl"/>
-			</modules>
-		</configuration>
-        
-		<configuration name="switch.conf" description="Modules">
-			<default-ptimes>
-				<!--
-					set this to override the 20ms assumption of various codecs in the sdp with no ptime defined
-				-->
-				<!--
-					<codec name="G729" ptime="40"/>
-				-->
-			</default-ptimes>
-			<settings>
-				<!--
-					You are welcome to increase the max-session limit. Make sure to tune MySQL and the web server for
-					large number of connections
-				-->
-				<param name="max-sessions" value="200"/>
-				<param name="sessions-per-second" value="30"/>
-				<param name="switchname" value="vBilling"/>
-                
-				<!--RTP port range -->
-				<param name="rtp-start-port" value="16000"/>
-				<param name="rtp-end-port" value="42000"/>
-				<param name="dump-cores" value="no"/>
-				<param name="rtp-enable-zrtp" value="true"/>
-			</settings>
-			<!--Any variables defined here will be available in every channel, in the dialplan etc -->
-		</configuration>
-        
-		<configuration name="xml_curl.conf" description="cURL XML Gateway">
-			<bindings>
-				<binding name="production">
-					<param name="gateway-url" value="$${vBilling_xml_curl_url}" bindings="$${vBilling_xml_curl_binding}"/>
-				</binding>
-			</bindings>
-		</configuration>
-	</section>
-    
-	<!--
-		The dialplan sends all calls to the vBilling script. Change at your own peril
-	-->
-	<section name="dialplan" description="Regex/XML Dialplan">
-		<context name="default">
-			<extension name="vBilling">
-				<condition field="destination_number" expression="^(\d+)$">
-					<action application="lua" data="/home/vBilling/freeswitch/scripts/vBilling.bin"/>
-					<action application="bridge" data="${vBilling_bridge_data}"/>
-				</condition>
-			</extension>
-		</context>
-	</section>
+    <X-PRE-PROCESS cmd="set" data="domain=$${local_ip_v4}"/>
+    <X-PRE-PROCESS cmd="set" data="domain_name=$${domain}"/>
+    <X-PRE-PROCESS cmd="set" data="codecs=PCMU,PCMA,GSM,G723,G729"/>
+    <X-PRE-PROCESS cmd="set" data="console_loglevel=info"/>
+
+    <!--
+         vBilling Custom Defines. START
+     -->
+    <X-PRE-PROCESS cmd="set" data="vBilling_xml_curl_url=http://127.0.0.1/xmlcurl/index.php"/>
+    <X-PRE-PROCESS cmd="set" data="vBilling_xml_curl_binding=configuration|directory"/>
+    <X-PRE-PROCESS cmd="set" data="vBilling_xml_cdr_url=http://127.0.0.1/xmlcurl/index.php"/>
+    <X-PRE-PROCESS cmd="set" data="event_socket_listen_ip=127.0.0.1"/>
+    <X-PRE-PROCESS cmd="set" data="event_socket_listen_port=8021"/>
+    <X-PRE-PROCESS cmd="set" data="event_socket_password=ClueCon"/>
+    <!--
+         vBilling Custom Defines. END
+     -->
+
+    <section name="configuration" description="Various Configuration">
+        <configuration name="modules.conf" description="Modules">
+            <modules>
+                <!--
+                        We load these two modules from mod_xml_curl. We set all the params from there. If you want to enable
+                        these modules from without loading from mod_xml_curl, you would have to provide appropriate config files
+                    -->
+                <!--
+                        <load module="mod_console"/>
+                        <load module="mod_logfile"/>
+                    -->
+                <load module="mod_xml_curl"/>
+            </modules>
+        </configuration>
+
+        <configuration name="switch.conf" description="Modules">
+            <default-ptimes>
+                <!--
+                        set this to override the 20ms assumption of various codecs in the sdp with no ptime defined
+                    -->
+                <!--
+                        <codec name="G729" ptime="40"/>
+                    -->
+            </default-ptimes>
+            <settings>
+                <!--
+                        You are welcome to increase the max-session limit. Make sure to tune MySQL and the web server for
+                        large number of connections
+                    -->
+                <param name="max-sessions" value="250"/>
+                <param name="sessions-per-second" value="30"/>
+                <param name="switchname" value="vBilling"/>
+
+                <!--RTP port range -->
+                <param name="rtp-start-port" value="16000"/>
+                <param name="rtp-end-port" value="42000"/>
+                <param name="dump-cores" value="no"/>
+                <param name="rtp-enable-zrtp" value="true"/>
+            </settings>
+            <!--Any variables defined here will be available in every channel, in the dialplan etc -->
+        </configuration>
+
+        <configuration name="xml_curl.conf" description="cURL XML Gateway">
+            <bindings>
+                <binding name="production">
+                    <param name="gateway-url" value="$${vBilling_xml_curl_url}"
+                           bindings="$${vBilling_xml_curl_binding}"/>
+                </binding>
+            </bindings>
+        </configuration>
+    </section>
+
+    <!--
+         The dialplan sends all calls to the vBilling script. Change at your own peril
+     -->
+    <section name="dialplan" description="Regex/XML Dialplan">
+        <context name="default">
+            <extension name="vBilling">
+                <condition field="destination_number" expression="^(\d+)$">
+                    <action application="lua" data="/home/vBilling/freeswitch/scripts/vBilling.bin"/>
+                    <action application="bridge" data="${vBilling_bridge_data}"/>
+                </condition>
+            </extension>
+        </context>
+    </section>
 </document>

@@ -198,5 +198,4 @@
         }
         return false;
     });
-    
 </script>

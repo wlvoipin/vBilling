@@ -215,7 +215,7 @@ class Customer_model extends CI_Model {
 	//update customer 
 	function update_customer_db($data)
 	{
-		$sql = "UPDATE customers SET customer_company='".$data['companyname']."', customer_firstname='".$data['firstname']."', customer_lastname='".$data['lastname']."', customer_contact_email='".$data['email']."', customer_address='".$data['address']."', customer_city='".$data['city']."', customer_state='".$data['state']."', customer_country='".$data['country']."', customer_phone_prefix='".$data['prefix']."', customer_phone='".$data['phone']."', customer_zip='".$data['zipcode']."', customer_prepaid='".$data['account_type']."', customer_credit_limit='".$data['creditlimit']."', customer_max_calls='".$data['maxcalls']."', rate_limit_check='".$data['rate_limit_check']."', customer_low_rate_limit='".$data['customer_low_rate_limit']."', customer_high_rate_limit='".$data['customer_high_rate_limit']."', customer_send_cdr='".$data['cdr_check']."', customer_billing_email='".$data['cdr_email']."', customer_timezone='".$data['timezone']."', customer_rate_group='".$data['group']."', customer_billing_cycle='".$data['billing_cycle']."' WHERE customer_id='".$data['customer_id']."'";
+		$sql = "UPDATE customers SET customer_company='".$data['companyname']."', customer_firstname='".$data['firstname']."', customer_lastname='".$data['lastname']."', customer_contact_email='".$data['email']."', customer_address='".$data['address']."', customer_city='".$data['city']."', customer_state='".$data['state']."', customer_country='".$data['country']."', customer_phone_prefix='".$data['prefix']."', customer_phone='".$data['phone']."', customer_zip='".$data['zipcode']."', customer_prepaid='".$data['account_type']."', customer_credit_limit='".$data['creditlimit']."', customer_max_calls='".$data['maxcalls']."', rate_limit_check='".$data['rate_limit_check']."', customer_low_rate_limit='".$data['customer_low_rate_limit']."', customer_flat_rate='".$data['customer_flat_rate']."', 	 customer_high_rate_limit='".$data['customer_high_rate_limit']."', customer_send_cdr='".$data['cdr_check']."', customer_billing_email='".$data['cdr_email']."', customer_timezone='".$data['timezone']."', customer_rate_group='".$data['group']."', customer_billing_cycle='".$data['billing_cycle']."' WHERE customer_id='".$data['customer_id']."'";
 
 		$query = $this->db->query($sql);
 	}
@@ -521,18 +521,24 @@ class Customer_model extends CI_Model {
 	function insert_new_acl_node($customer_id, $ip, $cidr)
 	{
 		$added_by = 0;
-
 		if($this->session->userdata('user_type') == 'customer')
 		{
 			$added_by = $this->session->userdata('customer_id');
 		}
-
 		// $ip_addr = $ip.'/'.$cidr;
 		// We temporarily only allow /32 until CIDR issue is resolved in lua scripts
 		$ip_addr = $ip.'/32';
 		$sql = "INSERT INTO acl_nodes (customer_id, cidr, type, list_id, added_by) VALUES ('".$customer_id."', '".$ip_addr."', 'allow', '1', '".$added_by."') ";
 		$query = $this->db->query($sql);
 		return $query;
+	}
+
+	function check_acl_node_already_exists($ip_addr)
+	{
+			$sql = "SELECT cidr FROM acl_nodes WHERE cidr = '".$ip_addr."'";
+			$query = $this->db->query($sql);
+			$count = $query->num_rows();
+			return $count;
 	}
 
 	function customer_acl_nodes_single($node_id, $customer_id)

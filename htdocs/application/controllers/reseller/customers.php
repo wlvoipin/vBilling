@@ -734,14 +734,25 @@ function insert_new_acl_node()
 	$customer_id = $this->input->post('customer_id');
 	$ip = $this->input->post('ip');
 	$cidr = $this->input->post('cidr');
-	$this->customer_model->insert_new_acl_node($customer_id, $ip, $cidr);
 
-	//relaod acl
-	$fp = $this->esl->event_socket_create($this->esl->ESL_host, $this->esl->ESL_port, $this->esl->ESL_password);
-	$cmd = "api reloadacl";
-	$response = $this->esl->event_socket_request($fp, $cmd);
-	echo $response; 
-	fclose($fp);
+	$ip_addr = $ip.'/32';
+
+	// We check if the acl_node already exists or not. If there, display user a message IP address exists and force him to enter another IP address
+	$check_cidr_already_exists = $this->customer_model->check_acl_node_already_exists($ip_addr);
+	if ($check_cidr_already_exists <= 0)
+	{
+		$this->customer_model->insert_new_acl_node($customer_id, $ip, $cidr);
+		//relaod acl
+		$fp = $this->esl->event_socket_create($this->esl->ESL_host, $this->esl->ESL_port, $this->esl->ESL_password);
+		$cmd = "api reloadacl";
+		$response = $this->esl->event_socket_request($fp, $cmd);
+		echo "success"; 
+		fclose($fp);
+	}
+	else
+	{
+		echo "acl_node_exists";	
+	}
 }
 
 function edit_acl_node($node_id = '', $customer_id = '')
@@ -776,14 +787,25 @@ function update_acl_node_db()
 	$node_id = $this->input->post('node_id');
 	$ip = $this->input->post('ip');
 	$cidr = $this->input->post('cidr');
+	$ip_addr = $ip.'/32';
+	
+	// We check if the acl_node already exists or not. If there, display user a message IP address exists and force him to enter another IP address
+	$check_cidr_already_exists = $this->customer_model->check_acl_node_already_exists($ip_addr);
+	if ($check_cidr_already_exists <= 0)
+	{
 	$this->customer_model->update_acl_node_db($node_id, $ip, $cidr);
 
 	//relaod acl
 	$fp = $this->esl->event_socket_create($this->esl->ESL_host, $this->esl->ESL_port, $this->esl->ESL_password);
 	$cmd = "api reloadacl";
 	$response = $this->esl->event_socket_request($fp, $cmd);
-	echo $response; 
+	echo "success"; 
 	fclose($fp);
+	}
+	else
+	{
+	echo "acl_node_exists";	
+	}
 }
 
 function delete_acl_node()

@@ -88,7 +88,7 @@ if [ ${REPLY}   = "y" ]; then
 		'DEBIAN')
 		export DEBIAN_FRONTEND=noninteractive
         apt-get -y update
-        apt-get -y install apache2 autoconf automake build-essential chkconfig dmidecode g++ gawk git-core git-core gnutls-bin libapache2-mod-php5 libncurses5 libjpeg62-dev libmyodbc libncurses5-dev libtool libtool libxml2 lua5.1 make mailx mysql-server php-apc php5 php5-gd php5-mcrypt php5-mhash php5-mysql pkg-config python-dev
+        apt-get -y install apache2 autoconf automake build-essential chkconfig dmidecode g++ gawk git-core git-core gnutls-bin libapache2-mod-php5 libncurses5 libjpeg62-dev libmyodbc libncurses5-dev libtool libtool libxml2 lua5.1 make bsd-mailx mysql-server php-apc php5 php5-gd php5-mcrypt php5-mhash php5-mysql pkg-config python-dev unixodbc-dev
 		;;
 		'CENTOS')
 		yum -y update
@@ -1051,6 +1051,7 @@ CREATE TABLE IF NOT EXISTS `customers` (
   `rate_limit_check` tinyint(1) NOT NULL DEFAULT '0',
   `customer_low_rate_limit` decimal(10,4) DEFAULT NULL,
   `customer_high_rate_limit` decimal(10,4) DEFAULT NULL,
+  `customer_flat_rate` decimal(10,4) DEFAULT NULL,
   `customer_prepaid` int(11) DEFAULT '1',
   `customer_balance` double(10,4) DEFAULT '0.0000',
   `customer_credit_limit` decimal(10,4) NOT NULL DEFAULT '0.0000',
@@ -1857,6 +1858,7 @@ ALTER TABLE `customers`
   , ADD COLUMN `rate_limit_check` tinyint(1) NULL DEFAULT 0
   , ADD COLUMN `customer_low_rate_limit` decimal(10,4) NULL
   , ADD COLUMN `customer_high_rate_limit` decimal(10,4) NULL
+  , ADD COLUMN `customer_flat_rate` decimal(10,4) NULL
   , ADD COLUMN `parent_id` int(11) NULL DEFAULT '0'
   , ADD COLUMN `grand_parent_id` int(11) NULL DEFAULT '0'
   , ADD COLUMN `reseller_level` tinyint(1) NULL DEFAULT 0;
@@ -1984,7 +1986,7 @@ if [ -f /etc/debian_version ] ; then
 	chmod -R 777 ${VBILLING_HTML}/media/
 	mkdir ${VBILLING_HTML}/application/3rdparty/tcpdf/cache/
 	chmod 777 ${VBILLING_HTML}/application/3rdparty/tcpdf/cache/
-elif [ -f /etc/redhat-release ]
+elif [ -f /etc/redhat-release ]; then
 	chown -R apache:apache ${VBILLING_HTML}
 	chmod -R 777 ${VBILLING_HTML}/media/
 	mkdir ${VBILLING_HTML}/application/3rdparty/tcpdf/cache/

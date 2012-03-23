@@ -1,5 +1,4 @@
-SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
-SET time_zone = "+00:00";
+
 
 --
 -- Database: `vBilling`
@@ -26,8 +25,16 @@ CREATE TABLE IF NOT EXISTS `accounts` (
 -- Dumping data for table `accounts`
 --
 
-INSERT INTO `accounts` (`id`, `username`, `password`, `type`, `is_customer`, `customer_id`, `enabled`) VALUES
-(1, 'admin', '8051d6ba25ceab9244c28a25523291fc', 'admin', 0, 0, 1);
+INSERT INTO `accounts` (`id`, `username`, `password`, `type`, `is_customer`, `customer_id`, `enabled`)
+       VALUES
+       (
+       1,
+       'admin',
+       '8051d6ba25ceab9244c28a25523291fc',
+       'admin',
+       0,
+       0,
+       1);
 
 -- --------------------------------------------------------
 
@@ -107,7 +114,10 @@ CREATE TABLE IF NOT EXISTS `acl_lists` (
 --
 
 INSERT INTO `acl_lists` (`id`, `acl_name`, `default_policy`) VALUES
-(1, 'default', 'deny');
+                                                             (
+                                                             1,
+                                                             'default',
+                                                             'deny');
 
 -- --------------------------------------------------------
 
@@ -255,8 +265,12 @@ CREATE TABLE IF NOT EXISTS `console_conf` (
 -- Dumping data for table `console_conf`
 --
 
-INSERT INTO `console_conf` (`id`, `param_name`, `param_value`) VALUES
-(1, 'colorize', 'true'),
+INSERT INTO `console_conf` (`id`, `param_name`, `param_value`)
+       VALUES
+       (
+       1,
+       'colorize',
+       'true'),
 (2, 'loglevel', '$${console_loglevel}'),
 (3, 'rotate-on-hup', 'true'),
 (4, 'uuid', 'true');
@@ -281,8 +295,15 @@ CREATE TABLE IF NOT EXISTS `countries` (
 -- Dumping data for table `countries`
 --
 
-INSERT INTO `countries` (`id`, `countrycode`, `alpha2code`, `countryprefix`, `gmttime`, `countryname`) VALUES
-(1, 'AFG', 'AF', '93', '', 'Afghanistan'),
+INSERT INTO `countries` (`id`, `countrycode`, `alpha2code`, `countryprefix`, `gmttime`, `countryname`)
+       VALUES
+       (
+       1,
+       'AFG',
+       'AF',
+       '93',
+       '',
+       'Afghanistan'),
 (2, 'ALB', 'AL', '355', 'GMT+01:00', 'Albania'),
 (3, 'DZA', 'DZ', '213', 'GMT', 'Algeria'),
 (4, 'ASM', 'AS', '684', 'GMT-11:00', 'American Samoa'),
@@ -682,8 +703,11 @@ CREATE TABLE IF NOT EXISTS `hangup_causes` (
 -- Dumping data for table `hangup_causes`
 --
 
-INSERT INTO `hangup_causes` (`id`, `hangup_cause`) VALUES
-(1, 'UNSPECIFIED'),
+INSERT INTO `hangup_causes` (`id`, `hangup_cause`)
+       VALUES
+       (
+       1,
+       'UNSPECIFIED'),
 (2, 'UNALLOCATED_NUMBER'),
 (4, 'NO_ROUTE_DESTINATION'),
 (5, 'CHANNEL_UNACCEPTABLE'),
@@ -760,8 +784,11 @@ CREATE TABLE IF NOT EXISTS `modless_conf` (
 -- Dumping data for table `modless_conf`
 --
 
-INSERT INTO `modless_conf` (`id`, `conf_name`) VALUES
-(1, 'post_load_switch.conf'),
+INSERT INTO `modless_conf` (`id`, `conf_name`)
+       VALUES
+       (
+       1,
+       'post_load_switch.conf'),
 (2, 'post_load_modules.conf'),
 (3, 'console.conf'),
 (4, 'acl.conf'),
@@ -786,8 +813,13 @@ CREATE TABLE IF NOT EXISTS `post_load_modules_conf` (
 -- Dumping data for table `post_load_modules_conf`
 --
 
-INSERT INTO `post_load_modules_conf` (`id`, `module_name`, `load_module`, `priority`) VALUES
-(1, 'mod_sofia', 1, 2000),
+INSERT INTO `post_load_modules_conf` (`id`, `module_name`, `load_module`, `priority`)
+       VALUES
+       (
+       1,
+       'mod_sofia',
+       1,
+       2000),
 (2, 'mod_xml_cdr', 1, 1000),
 (3, 'mod_commands', 1, 1000),
 (4, 'mod_dialplan_xml', 1, 150),
@@ -837,8 +869,12 @@ CREATE TABLE IF NOT EXISTS `socket_client_conf` (
 -- Dumping data for table `socket_client_conf`
 --
 
-INSERT INTO `socket_client_conf` (`id`, `param_name`, `param_value`) VALUES
-(1, 'nat-map', 'false'),
+INSERT INTO `socket_client_conf` (`id`, `param_name`, `param_value`)
+       VALUES
+       (
+       1,
+       'nat-map',
+       'false'),
 (2, 'listen-ip', '$${event_socket_listen_ip}'),
 (3, 'listen-port', '$${event_socket_listen_port}'),
 (4, 'password', '$${event_socket_password}');
@@ -900,8 +936,11 @@ CREATE TABLE IF NOT EXISTS `sofia_gateways_params` (
 -- Dumping data for table `sofia_gateways_params`
 --
 
-INSERT INTO `sofia_gateways_params` (`id`, `param_name`) VALUES
-(1, 'username'),
+INSERT INTO `sofia_gateways_params` (`id`, `param_name`)
+       VALUES
+       (
+       1,
+       'username'),
 (2, 'register'),
 (3, 'password'),
 (4, 'proxy'),
@@ -960,8 +999,13 @@ CREATE TABLE IF NOT EXISTS `sofia_settings_params` (
 -- Dumping data for table `sofia_settings_params`
 --
 
-INSERT INTO `sofia_settings_params` (`id`, `type`, `param_name`, `param_value_type`) VALUES
-(1, 'Basic', 'alias', 1),
+INSERT INTO `sofia_settings_params` (`id`, `type`, `param_name`, `param_value_type`)
+       VALUES
+       (
+       1,
+       'Basic',
+       'alias',
+       1),
 (2, 'Basic', 'shutdown-on-fail', 3),
 (3, 'Basic', 'user-agent-string', 1),
 (4, 'Basic', 'debug', 3),
@@ -1079,8 +1123,12 @@ CREATE TABLE IF NOT EXISTS `switch_conf` (
 -- Dumping data for table `switch_conf`
 --
 
-INSERT INTO `switch_conf` (`id`, `param_name`, `param_value`) VALUES
-(1, 'max-sessions', '200'),
+INSERT INTO `switch_conf` (`id`, `param_name`, `param_value`)
+       VALUES
+       (
+       1,
+       'max-sessions',
+       '200'),
 (2, 'sessions-per-second', '30'),
 (3, 'switchname', 'vBilling');
 
@@ -1102,8 +1150,13 @@ CREATE TABLE IF NOT EXISTS `timezones` (
 -- Dumping data for table `timezones`
 --
 
-INSERT INTO `timezones` (`id`, `timezone_location`, `gmt`, `offset`) VALUES
-(1, 'International Date Line West', '(GMT-12:00)', -12),
+INSERT INTO `timezones` (`id`, `timezone_location`, `gmt`, `offset`)
+       VALUES
+       (
+       1,
+       'International Date Line West',
+       '(GMT-12:00)',
+       -12),
 (2, 'Midway Island', '(GMT-11:00)', -11),
 (3, 'Samoa', '(GMT-11:00)', -11),
 (4, 'Hawaii', '(GMT-10:00)', -10),
@@ -1263,8 +1316,12 @@ CREATE TABLE IF NOT EXISTS `xml_cdr_conf` (
 -- Dumping data for table `xml_cdr_conf`
 --
 
-INSERT INTO `xml_cdr_conf` (`id`, `param_name`, `param_value`) VALUES
-(1, 'url', '$${vBilling_xml_cdr_url}'),
+INSERT INTO `xml_cdr_conf` (`id`, `param_name`, `param_value`)
+       VALUES
+       (
+       1,
+       'url',
+       '$${vBilling_xml_cdr_url}'),
 (2, 'encode', 'true'),
 (3, 'log-b-leg', 'false'),
 (4, 'prefix-a-leg', 'true'),
