@@ -5,12 +5,12 @@
 <div style="text-align:center;padding:10px">
   <div class="button white">
     <form method="get" action="<?php echo base_url();?>billing/" >
-      <table width="100%" cellspacing="0" cellpadding="0" border="0" id="filter_table">
+      <table width="798" cellspacing="0" cellpadding="0" border="0" id="filter_table">
         <tr>
-          <td width="14%"> Result for days </td>
-          <td width="14%"> Carrier </td>
-          <td width="14%" rowspan="2"><input type="submit" name="searchFilter" value="SEARCH" class="button blue" style="float:right;margin-top:5px;margin-right:10px" /></td>
-          <td width="9%" rowspan="2"><a href="#" id="reset" class="button orange" style="float:left;margin-top:5px;">RESET</a></td>
+          <td width="253"> Result for days </td>
+          <td width="195"> Carrier </td>
+          <td width="195" rowspan="2"><input type="submit" name="searchFilter" value="SEARCH" class="button blue" style="float:right;margin-top:5px;margin-right:10px" /></td>
+          <td width="155" rowspan="2"><a href="#" id="reset" class="button orange" style="float:left;margin-top:5px;">RESET</a></td>
         </tr>
         <tr>
           <td><input type="text" name="filter_result_days" value="<?php echo $filter_result_days;?>" class="numeric"/>
