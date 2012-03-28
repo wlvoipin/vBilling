@@ -239,10 +239,10 @@ class Billing_model extends CI_Model {
         {
             $row = $query->row();
             
-            $customer_id        = $row->customer_id;
-            $total_charges      = $row->total_charges;
-            $total_tax          = $row->total_tax;
-            $misc_charges 	    = $row->misc_charges;
+            $customer_id   = $row->customer_id;
+            $total_charges = $row->total_charges;
+            $total_tax     = $row->total_tax;
+            $misc_charges  = $row->misc_charges;
             
             $actual_amt = $total_charges - $total_tax - $misc_charges;
             

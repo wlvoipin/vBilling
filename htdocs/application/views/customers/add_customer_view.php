@@ -63,7 +63,7 @@
             <tbody>
               <tr>
                 <td align="right"><span class="required">*</span> Type:</td>
-                <td align="left" onmouseover="return overlib('<?php echo $this->lang->line('add_customer_view_customer_type');?>', HAUTO, VAUTO, STICKY)" onmouseout="return nd()" ><select class="textfield" name="type" id="type">
+                <td align="left" onmouseover="return overlib('<?php echo $this->lang->line('add_customer_view_customer_type');?>', HAUTO, VAUTO)" onmouseout="return nd()" ><select class="textfield" name="type" id="type">
                     <option value="0" selected>Normal Customer</option>
                     <option value="3">Reseller (Level- 3)</option>
                     <option value="2">Reseller (Level- 2)</option>
@@ -71,23 +71,23 @@
               </tr>
               <tr>
                 <td align="right" width="45%"><span class="required">*</span> Firstname:</td>
-                <td align="left" width="55%"><input onmouseover="return overlib('<?php echo $this->lang->line('add_customer_view_firstname');?>', HAUTO, VAUTO, STICKY)" onmouseout="return nd()" name="firstname" type="text" class="textfield" id="firstname" maxlength="50"></td>
+                <td align="left" width="55%"><input onmouseover="return overlib('<?php echo $this->lang->line('add_customer_view_firstname');?>', HAUTO, VAUTO)" onmouseout="return nd()" name="firstname" type="text" class="textfield" id="firstname" maxlength="50"></td>
               </tr>
               <tr>
                 <td align="right"><span class="required">*</span> Lastname:</td>
-                <td align="left"><input onmouseover="return overlib('<?php echo $this->lang->line('add_customer_view_lastname');?>', HAUTO, VAUTO, STICKY)" onmouseout="return nd()" type="text" value="" name="lastname" id="lastname" maxlength="50" class="textfield"></td>
+                <td align="left"><input onmouseover="return overlib('<?php echo $this->lang->line('add_customer_view_lastname');?>', HAUTO, VAUTO)" onmouseout="return nd()" type="text" value="" name="lastname" id="lastname" maxlength="50" class="textfield"></td>
               </tr>
               <tr>
                 <td align="right">Company Name:</td>
-                <td align="left"><input onmouseover="return overlib('<?php echo $this->lang->line('add_customer_view_company');?>', HAUTO, VAUTO, STICKY)" onmouseout="return nd()" type="text" value="" name="companyname" id="companyname" maxlength="45" class="textfield"></td>
+                <td align="left"><input onmouseover="return overlib('<?php echo $this->lang->line('add_customer_view_company');?>', HAUTO, VAUTO)" onmouseout="return nd()" type="text" value="" name="companyname" id="companyname" maxlength="45" class="textfield"></td>
               </tr>
               <tr>
                 <td align="right"><span class="required">*</span> Email:</td>
-                <td align="left"><input onmouseover="return overlib('<?php echo $this->lang->line('add_customer_view_email');?>', HAUTO, VAUTO, STICKY)" onmouseout="return nd()" type="text" value="" name="email" id="email" maxlength="50" class="textfield"></td>
+                <td align="left"><input onmouseover="return overlib('<?php echo $this->lang->line('add_customer_view_email');?>', HAUTO, VAUTO)" onmouseout="return nd()" type="text" value="" name="email" id="email" maxlength="50" class="textfield"></td>
               </tr>
               <tr>
                 <td align="right"><span class="required">*</span> Account type:</td>
-                <td align="left"><select onmouseover="return overlib('<?php echo $this->lang->line('add_customer_view_account_type');?>', HAUTO, VAUTO, STICKY)" onmouseout="return nd()" name="account_type" id="account_type" class="textfield">
+                <td align="left"><select onmouseover="return overlib('<?php echo $this->lang->line('add_customer_view_account_type');?>', HAUTO, VAUTO)" onmouseout="return nd()" name="account_type" id="account_type" class="textfield">
                     <option value="">Select Account type</option>
                     <option value="1">Prepaid</option>
                     <option value="0">Postpaid</option>
@@ -95,11 +95,11 @@
               </tr>
               <tr class="account_type_dependent" style="display:none;">
                 <td align="right"><span class="required">*</span> Credit Limit:</td>
-                <td align="left"><input onmouseover="return overlib('<?php echo $this->lang->line('add_customer_view_postpaid_credit_limit');?>', HAUTO, VAUTO, STICKY)" onmouseout="return nd()" name="creditlimit" type="text" class="textfield" id="creditlimit" onkeypress='validate_input_digits_only(event)' value="0" maxlength="10"></td>
+                <td align="left"><input name="creditlimit" type="text" class="textfield numeric" id="creditlimit" onmouseover="return overlib('<?php echo $this->lang->line('add_customer_view_postpaid_credit_limit');?>', HAUTO, VAUTO)" onmouseout="return nd()" value="0" maxlength="10"></td>
               </tr>
               <tr>
                 <td align="right"><span class="required">*</span> Bill Cycle:</td>
-                <td align="left"><select onmouseover="return overlib('<?php echo $this->lang->line('add_customer_view_bill_cycle');?>', HAUTO, VAUTO, STICKY)" onmouseout="return nd()" name="billing_cycle" id="billing_cycle" class="textfield">
+                <td align="left"><select onmouseover="return overlib('<?php echo $this->lang->line('add_customer_view_bill_cycle');?>', HAUTO, VAUTO)" onmouseout="return nd()" name="billing_cycle" id="billing_cycle" class="textfield">
                     <option value="">Select Bill Cycle</option>
                     <option value="daily">Daily</option>
                     <option value="weekly">Weekly</option>
@@ -109,7 +109,7 @@
               </tr>
               <tr>
                 <td align="right"><span class="required">*</span> Concurrent Calls:</td>
-                <td align="left"><input name="maxcalls" type="text" class="textfield numeric" id="maxcalls" onmouseover="return overlib('<?php echo $this->lang->line('add_customer_view_concurrent_calls');?>', HAUTO, VAUTO, STICKY)" onmouseout="return nd()" maxlength="11"></td>
+                <td align="left"><input name="maxcalls" type="text" class="textfield numeric" id="maxcalls" onmouseover="return overlib('<?php echo $this->lang->line('add_customer_view_concurrent_calls');?>', HAUTO, VAUTO)" onmouseout="return nd()" maxlength="11"></td>
               </tr>
               <tr>
                 <td align="right"><span class="required">*</span> Address:</td>
@@ -140,24 +140,24 @@
               </tr>
               <tr>
                 <td align="right">Timezone:</td>
-                <td align="left"><select onmouseover="return overlib('<?php echo $this->lang->line('add_customer_view_timezone');?>', HAUTO, VAUTO, STICKY)" onmouseout="return nd()" class="textfield" name="timezone" id="timezone">
+                <td align="left"><select onmouseover="return overlib('<?php echo $this->lang->line('add_customer_view_timezone');?>', HAUTO, VAUTO)" onmouseout="return nd()" class="textfield" name="timezone" id="timezone">
                     <?php echo all_timezones();?>
                   </select></td>
               </tr>
               <tr>
                 <td align="right"><span class="required">*</span> Rate Rate Group:</td>
-                <td align="left"><select onmouseover="return overlib('<?php echo $this->lang->line('add_customer_view_rate_group');?>', HAUTO, VAUTO, STICKY)" onmouseout="return nd()" id="group" name="group" class="textfield">
+                <td align="left"><select onmouseover="return overlib('<?php echo $this->lang->line('add_customer_view_rate_group');?>', HAUTO, VAUTO)" onmouseout="return nd()" id="group" name="group" class="textfield">
                     <?php echo show_group_select_box_valid_invalid();?>
                   </select></td>
               </tr>
               <tr>
                 <td align="right">&nbsp;</td>
-                <td align="left" onmouseover="return overlib('<?php echo $this->lang->line('add_customer_view_attach_cdr_with_email');?>', HAUTO, VAUTO, STICKY)" onmouseout="return nd()"><input type="checkbox" id="cdr_check" value="1" name="cdr_check">
+                <td align="left" onmouseover="return overlib('<?php echo $this->lang->line('add_customer_view_attach_cdr_with_email');?>', HAUTO, VAUTO)" onmouseout="return nd()"><input type="checkbox" id="cdr_check" value="1" name="cdr_check">
                   &nbsp;Attach CDR With Email</td>
               </tr>
               <tr>
                 <td align="right">&nbsp;</td>
-                <td align="left" onmouseover="return overlib('<?php echo $this->lang->line('add_customer_view_billing_same_as_email');?>', HAUTO, VAUTO, STICKY)" onmouseout="return nd()" ><input type="checkbox" id="same_check" value="1" name="same_check">
+                <td align="left" onmouseover="return overlib('<?php echo $this->lang->line('add_customer_view_billing_same_as_email');?>', HAUTO, VAUTO)" onmouseout="return nd()" ><input type="checkbox" id="same_check" value="1" name="same_check">
                   &nbsp;Billing email same as contact email</td>
               </tr>
               <tr id="cdr_tr">
@@ -172,7 +172,7 @@
               </tr>
               <tr>
                 <td align="right">&nbsp;</td>
-                <td align="left" onmouseover="return overlib('<?php echo $this->lang->line('add_customer_view_allow_cp_access');?>', HAUTO, VAUTO, STICKY)" onmouseout="return nd()" ><input type="checkbox" id="access_chk" value="Y" name="access_chk">
+                <td align="left" onmouseover="return overlib('<?php echo $this->lang->line('add_customer_view_allow_cp_access');?>', HAUTO, VAUTO)" onmouseout="return nd()" ><input type="checkbox" id="access_chk" value="Y" name="access_chk">
                   &nbsp;Allow User Control Panel Access</td>
               </tr>
               <tr id="userpass" style="display:none">
@@ -180,11 +180,11 @@
                     <tbody>
                       <tr>
                         <td align="right" width="45%"><span class="required">*</span> Username:</td>
-                        <td align="left" onmouseover="return overlib('<?php echo $this->lang->line('add_customer_view_username_for_cp');?>', HAUTO, VAUTO, STICKY)" onmouseout="return nd()" width="55%"><input name="username" type="text" class="textfield" id="username" maxlength="20"></td>
+                        <td align="left" onmouseover="return overlib('<?php echo $this->lang->line('add_customer_view_username_for_cp');?>', HAUTO, VAUTO)" onmouseout="return nd()" width="55%"><input name="username" type="text" class="textfield" id="username" maxlength="20"></td>
                       </tr>
                       <tr>
                         <td align="right"><span class="required">*</span> Password:</td>
-                        <td align="left" onmouseover="return overlib('<?php echo $this->lang->line('add_customer_view_password_for_cp');?>', HAUTO, VAUTO, STICKY)" onmouseout="return nd()" ><input name="password" type="password" class="textfield" id="password" value="" maxlength="20"></td>
+                        <td align="left" onmouseover="return overlib('<?php echo $this->lang->line('add_customer_view_password_for_cp');?>', HAUTO, VAUTO)" onmouseout="return nd()" ><input name="password" type="password" class="textfield" id="password" value="" maxlength="20"></td>
                       </tr>
                       <tr>
                         <td align="right"><span class="required">*</span>Confirm Password:</td>
@@ -192,21 +192,21 @@
                       </tr>
                       <tr>
                         <td align="right"><span class="required">*</span>Total # of ACL Nodes:</td>
-                        <td align="left" onmouseover="return overlib('<?php echo $this->lang->line('add_customer_view_number_of_acl_nodes');?>', HAUTO, VAUTO, STICKY)" onmouseout="return nd()" ><input name="tot_acl_nodes" type="text" class="textfield numeric" id="tot_acl_nodes" value="5" maxlength="3"></td>
+                        <td align="left" onmouseover="return overlib('<?php echo $this->lang->line('add_customer_view_number_of_acl_nodes');?>', HAUTO, VAUTO)" onmouseout="return nd()" ><input name="tot_acl_nodes" type="text" class="textfield numeric" id="tot_acl_nodes" value="5" maxlength="3"></td>
                       </tr>
                       <tr>
                         <td align="right"><span class="required">*</span>Total # of SIP Accounts:</td>
-                        <td align="left" onmouseover="return overlib('<?php echo $this->lang->line('add_customer_view_number_of_sip_accounts');?>', HAUTO, VAUTO, STICKY)" onmouseout="return nd()" ><input name="tot_sip_acc" type="text" class="textfield numeric" id="tot_sip_acc" value="5" maxlength="3"></td>
+                        <td align="left" onmouseover="return overlib('<?php echo $this->lang->line('add_customer_view_number_of_sip_accounts');?>', HAUTO, VAUTO)" onmouseout="return nd()" ><input name="tot_sip_acc" type="text" class="textfield numeric" id="tot_sip_acc" value="5" maxlength="3"></td>
                       </tr>
                       <tr>
                         <td align="right"><span class="required">*</span>SIP IP (Select All That Apply):</td>
-                        <td align="left" onmouseover="return overlib('<?php echo $this->lang->line('add_customer_view_profile_ip_address');?>', HAUTO, VAUTO, STICKY)" onmouseout="return nd()" ><select  name="sip_ip[]"  id="sip_ip" class="textfield" multiple="multiple" size="5">
+                        <td align="left" onmouseover="return overlib('<?php echo $this->lang->line('add_customer_view_profile_ip_address');?>', HAUTO, VAUTO)" onmouseout="return nd()" ><select  name="sip_ip[]"  id="sip_ip" class="textfield" multiple="multiple" size="5">
                             <?php echo get_all_sip_ips(); ?>
                           </select></td>
                       </tr>
                       <tr>
                         <td align="right">&nbsp;</td>
-                        <td align="left" onmouseover="return overlib('<?php echo $this->lang->line('add_customer_view_email_information_customer');?>', HAUTO, VAUTO, STICKY)" onmouseout="return nd()" ><input type="checkbox" value="Y" name="email_check" id="email_check">
+                        <td align="left" onmouseover="return overlib('<?php echo $this->lang->line('add_customer_view_email_information_customer');?>', HAUTO, VAUTO)" onmouseout="return nd()" ><input type="checkbox" value="Y" name="email_check" id="email_check">
                           &nbsp;Email information to customer</td>
                       </tr>
                     </tbody>

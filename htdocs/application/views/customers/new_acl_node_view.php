@@ -80,7 +80,7 @@ window.location = '../../home/';
                 
                 <tr>
                     <td align="right" width="45%"><span class="required">*</span> IP Address:</td>
-                    <td align="left" onmouseover="return overlib('<?php echo $this->lang->line('admin_new_acl_node_view_acl_node');?>', HAUTO, VAUTO, STICKY)" onmouseout="return nd()" width="55%"><input name="ip" type="text" class="textfield numeric" id="ip" maxlength="15"></td>
+                    <td align="left" onmouseover="return overlib('<?php echo $this->lang->line('admin_new_acl_node_view_acl_node');?>', HAUTO, VAUTO)" onmouseout="return nd()" width="55%"><input name="ip" type="text" class="textfield numeric" id="ip" maxlength="15"></td>
                 </tr>
                 <tr>
 <!--

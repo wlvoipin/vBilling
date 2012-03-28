@@ -24,38 +24,38 @@
     </div>
     
     <form method="get" action="<?php echo base_url();?>billing/invoices/" id="filterForm"> 
-        <table width="100%" cellspacing="0" cellpadding="0" border="0" id="filter_table">
+        <table width="926" cellspacing="0" cellpadding="0" border="0" id="filter_table">
              
                 <tr>
-                    <td width="8%">
+                    <td width="170">
                         Date From
                     </td>
 
-                    <td width="8%">
+                    <td width="170">
                         Date To
                     </td>
                     
-                    <td width="8%">
+                    <td width="170">
                         Customers
                     </td>
                     
-                    <td width="8%">
+                    <td width="83">
                         Billing Type
                     </td>
                     
-                    <td width="8%">
+                    <td width="87">
                         Status
                     </td>
                     
-                    <td width="8%">
+                    <td width="124">
                         Sort By
                     </td>
                     
-                    <td width="8%" rowspan="2">
+                    <td width="76" rowspan="2">
                         <input type="submit" id="searchFilter" name="searchFilter" value="SEARCH" class="button blue" style="float:right;margin-top:5px;margin-right:10px" />
                     </td>
                     
-                    <td width="6%" rowspan="2">
+                    <td width="46" rowspan="2">
                         <a href="#" id="reset" class="button orange" style="float:left;margin-top:5px;">RESET</a>
                     </td>
                 
@@ -134,19 +134,19 @@
     <div style="text-align:center;padding:10px">
         <div class="button white">
         
-        <form method="post" action="<?php echo base_url();?>billing/generate_manual_invoice/" id="newInvForm"> 
-            <table width="100%" cellspacing="0" cellpadding="0" border="0" id="filter_table">
-                 
+        <form method="post" action="<?php echo base_url();?>billing/generate_manual_invoice/" id="newInvForm">
+            <table width="783" cellspacing="0" cellpadding="0" border="0" id="filter_table">
+
                     <tr>
-                        <td width="8%">
+                        <td width="161">
                             Customer
                         </td>
 
-                        <td width="8%">
-                            Misclleneous Charges
+                        <td width="261">
+                            Miscellaneous Charges
                         </td>
                         
-                        <td width="1%" rowspan="2">
+                        <td width="361" rowspan="2">
                             <input type="submit" id="sssearchFilter" name="sssearchFilter" value="Generate Invoice Till Today 12:00:00 am" class="button blue" style="float:right;margin-top:5px;margin-right:10px" />
                         </td>
                     </tr>
@@ -160,7 +160,6 @@
                         
                         <td><input type="text" name="misc_charges" id="misc_charges" class="numeric"></td>
                     </tr>
-                
             </table>
         </form>
         </div>
@@ -182,18 +181,18 @@
                     <div class="button white">
                     
                     <form method="post" action="<?php echo base_url();?>billing/generate_manual_invoice/" id="newInvForm"> 
-                        <table width="100%" cellspacing="0" cellpadding="0" border="0" id="filter_table">
+                        <table width="783" cellspacing="0" cellpadding="0" border="0" id="filter_table">
                              
                                 <tr>
-                                    <td width="8%">
+                                    <td width="156">
                                         Customer
                                     </td>
 
-                                    <td width="8%">
-                                        Misclleneous Charges
+                                    <td width="264">
+                                        Miscellaneous Charges
                                     </td>
                                     
-                                    <td width="1%" rowspan="2">
+                                    <td width="363" rowspan="2">
                                         <input type="submit" id="ssssearchFilter" name="ssssearchFilter" value="Generate Invoice Till Today 12:00:00 am" class="button blue" style="float:right;margin-top:5px;margin-right:10px" />
                                     </td>
                                 </tr>
@@ -216,8 +215,7 @@
             }
         }
 ?>
-         
-                                
+
 <table width="100%" cellpadding="0" cellspacing="0">
         <tbody><tr>
             <td>

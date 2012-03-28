@@ -67,7 +67,7 @@
                 <tbody>
                 <tr>
                     <td align="right" width="45%"><span class="required">*</span><?php echo $this->lang->line('admin_rate_menu_country');?></td>
-                    <td align="left" onmouseover="return overlib('<?php echo $this->lang->line('admin_view_new_rate_country');?>', HAUTO, VAUTO, STICKY)" onmouseout="return nd()" width="55%">
+                    <td align="left" onmouseover="return overlib('<?php echo $this->lang->line('admin_view_new_rate_country');?>', HAUTO, VAUTO)" onmouseout="return nd()" width="55%">
                         <select name="country" id="country" class="textfield">
                         <?php echo all_countries();?>
                         </select>
@@ -76,32 +76,32 @@
                 
                 <tr>
                     <td align="right" width="45%"><span class="required">*</span><?php echo $this->lang->line('admin_rate_menu_country_code');?></td>
-                    <td align="left" onmouseover="return overlib('<?php echo $this->lang->line('admin_view_new_rate_country_code');?>', HAUTO, VAUTO, STICKY)" onmouseout="return nd()" width="55%"><input type="text" value="" name="digits" id="digits" maxlength="50" class="textfield"></td>
+                    <td align="left" onmouseover="return overlib('<?php echo $this->lang->line('admin_view_new_rate_country_code');?>', HAUTO, VAUTO)" onmouseout="return nd()" width="55%"><input type="text" value="" name="digits" id="digits" maxlength="50" class="textfield"></td>
                 </tr>
 
                 <tr>
                     <td align="right"><span class="required">*</span><?php echo $this->lang->line('admin_rate_menu_buying_rate');?></td>
-                    <td align="left" onmouseover="return overlib('<?php echo $this->lang->line('admin_view_new_rate_buying_rate');?>', HAUTO, VAUTO, STICKY)" onmouseout="return nd()" ><input type="text" value="" name="costrate" id="costrate" maxlength="50" class="textfield"></td>
+                    <td align="left" onmouseover="return overlib('<?php echo $this->lang->line('admin_view_new_rate_buying_rate');?>', HAUTO, VAUTO)" onmouseout="return nd()" ><input type="text" value="" name="costrate" id="costrate" maxlength="50" class="textfield"></td>
                 </tr>
                 <tr>
                     <td align="right"><span class="required">*</span><?php echo $this->lang->line('admin_rate_menu_min_buy_block');?></td>
-                    <td align="left" onmouseover="return overlib('<?php echo $this->lang->line('admin_view_new_rate_min_buying_block');?>', HAUTO, VAUTO, STICKY)" onmouseout="return nd()" ><input type="text" value="" name="buyblock_min_duration" id="buyblock_min_duration" maxlength="3" class="textfield"></td>
+                    <td align="left" onmouseover="return overlib('<?php echo $this->lang->line('admin_view_new_rate_min_buying_block');?>', HAUTO, VAUTO)" onmouseout="return nd()" ><input type="text" value="" name="buyblock_min_duration" id="buyblock_min_duration" maxlength="3" class="textfield"></td>
                 </tr>
                 <tr>
                     <td align="right"><span class="required">*</span><?php echo $this->lang->line('admin_rate_menu_buy_rate_init_block');?></td>
-                    <td align="left" onmouseover="return overlib('<?php echo $this->lang->line('admin_view_new_rate_buy_init_block');?>', HAUTO, VAUTO, STICKY)" onmouseout="return nd()" ><input type="text" value="" name="buyblock" id="buyblock" maxlength="3" class="textfield"></td>
+                    <td align="left" onmouseover="return overlib('<?php echo $this->lang->line('admin_view_new_rate_buy_init_block');?>', HAUTO, VAUTO)" onmouseout="return nd()" ><input type="text" value="" name="buyblock" id="buyblock" maxlength="3" class="textfield"></td>
                 </tr>
                 <tr>
                     <td align="right"><span class="required">*</span><?php echo $this->lang->line('admin_rate_menu_sell_rate');?></td>
-                    <td align="left" onmouseover="return overlib('<?php echo $this->lang->line('admin_view_new_rate_sell_rate');?>', HAUTO, VAUTO, STICKY)" onmouseout="return nd()" ><input type="text" value="" name="rate" id="rate" maxlength="50" class="textfield"></td>
+                    <td align="left" onmouseover="return overlib('<?php echo $this->lang->line('admin_view_new_rate_sell_rate');?>', HAUTO, VAUTO)" onmouseout="return nd()" ><input type="text" value="" name="rate" id="rate" maxlength="50" class="textfield"></td>
                 </tr>
                 <tr>
                     <td align="right"><span class="required">*</span><?php echo $this->lang->line('admin_rate_menu_min_sell_block');?></td>
-                    <td align="left" onmouseover="return overlib('<?php echo $this->lang->line('admin_view_new_rate_min_sell_block');?>', HAUTO, VAUTO, STICKY)" onmouseout="return nd()" ><input type="text" value="" name="sellblock_min_duration" id="sellblock_min_duration" maxlength="3" class="textfield"></td>
+                    <td align="left" onmouseover="return overlib('<?php echo $this->lang->line('admin_view_new_rate_min_sell_block');?>', HAUTO, VAUTO)" onmouseout="return nd()" ><input type="text" value="" name="sellblock_min_duration" id="sellblock_min_duration" maxlength="3" class="textfield"></td>
                 </tr>
                 <tr>
                     <td align="right"><span class="required">*</span><?php echo $this->lang->line('admin_rate_menu_sell_rate_init_block');?></td>
-                    <td align="left" onmouseover="return overlib('<?php echo $this->lang->line('admin_view_new_rate_sell_init_block');?>', HAUTO, VAUTO, STICKY)" onmouseout="return nd()" ><input type="text" value="" name="sellblock" id="sellblock" maxlength="3" class="textfield"></td>
+                    <td align="left" onmouseover="return overlib('<?php echo $this->lang->line('admin_view_new_rate_sell_init_block');?>', HAUTO, VAUTO)" onmouseout="return nd()" ><input type="text" value="" name="sellblock" id="sellblock" maxlength="3" class="textfield"></td>
                 </tr>
                 <tr>
                     <td align="right"><span class="optional"></span><?php echo $this->lang->line('admin_rate_menu_remove_prefix');?></td>

@@ -80,7 +80,7 @@ window.location = '../../home/';
                 
                 <tr>
                     <td align="right" width="45%"><span class="required">*</span> Username:</td>
-                    <td align="left" onmouseover="return overlib('<?php echo $this->lang->line('admin_new_sip_view_username');?>', HAUTO, VAUTO, STICKY)" onmouseout="return nd()" width="55%"><input type="text" name="username" id="username" readonly maxlength="6" class="textfield" value="<?php echo $username;?>"></td>
+                    <td align="left" onmouseover="return overlib('<?php echo $this->lang->line('admin_new_sip_view_username');?>', HAUTO, VAUTO)" onmouseout="return nd()" width="55%"><input type="text" name="username" id="username" readonly maxlength="6" class="textfield" value="<?php echo $username;?>"></td>
                 </tr>
                 
                 <tr>
@@ -90,12 +90,12 @@ window.location = '../../home/';
                 
                 <tr>
                     <td align="right" width="45%"><span class="required">*</span> CID:</td>
-                    <td align="left" onmouseover="return overlib('<?php echo $this->lang->line('admin_new_sip_view_cid');?>', HAUTO, VAUTO, STICKY)" onmouseout="return nd()" width="55%"><input name="cid" type="text" class="textfield numeric" id="cid" value="<?php echo $username;?>"  maxlength="20"></td>
+                    <td align="left" onmouseover="return overlib('<?php echo $this->lang->line('admin_new_sip_view_cid');?>', HAUTO, VAUTO)" onmouseout="return nd()" width="55%"><input name="cid" type="text" class="textfield numeric" id="cid" value="<?php echo $username;?>"  maxlength="20"></td>
                 </tr>
                 
                 <tr>
                     <td align="right"><span class="required">*</span> SIP IP:</td>
-                    <td align="left" onmouseover="return overlib('<?php echo $this->lang->line('admin_new_sip_view_sip_ip');?>', HAUTO, VAUTO, STICKY)" onmouseout="return nd()" >
+                    <td align="left" onmouseover="return overlib('<?php echo $this->lang->line('admin_new_sip_view_sip_ip');?>', HAUTO, VAUTO)" onmouseout="return nd()" >
                         <select  name="sip_ip" id="sip_ip" class="textfield">
                             <?php echo get_all_sip_ips(); ?>
                         </select>

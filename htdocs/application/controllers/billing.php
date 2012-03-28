@@ -320,16 +320,16 @@ class Billing extends CI_Controller {
 			redirect ('billing/invoices/');
 		}
 
-		if ($urlParts = parse_url($this->agent->referrer()))
-		{
-			$baseUrl = $urlParts["scheme"] . "://" . $urlParts["host"] . $urlParts["path"];
-			if($baseUrl != ''.base_url().'billing/invoices' && $baseUrl != ''.base_url().'billing/invoices/')
-			{
-				redirect ('billing/invoices/');
-			}
-		}
+		// if ($urlParts = parse_url($this->agent->referrer()))
+		// {
+		// 	$baseUrl = $urlParts["scheme"] . "://" . $urlParts["host"] . $urlParts["path"];
+		// 	if($baseUrl != ''.base_url().'billing/invoices' && $baseUrl != ''.base_url().'billing/invoices/')
+		// 	{
+		// 		redirect ('billing/invoices/');
+		// 	}
+		// }
 
-		$customer_id = $this->input->post('new_inv_customer');
+		$customer_id  = $this->input->post('new_inv_customer');
 		$misc_charges = $this->input->post('misc_charges');
 
 		if($customer_id == '')
@@ -347,9 +347,8 @@ class Billing extends CI_Controller {
 			redirect ('billing/invoices/');
 		}
 
-		$misc_charges = round($misc_charges, 4);
-
-		$current_date = date('Y-m-d');
+		$misc_charges      = round($misc_charges, 4);
+		$current_date      = date('Y-m-d');
 		$current_date_time = strtotime($current_date);
 
 		//get all customers whos invoicing date is today 
@@ -360,21 +359,19 @@ class Billing extends CI_Controller {
 		{
 			$row = $query->row();
 
-			$billing_cycle     =   $row->customer_billing_cycle;
-			$is_prepaid         =   $row->customer_prepaid;
-
-			//other info 
-			$customer_name          = $row->customer_firstname.' '.$row->customer_lastname;
-			$customer_address       = $row->customer_address;
-			$customer_city_country  = $row->customer_city.', '.$row->customer_country;
-			$customer_contact       = $row->customer_phone_prefix.$row->customer_phone;
-			$customer_send_cdr      = $row->customer_send_cdr;
-			$customer_email         = $row->customer_billing_email;
+			$billing_cycle         = $row->customer_billing_cycle;
+			$is_prepaid            = $row->customer_prepaid;
+			$customer_name         = $row->customer_firstname.' '.$row->customer_lastname;
+			$customer_address      = $row->customer_address;
+			$customer_city_country = $row->customer_city.', '.$row->customer_country;
+			$customer_contact      = $row->customer_phone_prefix.$row->customer_phone;
+			$customer_send_cdr     = $row->customer_send_cdr;
+			$customer_email        = $row->customer_billing_email;
 
 			//get the last invoice id generated for particular customer 
-			$sql2 = "SELECT MAX(id) AS id FROM invoices WHERE customer_id = '".$customer_id."' ";
+			$sql2   = "SELECT MAX(id) AS id FROM invoices WHERE customer_id = '".$customer_id."' ";
 			$query2 = $this->db->query($sql2);
-			$row2 = $query2->row();
+			$row2   = $query2->row();
 
 			if($row2->id != '') //if there is invoice generated last time 
 			{
@@ -386,27 +383,27 @@ class Billing extends CI_Controller {
 			}
 			else //this is the first invoice 
 			{
-				$m= date("m");
-				$d= date("d");
-				$y= date("Y");
+				$m = date("m");
+				$d = date("d");
+				$y = date("Y");
 				if($billing_cycle == 'daily')
 				{
-					$d =  date('Y-m-d',mktime(0,0,0,$m,($d-1),$y));
+					$d         = date('Y-m-d',mktime(0,0,0,$m,($d-1),$y));
 					$date_from = strtotime($d);
 				}
 				else if($billing_cycle == 'weekly')
 				{
-					$d =  date('Y-m-d',mktime(0,0,0,$m,($d-7),$y));
+					$d         = date('Y-m-d',mktime(0,0,0,$m,($d-7),$y));
 					$date_from = strtotime($d);
 				}
 				else if($billing_cycle == 'bi_weekly')
 				{
-					$d =  date('Y-m-d',mktime(0,0,0,$m,($d-14),$y));
+					$d         = date('Y-m-d',mktime(0,0,0,$m,($d-14),$y));
 					$date_from = strtotime($d);
 				}
 				else if($billing_cycle == 'monthly')
 				{
-					$d =  date('Y-m-d',mktime(0,0,0,$m,($d-30),$y));
+					$d         = date('Y-m-d',mktime(0,0,0,$m,($d-30),$y));
 					$date_from = strtotime($d);
 				}
 			}
@@ -414,8 +411,8 @@ class Billing extends CI_Controller {
 			// to 2011-12-16 00:00:00  (less or equal to 2011-12-16 00:00:00)
 			// from 2011-12-15 00:00:00 (greater than from starting from 2011-12-15 00:00:01)
 
-			$cdr_from   = $date_from * 1000000; //convert into micro seconds
-			$cdr_to     = $current_date_time * 1000000; //convert into micro seconds
+			$cdr_from = $date_from * 1000000; 			//convert into micro seconds
+			$cdr_to   = $current_date_time * 1000000; 	//convert into micro seconds
 
 			//sum total invoice amount from cdr between 2 dates 
 			$sql4 = "SELECT SUM(total_sell_cost) as total_invoice_amount, COUNT(*) as total_calls FROM cdr WHERE customer_id = '".$customer_id."' AND (hangup_cause = 'ALLOTTED_TIMEOUT' || hangup_cause = 'NORMAL_CLEARING') AND billsec > 0 AND created_time > '".sprintf("%.0f", $cdr_from)."' AND created_time <= '".sprintf("%.0f", $cdr_to)."'";
@@ -463,9 +460,9 @@ class Billing extends CI_Controller {
 
 			//update the next invoice date for customer 
 
-			$m= date("m");
-			$d= date("d");
-			$y= date("Y");
+			$m = date("m");
+			$d = date("d");
+			$y = date("Y");
 			if($billing_cycle == 'daily')
 			{
 				$d =  date('Y-m-d',mktime(0,0,0,$m,($d+1),$y));
@@ -709,7 +706,7 @@ class Billing extends CI_Controller {
 			$objcdr = new $this->pdf;
 			// set document information
 			$objcdr->SetSubject('INVOICE CDR');
-			$objcdr->SetKeywords('DigitalLinx, INVOICE, CDR');
+			$objcdr->SetKeywords('Digital Linx, INVOICE, CDR');
 
 			// add a page
 			$objcdr->AddPage();
