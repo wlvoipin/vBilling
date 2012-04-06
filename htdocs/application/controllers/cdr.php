@@ -1173,7 +1173,48 @@ class Cdr extends CI_Controller {
 
 		if($data_cdr->num_rows() > 0)
 		{
-			$headers = array('Date/Time', 'Destination', 'Bill Duration', 'Hangup Cause', 'IP Address', 'Username', 'Sell Rate', 'Sell Init Block', 'Cost Rate','Buy Init Block', 'Total Charges', 'Total Cost', 'Margin', 'Markup');
+		//  $headers 	= array('Date/Time', 'Destination', 'Bill Duration', 'Hangup Cause', 'IP Address', 'Username', 'Sell Rate', 'Sell Init Block', 'Cost Rate','Buy Init Block', 'Total Charges', 'Total Cost', 'Margin', 'Markup');
+		//	$headers 	= array( 'network_addr' => 'IP Address', 'username' => 'Username', 'sell_rate'  => 'Sell Rate', 'sell_initblock' => 'Sell Init Block','cost_rate' => 'Cost Rate','buy_initblock' => 'Buy Init Block','total_buy_cost' => 'Total Cost');
+			
+		$headers = array(
+				 'caller_id_number'   => 'CalledID Number'
+				, 'network_addr'       => 'IP Address'
+				, 'username'           => 'Username'
+				, 'sip_user_agent'     => 'SIP User Agent'
+				, 'ani'                => 'ANI'
+				, 'cost_rate'          => 'Cost Rate'
+				, 'sell_rate'          => 'Sell Rate'
+				, 'buy_initblock'      => 'Buy Init Block'
+				, 'sell_initblock'     => 'Sell Init Block'
+				, 'gateway'            => 'Gateway' 
+				);
+			
+			$hdatakey[]	=	'created_time';
+			$hdata[]	=	'Data / Time';
+				
+			$hdatakey[]	=	'destination_number';
+			$hdata[]	=	'Destination';
+			
+			$hdatakey[]	=	'billsec';
+			$hdata[]	=	'Call Duration';
+			
+			$hdatakey[]	=	'total_sell_cost';
+			$hdata[]	=	'Total Charges';
+			
+			$sql12 		= "SELECT * FROM settings WHERE customer_id = '".$this->session->userdata('customer_id')."'";
+			$query12 	= $this->db->query($sql12);
+            $row12 		= $query12->row();
+            $data_array = explode(',',$row12->optional_cdr_fields_include);
+			
+			foreach($headers as $hkey => $hvalue): 
+					foreach($data_array as $key):
+						if($hkey == $key)
+						{  
+							$hdata[]	= $hvalue;
+							$hdatakey[] = $hkey;
+						}
+					endforeach;
+			endforeach;
 
 			$csv_file_name = $this->session->userdata('username')."_".$this->session->userdata('last_activity');
 
@@ -1183,12 +1224,22 @@ class Cdr extends CI_Controller {
 				header("Content-Disposition: attachment; filename=".$csv_file_name);
 				header('Pragma: no-cache');
 				header('Expires: 0');
-				fputcsv($fp, $headers);
+				fputcsv($fp, $hdata);
 
-				foreach ($data_cdr->result_array() as $row)
-				{
-					print '"' . stripslashes(implode('","',$row)) . "\"\n";
-				}
+				foreach ($data_cdr->result() as $row):
+						$odata 		=	array();
+							foreach($hdatakey as $key):
+								if($key == 'created_time')
+								{
+									$odata[] = date("Y-m-d H:i:s", $row->$key/1000000);
+										
+								}else
+								{
+									$odata[] 	=	$row->$key;				
+								}
+							endforeach;
+						   print '"' . stripslashes(implode('","',$odata)) . "\"\n";
+				endforeach;
 				die;
 			}
 		}

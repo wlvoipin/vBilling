@@ -1236,8 +1236,9 @@ class Cdr_model extends CI_Model {
 			}
 		}
 
-		$sql = "SELECT created_time, destination_number, billsec, hangup_cause, network_addr, username, sell_rate, sell_initblock, cost_rate, buy_initblock, total_sell_cost, total_buy_cost FROM cdr ".$where." ".$order_by."";
-		$query = $this->db->query($sql);
+		$sql 	= "SELECT created_time, destination_number, billsec, hangup_cause, network_addr, username, sell_rate, sell_initblock, cost_rate, buy_initblock, total_sell_cost, total_buy_cost, gateway, ani, caller_id_number, sip_user_agent FROM cdr ".$where." ".$order_by."";
+		// echo $sql; exit;
+		$query 	= $this->db->query($sql);
 		return $query;
 	}
 }
