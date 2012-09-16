@@ -1,10 +1,5 @@
-
-
---
--- Database: `vBilling`
---
-
--- --------------------------------------------------------
+SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
+SET time_zone = "+00:00";
 
 --
 -- Table structure for table `accounts`
@@ -19,22 +14,14 @@ CREATE TABLE IF NOT EXISTS `accounts` (
   `customer_id` int(11) NOT NULL,
   `enabled` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=7 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
 
 --
 -- Dumping data for table `accounts`
 --
 
-INSERT INTO `accounts` (`id`, `username`, `password`, `type`, `is_customer`, `customer_id`, `enabled`)
-       VALUES
-       (
-       1,
-       'admin',
-       '8051d6ba25ceab9244c28a25523291fc',
-       'admin',
-       0,
-       0,
-       1);
+INSERT INTO `accounts` (`id`, `username`, `password`, `type`, `is_customer`, `customer_id`, `enabled`) VALUES
+(1, 'admin', '8051d6ba25ceab9244c28a25523291fc', 'admin', 0, 0, 1);
 
 -- --------------------------------------------------------
 
@@ -94,7 +81,7 @@ CREATE TABLE IF NOT EXISTS `accounts_restrictions` (
   `delete_settings` tinyint(1) NOT NULL DEFAULT '0',
   `edit_settings` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -107,17 +94,14 @@ CREATE TABLE IF NOT EXISTS `acl_lists` (
   `acl_name` varchar(128) NOT NULL,
   `default_policy` varchar(45) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
 
 --
 -- Dumping data for table `acl_lists`
 --
 
 INSERT INTO `acl_lists` (`id`, `acl_name`, `default_policy`) VALUES
-                                                             (
-                                                             1,
-                                                             'default',
-                                                             'deny');
+(1, 'default', 'deny');
 
 -- --------------------------------------------------------
 
@@ -128,12 +112,13 @@ INSERT INTO `acl_lists` (`id`, `acl_name`, `default_policy`) VALUES
 CREATE TABLE IF NOT EXISTS `acl_nodes` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `customer_id` int(11) NOT NULL,
+  `localization_id` int(11) DEFAULT NULL,
   `cidr` varchar(45) NOT NULL,
   `type` varchar(16) NOT NULL,
   `list_id` int(10) unsigned NOT NULL,
   `added_by` tinyint(3) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -146,7 +131,7 @@ CREATE TABLE IF NOT EXISTS `carriers` (
   `carrier_name` varchar(255) DEFAULT NULL,
   `enabled` tinyint(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -167,7 +152,7 @@ CREATE TABLE IF NOT EXISTS `carrier_gateway` (
   `enabled` tinyint(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`),
   KEY `carrier_id` (`carrier_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -231,8 +216,12 @@ CREATE TABLE IF NOT EXISTS `cdr` (
   `admin_rate_id` int(11) NOT NULL DEFAULT '0',
   `reseller_rate_group` varchar(50) DEFAULT NULL,
   `reseller_rate_id` int(11) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+  PRIMARY KEY (`id`),
+  KEY `IX_cdr` (`customer_id`,`hangup_cause`,`created_time`,`billsec`,`total_sell_cost`),
+  KEY `IX_cdr2` (`gateway`,`hangup_cause`,`created_time`,`sofia_id`),
+  KEY `IX_cdr3` (`gateway`,`sofia_id`,`created_time`),
+  KEY `IX_parent_id_created_time` (`parent_id`,`created_time`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -246,7 +235,7 @@ CREATE TABLE IF NOT EXISTS `check_cdr_time` (
   `uuid` varchar(500) NOT NULL,
   `charges` decimal(11,4) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -259,18 +248,14 @@ CREATE TABLE IF NOT EXISTS `console_conf` (
   `param_name` varchar(255) NOT NULL,
   `param_value` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5 ;
 
 --
 -- Dumping data for table `console_conf`
 --
 
-INSERT INTO `console_conf` (`id`, `param_name`, `param_value`)
-       VALUES
-       (
-       1,
-       'colorize',
-       'true'),
+INSERT INTO `console_conf` (`id`, `param_name`, `param_value`) VALUES
+(1, 'colorize', 'true'),
 (2, 'loglevel', '$${console_loglevel}'),
 (3, 'rotate-on-hup', 'true'),
 (4, 'uuid', 'true');
@@ -289,21 +274,14 @@ CREATE TABLE IF NOT EXISTS `countries` (
   `gmttime` varchar(15) CHARACTER SET utf8 NOT NULL,
   `countryname` varchar(100) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=254 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=254 ;
 
 --
 -- Dumping data for table `countries`
 --
 
-INSERT INTO `countries` (`id`, `countrycode`, `alpha2code`, `countryprefix`, `gmttime`, `countryname`)
-       VALUES
-       (
-       1,
-       'AFG',
-       'AF',
-       '93',
-       '',
-       'Afghanistan'),
+INSERT INTO `countries` (`id`, `countrycode`, `alpha2code`, `countryprefix`, `gmttime`, `countryname`) VALUES
+(1, 'AFG', 'AF', '93', '', 'Afghanistan'),
 (2, 'ALB', 'AL', '355', 'GMT+01:00', 'Albania'),
 (3, 'DZA', 'DZ', '213', 'GMT', 'Algeria'),
 (4, 'ASM', 'AS', '684', 'GMT-11:00', 'American Samoa'),
@@ -532,8 +510,8 @@ INSERT INTO `countries` (`id`, `countrycode`, `alpha2code`, `countryprefix`, `gm
 (236, 'YEM', 'YE', '967', 'GMT+03:00', 'Yemen'),
 (238, 'ZMB', 'ZM', '260', 'GMT+02:00', 'Zambia'),
 (239, 'ZWE', 'ZW', '263', 'GMT+02:00', 'Zimbabwe'),
-(241, 'ALA', 'AX', '35818', '', 'Aland Inland'),
 (240, 'CIV', 'CI', '225', 'GMT', 'CÃƒÆ’Ã‚Â´te d''Ivoire'),
+(241, 'ALA', 'AX', '35818', '', 'Aland Inland'),
 (248, 'GGY', 'GG', '441481', '', 'Guernsey'),
 (249, 'IMN', 'IM', '441624', '', 'Isle of Man'),
 (250, 'JEY', 'JE', '441534', '', 'Jersey'),
@@ -566,6 +544,7 @@ CREATE TABLE IF NOT EXISTS `customers` (
   `rate_limit_check` tinyint(1) NOT NULL DEFAULT '0',
   `customer_low_rate_limit` decimal(10,4) DEFAULT NULL,
   `customer_high_rate_limit` decimal(10,4) DEFAULT NULL,
+  `customer_flat_rate` decimal(10,4) NOT NULL,
   `customer_prepaid` int(11) DEFAULT '1',
   `customer_balance` double(10,4) DEFAULT '0.0000',
   `customer_credit_limit` decimal(10,4) NOT NULL DEFAULT '0.0000',
@@ -579,7 +558,7 @@ CREATE TABLE IF NOT EXISTS `customers` (
   `grand_parent_id` int(11) NOT NULL DEFAULT '0',
   `reseller_level` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`customer_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 CHECKSUM=1 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 CHECKSUM=1 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -593,7 +572,7 @@ CREATE TABLE IF NOT EXISTS `customer_access_limitations` (
   `total_sip_accounts` int(11) NOT NULL,
   `total_acl_nodes` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -608,7 +587,7 @@ CREATE TABLE IF NOT EXISTS `customer_balance_history` (
   `action` varchar(20) DEFAULT NULL,
   `date` varchar(250) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -622,7 +601,7 @@ CREATE TABLE IF NOT EXISTS `customer_sip` (
   `domain` varchar(255) NOT NULL,
   `domain_sofia_id` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -633,6 +612,7 @@ CREATE TABLE IF NOT EXISTS `customer_sip` (
 CREATE TABLE IF NOT EXISTS `directory` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `customer_id` int(11) NOT NULL,
+  `localization_id` int(11) DEFAULT NULL,
   `username` varchar(255) CHARACTER SET utf8 NOT NULL,
   `cid` varchar(255) CHARACTER SET utf8 NOT NULL,
   `domain` varchar(255) CHARACTER SET utf8 NOT NULL,
@@ -641,7 +621,7 @@ CREATE TABLE IF NOT EXISTS `directory` (
   `added_by` int(11) NOT NULL,
   `enabled` tinyint(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -655,7 +635,7 @@ CREATE TABLE IF NOT EXISTS `directory_params` (
   `param_name` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
   `param_value` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -669,7 +649,7 @@ CREATE TABLE IF NOT EXISTS `directory_vars` (
   `var_name` varchar(255) DEFAULT NULL,
   `var_value` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -685,7 +665,7 @@ CREATE TABLE IF NOT EXISTS `groups` (
   `enabled` tinyint(1) NOT NULL,
   `created_by` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AVG_ROW_LENGTH=39 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -697,17 +677,14 @@ CREATE TABLE IF NOT EXISTS `hangup_causes` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `hangup_cause` varchar(250) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=64 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=64 ;
 
 --
 -- Dumping data for table `hangup_causes`
 --
 
-INSERT INTO `hangup_causes` (`id`, `hangup_cause`)
-       VALUES
-       (
-       1,
-       'UNSPECIFIED'),
+INSERT INTO `hangup_causes` (`id`, `hangup_cause`) VALUES
+(1, 'UNSPECIFIED'),
 (2, 'UNALLOCATED_NUMBER'),
 (4, 'NO_ROUTE_DESTINATION'),
 (5, 'CHANNEL_UNACCEPTABLE'),
@@ -766,7 +743,38 @@ CREATE TABLE IF NOT EXISTS `invoices` (
   `parent_id` int(11) NOT NULL DEFAULT '0',
   `grand_parent_id` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `localization_groups`
+--
+
+CREATE TABLE IF NOT EXISTS `localization_groups` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) DEFAULT NULL,
+  `enabled` int(1) NOT NULL DEFAULT '1' COMMENT '1- enabled; 0 -not enabled',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `localization_rules`
+--
+
+CREATE TABLE IF NOT EXISTS `localization_rules` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `localization_id` int(11) NOT NULL,
+  `name` varchar(255) DEFAULT NULL,
+  `enabled` tinyint(4) NOT NULL DEFAULT '1',
+  `lcut` varchar(255) DEFAULT NULL,
+  `ladd` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `UK_localization_rules_id` (`id`),
+  KEY `IX_localization_rules` (`lcut`,`ladd`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -778,17 +786,14 @@ CREATE TABLE IF NOT EXISTS `modless_conf` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `conf_name` varchar(64) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=6 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=6 ;
 
 --
 -- Dumping data for table `modless_conf`
 --
 
-INSERT INTO `modless_conf` (`id`, `conf_name`)
-       VALUES
-       (
-       1,
-       'post_load_switch.conf'),
+INSERT INTO `modless_conf` (`id`, `conf_name`) VALUES
+(1, 'post_load_switch.conf'),
 (2, 'post_load_modules.conf'),
 (3, 'console.conf'),
 (4, 'acl.conf'),
@@ -807,19 +812,14 @@ CREATE TABLE IF NOT EXISTS `post_load_modules_conf` (
   `priority` int(10) unsigned NOT NULL DEFAULT '1000',
   PRIMARY KEY (`id`),
   UNIQUE KEY `unique_mod` (`module_name`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=15 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=15 ;
 
 --
 -- Dumping data for table `post_load_modules_conf`
 --
 
-INSERT INTO `post_load_modules_conf` (`id`, `module_name`, `load_module`, `priority`)
-       VALUES
-       (
-       1,
-       'mod_sofia',
-       1,
-       2000),
+INSERT INTO `post_load_modules_conf` (`id`, `module_name`, `load_module`, `priority`) VALUES
+(1, 'mod_sofia', 1, 2000),
 (2, 'mod_xml_cdr', 1, 1000),
 (3, 'mod_commands', 1, 1000),
 (4, 'mod_dialplan_xml', 1, 150),
@@ -850,7 +850,7 @@ CREATE TABLE IF NOT EXISTS `settings` (
   `invoice_terms` text NOT NULL,
   `company_logo_as_invoice_logo` tinyint(1) NOT NULL,
   `optional_cdr_fields_include` text NOT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -863,18 +863,14 @@ CREATE TABLE IF NOT EXISTS `socket_client_conf` (
   `param_name` varchar(100) NOT NULL,
   `param_value` varchar(100) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5 ;
 
 --
 -- Dumping data for table `socket_client_conf`
 --
 
-INSERT INTO `socket_client_conf` (`id`, `param_name`, `param_value`)
-       VALUES
-       (
-       1,
-       'nat-map',
-       'false'),
+INSERT INTO `socket_client_conf` (`id`, `param_name`, `param_value`) VALUES
+(1, 'nat-map', 'false'),
 (2, 'listen-ip', '$${event_socket_listen_ip}'),
 (3, 'listen-port', '$${event_socket_listen_port}'),
 (4, 'password', '$${event_socket_password}');
@@ -889,7 +885,7 @@ CREATE TABLE IF NOT EXISTS `sofia_conf` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `profile_name` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -903,7 +899,7 @@ CREATE TABLE IF NOT EXISTS `sofia_domains` (
   `domain_name` varchar(255) DEFAULT NULL,
   `parse` tinyint(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -918,7 +914,7 @@ CREATE TABLE IF NOT EXISTS `sofia_gateways` (
   `gateway_param` varchar(255) DEFAULT NULL,
   `gateway_value` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -930,42 +926,7 @@ CREATE TABLE IF NOT EXISTS `sofia_gateways_params` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `param_name` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=28 ;
-
---
--- Dumping data for table `sofia_gateways_params`
---
-
-INSERT INTO `sofia_gateways_params` (`id`, `param_name`)
-       VALUES
-       (
-       1,
-       'username'),
-(2, 'register'),
-(3, 'password'),
-(4, 'proxy'),
-(5, 'from-domain'),
-(6, 'from-user'),
-(7, 'realm'),
-(8, 'caller-id-in-from'),
-(9, 'extension'),
-(10, 'expire-seconds'),
-(19, 'auth'),
-(12, 'register-transport'),
-(13, 'contact-params'),
-(14, 'ping'),
-(15, 'ping-max'),
-(16, 'ping-min'),
-(17, 'extension-in-contact'),
-(11, 'scheme'),
-(20, 'context'),
-(21, 'retry-seconds'),
-(22, 'timeout-seconds'),
-(23, 'contact-host'),
-(24, 'register-proxy'),
-(25, 'outbound-proxy'),
-(26, 'distinct-to'),
-(27, 'channels');
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -979,7 +940,7 @@ CREATE TABLE IF NOT EXISTS `sofia_settings` (
   `param_name` varchar(255) DEFAULT NULL,
   `param_value` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -993,118 +954,7 @@ CREATE TABLE IF NOT EXISTS `sofia_settings_params` (
   `param_name` varchar(255) NOT NULL,
   `param_value_type` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=101 ;
-
---
--- Dumping data for table `sofia_settings_params`
---
-
-INSERT INTO `sofia_settings_params` (`id`, `type`, `param_name`, `param_value_type`)
-       VALUES
-       (
-       1,
-       'Basic',
-       'alias',
-       1),
-(2, 'Basic', 'shutdown-on-fail', 3),
-(3, 'Basic', 'user-agent-string', 1),
-(4, 'Basic', 'debug', 3),
-(5, 'Basic', 'sip-trace', 2),
-(6, 'Basic', 'context', 1),
-(7, 'Basic', 'sip-port', 1),
-(8, 'Basic', 'sip-ip', 1),
-(9, 'Basic', 'rtp-ip', 1),
-(10, 'Basic', 'ext-rtp-ip', 1),
-(11, 'Basic', 'ext-sip-ip', 1),
-(12, 'Basic', 'dialplan', 1),
-(13, 'Media', 'resume-media-on-hold', 1),
-(14, 'Media', 'bypass-media-after-att-xfer', 1),
-(15, 'Media', 'inbound-bypass-media', 3),
-(16, 'Media', 'inbound-proxy-media', 3),
-(17, 'Media', 'disable-rtp-auto-adjust', 3),
-(18, 'Media', 'ignore-183nosdp', 3),
-(19, 'Media', 'enable-soa', 3),
-(20, 'Codec', 'inbound-codec-prefs', 1),
-(21, 'Codec', 'outbound-codec-prefs', 1),
-(22, 'Codec', 'codec-prefs', 1),
-(23, 'Codec', 'inbound-codec-negotiation', 1),
-(24, 'Codec', 'inbound-late-negotiation', 3),
-(25, 'Codec', 'bitpacking', 1),
-(26, 'Codec', 'disable-transcoding', 3),
-(27, 'STUN', 'ext-rtp-ip', 1),
-(28, 'STUN', 'ext-sip-ip', 1),
-(29, 'STUN', 'stun-enabled', 3),
-(30, 'STUN', 'stun-auto-disable', 3),
-(31, 'NAT', 'apply-nat-acl', 1),
-(32, 'NAT', 'aggressive-nat-detection', 3),
-(33, 'VAD', 'vad', 1),
-(34, 'VAD', 'suppress-cng', 3),
-(35, 'NDLB', 'NDLB-force-rport', 1),
-(36, 'NDLB', 'NDLB-broken-auth-hash', 3),
-(37, 'NDLB', 'NDLB-received-in-nat-reg-contact', 3),
-(38, 'NDLB', 'NDLB-sendrecv-in-session', 3),
-(39, 'NDLB', 'NDLB-allow-bad-iananame', 3),
-(40, 'Call_ID', 'inbound-use-callid-as-uuid', 3),
-(41, 'Call_ID', 'outbound-use-uuid-as-callid', 3),
-(42, 'TLS', 'tls', 1),
-(43, 'TLS', 'tls-bind-params', 1),
-(44, 'TLS', 'tls-sip-port', 1),
-(45, 'TLS', 'tls-cert-dir', 1),
-(46, 'TLS', 'tls-version', 1),
-(47, 'DTMF', 'rfc2833-pt', 1),
-(48, 'DTMF', 'dtmf-duration', 1),
-(49, 'DTMF', 'dtmf-type', 1),
-(50, 'DTMF', 'pass-rfc2833', 3),
-(51, 'DTMF', 'liberal-dtmf', 3),
-(52, 'SIP_Options', 'enable-timer', 3),
-(53, 'SIP_Options', 'session-timeout', 1),
-(54, 'SIP_Options', 'enable-100rel', 3),
-(55, 'SIP_Options', 'minimum-session-expires', 1),
-(56, 'RTP_Related', 'auto-jitterbuffer-msec', 1),
-(57, 'RTP_Related', 'rtp-timer-name', 1),
-(58, 'RTP_Related', 'rtp-rewrite-timestamps', 3),
-(59, 'RTP_Related', 'rtp-timeout-sec', 1),
-(60, 'RTP_Related', 'rtp-hold-timeout-sec', 1),
-(61, 'RTP_Related', 'rtp-autoflush-during-bridge', 3),
-(62, 'RTP_Related', 'rtp-autoflush', 3),
-(63, 'Auth', 'challenge-realm', 1),
-(64, 'Auth', 'accept-blind-auth', 3),
-(65, 'Auth', 'auth-calls', 1),
-(66, 'Auth', 'log-auth-failures', 3),
-(67, 'Auth', 'auth-all-packets', 3),
-(68, 'Registration', 'disable-register', 3),
-(69, 'Registration', 'multiple-registrations', 1),
-(70, 'Registration', 'accept-blind-reg', 3),
-(71, 'Registration', 'inbound-reg-force-matching-username', 3),
-(72, 'Registration', 'force-publish-expires', 3),
-(73, 'Registration', 'force-register-domain', 1),
-(74, 'Registration', 'force-register-db-domain', 1),
-(75, 'Registration', 'send-message-query-on-register', 3),
-(76, 'Registration', 'unregister-on-options-fail', 3),
-(77, 'Registration', 'nat-options-ping', 3),
-(78, 'Registration', 'all-reg-options-ping', 3),
-(79, 'Subscription', 'force-subscription-expires', 1),
-(80, 'Subscription', 'force-subscription-domain', 1),
-(81, 'Presence', 'manage-presence', 3),
-(82, 'Presence', 'dbname', 1),
-(83, 'Presence', 'presence-hosts', 1),
-(84, 'Presence', 'send-presence-on-register', 3),
-(85, 'CallerID', 'caller-id-type', 1),
-(86, 'CallerID', 'pass-callee-id', 3),
-(87, 'Other', 'hold-music', 1),
-(88, 'Other', 'disable-hold', 3),
-(89, 'Other', 'apply-inbound-acl', 1),
-(90, 'Other', 'apply-register-acl', 1),
-(91, 'Other', 'apply-proxy-acl', 1),
-(92, 'Other', 'record-template', 1),
-(93, 'Other', 'max-proceeding', 1),
-(94, 'Other', 'bind-params', 1),
-(95, 'Other', 'disable-transfer', 3),
-(96, 'Other', 'manual-redirect', 3),
-(97, 'Other', 'enable-3pcc', 3),
-(98, 'Other', 'nonce-ttl', 1),
-(99, 'Other', 'sql-in-transactions', 3),
-(100, 'Other', 'odbc-dsn', 1);
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -1117,19 +967,15 @@ CREATE TABLE IF NOT EXISTS `switch_conf` (
   `param_name` varchar(255) NOT NULL,
   `param_value` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
 
 --
 -- Dumping data for table `switch_conf`
 --
 
-INSERT INTO `switch_conf` (`id`, `param_name`, `param_value`)
-       VALUES
-       (
-       1,
-       'max-sessions',
-       '200'),
-(2, 'sessions-per-second', '30'),
+INSERT INTO `switch_conf` (`id`, `param_name`, `param_value`) VALUES
+(1, 'max-sessions', '500'),
+(2, 'sessions-per-second', '25'),
 (3, 'switchname', 'vBilling');
 
 -- --------------------------------------------------------
@@ -1144,19 +990,14 @@ CREATE TABLE IF NOT EXISTS `timezones` (
   `gmt` varchar(11) NOT NULL DEFAULT '',
   `offset` tinyint(2) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=143 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=143 ;
 
 --
 -- Dumping data for table `timezones`
 --
 
-INSERT INTO `timezones` (`id`, `timezone_location`, `gmt`, `offset`)
-       VALUES
-       (
-       1,
-       'International Date Line West',
-       '(GMT-12:00)',
-       -12),
+INSERT INTO `timezones` (`id`, `timezone_location`, `gmt`, `offset`) VALUES
+(1, 'International Date Line West', '(GMT-12:00)', -12),
 (2, 'Midway Island', '(GMT-11:00)', -11),
 (3, 'Samoa', '(GMT-11:00)', -11),
 (4, 'Hawaii', '(GMT-10:00)', -10),
@@ -1302,6 +1143,26 @@ INSERT INTO `timezones` (`id`, `timezone_location`, `gmt`, `offset`)
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `version`
+--
+
+CREATE TABLE IF NOT EXISTS `version` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `version` varchar(50) NOT NULL,
+  `enabled` tinyint(1) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
+
+--
+-- Dumping data for table `version`
+--
+
+INSERT INTO `version` (`id`, `version`, `enabled`) VALUES
+(1, '0.2.0', 1);
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `xml_cdr_conf`
 --
 
@@ -1310,18 +1171,14 @@ CREATE TABLE IF NOT EXISTS `xml_cdr_conf` (
   `param_name` varchar(255) NOT NULL,
   `param_value` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=8 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=8 ;
 
 --
 -- Dumping data for table `xml_cdr_conf`
 --
 
-INSERT INTO `xml_cdr_conf` (`id`, `param_name`, `param_value`)
-       VALUES
-       (
-       1,
-       'url',
-       '$${vBilling_xml_cdr_url}'),
+INSERT INTO `xml_cdr_conf` (`id`, `param_name`, `param_value`) VALUES
+(1, 'url', '$${vBilling_xml_cdr_url}'),
 (2, 'encode', 'true'),
 (3, 'log-b-leg', 'false'),
 (4, 'prefix-a-leg', 'true'),
