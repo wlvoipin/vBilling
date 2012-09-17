@@ -24,7 +24,7 @@ UPGRADE="0"
 # License acceptance (MPL 1.1)
 clear
 echo "***"
-wget --no-check-certificate -q -O MPL-v1.1.txt https://raw.github.com/digitallinx/vBilling/COPYING
+wget --no-check-certificate -q -O MPL-v1.1.txt https://github.com/digitallinx/vBilling/raw/master/COPYING
 more MPL-v1.0.txt
 echo "***"
 echo "*** vBilling License MPL V1.1"
@@ -613,7 +613,7 @@ cp -apr ${TEMPDIR}/vBilling/htdocs/.htaccess  ${VBILLING_HTML}/
 
 # Create MySQL DB and import the database
 mysql -uroot -p${MYSQL_ROOT_PASSWORD} -e "create database ${VBILLING_DB};"
-mysql -u${VBILLING_DB_USER} -p${VBILLING_MYSQL_PASSWORD} ${VBILLING_DB} < ${TEMPDIR}/vBilling/sql/vBilling_Complete.sql
+mysql -u${VBILLING_DB_USER} -p${VBILLING_MYSQL_PASSWORD} ${VBILLING_DB} < ${TEMPDIR}/vBilling/sql/vBilling_complete.sql
 
 # Pre Install Complete, let's move forward
 
