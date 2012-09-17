@@ -220,8 +220,9 @@ class Groups_model extends CI_Model {
             `admin_rate_id` int(11) NOT NULL DEFAULT '0',
             `reseller_rate_group` varchar(50) DEFAULT NULL,
             `reseller_rate_id` int(11) NOT NULL DEFAULT '0',
-			PRIMARY KEY (`id`)
-			) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;";
+		  KEY `id` (`id`),
+		  KEY `i_digits` (`digits`)
+			) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;";
 		$query = $this->db->query($sql);
 
 		$sql2 = "UPDATE groups SET 	group_rate_table = 'lcr_group_".$insert_id."' WHERE id = '".$insert_id."'";

@@ -457,7 +457,7 @@ class Cdr_model extends CI_Model {
 		$date_from  = strtotime($date_from) * 1000000; //convert into micro seconds
 
 		$where = '';
-		if($call_type == 'answered')
+		if($call_type == 'answered' || $call_type == 'all')
 		{
 			$where = "&& (hangup_cause = 'NORMAL_CLEARING' || hangup_cause = 'ALLOTTED_TIMEOUT')";
 		}
@@ -643,7 +643,7 @@ class Cdr_model extends CI_Model {
 			$where = "AND created_time >= '".sprintf("%.0f", $previous_date)."' AND created_time <= '".sprintf("%.0f", $current_date_in_sec)."' ";
 		}
 
-		$sql = "SELECT COUNT(*) AS total_calls FROM cdr WHERE customer_id = '".$customer_id."' AND (hangup_cause = 'ALLOTTED_TIMEOUT' || hangup_cause = 'NORMAL_CLEARING') AND billsec > 0 ".$where."";
+		$sql = "SELECT COUNT(id) AS total_calls FROM cdr WHERE customer_id = '".$customer_id."' AND billsec > 0 ".$where."";
 		$query = $this->db->query($sql);
 		$row = $query->row();
 		return $row->total_calls;
@@ -695,7 +695,7 @@ class Cdr_model extends CI_Model {
 			$where = "AND created_time >= '".sprintf("%.0f", $previous_date)."' AND created_time <= '".sprintf("%.0f", $current_date_in_sec)."' ";
 		}
 
-		$sql = "SELECT SUM(total_sell_cost) AS total_sell_cost FROM cdr WHERE customer_id = '".$customer_id."' AND (hangup_cause = 'NORMAL_CLEARING' || hangup_cause = 'ALLOTTED_TIMEOUT') AND billsec > 0 ".$where."";
+		$sql = "SELECT SUM(total_sell_cost) AS total_sell_cost FROM cdr WHERE customer_id = '".$customer_id."' AND billsec > 0 ".$where."";
 		$query = $this->db->query($sql);
 		$row = $query->row();
 		return $row->total_sell_cost;
@@ -718,7 +718,7 @@ class Cdr_model extends CI_Model {
 			$where .= "AND created_time <= '".sprintf("%.0f", $date_to)."' ";
 		}
 
-		$sql = "SELECT SUM(total_buy_cost) AS total_buy_cost FROM cdr WHERE customer_id = '".$customer_id."' AND (hangup_cause = 'NORMAL_CLEARING' || hangup_cause = 'ALLOTTED_TIMEOUT') AND billsec > 0 ".$where."";
+		$sql = "SELECT SUM(total_buy_cost) AS total_buy_cost FROM cdr WHERE customer_id = '".$customer_id."' AND billsec > 0 ".$where."";
 		$query = $this->db->query($sql);
 		$row = $query->row();
 		return $row->total_buy_cost;
@@ -819,7 +819,7 @@ class Cdr_model extends CI_Model {
 			$where .= "AND created_time <= '".sprintf("%.0f", $date_to)."' ";
 		}
 
-		$sql = "SELECT SUM(billsec) AS total_seconds FROM cdr WHERE country_id = '".$country_id."' AND (hangup_cause = 'NORMAL_CLEARING' || hangup_cause = 'ALLOTTED_TIMEOUT') AND billsec > 0 ".$where." ";
+		$sql = "SELECT SUM(billsec) AS total_seconds FROM cdr WHERE country_id = '".$country_id."' AND billsec > 0 ".$where." ";
 		$query = $this->db->query($sql);
 		$row = $query->row();
 		return $row->total_seconds;
@@ -842,8 +842,8 @@ class Cdr_model extends CI_Model {
 			$where .= "AND created_time <= '".sprintf("%.0f", $date_to)."' ";
 		}
 
-		$sql = "SELECT COUNT(*) AS total_calls FROM cdr WHERE country_id = '".$country_id."' AND (hangup_cause = 'NORMAL_CLEARING' || hangup_cause = 'ALLOTTED_TIMEOUT') AND billsec > 0 ".$where."";
-		$query = $this->db->query($sql);
+//		$sql = "SELECT COUNT(*) AS total_calls FROM cdr WHERE country_id = '".$country_id."' AND billsec > 0 ".$where."";
+        $sql = "SELECT COUNT(*) AS total_calls FROM cdr WHERE country_id = '".$country_id."' AND billsec > 0 ".$where."";		$query = $this->db->query($sql);
 		$row = $query->row();
 		return $row->total_calls;
 	}
@@ -865,8 +865,9 @@ class Cdr_model extends CI_Model {
 			$where .= "AND created_time <= '".sprintf("%.0f", $date_to)."' ";
 		}
 
-		$sql = "SELECT SUM(total_sell_cost) AS total_sell_cost FROM cdr WHERE country_id = '".$country_id."' AND (hangup_cause = 'NORMAL_CLEARING' || hangup_cause = 'ALLOTTED_TIMEOUT') AND billsec > 0 ".$where."";
-		$query = $this->db->query($sql);
+//		$sql = "SELECT SUM(total_sell_cost) AS total_sell_cost FROM cdr WHERE country_id = '".$country_id."' AND billsec > 0 ".$where."";
+        $sql = "SELECT SUM(total_sell_cost) AS total_sell_cost FROM cdr WHERE country_id = '".$country_id."' AND billsec > 0 ".$where."";
+        $query = $this->db->query($sql);
 		$row = $query->row();
 		return $row->total_sell_cost;
 	}
@@ -888,7 +889,7 @@ class Cdr_model extends CI_Model {
 			$where .= "AND created_time <= '".sprintf("%.0f", $date_to)."' ";
 		}
 
-		$sql = "SELECT SUM(total_buy_cost) AS total_buy_cost FROM cdr WHERE country_id = '".$country_id."' AND (hangup_cause = 'NORMAL_CLEARING' || hangup_cause = 'ALLOTTED_TIMEOUT') AND billsec > 0 ".$where."";
+		$sql = "SELECT SUM(total_buy_cost) AS total_buy_cost FROM cdr WHERE country_id = '".$country_id."' AND billsec > 0 ".$where."";
 		$query = $this->db->query($sql);
 		$row = $query->row();
 		return $row->total_buy_cost;

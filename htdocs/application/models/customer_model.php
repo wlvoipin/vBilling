@@ -563,6 +563,21 @@ class Customer_model extends CI_Model {
 		$query = $this->db->query($sql);
 		return $query;
 	}
+	
+
+	function change_localization_group($node_id, $value)
+	{
+		$sql = "UPDATE acl_nodes SET localization_id='".$value."' WHERE id='".$node_id."' ";
+		$query = $this->db->query($sql);
+		return $query;
+	}
+	
+	function change_localization_group_sip($id, $value)
+	{
+		$sql = "UPDATE directory SET localization_id='".$value."' WHERE id='".$id."' ";
+		$query = $this->db->query($sql);
+		return $query;
+	}		
 
 	function change_acl_node_type($node_id, $value)
 	{
@@ -587,7 +602,7 @@ class Customer_model extends CI_Model {
 		return $query;
 	}
 
-	function insert_new_sip_access($customer_id, $username, $password, $domain, $sofia_id, $cid)
+	function insert_new_sip_access($customer_id, $username, $password, $domain, $sofia_id, $cid) //, $did_id, $forwardnumber, $forwardip)
 	{
 		$added_by = 0;
 
@@ -599,6 +614,7 @@ class Customer_model extends CI_Model {
 		$new_password = md5($new_password);
 
 		//insert into directory table 
+		// $sql = "INSERT INTO directory (customer_id, username, domain, domain_sofia_id, added_by, enabled, cid, did_id, forwardnumber, forwardip) VALUES ('".$customer_id."', '".$username."', '".$domain."', '".$sofia_id."', '".$added_by."', '1', '".$cid."', '".$did_id."', '".$forwardnumber."', '".$forwardip."')";
 		$sql = "INSERT INTO directory (customer_id, username, domain, domain_sofia_id, added_by, enabled, cid) VALUES ('".$customer_id."', '".$username."', '".$domain."', '".$sofia_id."', '".$added_by."', '1', '".$cid."')";
 		$query = $this->db->query($sql);
 		$inser_id = $this->db->insert_id();
@@ -872,6 +888,13 @@ function customer_cdr_count($customer_id, $filter_date_from, $filter_date_to, $f
 	$query = $this->db->query($sql);
 	$count = $query->num_rows();
 	return $count;
+}
+
+function customer_balance($customer_id)
+{
+	$sql = "SELECT customer_balance FROM customers WHERE customer_id = '".$customer_id."' ";
+	$query = $this->db->query($sql);
+	return $query;
 }
 
 function customer_balance_history($customer_id)

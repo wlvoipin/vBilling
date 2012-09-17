@@ -30,6 +30,180 @@
 class Groups_model extends CI_Model {
 
 	// list all customers
+	
+	function getAllLocalizationGroups(){
+		$data = array();
+		$sql = "SELECT * FROM localization_groups ORDER BY name ASC";
+		$query = $this->db->query($sql);
+		if($query->num_rows()>0){
+			foreach($query->result() as $row){
+				$data[] = $row;
+			}			
+		}
+		$query->free_result();
+		return $data;
+	}
+	
+	function get_all_localization_groups($num, $offset, $filter_groups, $filter_group_type, $filter_sort)
+	{
+		if($offset == ''){$offset='0';}
+
+		$order_by = "";
+		if($filter_sort == 'name_asc')
+		{
+			$order_by = "ORDER BY name ASC";
+		}
+		else if($filter_sort == 'name_dec')
+		{
+			$order_by = "ORDER BY name DESC";
+		}
+		else
+		{
+			$order_by = "ORDER BY id DESC";
+		}
+
+		$where = '';
+		$where .= "WHERE 1 ";
+
+		if($filter_groups != '')
+		{
+			if(is_numeric($filter_groups))
+			{
+				$where .= 'AND id = '.$this->db->escape($filter_groups).' ';
+			}
+		}
+
+		if($filter_group_type != '')
+		{
+			if(is_numeric($filter_group_type))
+			{
+				$where .= 'AND enabled = '.$filter_group_type.' ';
+			}
+		}
+
+		$sql = "SELECT * FROM localization_groups ".$where." ".$order_by." LIMIT $offset,$num";
+		$query = $this->db->query($sql);
+		return $query;
+	}
+
+	function get_all_localization_groups_count($filter_groups, $filter_group_type)
+	{
+		$where = '';
+		$where .= "WHERE 1 ";
+
+		if($filter_groups != '')
+		{
+			if(is_numeric($filter_groups))
+			{
+				$where .= 'AND id = '.$this->db->escape($filter_groups).' ';
+			}
+		}
+
+		if($filter_group_type != '')
+		{
+			if(is_numeric($filter_group_type))
+			{
+				$where .= 'AND enabled = '.$filter_group_type.' ';
+			}
+		}
+
+		$sql = "SELECT * FROM localization_groups ".$where." ";
+		$query = $this->db->query($sql);
+		$count = $query->num_rows();
+		return $count;
+	}
+	
+	function get_single_localization_group($localization_group_id)
+	{
+		$sql = "SELECT * FROM localization_groups WHERE id='".$localization_group_id."'";
+		$query = $this->db->query($sql);
+		return $query;
+	}	
+	
+	//***************CARRIER GATEWAYS ********************************
+	function get_localization_rules($localization_group_id)
+	{
+		$sql = "SELECT * FROM localization_rules WHERE localization_id = '".$localization_group_id."' ORDER BY name ASC";
+		$query = $this->db->query($sql);
+		return $query;
+	}	
+	
+	//new group
+	function insert_new_localization_group($name)
+	{
+		$sql = "INSERT INTO localization_groups (name, enabled) VALUES ('".$name."', '1') ";
+		$query = $this->db->query($sql);
+		return $this->db->insert_id();
+	}	
+	
+	 
+	function enable_disable_localization_group($data)
+	{
+		$sql = "UPDATE localization_groups SET enabled = '".$data['status']."' WHERE id = '".$data['localization_id']."'";
+		return $query = $this->db->query($sql);
+	}	
+	
+	function enable_disable_localization_rules($data)
+	{
+		$sql = "UPDATE localization_rules SET enabled = '".$data['status']."' WHERE localization_id = '".$data['localization_id']."'";
+		return $query = $this->db->query($sql);
+	}	
+	
+	function insert_localization_rules($localization_id, $name,$cut, $add, $enabled)
+	{
+		$sql = "INSERT INTO localization_rules (localization_id, name,enabled, lcut, ladd) VALUES ('".$localization_id."', '".$name."', '".$enabled."', '".$cut."', '".$add."')";
+		return $query = $this->db->query($sql);		
+		 
+	}
+	
+	function update_localization_group($groupname, $localization_id)
+	{
+		$sql = "UPDATE localization_groups SET name='".$groupname."' WHERE id='".$localization_id."'";
+		return $query = $this->db->query($sql);		
+	}
+	
+	function delete_localization_rules($localization_id)
+	{
+		$sql = "DELETE FROM localization_rules WHERE localization_id = '".$localization_id."' ";
+		$query = $this->db->query($sql);		 
+		return $query;
+	}	
+	
+	//populate localization group select box
+	function localization_group_select_box($group_id)
+	{
+		$sql = "SELECT * FROM localization_groups ORDER BY name ASC ";
+		$query = $this->db->query($sql);
+
+		$data = '';
+		$data .= '<option value="">Select Localization Group</option>';
+
+		if($query->num_rows() > 0)
+		{
+			foreach($query->result() as $row)
+			{
+				if($rate_group_id == $row->id)
+				{
+					$data .= '<option value="'.$row->id.'" selected>'.$row->name.'</option>';
+				}
+				else
+				{
+					$data .= '<option value="'.$row->id.'">'.$row->name.'</option>';
+				}
+			}
+		}
+
+		return $data;
+	}	
+	
+	function delete_localization_group($localization_group_id)
+	{
+		//delete the group
+		$sql = "DELETE FROM localization_groups WHERE id = '".$localization_group_id."' ";
+		return $query = $this->db->query($sql);	
+	}	
+
+	// list all customers
 	function get_all_groups($num, $offset, $filter_groups, $filter_group_type, $filter_sort)
 	{
 		if($offset == ''){$offset='0';}
@@ -168,11 +342,11 @@ class Groups_model extends CI_Model {
 	function create_new_rate_group_rate_tbl($insert_id)
 	{
 		$sql = "CREATE TABLE IF NOT EXISTS `lcr_group_".$insert_id."` (
-			`id` int(11) NOT NULL AUTO_INCREMENT,
-			`digits` varchar(15) NOT NULL,
+			`id` int(20) NOT NULL AUTO_INCREMENT,
+			`digits` bigint(20) NOT NULL,
 			`country_id` int(4) NOT NULL,
-			`sell_rate` float(11,5) unsigned NOT NULL,
-			`cost_rate` float(11,5) unsigned NOT NULL,
+			`sell_rate` float(11,4) unsigned NOT NULL,
+			`cost_rate` float(11,4) unsigned NOT NULL,
 			`sellblock_min_duration` int(4) NOT NULL,
 			`buyblock_min_duration` int(4) NOT NULL,
 			`buy_initblock` int(4) NOT NULL,
@@ -182,8 +356,8 @@ class Groups_model extends CI_Model {
 			`carrier_id` int(11) NOT NULL,
 			`lead_strip` int(11) NOT NULL,
 			`trail_strip` int(11) NOT NULL,
-			`prefix` varchar(16) NOT NULL,
-			`suffix` varchar(16) NOT NULL,
+			`prefix` varchar(20) NOT NULL,
+			`suffix` varchar(20) NOT NULL,
 			`lcr_profile` int(3) DEFAULT NULL,
 			`date_start` datetime NOT NULL DEFAULT '1970-01-01 00:00:00',
 			`date_end` datetime NOT NULL DEFAULT '2030-12-31 00:00:00',
@@ -195,11 +369,11 @@ class Groups_model extends CI_Model {
 			`admin_rate_id` int(11) NOT NULL DEFAULT '0',
 			`reseller_rate_group` varchar(50) DEFAULT NULL,
 			`reseller_rate_id` int(11) NOT NULL DEFAULT '0',
-			PRIMARY KEY (`id`)
-			) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;";
+		  KEY `id` (`id`)
+			) ENGINE=InnoDB DEFAULT AUTO_INCREMENT=1;";
 		$query = $this->db->query($sql);
 
-		$sql2 = "UPDATE groups SET 	group_rate_table = 'lcr_group_".$insert_id."' WHERE id = '".$insert_id."'";
+		$sql2 = "UPDATE groups SET group_rate_table = 'lcr_group_".$insert_id."' WHERE id = '".$insert_id."'";
 		$query2 = $this->db->query($sql2);
 	}
 
@@ -341,6 +515,40 @@ function check_group_in_use($rate_group_id)
 	$sql = "SELECT * FROM customers WHERE customer_rate_group = '".$rate_group_id."' ";
 	$query = $this->db->query($sql);
 	return $query;
+}
+
+function update_localization_group_sip($localization_id)
+	{
+		$sql = "UPDATE directory SET localization_id='0' WHERE localization_id='".$localization_id."'";
+		return $query = $this->db->query($sql);		
+	}
+	
+function update_localization_group_acl($localization_id)
+	{
+		$sql = "UPDATE acl_nodes SET localization_id='0' WHERE localization_id='".$localization_id."'";
+		return $query = $this->db->query($sql);		
+	}
+	
+
+function check_localization_group_in_use_by_sip($localization_id )
+{
+	$sql = "SELECT * FROM directory WHERE localization_id  = '".$localization_id ."' ";
+	$query = $this->db->query($sql);
+	if($query->num_rows()>0){
+		return TRUE;
+	}	
+	return FALSE;
+}
+
+
+function check_localization_group_in_use_by_acl($localization_id )
+{
+	$sql = "SELECT * FROM acl_nodes WHERE localization_id  = '".$localization_id ."' ";
+	$query = $this->db->query($sql);
+	if($query->num_rows()>0){
+		return TRUE;
+	}	
+	return FALSE;
 }
 
 function delete_group($rate_group_id)
