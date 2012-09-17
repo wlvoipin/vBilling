@@ -74,7 +74,7 @@
                 <td align="left" width="55%"><input onmouseover="return overlib('<?php echo $this->lang->line('add_customer_view_firstname');?>', HAUTO, VAUTO)" onmouseout="return nd()" name="firstname" type="text" class="textfield" id="firstname" maxlength="50"></td>
               </tr>
               <tr>
-                <td align="right"><span class="required">*</span> Lastname:</td>
+                <td align="right"> Lastname:</td>
                 <td align="left"><input onmouseover="return overlib('<?php echo $this->lang->line('add_customer_view_lastname');?>', HAUTO, VAUTO)" onmouseout="return nd()" type="text" value="" name="lastname" id="lastname" maxlength="50" class="textfield"></td>
               </tr>
               <tr>
@@ -308,7 +308,7 @@
         var pass_mismatched_error = 0;
         
         //common required fields check
-        if(firstname == '' || lastname == '' || maxcalls == '' || address == '' || city == '' || state == '' || zipcode == '' || country == '' || group == '' || billing_cycle == '')
+        if(firstname == '' || maxcalls == '' || address == '' || city == '' || state == '' || zipcode == '' || country == '' || group == '' || billing_cycle == '')
         {
             required_error = 1;
         }

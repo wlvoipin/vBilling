@@ -69,14 +69,35 @@
     <td></td>
     <td></td>
 </tr>
-              
+
 <tr>
     <td align="center" height="20" colspan="3">
         <table cellspacing="0" cellpadding="0" border="0" width="95%" class="search_col">
                 
                 <thead>
-                    
-                    
+                    <tr class="bottom_link">
+                        <td width="34%" align="center">Current Balance</td>
+                        <td width="34%" align="center">
+                            <?php if($current_balance->num_rows() > 0) {?>
+								<?php foreach ($current_balance->result() as $row) ?>
+                            	<td align="center"><?php echo $row->customer_balance; ?></td>
+                            <?php } ?>
+	</td>
+                    </tr>
+                    <tr><td colspan="3" id="shadowDiv" style="height:5px;margin-top:-1px"></td></tr>
+                </thead>
+            </table>
+    </td>
+</tr>
+
+<td height="20"></td>
+<td></td>
+<td></td>
+<tr>
+    <td align="center" height="20" colspan="3">
+        <table cellspacing="0" cellpadding="0" border="0" width="95%" class="search_col">
+                
+                <thead>
                     <tr class="bottom_link">
                         <td width="34%" align="center">Date</td>
                         <td width="33%" align="center">Modified Balance</td>
@@ -100,7 +121,6 @@
                                 
                                 <tr class="main_text"><td align="center" colspan="3" style="color:red;">No Records Found</td></tr>
                             <?php } ?>
-                    
                 </tbody>
             </table>
     </td>

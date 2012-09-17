@@ -114,11 +114,11 @@
 			<table width="100%" border="0" cellpadding="0" cellspacing="0">
 				<thead>
 					<tr>
-						<th height="20" colspan="3" align="left" class="tbl_main_head">                        
-							<div class="left">COMMAND:</div> 
+						<th height="20" colspan="3" align="left" class="tbl_main_head">
+							<div class="left">COMMAND:</div>
 							<div class="left" style="margin-left:10px; margin-top:-5px">
 								<form action="" method="post">
-									<input type="text" name="manual_command" id="manual_command" class="textfield"/> 
+									<input type="text" name="manual_command" id="manual_command" class="textfield"/>
 									<a href="#" class="run_command" style="font-size:12px;">RUN</a>
 								</form>
 							</div>

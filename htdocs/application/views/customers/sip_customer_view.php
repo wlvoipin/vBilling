@@ -95,15 +95,16 @@ window.location = '../../home/';
                      <?php } ?>          
                     
                     <tr class="bottom_link">
-                        <td width="20%" align="center">Username</td>
-                        <td width="20%" align="center">Password</td>
-                        <td width="20%" align="center">CID</td>
-                        <td width="20%" align="center">Domain</td>
-                        <td width="20%" align="center">Sofia Profile</td>
-                        <td width="20%" align="center">Delete</td>
-                        <td width="20%" align="center">Enable/Disable</td>
-                    </tr>
-                    <tr><td colspan="7" id="shadowDiv" style="height:5px;margin-top:-1px"></td></tr>
+                        <td width="7%" align="center">Username</td>
+                      <td width="10%" align="center">Password</td>
+                      <td width="11%" align="center">CID</td>
+                      <td width="11%" align="center">Domain</td>
+                      <td width="11%" align="center">Sofia Profile</td>
+                      <td width="11%" align="center">Delete</td>
+                      <td width="17%" align="center">Enable/Disable</td>
+                      <td width="10%" align="center">Group</td>
+                  </tr>
+                    <tr><td colspan="8" id="shadowDiv" style="height:5px;margin-top:-1px"></td></tr>
                 </thead>
                 
                 <tbody id="dynamic">
@@ -121,7 +122,17 @@ window.location = '../../home/';
                                         <td align="center"><?php echo $row->cid; ?></td>
                                         <td align="center"><?php echo $row->domain; ?></td>
                                         <td align="center"><?php echo sofia_profile_name($row->domain_sofia_id); ?></td>
-                                        
+                                        <td align="center"><select name="localiz_group[]" id="localize_group-<?php echo $row->id; ?>" onchange="updateLocalizationGroup(<?php echo $row->id; ?>,this);">
+                                                            <option value="">Select</option>
+                                                            <?php foreach($groups as $index=>$group){
+															$selected = "";
+															if($group->id==$row->localization_id){
+																$selected = "selected='selected'";
+															}
+															 ?>
+                                                            <option value="<?php echo $group->id;?>" <?php echo $selected;?>><?php echo $group->name;?></option>
+                                                            <?php } ?>
+                                                        </select></td>
                                         
                                         <?php if(customer_any_cell($customer_id, 'parent_id') == $this->session->userdata('customer_id')){?>
                                             <?php if($this->session->userdata('user_type') == 'admin'){?>
@@ -133,53 +144,52 @@ window.location = '../../home/';
                                                         if(sub_admin_access_any_cell($this->session->userdata('user_id'), 'delete_sip') == 1)
                                                         {
                                             ?>
-                                                            <td align="center">
-                                                                <a href="#" id="<?php echo $row->id;?>" class="delete_access"><img src="<?php echo base_url();?>assets/images/button_cancel.png" style="width:16px;border:none;cursor:pointer;" /></a>
-                                                            </td>
-                                            <?php 
+                                                            <td width="2%" align="center">
+                                                                <a href="#" id="<?php echo $row->id;?>" class="delete_access"><img src="<?php echo base_url();?>assets/images/button_cancel.png" style="width:16px;border:none;cursor:pointer;" /></a>                                                            </td>
+                <?php 
                                                         }
                                                         else
                                                         {
                                             ?>
-                                                            <td align="center">---</td>
-                                            <?php
+                                                            <td width="1%" align="center">---</td>
+                                    <?php
                                                         }
                                                     }
                                             ?>
                                         <?php } else { ?>
-                                            <td align="center">---</td>
-                                        <?php } ?>
+                                            <td width="1%" align="center">---</td>
+                                    <?php } ?>
                                         
                                         
                                         <?php if(customer_any_cell($customer_id, 'parent_id') == $this->session->userdata('customer_id')){?>
                                             <?php if($this->session->userdata('user_type') == 'admin'){?>
-                                                <td align="center"><input type="checkbox" id="<?php echo $row->id;?>" class="enable_checkbox" <?php if($row->enabled == 1){ echo 'checked="checked"';}?>/></td>
-                                            <?php 
+                                                <td width="2%" align="center"><input type="checkbox" id="<?php echo $row->id;?>" class="enable_checkbox" <?php if($row->enabled == 1){ echo 'checked="checked"';}?>/></td>
+                <?php 
                                                 } else if($this->session->userdata('user_type') == 'sub_admin'){
                                                         if(sub_admin_access_any_cell($this->session->userdata('user_id'), 'enable_disable_sip') == 1)
                                                         {
                                             ?>
-                                                            <td align="center"><input type="checkbox" id="<?php echo $row->id;?>" class="enable_checkbox" <?php if($row->enabled == 1){ echo 'checked="checked"';}?>/></td>
-                                            <?php 
+                                                            <td width="2%" align="center"><input type="checkbox" id="<?php echo $row->id;?>" class="enable_checkbox" <?php if($row->enabled == 1){ echo 'checked="checked"';}?>/></td>
+                <?php 
                                                         }
                                                         else
                                                         {
                                             ?>
-                                                            <td align="center"><?php if($row->enabled == 1){ echo 'Enabled';} else { echo "Disabled";}?></td>
-                                            <?php
+                                                            <td width="2%" align="center"><?php if($row->enabled == 1){ echo 'Enabled';} else { echo "Disabled";}?></td>
+                                    <?php
                                                         }
                                                     }
                                             ?>
                                         <?php } else { ?>
-                                            <td align="center"><?php if($row->enabled == 1){ echo 'Enabled';} else { echo "Disabled";}?></td>
-                                        <?php } ?>
+                                            <td width="2%" align="center"><?php if($row->enabled == 1){ echo 'Enabled';} else { echo "Disabled";}?></td>
+                                      <?php } ?>
                                         
                                     </tr>
-                                    <tr style="height:5px;"><td colspan="7" id="shadowDiv" style="height:5px;margin-top:0px;background-color:#fff"></td></tr>
+                                    <tr style="height:5px;"><td colspan="8" id="shadowDiv" style="height:5px;margin-top:0px;background-color:#fff"></td></tr>
                                 <?php } ?>
                             <?php } else { ?>
                                 
-                                <tr class="main_text"><td align="center" colspan="7" style="color:red;">No Records Found</td></tr>
+                                <tr class="main_text"><td align="center" colspan="8" style="color:red;">No Records Found</td></tr>
                             <?php } ?>
                     
                 </tbody>
@@ -220,7 +230,9 @@ window.location = '../../home/';
 	<p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>Are You Sure Want To Disable This SIP Account?</p>
     </div>
     
-    
+ <div id="dialog-confirm-update-localization-group" title="Localization Group Update" style="display:none;">
+	<p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span> Are You Sure Want To Update Localiztion group?</p>
+    </div>    
 <script type="text/javascript">
         $('.delete_access').live('click', function(){
             var id = $(this).attr('id');
@@ -352,5 +364,38 @@ window.location = '../../home/';
             });
            return false;
         });
+		
+		function updateLocalizationGroup(node_id,thisobj){
+		var id = node_id;
+        var value = $(thisobj).val();
+		$( "#dialog-confirm-update-localization-group" ).dialog({
+                    resizable: false,
+                    height:180,
+                    modal: true,
+                    buttons: {
+                        "Continue": function() {
+                            var data  = 'id='+id+'&value='+value;
+                            $.ajax({
+                                type: "POST",
+                                url: base_url+"customers/change_localization_group_sip",
+                                data: data,
+                                success: function(html){
+                                    $( "#dialog-confirm-update-localization-group" ).dialog( "close" );
+                                    $('.success').html("Localization group changed.");
+                                    $('.success').fadeOut();
+                                    $('.success').fadeIn();
+                                    document.getElementById('success_div').scrollIntoView();
+									$( this ).dialog( "close" ); 
+                                }
+                            });
+                        },
+                        Cancel: function() {
+                            $( this ).dialog( "close" );                           
+                        }
+                    }
+            });
+               
+           return false;
+	}
         
     </script>

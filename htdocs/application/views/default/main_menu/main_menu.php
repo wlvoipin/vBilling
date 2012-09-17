@@ -71,6 +71,20 @@
 					}
 				}
 				?>
+				    <!-- <?php if($this->session->userdata('user_type') == 'admin'){?>
+				    <li <?php if($selected == "did") { echo 'class="current"';} ?>><a  href="<?php echo base_url();?>did/"><img src="<?php echo base_url();?>assets/images/icons/cdr.png"/> <span><?php echo $this->lang->line('main_menu_did');?></span> </a></li>
+				    <?php
+				} else if($this->session->userdata('user_type') == 'sub_admin'){
+				    if(sub_admin_access_any_cell($this->session->userdata('user_id'), 'view_did') == 1)
+				    {
+				        ?>
+				        <li <?php if($selected == "did") { echo 'class="current"';} ?>><a  href="<?php echo base_url();?>did/"><img src="<?php echo base_url();?>assets/images/icons/cdr.png"/> <span><?php echo $this->lang->line('main_menu_did');?></span> </a></li>
+				        <?php
+				    }
+				}
+				    ?> -->
+
+
   <?php if($this->session->userdata('user_type') == 'admin'){?>
   <li <?php if($selected == "cdr") { echo 'class="current"';} ?>><a  href="<?php echo base_url();?>cdr/"><img src="<?php echo base_url();?>assets/images/icons/cdr.png"/> <span><?php echo $this->lang->line('main_menu_call_details');?></span> </a></li>
   <?php 

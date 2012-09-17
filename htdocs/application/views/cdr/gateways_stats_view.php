@@ -191,7 +191,7 @@
 								}
 								?></td>
               <td align="center"><?php 
-                                        $acd = $total_duration_in_min_sec / $result;
+					$acd = $total_duration_in_min_sec / $this->cdr_model->get_gateway_total_answered_calls($row->gateway_name, $row->sofia_id, $filter_date_from, $filter_date_to);
                                         echo round($acd,4).'&nbsp;'.$filter_display_results;
                                     ?></td>
               <td align="center"><?php echo "PDD Value" ?></td>

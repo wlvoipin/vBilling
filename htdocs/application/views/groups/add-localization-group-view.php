@@ -31,7 +31,7 @@
 	<tbody><tr>
             <td width="21" height="35"></td>
             <td width="825" class="heading">
-            New SIP Credentials            </td>
+            New Group            </td>
             <td width="178">
             <table cellspacing="0" cellpadding="0" width="170" height="42" class="search_col">
                 <tbody><tr>
@@ -47,8 +47,6 @@
         <tr>
         <td background="<?php echo base_url();?>assets/images/line.png" height="7" colspan="3"></td>
         </tr>
-        
-        <?php require_once("pop_up_menu.php");?>
 
                 <tr>
             <td height="10"></td>
@@ -66,59 +64,22 @@
               
 <tr>
     <td align="center" height="20" colspan="3">
-        <form enctype="multipart/form-data"  method="post" action="" name="addSipAccess" id="addSipAccess">
+        <form enctype="multipart/form-data"  method="post" action="" name="addGroup" id="addGroup">
             <table cellspacing="3" cellpadding="2" border="0" width="95%" class="search_col">
-                
-                <input type="hidden" name="customer_id" id="customer_id" value="<?php echo $customer_id;?>"/>
                 
                 <tbody>
                 
                 <tr>
-                    <td align="right" width="45%"><span class="required">*</span> Username:</td>
-                    <td align="left" width="55%"><input type="text" name="username" id="username" readonly maxlength="6" class="textfield" value="<?php echo $username;?>"></td>
+                    <td align="right" width="45%"><span class="required">*</span> Localization Group Name:</td>
+                    <td align="left" width="55%"><input type="text" value="" name="groupname" id="groupname" maxlength="50" class="textfield"></td>
                 </tr>
                 
-                <tr>
-                    <td align="right" width="45%"><span class="required">*</span> Password:</td>
-                    <td align="left" width="55%"><input type="text" name="password" id="password" readonly maxlength="8" class="textfield" value="<?php echo $password;?>"></td>
-                </tr>
-                
-                <tr>
-                    <td align="right" width="45%"><span class="required">*</span> CID:</td>
-                    <td align="left" width="55%"><input type="text" name="cid" id="cid"  maxlength="6" class="textfield numeric" value="<?php echo $username;?>"></td>
-                </tr>
-                
-                <tr>
-                    <td align="right"><span class="required">*</span> SIP IP:</td>
-                    <td align="left">
-                        
-                        <select  name="sip_ip" id="sip_ip" class="textfield">
-                            <option value="">Select</option>
-                            <?php echo get_all_sip_ips_customer_not_selected($this->session->userdata('customer_id'));?>
-                        </select>
-                    </td>
-                </tr>
-		                <!-- <tr>
-		                    <td align="right"> DID:</td>
-		                    <td align="left">
-		                        <select name="did_id" id="did_id" class="textfield">  
-		                        <?php did_select_box($did_id, $this->session->userdata('customer_id')); ?>
-		                    </select>               
-		                </tr>
-		                <tr>
-		                    <td align="right" width="45%"> Forward to Number:</td>
-		                    <td align="left" width="55%"><input type="text" name="forwardnumber" id="forwardnumber"  maxlength="6" class="textfield numeric" value="<?php echo $forwardnumber;?>"></td>
-		                </tr>      
-		                <tr>
-		                    <td align="right" width="45%"> Forward to IP:</td>
-		                    <td align="left" width="55%"><input type="text" name="forwardip" id="forwardip"  maxlength="6" class="textfield numeric" value="<?php echo $forwardip;?>"></td>
-				</tr> -->
                 
                 <tr>
                     <td align="right" colspan="2">&nbsp;</td>
                 </tr>
                 <tr>
-                    <td align="center" colspan="2"><input border="0" id="submitaddSipAccessForm" type="image" src="<?php echo base_url();?>assets/images/btn-submit.png"></td>
+                    <td align="center" colspan="2"><input border="0" id="submitaddGroupForm" type="image" src="<?php echo base_url();?>assets/images/btn-submit.png"></td>
                     
                     
                 </tr>
@@ -149,9 +110,7 @@
     </tbody></table>
 
 <script type="text/javascript">
-    
-    
-    $('#addSipAccess').submit(function(){
+    $('#addGroup').submit(function(){
         //show wait msg 
     $.blockUI({ css: { 
                     border: 'none', 
@@ -164,40 +123,21 @@
                     } 
                 });
                 
-        var username       = $('#username').val();
-        var password       = $('#password').val();
-        var sip_ip         = $('#sip_ip').val();
-        var cid            = $('#cid').val();
-        var did_id         = $('#did_id').val();
-        var forwardnumber  = $('#forwardnumber').val();
-        var forwardip      = $('#forwardip').val();        
+        var groupname = $('#groupname').val();
+        
         var required_error = 0;
-        var password_error = 0;
         
         //common required fields check
-        if(username == '' || password == '' || sip_ip == '' || cid == '')
+        if(groupname == '')
         {
             required_error = 1;
-        }
-        
-        if(password != '')
-        {
-            if(password.length < 6)
-            {
-                password_error = 1;
-            }
         }
         
         var text = "";
         
         if(required_error == 1)
         {
-            text += "Fields With * Are Required Fields.<br/>";
-        }
-        
-        if(password_error == 1)
-        {
-            text += "Password must be atleast 6 characters long.<br/>";
+            text += "Fields With * Are Required Fields<br/>";
         }
         
         if(text != '')
@@ -212,13 +152,18 @@
         }
         else
         {
-           var form = $('#addSipAccess').serialize();
+           var form = $('#addGroup').serialize();
             $.ajax({
                     type: "POST",
-					url: base_url+"customer/insert_new_sip_access",
+					url: base_url+"groups/insert_new_localization_group",
 					data: form,
                     success: function(html){
-                     window.location = base_url+"customer/sip_access";
+                            $('.error').hide();
+                            $('.success').html("Group added successfully.");
+                            $('.success').fadeOut();
+                            $('.success').fadeIn();
+                            document.getElementById('success_div').scrollIntoView();
+                            $.unblockUI();
                     }
 				});
                 
@@ -226,7 +171,5 @@
         }
         return false;
     });
-    $('.numeric').numeric();
-   // $('.numeric').numeric({allow:"."});
     
 </script>

@@ -73,6 +73,10 @@
             
             <?php if($this->session->userdata('user_type') == 'admin'){?>
                 <li><a href="<?php echo base_url();?>groups/import_by_csv" <?php if($sub_selected == 'import_by_csv') { echo 'class="sub_selected"' ;}?>>Import By CSV</a></li>
+				
+				<li><a href="<?php echo base_url();?>groups/localization_groups" <?php if($sub_selected == 'localization_groups') { echo 'class="sub_selected"' ;}?>>Localization Groups</a></li>
+				
+				<li><a href="<?php echo base_url();?>groups/add_localization_groups" <?php if($sub_selected == 'add_localization_groups') { echo 'class="sub_selected"' ;}?>>Add Localization Groups</a></li>
             <?php 
             } else if($this->session->userdata('user_type') == 'sub_admin'){
                 if(sub_admin_access_any_cell($this->session->userdata('user_id'), 'import_csv') == 1)

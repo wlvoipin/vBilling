@@ -94,6 +94,9 @@
                         <td width="15%" align="center">Username</td>
                         <td width="15%" align="center">Password</td>
                         <td width="15%" align="center">CID</td>
+                        <!-- <td width="15%" align="center">DID</td>
+                        <td width="15%" align="center">Forward Number</td>
+                        <td width="15%" align="center">Forward IP</td>         -->
                         <td width="20%" align="center">Domain</td>
 <!--
                         <td width="15%" align="center">Sofia Profile</td>
@@ -112,6 +115,9 @@
                                         <td align="center" id="reset_pass"><a class="reset_pass" href="#" id="<?php echo $row->id; ?>">Reset Password</a></td>
                                         <td align="center"><?php echo $row->cid; ?></td>
                                         <td align="center"><?php echo $row->domain; ?></td>
+                                        <!-- <td align="center"><?php echo $row->did_id; ?></td>         
+                                        <td align="center"><?php echo $row->forwardnumber; ?></td>
+                                        <td align="center"><?php echo $row->forwardip; ?></td> -->
 <!--
                                         <td align="center"><?php echo sofia_profile_name($row->domain_sofia_id); ?></td>
 -->                                        

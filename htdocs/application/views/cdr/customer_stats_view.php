@@ -371,7 +371,7 @@
                                     
                                     if($filter_display_results == 'sec')
                                     {
-                                        $total_duration_in_min_sec = $total_duration; //be defualt it is in sec
+                                        $total_duration_in_min_sec = $total_duration; //default in sec
                                     }
                                     else
                                     {

@@ -91,7 +91,7 @@ window.location = '../../home/';
                 <td align="left" width="55%"><input type="text" value="<?php echo $row->customer_firstname;?>" name="firstname" id="firstname" maxlength="50" class="textfield"></td>
               </tr>
               <tr>
-                <td align="right"><span class="required">*</span> Lastname:</td>
+                <td align="right"> Lastname:</td>
                 <td align="left"><input type="text" value="<?php echo $row->customer_lastname;?>" name="lastname" id="lastname" maxlength="50" class="textfield"></td>
               </tr>
               <tr>
@@ -440,7 +440,7 @@ $('#addCust').submit(function(){
         var pass_mismatched_error = 0;
         
         //common required fields check
-        if(firstname == '' || lastname == '' || maxcalls == '' || address == '' || city == '' || state == '' || zipcode == '' || country == '' || group == '' || tot_acl_nodes == '' || tot_sip_acc == '' || billing_cycle == '')
+        if(firstname == '' || maxcalls == '' || address == '' || city == '' || state == '' || zipcode == '' || country == '' || group == '' || tot_acl_nodes == '' || tot_sip_acc == '' || billing_cycle == '')
         {
             required_error = 1;
         }
@@ -642,7 +642,7 @@ $('#addCust').submit(function(){
         var pass_mismatched_error = 0;
         
         //common required fields check
-        if(firstname == '' || lastname == '' || maxcalls == '' || address == '' || city == '' || state == '' || zipcode == '' || country == '' || group == '' || billing_cycle == '')
+        if(firstname == '' || maxcalls == '' || address == '' || city == '' || state == '' || zipcode == '' || country == '' || group == '' || billing_cycle == '')
         {
             required_error = 1;
         }

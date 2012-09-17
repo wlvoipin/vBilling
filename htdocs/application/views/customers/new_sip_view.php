@@ -102,6 +102,22 @@ window.location = '../../home/';
                     </td>
                 </tr>
                 
+		                <!-- <tr>
+		                    <td align="right"> DID:</td>
+		                    <td align="left">
+		                        <select name="did_id" id="did_id" class="textfield">  
+		                        <?php // did_select_box($did_id, $this->session->userdata('customer_id')); ?>
+		                    </select>               
+		                </tr>
+		                <tr>
+		                    <td align="right" width="45%"> Forward to Number:</td>
+		                    <td align="left" width="55%"><input type="text" name="forwardnumber" id="forwardnumber"  maxlength="6" class="textfield numeric" value="<?php echo $forwardnumber;?>"></td>
+		                </tr>      
+		                <tr>
+		                    <td align="right" width="45%"> Forward to IP:</td>
+		                    <td align="left" width="55%"><input type="text" name="forwardip" id="forwardip"  maxlength="6" class="textfield numeric" value="<?php echo $forwardip;?>"></td>
+				</tr> -->
+
                 <tr>
                     <td align="right" colspan="2">&nbsp;</td>
                 </tr>
@@ -152,10 +168,13 @@ window.location = '../../home/';
                     } 
                 });
                 
-        var username    = $('#username').val();
-        var password    = $('#password').val();
-        var sip_ip      = $('#sip_ip').val();
-        var cid         = $('#cid').val();
+        var username      = $('#username').val();
+        var password      = $('#password').val();
+        var sip_ip        = $('#sip_ip').val();
+        var cid           = $('#cid').val();
+        var did_id        = $('#did_id').val();
+        var forwardnumber = $('#forwardnumber').val();
+        var forwardip     = $('#forwardip').val();
         
         var required_error = 0;
         var password_error = 0;

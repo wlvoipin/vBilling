@@ -29,7 +29,7 @@
 ?>
 <?php 
     $allowedExtensions = array("csv","CSV"); //allowed extensions
-    $maxSize = 5096000; // ~5 MB
+    $maxSize = 20096000; // ~20 MB
     $msg = "";
     $err = "";
     if(isset($_POST['group']) && isset($_POST['carrier']))
@@ -53,17 +53,18 @@
                      {
                         if(count($data) == 5)
                         {
-							$sql = "INSERT INTO ".$group_table_name." (digits, sell_rate, cost_rate, buy_initblock, sell_initblock, carrier_id, lcr_profile, quality, reliability, enabled, lrn) VALUES ('".mysql_real_escape_string($data[0])."', '".mysql_real_escape_string($data[1])."', '".mysql_real_escape_string($data[2])."', '".mysql_real_escape_string($data[3])."', '".mysql_real_escape_string($data[4])."', '".$carrier."', '0', '0', '0', '1', '0')";
+							// $sql = "INSERT INTO ".$group_table_name." (digits, sell_rate, cost_rate, buy_initblock, sell_initblock, carrier_id, lcr_profile, quality, reliability, enabled, lrn) VALUES ('".mysql_real_escape_string($data[0])."', '".mysql_real_escape_string($data[1])."', '".mysql_real_escape_string($data[2])."', '".mysql_real_escape_string($data[3])."', '".mysql_real_escape_string($data[4])."', '".$carrier."', '0', '0', '0', '1', '0')";
+							$sql = "INSERT INTO ".$group_table_name." (digits, cost_rate, sell_rate, buy_initblock, sell_initblock, carrier_id, lcr_profile, quality, reliability, enabled, lrn) VALUES ('".mysql_real_escape_string($data[0])."', '".mysql_real_escape_string($data[1])."', '".mysql_real_escape_string($data[2])."', '".mysql_real_escape_string($data[3])."', '".mysql_real_escape_string($data[4])."', '".$carrier."', '0', '0', '0', '1', '0')";
+							
                             $this->db->query($sql);
                         }
                      }
-               
                      fclose($handle);
                      $msg = "File Imported Successfully.";
                  }
                  else
                  {
-                    $err = "ERROR: File size is greater than 4 MB";
+                    $err = "ERROR: File size is greater than 20 MB";
                  }
             }
             else
