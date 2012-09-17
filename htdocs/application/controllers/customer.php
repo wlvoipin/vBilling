@@ -317,8 +317,7 @@ $this->customer_model->enable_disable_customer_rate($data);
 
 function customer_acl_nodes()
 {
-	$customer_id = $this->session->userdata('customer_id');
-
+	$customer_id = $this->session->userdata('customer_id');	
 	$data['acl_nodes']      =   $this->customer_model->customer_acl_nodes($customer_id);
 	$data['customer_id']    =   $customer_id;
 
@@ -516,10 +515,13 @@ function reset_sip_password()
 
 function insert_new_sip_access()
 {
-	$customer_id    =   $this->input->post('customer_id');
-	$username       =   $this->input->post('username');
-	$password       =   $this->input->post('password');
-    $cid       =   $this->input->post('cid');
+	$customer_id   = $this->input->post('customer_id');
+	$username      = $this->input->post('username');
+	$password      = $this->input->post('password');
+	$cid           = $this->input->post('cid');
+	// $did_id        = $this->input->post('did_id');
+	// $forwardnumber = $this->input->post('forwardnumber');
+	// $forwardip     = $this->input->post('forwardip');            
 
 	$getdomain      =   $this->input->post('sip_ip');
 	$explode = explode('|', $getdomain);
@@ -527,7 +529,7 @@ function insert_new_sip_access()
 	$domain     = $explode[0];
 	$sofia_id   = $explode[1];
 
-	$this->customer_model->insert_new_sip_access($customer_id, $username, $password, $domain, $sofia_id, $cid);
+	$this->customer_model->insert_new_sip_access($customer_id, $username, $password, $domain, $sofia_id, $cid);// , $did_id, $forwardnumber, $forwardip);
 	$this->session->set_flashdata('success','SIP account added successfully.');
 }
 
@@ -732,6 +734,7 @@ function manage_balance()
 {
 	$customer_id            =   $this->session->userdata('customer_id');
 	$data['history']        =   $this->customer_model->customer_balance_history($customer_id);
+	$data['current_balance']        =   $this->customer_model->customer_balance($customer_id);
 	$data['customer_id']    =   $customer_id;
 
 	$data['page_name']		=	'customer_manage_balance';

@@ -1176,6 +1176,27 @@ class Cdr extends CI_Controller {
 		//  $headers 	= array('Date/Time', 'Destination', 'Bill Duration', 'Hangup Cause', 'IP Address', 'Username', 'Sell Rate', 'Sell Init Block', 'Cost Rate','Buy Init Block', 'Total Charges', 'Total Cost', 'Margin', 'Markup');
 		//	$headers 	= array( 'network_addr' => 'IP Address', 'username' => 'Username', 'sell_rate'  => 'Sell Rate', 'sell_initblock' => 'Sell Init Block','cost_rate' => 'Cost Rate','buy_initblock' => 'Buy Init Block','total_buy_cost' => 'Total Cost');
 			
+		/*
+		$headers = array(
+				 'created_time'        => 'Data / Time'
+				, 'destination_number' => 'Destination'
+				, 'billsec'            => 'Call Duration'
+				, 'total_sell_cost'    => 'Total Charges'
+				, 'caller_id_number'   => 'CalledID Number'
+				, 'network_addr'       => 'IP Address'
+				, 'username'           => 'Username'
+				, 'sip_user_agent'     => 'SIP User Agent'
+				, 'ani'                => 'ANI'
+				, 'cost_rate'          => 'Cost Rate'
+				, 'sell_rate'          => 'Sell Rate'
+				, 'buy_initblock'      => 'Buy Init Block'
+				, 'sell_initblock'     => 'Sell Init Block'
+				, 'gateway'            => 'Gateway' 
+				);
+		*/	
+			
+			
+			
 		$headers = array(
 				 'caller_id_number'   => 'CalledID Number'
 				, 'network_addr'       => 'IP Address'
@@ -1188,6 +1209,8 @@ class Cdr extends CI_Controller {
 				, 'sell_initblock'     => 'Sell Init Block'
 				, 'gateway'            => 'Gateway' 
 				);
+			
+			
 			
 			$hdatakey[]	=	'created_time';
 			$hdata[]	=	'Data / Time';
@@ -1206,6 +1229,16 @@ class Cdr extends CI_Controller {
             $row12 		= $query12->row();
             $data_array = explode(',',$row12->optional_cdr_fields_include);
 			
+			/*
+			foreach($data_array as $x):
+			
+				echo $x." ";
+			
+			endforeach;
+			echo 'above user requerment<br>';
+			
+			*/
+			
 			foreach($headers as $hkey => $hvalue): 
 					foreach($data_array as $key):
 						if($hkey == $key)
@@ -1215,6 +1248,33 @@ class Cdr extends CI_Controller {
 						}
 					endforeach;
 			endforeach;
+			/*
+			foreach($hdatakey as $y):			
+				echo $y."|";
+			endforeach;
+			*/
+			
+			/* this is show the date in proper date formated not in unix format 
+			foreach ($data_cdr->result() as $row):
+						$odata 		=	array();
+							foreach($hdatakey as $key):
+								if($key == 'created_time')
+								{
+									$odata[] = date("Y-m-d H:i:s", $row->$key/1000000);
+										
+								}else
+								{
+									$odata[] 	=	$row->$key;				
+								}
+							endforeach;
+						   print '"' . stripslashes(implode('","',$odata)) . "\"\n";
+			endforeach;
+*/
+			/*
+			foreach($hdata as $y):			
+				echo $y." ";
+			endforeach;
+			*/
 
 			$csv_file_name = $this->session->userdata('username')."_".$this->session->userdata('last_activity');
 
@@ -1225,6 +1285,7 @@ class Cdr extends CI_Controller {
 				header('Pragma: no-cache');
 				header('Expires: 0');
 				fputcsv($fp, $hdata);
+				
 
 				foreach ($data_cdr->result() as $row):
 						$odata 		=	array();
@@ -1240,6 +1301,26 @@ class Cdr extends CI_Controller {
 							endforeach;
 						   print '"' . stripslashes(implode('","',$odata)) . "\"\n";
 				endforeach;
+
+				/*
+					foreach ($data_cdr->result() as $row):
+						$odata 		=	array();
+							foreach($hdatakey as $key):
+								
+								$odata[] 	=	$row->$key;				
+									  
+							endforeach;
+						print '"' . stripslashes(implode('","',$odata)) . "\"\n";	
+					endforeach;
+				*/	
+				
+				
+				/*
+				foreach ($data_cdr->result_array() as $row)
+				{
+					print '"' . stripslashes(implode('","',$row)) . "\"\n";
+				}
+				*/
 				die;
 			}
 		}

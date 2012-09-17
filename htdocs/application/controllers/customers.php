@@ -34,11 +34,13 @@ class Customers extends CI_Controller {
 	function __construct()
 	{
 		parent::__construct();
+		
 		$this->load->model('customer_model');
 		$this->load->model('groups_model');
 		$this->load->model('manage_accounts_model');
         $this->load->model('billing_model');
 		//validate login
+		
 		if (!user_login())
 		{
 			redirect ('home/');
@@ -63,6 +65,7 @@ class Customers extends CI_Controller {
                 }
 			}
 		}
+		
 	}
 
 	function index()
@@ -739,7 +742,9 @@ function customer_acl_nodes($customer_id = '')
     
     $data['acl_nodes']      =   $this->customer_model->customer_acl_nodes($customer_id);
 	$data['customer_id']    =   $customer_id;
-
+	$this->load->model('groups_model');
+	$data['groups'] 	 =   $this->groups_model->getAllLocalizationGroups();
+	 
 	$data['page_name']		=	'customer_acl_nodes';
 	$data['selected']		=	'customers_ip';
 	$data['sub_selected']   =   '';
@@ -750,6 +755,21 @@ function customer_acl_nodes($customer_id = '')
     $data['dont_show_this'] = 1;
 	$this->load->view('default/template',$data);
 }
+
+function change_localization_group()
+{
+	$node_id = $this->input->post('node_id');
+	$value = $this->input->post('value');
+	$this->customer_model->change_localization_group($node_id, $value);
+}
+
+function change_localization_group_sip()
+{
+	$id = $this->input->post('id');
+	$value = $this->input->post('value');
+	$this->customer_model->change_localization_group_sip($id, $value);
+}
+
 
 function new_acl_node($customer_id = '')
 {
@@ -893,7 +913,8 @@ function sip_access($customer_id)
     
     $data['sip_access']     =   $this->customer_model->customer_sip_access($customer_id);
 	$data['customer_id']    =   $customer_id;
-
+	$this->load->model('groups_model');
+	$data['groups'] 	 =   $this->groups_model->getAllLocalizationGroups();
 	$data['page_name']		=	'customer_sip_access';
 	$data['selected']		=	'sip_access';
 	$data['sub_selected']   =   '';

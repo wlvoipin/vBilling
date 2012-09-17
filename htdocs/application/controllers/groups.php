@@ -150,6 +150,42 @@ class Groups extends CI_Controller {
 		$data['main_content']	=	'groups/groups_view';
 		$this->load->view('default/template',$data);
 	}
+	
+	function delete_localization_group()
+	{
+		$localization_id	=	$this->input->post('localization_id');
+		$this->groups_model->delete_localization_group($localization_id);
+		$this->groups_model->update_localization_group_sip($localization_id);
+		$this->groups_model->update_localization_group_acl($localization_id);
+	}
+	
+		//enable or disable localization group 
+	function enable_disable_localization_group()
+	{
+		$data['localization_id'] = $this->input->post('rate_group_id');
+		$data['status']        = $this->input->post('status');
+		$this->groups_model->enable_disable_localization_group($data);
+		$this->groups_model->enable_disable_localization_rules($data);
+	}	
+	
+	function check_localization_group_in_use()
+	{	
+		$localization_id	=	$this->input->post('localization_id');
+		$check_in_use_acl = $this->groups_model->check_localization_group_in_use_by_acl($localization_id);
+		$check_in_use_sip = $this->groups_model->check_localization_group_in_use_by_sip($localization_id);
+		
+		if($check_in_use_acl==TRUE || $check_in_use_sip==TRUE)
+		{
+			echo "in_use";
+			exit;
+		}
+		else
+		{
+			$this->groups_model->delete_localization_group($localization_id);
+			echo "deleted";
+			exit;
+		}
+	}	
 
 	//enable or disable rate group 
 	function enable_disable_group()
@@ -650,4 +686,158 @@ class Groups extends CI_Controller {
 		$data['main_content']	=	'groups/list_rate_view';
 		$this->load->view('default/template',$data);
     }
+	
+	/** 
+	* Encodes string for use in XML
+	* 
+	* @access public * @param string * @return string 
+	*/
+	
+	function localization_groups(){
+		$filter_groups          = '';
+		$filter_group_type      = '';
+        $filter_sort            = '';
+		$search                 = '';
+
+		$msg_records_found = "Records Found";
+
+		if($this->input->get('searchFilter'))
+		{
+			$filter_groups          = $this->input->get('filter_groups');
+			$filter_group_type      = $this->input->get('filter_group_type');
+            $filter_sort            = $this->input->get('filter_sort');
+			$search                 = $this->input->get('searchFilter');
+			$msg_records_found      = "Records Found Based On Search Criteria";
+		}
+
+		$data['filter_groups']              = $filter_groups;
+		$data['filter_group_type']          = $filter_group_type;
+        $data['filter_sort']                = $filter_sort;
+
+		//for pagging set information
+		$this->load->library('pagination');
+		$config['per_page'] = '20';
+		$config['base_url'] = base_url().'groups/localization_groups/?searchFilter='.$search.'&filter_groups='.$filter_groups.'&filter_group_type='.$filter_group_type.'&filter_sort='.$filter_sort.'';
+		$config['page_query_string'] = TRUE;
+
+		$config['num_links'] = 2;
+
+		$config['cur_tag_open'] = '<span class="current">';
+		$config['cur_tag_close'] = '</span> ';
+
+		$config['next_link'] = 'next';
+		$config['next_tag_open'] = '<span class="next-site">';
+		$config['next_tag_close'] = '</span>';
+
+		$config['prev_link'] = 'previous';
+		$config['prev_tag_open'] = '<span class="prev-site">';
+		$config['prev_tag_close'] = '</span>';
+
+		$config['first_link'] = 'first';
+		$config['last_link'] = 'last';
+
+		$data['count'] = $this->groups_model->get_all_localization_groups_count($filter_groups, $filter_group_type);
+		$config['total_rows'] = $data['count'];
+
+		if(isset($_GET['per_page']))
+		{
+			if(is_numeric($_GET['per_page']))
+			{
+				$config['uri_segment'] = $_GET['per_page'];
+			}
+			else
+			{
+				$config['uri_segment'] = '';
+			}
+		}
+		else
+		{
+			$config['uri_segment'] = '';
+		}
+
+		$this->pagination->initialize($config);
+
+		if ($data['count'] <= 1)
+		{
+			$msg_records_found = "Record Found";
+		}
+		else
+		{
+			$msg_records_found = "Records Found";			
+		}
+
+		$data['msg_records_found'] = "".$data['count']."&nbsp;".$msg_records_found."";
+
+		$data['groups'] 	 =   $this->groups_model->get_all_localization_groups($config['per_page'],$config['uri_segment'], $filter_groups, $filter_group_type, $filter_sort);
+		
+		$data['page_name']		=	'group_view';
+		$data['selected']		=	'groups';
+		$data['sub_selected']   =   'localization_groups';
+		$data['page_title']		=	'GROUPS';
+		$data['main_menu']	    =	'default/main_menu/main_menu';
+		$data['sub_menu']	    =	'default/sub_menu/groups_sub_menu';
+		$data['main_content']	=	'groups/localization-groups-view';
+		$this->load->view('default/template',$data);
+
+	}
+	
+	function edit_localization_group_db()
+	{	
+		$localization_id = $this->input->post('localization_id');		 
+		$groupname = $this->input->post('groupname');			
+		$this->groups_model->update_localization_group($groupname, $localization_id);		
+		$this->groups_model->delete_localization_rules($localization_id);       
+		foreach($_REQUEST['pre'] as $a => $b){	
+			$name = $b;
+			$cut = $_REQUEST['cut'][$a];
+			$add = $_REQUEST['add'][$a];
+			$enabled = isset($_REQUEST['enabled'][$a]) ? 1 : 0;					 
+			$this->groups_model->insert_localization_rules($localization_id, $name, $cut, $add, $enabled);     			
+		}
+	}	
+	
+	function update_localization_group($localization_id)
+	{
+        $data['localization_group']            =   $this->groups_model->get_single_localization_group($localization_id);
+		$data['localization_rules']   =   $this->groups_model->get_localization_rules($localization_id);
+		$data['localization_id']     =   $localization_id;
+
+		$data['page_name']		=	'edit_localization_group_view';
+		$data['selected']		=	'groups';
+		$data['sub_selected']   =   'localization_groups';
+		$data['page_title']		=	'GROUPS';
+		$data['main_menu']	    =	'default/main_menu/main_menu';
+		$data['sub_menu']	    =	'default/sub_menu/groups_sub_menu';
+		$data['main_content']	=	'groups/edit_localization_group_view';
+		$this->load->view('default/template',$data);
+	}	
+	
+	function insert_new_localization_group()
+	{
+		$data['groupname']		=	$this->input->post('groupname');
+		$insert_id = $this->groups_model->insert_new_localization_group($data['groupname']);
+
+		//create group table
+		$this->groups_model->create_new_rate_group_rate_tbl($insert_id);
+	}	
+	
+	function add_localization_groups(){
+		if($this->session->userdata('user_type') == 'sub_admin')
+        {
+            if(sub_admin_access_any_cell($this->session->userdata('user_id'), 'new_rate_groups') == 0)
+            {
+                redirect ('groups/');
+            }
+        }
+        
+        $data['page_name']		=	'group_view';
+		$data['selected']		=	'groups';
+		$data['sub_selected']   =   'add_localization_groups';
+		$data['page_title']		=	'NEW GROUP';
+		$data['main_menu']	    =	'default/main_menu/main_menu';
+		$data['sub_menu']	    =	'default/sub_menu/groups_sub_menu';
+		$data['main_content']	=	'groups/add-localization-group-view';
+		$this->load->view('default/template',$data);
+	}
+	
 }

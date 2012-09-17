@@ -684,7 +684,7 @@ class Freeswitch extends CI_Controller {
 	// 	$fp = $this->esl->event_socket_create($this->esl->ESL_host, $this->esl->ESL_port, $this->esl->ESL_password);
 	// 	$cmd = "api ".$_GET['command']."";
 	// 	$response = $this->esl->event_socket_request($fp, $cmd);
-	// 	echo nl2br($response); 
+	// 	echo nl2br($response);
 	// 	fclose($fp);
 	// }
 
