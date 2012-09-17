@@ -613,7 +613,7 @@ cp -apr ${TEMPDIR}/vBilling/htdocs/.htaccess  ${VBILLING_HTML}/
 
 # Create MySQL DB and import the database
 mysql -uroot -p${MYSQL_ROOT_PASSWORD} -e "create database ${VBILLING_DB};"
-mysql -u${VBILLING_DB_USER} -p${VBILLING_MYSQL_PASSWORD} ${VBILLING_DB} < ${TEMPDIR}/vBilling/sql/vBilling_complete.sql
+mysql -u${VBILLING_DB_USER} -p${VBILLING_MYSQL_PASSWORD} ${VBILLING_DB} < ${TEMPDIR}/vBilling/htdocs/sql/vBilling_complete.sql
 
 # Pre Install Complete, let's move forward
 
@@ -793,11 +793,11 @@ cp ${TEMPDIR}/constants.php ${VBILLING_HTML}/application/config/constants.php
 if [ -f /etc/debian_version ] ; then
 	VBILLING_DB_PASSWORD=$(cat /var/www/application/config/constants.php | grep DEFAULT_DSN_PASSWORD | cut -d ',' -f 2 | cut -d \''' -f 2)
 	VBILLING_DB_USER=$(cat /var/www/application/config/constants.php | grep DEFAULT_DSN_LOGIN | cut -d ',' -f 2 | cut -d \''' -f 2)
-	mysql -u${VBILLING_DB_USER} -p${VBILLING_DB_PASSWORD} ${VBILLING_DB} < ${TEMPDIR}/vBilling/sql/vBilling_upgrade_0_2_0.sql
+	mysql -u${VBILLING_DB_USER} -p${VBILLING_DB_PASSWORD} ${VBILLING_DB} < ${TEMPDIR}/vBilling/htdocs/sql/vBilling_upgrade_0_2_0.sql
 else [ -f /etc/redhat-release ]
 	VBILLING_DB_PASSWORD=$(cat /var/www/html/application/config/constants.php | grep DEFAULT_DSN_PASSWORD | cut -d ',' -f 2 | cut -d \''' -f 2)
 	VBILLING_DB_USER=$(cat /var/www/html/application/config/constants.php | grep DEFAULT_DSN_LOGIN | cut -d ',' -f 2 | cut -d \''' -f 2)
-	mysql -u${VBILLING_DB_USER} -p${VBILLING_DB_PASSWORD} ${VBILLING_DB} < ${TEMPDIR}/vBilling/sql/vBilling_upgrade_0_2_0.sql
+	mysql -u${VBILLING_DB_USER} -p${VBILLING_DB_PASSWORD} ${VBILLING_DB} < ${TEMPDIR}/vBilling/htdocs/sql/vBilling_upgrade_0_2_0.sql
 fi
 
 if [ -f /etc/debian_version ] ; then
