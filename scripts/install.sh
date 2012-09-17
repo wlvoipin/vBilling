@@ -25,7 +25,7 @@ UPGRADE="0"
 clear
 echo "***"
 wget --no-check-certificate -q -O MPL-v1.1.txt https://github.com/digitallinx/vBilling/raw/master/COPYING
-more MPL-v1.0.txt
+more MPL-v1.1.txt
 echo "***"
 echo "*** vBilling License MPL V1.1"
 echo "***"
