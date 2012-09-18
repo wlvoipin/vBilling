@@ -370,7 +370,7 @@ class Groups_model extends CI_Model {
 			`reseller_rate_group` varchar(50) DEFAULT NULL,
 			`reseller_rate_id` int(11) NOT NULL DEFAULT '0',
 		  KEY `id` (`id`)
-			) ENGINE=InnoDB DEFAULT AUTO_INCREMENT=1;";
+			) ENGINE=InnoDB AUTO_INCREMENT=1;";
 		$query = $this->db->query($sql);
 
 		$sql2 = "UPDATE groups SET group_rate_table = 'lcr_group_".$insert_id."' WHERE id = '".$insert_id."'";
