@@ -667,10 +667,12 @@ UsageCount  = 1
 EOF
 	if [ $(cat /etc/debian_version | cut -d "." -f 1) == 6 ]; then
 			ln -s ${VBILLING_HTML}/bin/debian/${ARCH}/vBilling.bin ${FS_INSTALL_PATH}/scripts/vBilling.bin
+			ln -s ${VBILLING_HTML}/bin/debian/${ARCH}/vBilling.lua ${FS_INSTALL_PATH}/scripts/vBilling.bin
 			ln -s ${VBILLING_HTML}/bin/debian/${ARCH}/vBilling.cfg ${FS_INSTALL_PATH}/scripts/vBilling.cfg
 			ln -s ${VBILLING_HTML}/bin/debian/${ARCH}/vBilling_functions.bin ${FS_INSTALL_PATH}/scripts/vBilling_functions.bin
 	else
 			ln -s ${VBILLING_HTML}/bin/ubuntu/${ARCH}/vBilling.bin ${FS_INSTALL_PATH}/scripts/vBilling.bin
+			ln -s ${VBILLING_HTML}/bin/ubuntu/${ARCH}/vBilling.lua ${FS_INSTALL_PATH}/scripts/vBilling.bin
 			ln -s ${VBILLING_HTML}/bin/ubuntu/${ARCH}/vBilling.cfg ${FS_INSTALL_PATH}/scripts/vBilling.cfg
 			ln -s ${VBILLING_HTML}/bin/ubuntu/${ARCH}/vBilling_functions.bin ${FS_INSTALL_PATH}/scripts/vBilling_functions.bin
 	fi
@@ -697,6 +699,7 @@ EOF
 	sed -i "s#__VBILLING_DB__#$VBILLING_DB#g" /etc/odbc.ini
 	sed -i "s#\[vBilling\]#\[$VBILLING_DB\]#g" /etc/odbc.ini
 	ln -s ${VBILLING_HTML}/bin/centos/${ARCH}/vBilling.bin ${FS_INSTALL_PATH}/scripts/vBilling.bin
+	ln -s ${VBILLING_HTML}/bin/centos/${ARCH}/vBilling.lua ${FS_INSTALL_PATH}/scripts/vBilling.bin
 	ln -s ${VBILLING_HTML}/bin/centos/${ARCH}/vBilling.cfg ${FS_INSTALL_PATH}/scripts/vBilling.cfg
 	ln -s ${VBILLING_HTML}/bin/centos/${ARCH}/vBilling_functions.bin ${FS_INSTALL_PATH}/scripts/vBilling_functions.bin
 	sed -i "s#\"__VBILLING_DB__\"#\"${VBILLING_DB}\"#g" ${FS_INSTALL_PATH}/scripts/vBilling.cfg
@@ -805,17 +808,20 @@ if [ -f /etc/debian_version ] ; then
 		rm -f ${FS_INSTALL_PATH}/scripts/vBilling.bin
 		rm -f ${FS_INSTALL_PATH}/scripts/vBilling_functions.bin
 		ln -s ${VBILLING_HTML}/bin/debian/${ARCH}/vBilling.bin ${FS_INSTALL_PATH}/scripts/vBilling.bin
+		ln -s ${VBILLING_HTML}/bin/debian/${ARCH}/vBilling.lua ${FS_INSTALL_PATH}/scripts/vBilling.bin
 		ln -s ${VBILLING_HTML}/bin/debian/${ARCH}/vBilling_functions.bin ${FS_INSTALL_PATH}/scripts/vBilling_functions.bin
 	else
 		rm -f ${FS_INSTALL_PATH}/scripts/vBilling.bin
 		rm -f ${FS_INSTALL_PATH}/scripts/vBilling_functions.bin
 		ln -s ${VBILLING_HTML}/bin/ubuntu/${ARCH}/vBilling.bin ${FS_INSTALL_PATH}/scripts/vBilling.bin
+		ln -s ${VBILLING_HTML}/bin/ubuntu/${ARCH}/vBilling.lua ${FS_INSTALL_PATH}/scripts/vBilling.bin
 		ln -s ${VBILLING_HTML}/bin/ubuntu/${ARCH}/vBilling_functions.bin ${FS_INSTALL_PATH}/scripts/vBilling_functions.bin
 	fi
 else [ -f /etc/redhat-release ]
 	rm -f ${FS_INSTALL_PATH}/scripts/vBilling.bin
 	rm -f ${FS_INSTALL_PATH}/scripts/vBilling_functions.bin
 	ln -s ${VBILLING_HTML}/bin/centos/${ARCH}/vBilling.bin ${FS_INSTALL_PATH}/scripts/vBilling.bin
+	ln -s ${VBILLING_HTML}/bin/centos/${ARCH}/vBilling.lua ${FS_INSTALL_PATH}/scripts/vBilling.bin
 	ln -s ${VBILLING_HTML}/bin/centos/${ARCH}/vBilling_functions.bin ${FS_INSTALL_PATH}/scripts/vBilling_functions.bin
 fi
 
