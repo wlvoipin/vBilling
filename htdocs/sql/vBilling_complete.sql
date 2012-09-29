@@ -916,6 +916,17 @@ CREATE TABLE IF NOT EXISTS `sofia_gateways` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `sofia_gateways_params`
+--
+
+CREATE TABLE IF NOT EXISTS `sofia_gateways_params` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `param_name` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 --
 -- Dumping data for table `sofia_gateways_params`
@@ -948,18 +959,6 @@ INSERT INTO `sofia_gateways_params` (`id`, `param_name`) VALUES
 (25, 'outbound-proxy'),
 (26, 'distinct-to'),
 (27, 'channels');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `sofia_gateways_params`
---
-
-CREATE TABLE IF NOT EXISTS `sofia_gateways_params` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `param_name` varchar(255) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
