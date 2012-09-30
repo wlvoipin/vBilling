@@ -118,7 +118,7 @@ if [ ${REPLY}   = "y" ]; then
 		'DEBIAN')
 		export DEBIAN_FRONTEND=noninteractive
         apt-get -y update
-        apt-get -y install apache2 autoconf automake build-essential chkconfig dmidecode g++ gawk git-core git-core gnutls-bin libapache2-mod-php5 libncurses5 libjpeg62-dev libmyodbc libncurses5-dev libtool libtool libxml2 lua5.1 make bsd-mailx mysql-server php-apc php5 php5-gd php5-mcrypt php5-mhash php5-mysql pkg-config python-dev unixodbc-dev
+        apt-get -y install apache2 autoconf automake build-essential chkconfig dmidecode g++ gawk git-core git-core gnutls-bin libapache2-mod-php5 libncurses5 libjpeg62-dev libmyodbc libncurses5-dev libtool libtool libxml2 libexpat1-dev libapr1-dev libpcre3 libpcre3-dev lua5.1 make bsd-mailx mysql-server php-apc php5 php5-gd php5-mcrypt php5-mhash php5-mysql pkg-config python-dev unixodbc-dev
 		;;
 		'CENTOS')
 		yum -y update
