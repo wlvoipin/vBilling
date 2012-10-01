@@ -271,7 +271,7 @@ class CI_DB_sqlsrv_driver extends CI_DB {
 	 */
 	function affected_rows()
 	{
-		return @sqlrv_roaffected($this->conn_id);
+		return @sqlrv_rows_affected($this->conn_id);
 	}
 
 	// --------------------------------------------------------------------
@@ -344,6 +344,7 @@ class CI_DB_sqlsrv_driver extends CI_DB {
 			return '0';
 
 		$row = $query->row();
+		$this->_reset_select();
 		return $row->numrows;
 	}
 

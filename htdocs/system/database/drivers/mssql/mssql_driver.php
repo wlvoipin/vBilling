@@ -287,7 +287,7 @@ class CI_DB_mssql_driver extends CI_DB {
 	 */
 	function affected_rows()
 	{
-		return @mssql_roaffected($this->conn_id);
+		return @mssql_rows_affected($this->conn_id);
 	}
 
 	// --------------------------------------------------------------------
@@ -367,6 +367,7 @@ class CI_DB_mssql_driver extends CI_DB {
 		}
 
 		$row = $query->row();
+		$this->_reset_select();
 		return (int) $row->numrows;
 	}
 

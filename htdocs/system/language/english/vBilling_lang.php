@@ -51,6 +51,7 @@ $lang['main_menu_customers_resellers']               = 'Customers / Resellers';
 $lang['main_menu_carriers']                          = 'Carriers';
 $lang['main_menu_rate_groups']                       = 'Rate Groups';
 $lang['main_menu_call_details']                      = 'Call Details (CDR)';
+$lang['main_menu_did']                               = 'DIDs';
 $lang['main_menu_billing_invoicing']                 = 'Billing / Invoicing';
 $lang['main_menu_freeswitch']                        = 'FreeSWITCH';
 $lang['main_menu_manage_accounts']                   = 'Manage Accounts';
