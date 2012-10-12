@@ -309,7 +309,7 @@ class Cdr_model extends CI_Model {
 	}
         
         //cdr total billsec 
-   function get_cdr_mw_billsec_count($filter_date_from, $filter_date_to, $filter_phonenum, $filter_caller_ip, $filter_customers, $filter_groups, $filter_gateways, $filter_call_type, $duration_from, $duration_to, $filter_contents,$mw_result)
+   function get_cdr_mw_billsec_count($filter_date_from, $filter_date_to, $filter_phonenum, $filter_caller_ip, $filter_customers, $filter_groups, $filter_gateways, $filter_call_type, $duration_from, $duration_to, $filter_contents, $mw_result)
    {
       $where = '';
       if($filter_contents == 'all') //get all customers and resellers which belongs to him 
