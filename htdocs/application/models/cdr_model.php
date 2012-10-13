@@ -493,7 +493,10 @@ class Cdr_model extends CI_Model {
 		$answered_calls = $row->total_answered_calls;
 
 		// ASR = call attempts answered / call attempts
+		if ($my_total_calls != 0) {
 		$asr = ($answered_calls / $my_total_calls) * 100;
+		}
+		else $asr = "N / A";
 		return $asr;
 
 	}
