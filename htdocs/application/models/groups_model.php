@@ -1033,7 +1033,7 @@ function return_batch_rates_to_perform_batch($group_id = '', $filter_carriers = 
 	return $madeQuery;
 }
 
-function perform_batch($get_full_batch_query, $is_sell_rate, $sell_rate_value, $action_sell_rate, $is_buy_rate, $buy_rate_value, $action_buy_rate, $is_sell_init, $sell_init_value, $action_sell_init, $is_buy_init, $buy_init_value, $action_buy_init, $is_sell_block_min, $sell_block_min_value, $action_sell_block_min_rate, $is_buy_block_min, $buy_block_min_value, $action_buy_block_min_rate)
+function perform_batch($get_full_batch_query, $is_sell_rate, $sell_rate_value, $action_sell_rate, $is_buy_rate, $buy_rate_value, $action_buy_rate, $is_sell_init, $sell_init_value, $action_sell_init, $is_buy_init, $buy_init_value, $action_buy_init, $is_sell_block_min, $sell_block_min_value, $action_sell_block_min_rate, $is_buy_block_min, $buy_block_min_value, $action_buy_block_min_rate, $is_carrier, $is_filter_carriers, $is_country, $is_filter_country)
 {
 	foreach($get_full_batch_query->result() as $row)
 	{
@@ -1320,7 +1320,6 @@ function perform_batch($get_full_batch_query, $is_sell_rate, $sell_rate_value, $
 			}
 		}
 
-		//admin personal matter 
 		if($is_buy_block_min == 1)
 		{
 			if($action_buy_block_min_rate == 'add' || $action_buy_block_min_rate == 'subtract' || $action_buy_block_min_rate == 'equal')
@@ -1365,6 +1364,32 @@ function perform_batch($get_full_batch_query, $is_sell_rate, $sell_rate_value, $
 					}
 				}
 			}
+		}
+
+		if($is_carrier == 1)
+		{
+			if($count == 1)
+			{
+				$set .= ',';
+			}
+			else
+			{
+				$count = 1;
+			}
+			$set .= 'carrier_id = '.$is_filter_carriers.'';
+		}
+
+		if($is_country == 1)
+		{
+			if($count == 1)
+			{
+				$set .= ',';
+			}
+			else
+			{
+				$count = 1;
+			}
+			$set .= 'country_id = '.$is_filter_country.'';
 		}
 
 		$sql = "UPDATE ".$row->tbl_name." SET ".$set." WHERE id = ".$row->id."";

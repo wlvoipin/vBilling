@@ -51,7 +51,7 @@ $atts = array(
 <!--********************************FILTER BOX************************-->
 <div style="text-align:center;padding:10px">
 	<div class="button white">
-        	<div style="color:green; font-weight:bold;"> <?php echo $msg_records_found; echo $msg_duration_found; echo $msg_margin_found; echo $msg_sell_found;?> </div>	
+		<div style="color:green; font-weight:bold;"> <?php echo $msg_records_found;?> </div>
 		<div style="margin-top:5px;margin-bottom:-5px;"> <a href="#" alt="Export As PDF" title="Export As PDF" class="exp_pdf"><img src="<?php echo base_url();?>assets/images/export-pdf.gif"/></a> <a href="#" alt="Export As EXCEL" title="Export As EXCEL" class="exp_exl"><img src="<?php echo base_url();?>assets/images/export-excel.png"/></a> <a href="#" alt="Export As CSV" title="Export As CSV" class="exp_csv"><img src="<?php echo base_url();?>assets/images/export-csv.png"/></a> </div>
 		<form method="get" action="<?php echo base_url();?>cdr/" id="filterForm">
 			<table width="100%" cellspacing="0" cellpadding="0" border="0" id="filter_table">
@@ -206,15 +206,15 @@ $atts = array(
 						<td width="7%" align="center">Call Duration</td>
 						<td width="7%" align="center">Hangup Cause</td>
 						<td width="7%" align="center">Gateway</td>
-						<td width="7%" align="center">Failed Gateways</td>
+						<!-- <td width="7%" align="center">Failed Gateways</td> -->
 						<td width="7%" align="center">Customer IP Address</td>
 						<td width="7%" align="center">Customer Account Number</td>
 						<td width="7%" align="center">Cost Rate</td>
 						<td width="7%" align="center">Sell Rate</td>
 						<td width="7%" align="center">Total Cost</td>
 						<td width="7%" align="center">Total Charges</td>
-						<td width="7%" align="center">PDD</td>
-						<td width="7%" align="center">Ringing time</td>
+    					<td width="7%" align="center">PDD</td>
+    					<td width="7%" align="center"></td>
 					</tr>
 					<tr>
 						<td colspan="16" id="shadowDiv" style="height:5px;margin-top:-1px"></td>
@@ -228,10 +228,8 @@ $atts = array(
 								if($filter_display_results == 'sec')
 								{
 									$billsec        = $row->billsec; // by default bill is in sec
-
 									$sellrate       = $row->sell_rate / 60; // sell rate per sec
 									$sellrate       = round($sellrate, 4);
-
 									$costrate       = $row->cost_rate / 60; // cost rate per sec
 									$costrate       = round($costrate, 4);
 								}
@@ -239,8 +237,7 @@ $atts = array(
 								{
 									$billsec        = $row->billsec / 60; // convert to min
 									$billsec        = round($billsec, 4);
-
-									$sellrate       = $row->sell_rate; // sell rate by default is in min 
+									$sellrate       = $row->sell_rate; // sell rate by default is in min
 									$costrate       = $row->cost_rate; // cost rate by default is in min
 								}
 								?>
@@ -255,7 +252,6 @@ $atts = array(
 									<?php
 								}
 								?>
-								<td align="center" <?php if($row->total_failed_gateways > 0) {?>class="selector" style="color:red;font-weight:bold;"<?php } ?> id="<?php echo $row->id;?>"><?php echo $row->total_failed_gateways; ?></td>
 									<td align="center"><?php echo $row->network_addr; ?></td>
 									<?php if ($row->customer_id != 0) {?>
 										<td align="center"><?php echo anchor_popup('customers/edit_customer/'.$row->customer_id.'', $row->customer_acc_num, $atts); ?></td>
@@ -267,20 +263,22 @@ $atts = array(
 										<?php if($row->parent_reseller_id == '0'){ ?>
 											<td align="center"><?php echo $costrate.'&nbsp;/&nbsp'.$filter_display_results; ?></td>
 											<td align="center"><?php echo $sellrate.'&nbsp;/&nbsp'.$filter_display_results; ?></td>
-											<?php if(($row->hangup_cause == 'NORMAL_CLEARING' || $row->hangup_cause == 'ALLOTTED_TIMEOUT') && $row->billsec > 0) {?>
+											<?php if($row->billsec > 0) {?>
 												<td align="center"><?php echo $row->total_buy_cost; ?></td>
 												<?php } else { ?>
 													<td align="center">0</td>
 													<?php } ?>
-													<?php if(($row->hangup_cause == 'NORMAL_CLEARING' || $row->hangup_cause == 'ALLOTTED_TIMEOUT') && $row->billsec > 0) {?>
+													<?php if($row->billsec > 0) {?>
 														<td align="center"><?php echo $row->total_sell_cost; ?></td>
 														<?php } else { ?>
 															<td align="center">0</td>
 															<?php } ?>
-															<td align="center"><?php if($row->progress_media_time != '0') echo round(($row->progress_media_time - $row->created_time)/1000000); else echo "-"; ?></td>
-															<td align="center"><?php if($row->answered_time != '0' AND $row->progress_media_time != '0') echo round(($row->answered_time - $row->progress_media_time)/1000000);
-elseif($row->progress_media_time != '0') echo round(($row->hangup_time - $row->progress_media_time)/1000000);
-else echo "-"; ?></td>
+															<td align="center">
+																<?php 
+																if($row->progress_media_time != '0')
+																	echo round(($row->progress_media_time - $row->created_time)/1000000);
+																else echo "N/A"; ?></td>
+    															<td align="center">&nbsp;</td>
 															<?php } else { ?>
 																<!--get admin rates -->
 																<?php
@@ -292,13 +290,12 @@ else echo "-"; ?></td>
 															{
 																$sellrate       = $getRateRow->sell_rate / 60; // sell rate per sec
 																$sellrate       = v_round($sellrate);
-
 																$costrate       = $getRateRow->cost_rate / 60; // cost rate per sec
 																$costrate       = v_round($costrate);
 															}
 															else
 															{
-																$sellrate       = $getRateRow->sell_rate; // sell rate by default is in min 
+																$sellrate       = $getRateRow->sell_rate; // sell rate by default is in min
 																$costrate       = $getRateRow->cost_rate; // cost rate by default is in min
 															}
 															?>

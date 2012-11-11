@@ -307,114 +307,6 @@ class Cdr_model extends CI_Model {
 		$count = $query->num_rows();
 		return $count;
 	}
-        
-        //cdr total billsec 
-   function get_cdr_mw_billsec_count($filter_date_from, $filter_date_to, $filter_phonenum, $filter_caller_ip, $filter_customers, $filter_groups, $filter_gateways, $filter_call_type, $duration_from, $duration_to, $filter_contents, $mw_result)
-   {
-      $where = '';
-      if($filter_contents == 'all') //get all customers and resellers which belongs to him 
-      {
-         $where .= "WHERE parent_id = '0' ";
-      }
-      else if($filter_contents == 'my') //only get those which are created by him 
-      {
-         $where .= "WHERE parent_id = '0' && parent_reseller_id = '0' ";
-      }
-      else //show all 
-      {
-         $where .= "WHERE parent_id = '0' ";
-      }
-
-      if($filter_date_from != '')
-      {
-         $date_from = strtotime($filter_date_from) * 1000000; //convert into micro seconds
-         $where .= "AND created_time >= '".sprintf("%.0f", $date_from)."' ";
-      }
-
-      if($filter_date_to != '')
-      {
-         $date_to = strtotime($filter_date_to) * 1000000; //convert into micro seconds
-         $where .= "AND created_time <= '".sprintf("%.0f", $date_to)."' ";
-      }
-
-      if($filter_phonenum != '')
-      {
-         if(is_numeric($filter_phonenum))
-         {
-            $where .= 'AND destination_number = '.$this->db->escape($filter_phonenum).' ';
-         }
-      }
-
-      if($filter_caller_ip != '')
-      {
-         if ($this->input->valid_ip($filter_caller_ip))
-         {
-            $where .= 'AND network_addr = '.$this->db->escape($filter_caller_ip).' ';
-         }
-      }
-
-      if($filter_customers != '')
-      {
-         if(is_numeric($filter_customers))
-         {
-            $where .= 'AND customer_id = '.$this->db->escape($filter_customers).' ';
-         }
-      }
-
-      if($filter_groups != '')
-      {
-         if(is_numeric($filter_groups))
-         {
-            $groupRateTbl = 'SELECT * FROM groups WHERE id = '.$this->db->escape($filter_groups).' ';
-            $groupQuery = $this->db->query($groupRateTbl);
-            $row = $groupQuery->row();
-
-            $where .= "AND customer_group_rate_table = '".$row->group_rate_table."' ";
-         }
-      }
-
-      if($filter_gateways != '')
-      {
-         if (strpos($filter_gateways,'|') !== false) {
-            $explode = explode('|', $filter_gateways);
-            $gateway = $explode[0];
-            $profile = $explode[1];
-            if(isset($gateway) && isset($profile))
-            {
-               if(is_numeric($profile))
-               {
-                  $where .= 'AND gateway = '.$this->db->escape($gateway).' AND sofia_id = '.$this->db->escape($profile).' ';
-               }
-            }
-         }
-      }
-
-      if($filter_call_type != '')
-      {
-         $where .= 'AND hangup_cause = '.$this->db->escape($filter_call_type).' ';
-      }
-
-      if($duration_from != '')
-      {
-         if(is_numeric($duration_from))
-         {
-            $where .= 'AND billsec >= '.$duration_from.' ';
-         }
-      }
-
-      if($duration_to != '')
-      {
-         if(is_numeric($duration_to))
-         {
-            $where .= 'AND billsec <= '.$duration_to.' ';
-         }
-      }
-
-      $sql = "SELECT SUM($mw_result) AS $mw_result FROM cdr ".$where."";
-      $query = $this->db->query($sql);
-      $row = $query->row();
-      return $row->$mw_result;
-   }
 
 	function get_parent_cdr_data($id)
 	{
@@ -482,23 +374,19 @@ class Cdr_model extends CI_Model {
 		$date_to    = strtotime($date_to) * 1000000; //convert into micro seconds
 		$date_from  = strtotime($date_from) * 1000000; //convert into micro seconds
 
-		$sql            = "SELECT COUNT(*) AS total_calls FROM cdr WHERE gateway = '".$gateway."' && sofia_id = '".$sofia_id."' && (created_time >= '".sprintf("%.0f", $date_from)."' && created_time <= '".sprintf("%.0f", $date_to)."') && parent_id = '0'";
+		$sql = "SELECT COUNT(id) AS total_calls FROM cdr WHERE gateway = '".$gateway."' && sofia_id = '".$sofia_id."' && (created_time >= '".sprintf("%.0f", $date_from)."' && created_time <= '".sprintf("%.0f", $date_to)."') && parent_id = '0'";
 		$query          = $this->db->query($sql);
 		$row            = $query->row();
-		$my_total_calls = $row->total_calls;
+		$gateway_total_calls = $row->total_calls;
 
-		$sql            = "SELECT COUNT(*) AS total_answered_calls FROM cdr WHERE gateway = '".$gateway."' && sofia_id = '".$sofia_id."' && (hangup_cause = 'NORMAL_CLEARING' || hangup_cause = 'ALLOTTED_TIMEOUT') && (created_time >= '".sprintf("%.0f", $date_from)."' && created_time <= '".sprintf("%.0f", $date_to)."') && parent_id = '0' && billsec > 0 ";
+		$sql = "SELECT COUNT(id) AS total_answered_calls FROM cdr WHERE gateway = '".$gateway."' && sofia_id = '".$sofia_id."' && (hangup_cause = 'NORMAL_CLEARING' || hangup_cause = 'ALLOTTED_TIMEOUT') && (created_time >= '".sprintf("%.0f", $date_from)."' && created_time <= '".sprintf("%.0f", $date_to)."') && parent_id = '0' && billsec > 0 ";
 		$query          = $this->db->query($sql);
 		$row            = $query->row();
 		$answered_calls = $row->total_answered_calls;
 
 		// ASR = call attempts answered / call attempts
-		if ($my_total_calls != 0) {
-		$asr = ($answered_calls / $my_total_calls) * 100;
-		}
-		else $asr = "N / A";
+		$asr = ($answered_calls / $gateway_total_calls) * 100;
 		return $asr;
-
 	}
 
 	//get particular gateway total calls
@@ -507,7 +395,7 @@ class Cdr_model extends CI_Model {
 		$date_to    = strtotime($date_to) * 1000000; //convert into micro seconds
 		$date_from  = strtotime($date_from) * 1000000; //convert into micro seconds
 
-		$sql = "SELECT COUNT(*) AS total_calls FROM cdr WHERE gateway = '".$gateway."' && sofia_id = '".$sofia_id."' && (created_time >= '".sprintf("%.0f", $date_from)."' && created_time <= '".sprintf("%.0f", $date_to)."') && parent_id = '0'";
+		$sql = "SELECT COUNT(id) AS total_calls FROM cdr WHERE gateway = '".$gateway."' && sofia_id = '".$sofia_id."' && (created_time >= '".sprintf("%.0f", $date_from)."' && created_time <= '".sprintf("%.0f", $date_to)."') && parent_id = '0'";
 		$query = $this->db->query($sql);
 		$row = $query->row();
 		return $row->total_calls;
@@ -519,7 +407,7 @@ class Cdr_model extends CI_Model {
 		$date_to    = strtotime($date_to) * 1000000; //convert into micro seconds
 		$date_from  = strtotime($date_from) * 1000000; //convert into micro seconds
 
-		$sql = "SELECT COUNT(*) AS total_answered_calls FROM cdr WHERE gateway = '".$gateway."' && sofia_id = '".$sofia_id."' && (hangup_cause = 'NORMAL_CLEARING' || hangup_cause = 'ALLOTTED_TIMEOUT') && (created_time >= '".sprintf("%.0f", $date_from)."' && created_time <= '".sprintf("%.0f", $date_to)."') && parent_id = '0' && billsec > 0 ";
+		$sql = "SELECT COUNT(id) AS total_answered_calls FROM cdr WHERE gateway = '".$gateway."' && sofia_id = '".$sofia_id."' && (hangup_cause = 'NORMAL_CLEARING' || hangup_cause = 'ALLOTTED_TIMEOUT') && (created_time >= '".sprintf("%.0f", $date_from)."' && created_time <= '".sprintf("%.0f", $date_to)."') && parent_id = '0' && billsec > 0 ";
 		$query = $this->db->query($sql);
 		$row = $query->row();
 		return $row->total_answered_calls;
@@ -531,7 +419,7 @@ class Cdr_model extends CI_Model {
 		$date_to    = strtotime($date_to) * 1000000; //convert into micro seconds
 		$date_from  = strtotime($date_from) * 1000000; //convert into micro seconds
 
-		$sql = "SELECT COUNT(*) AS total_busy_calls FROM cdr WHERE gateway = '".$gateway."' && sofia_id = '".$sofia_id."' && hangup_cause = 'USER_BUSY' && (created_time >= '".sprintf("%.0f", $date_from)."' && created_time <= '".sprintf("%.0f", $date_to)."') && parent_id = '0' ";
+		$sql = "SELECT COUNT(id) AS total_busy_calls FROM cdr WHERE gateway = '".$gateway."' && sofia_id = '".$sofia_id."' && hangup_cause = 'USER_BUSY' && (created_time >= '".sprintf("%.0f", $date_from)."' && created_time <= '".sprintf("%.0f", $date_to)."') && parent_id = '0' ";
 		$query = $this->db->query($sql);
 		$row = $query->row();
 		return $row->total_busy_calls;
@@ -543,7 +431,7 @@ class Cdr_model extends CI_Model {
 		$date_to    = strtotime($date_to) * 1000000; //convert into micro seconds
 		$date_from  = strtotime($date_from) * 1000000; //convert into micro seconds
 
-		$sql = "SELECT COUNT(*) AS total_rejected_calls FROM cdr WHERE gateway = '".$gateway."' && sofia_id = '".$sofia_id."' && hangup_cause = 'CALL_REJECTED' && (created_time >= '".sprintf("%.0f", $date_from)."' && created_time <= '".sprintf("%.0f", $date_to)."') ";
+		$sql = "SELECT COUNT(id) AS total_rejected_calls FROM cdr WHERE gateway = '".$gateway."' && sofia_id = '".$sofia_id."' && hangup_cause = 'CALL_REJECTED' && (created_time >= '".sprintf("%.0f", $date_from)."' && created_time <= '".sprintf("%.0f", $date_to)."') ";
 		$query = $this->db->query($sql);
 		$row = $query->row();
 		return $row->total_rejected_calls;
@@ -555,7 +443,7 @@ class Cdr_model extends CI_Model {
 		$date_to    = strtotime($date_to) * 1000000; //convert into micro seconds
 		$date_from  = strtotime($date_from) * 1000000; //convert into micro seconds
 
-		$sql = "SELECT COUNT(*) AS total_failed_calls FROM cdr WHERE gateway = '".$gateway."' && sofia_id = '".$sofia_id."' && hangup_cause != 'NORMAL_CLEARING' && hangup_cause != 'ALLOTTED_TIMEOUT' && (created_time >= '".sprintf("%.0f", $date_from)."' && created_time <= '".sprintf("%.0f", $date_to)."') ";
+		$sql = "SELECT COUNT(id) AS total_failed_calls FROM cdr WHERE gateway = '".$gateway."' && sofia_id = '".$sofia_id."' && hangup_cause != 'NORMAL_CLEARING' && hangup_cause != 'ALLOTTED_TIMEOUT' && (created_time >= '".sprintf("%.0f", $date_from)."' && created_time <= '".sprintf("%.0f", $date_to)."') ";
 		$query = $this->db->query($sql);
 		$row = $query->row();
 		return $row->total_failed_calls;
@@ -954,7 +842,7 @@ class Cdr_model extends CI_Model {
 		}
 
 //		$sql = "SELECT COUNT(*) AS total_calls FROM cdr WHERE country_id = '".$country_id."' AND billsec > 0 ".$where."";
-        $sql = "SELECT COUNT(*) AS total_calls FROM cdr WHERE country_id = '".$country_id."' AND billsec > 0 ".$where."";		$query = $this->db->query($sql);
+        $sql = "SELECT COUNT(id) AS total_calls FROM cdr WHERE country_id = '".$country_id."' AND billsec > 0 ".$where."";		$query = $this->db->query($sql);
 		$row = $query->row();
 		return $row->total_calls;
 	}

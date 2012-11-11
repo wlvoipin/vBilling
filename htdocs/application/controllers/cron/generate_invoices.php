@@ -40,8 +40,6 @@ class Generate_Invoices extends CI_Controller {
 	function index()
 	{
 		set_time_limit(0); //may be script can take longer as expected so setting time limit to 0 will not make any time restriction on the script 
-
-		
         
         /*
         

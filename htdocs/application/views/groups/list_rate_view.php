@@ -137,7 +137,7 @@
         <?php
             if($count == 1)
             {
-                echo 'Perform Batch Update On Following Records';
+                echo 'Perform Batch Update On Following Record';
             }
             else
             {
@@ -222,6 +222,26 @@
                         <input type="radio" name="action_sell_init" value="equal" checked /> Equal 
                         <input type="radio" name="action_sell_init" value="add" /> Add 
                         <input type="radio" name="action_sell_init" value="subtract" /> Subtract
+                    </td>
+                </tr>
+
+                <tr>
+                    <td><input type="checkbox" name="is_carrier" value="1" class="is" /></td>
+                    <td align="left">Carrier:</td>
+                    <td>
+		                <select name="is_filter_carriers" id="is_filter_carriers" style="width:150px;">
+		                    <?php echo show_carrier_select_box($filter_carriers);?>
+		                </select>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td><input type="checkbox" name="is_country" value="1" class="is" /></td>
+                    <td align="left">Country:</td>
+                    <td>
+                        <select name="is_filter_country" id="is_filter_country" style="width:150px;">>
+                            <?php echo all_countries($filter_country);?>
+                        </select>
                     </td>
                 </tr>
                                 

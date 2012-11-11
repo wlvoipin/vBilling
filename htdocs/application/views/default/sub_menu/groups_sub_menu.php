@@ -39,7 +39,7 @@
             <li><a href="<?php echo base_url();?>groups/" <?php if($sub_selected == 'list_rate_groups') { echo 'class="sub_selected"' ;}?>>List Rate Groups</a></li>
             
             <?php if($this->session->userdata('user_type') == 'admin'){?>
-            <li><a href="<?php echo base_url();?>groups/list_rates/" <?php if($sub_selected == 'list_rates') { echo 'class="sub_selected"' ;}?>>List Rates</a></li>
+            <li><a href="<?php echo base_url();?>groups/list_rates/" <?php if($sub_selected == 'list_rates') { echo 'class="sub_selected"' ;}?>>Batch Update Rates</a></li>
             <?php } ?>
             
             <?php if($this->session->userdata('user_type') == 'admin'){?>

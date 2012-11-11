@@ -36,10 +36,10 @@ class Freeswitch extends CI_Controller {
 		parent::__construct();
 		$this->load->model('freeswitch_model');
 		// validate login
-		// if (!user_login())
-		//  {
-		//             redirect ('home/');
-		//  }
+		if (!user_login())
+		 {
+		            redirect ('home/');
+		 }
 		//  else
 		//  {
 		//             if($this->session->userdata('user_type') == 'customer')
@@ -162,6 +162,12 @@ class Freeswitch extends CI_Controller {
 
 	function profile_detail($sofia_id)
 	{
+		// validate login
+		// if (!user_login())
+		//  {
+		//             redirect ('home/');
+		//  }
+
 		if($this->session->userdata('user_type') == 'sub_admin')
         {
             if(sub_admin_access_any_cell($this->session->userdata('user_id'), 'profile_details') == 0)
@@ -666,6 +672,35 @@ class Freeswitch extends CI_Controller {
 		$data['main_content']	=	'freeswitch/esl_view';
 		$this->load->view('default/template',$data);
 	}
+
+    //***************************************Active calls *******************************************
+    function active_calls()
+    {
+        if($this->session->userdata('user_type') == 'sub_admin')
+        {
+            if(sub_admin_access_any_cell($this->session->userdata('user_id'), 'active_calls') == 0)
+            {
+                redirect ('freeswitch/');
+            }
+        }
+        $data['page_name']		=	'active_calls';
+        $data['selected']		=	'freeswitch';
+        $data['sub_selected']   =   'active_calls';
+        $data['page_title']		=	'Active Calls';
+        $data['main_menu']	    =	'default/main_menu/main_menu';
+        $data['sub_menu']	    =	'default/sub_menu/freeswitch_sub_menu';
+        $data['main_content']	=	'freeswitch/activity_view';
+        $this->load->view('default/template',$data);
+    }
+
+    function cutcall()
+    {
+        $uuid = $this->input->post('uuid');
+        $fp = $this->esl->event_socket_create($this->esl->ESL_host, $this->esl->ESL_port, $this->esl->ESL_password);
+        $cmd = "api uuid_kill ". $uuid;
+        $response = $this->esl->event_socket_request($fp, $cmd);
+        fclose($fp);
+    }
 
 	//generate the xml
 	function generate_xml()

@@ -603,12 +603,19 @@ class Groups extends CI_Controller {
 			$sell_block_min_value       = $this->input->get('sell_block_min_value');
 			$action_sell_block_min_rate = $this->input->get('action_sell_block_min_rate');
 
-            if($is_sell_rate == 1 || $is_buy_rate == 1 || $is_sell_init == 1 || $is_buy_init == 1 || $is_buy_block_min == 1 || $is_sell_block_min == 1)
+			$is_carrier                 = $this->input->get('is_carrier');
+			$is_filter_carriers         = $this->input->get('is_filter_carriers');
+
+			$is_country                 = $this->input->get('is_country');
+			$is_filter_country          = $this->input->get('is_filter_country');
+
+			echo ".............";
+			
+            if($is_sell_rate == 1 || $is_buy_rate == 1 || $is_sell_init == 1 || $is_buy_init == 1 || $is_buy_block_min == 1 || $is_sell_block_min == 1 || $is_carrier == 1 || $is_country == 1)
             {
                 $get_full_batch_query = $this->groups_model->get_all_rates_to_perform_batch($filter_groups, $filter_carriers, $filter_country, $filter_destination, $destination_advance_filter);
-                
-                $this->groups_model->perform_batch($get_full_batch_query, $is_sell_rate, $sell_rate_value, $action_sell_rate, $is_buy_rate, $buy_rate_value, $action_buy_rate, $is_sell_init, $sell_init_value, $action_sell_init, $is_buy_init, $buy_init_value, $action_buy_init, $is_sell_block_min, $sell_block_min_value, $action_sell_block_min_rate, $is_buy_block_min, $buy_block_min_value, $action_buy_block_min_rate);
-                
+
+                $this->groups_model->perform_batch($get_full_batch_query, $is_sell_rate, $sell_rate_value, $action_sell_rate, $is_buy_rate, $buy_rate_value, $action_buy_rate, $is_sell_init, $sell_init_value, $action_sell_init, $is_buy_init, $buy_init_value, $action_buy_init, $is_sell_block_min, $sell_block_min_value, $action_sell_block_min_rate, $is_buy_block_min, $buy_block_min_value, $action_buy_block_min_rate, $is_carrier, $is_filter_carriers, $is_country, $is_filter_country);
                 $this->session->set_flashdata('success_message','Batch Update Performed Successfully.');
                 redirect ('groups/list_rates/');
             }
@@ -626,11 +633,11 @@ class Groups extends CI_Controller {
 
 		$data['filter_groups']              = $filter_groups;
 		$data['filter_carriers']            = $filter_carriers;
-        $data['filter_country']             = $filter_country;
-        $data['filter_destination']         = $filter_destination;
-        $data['destination_advance_filter']         = $destination_advance_filter;
-        $data['filter_sort']                = $filter_sort;
-        $data['filter_display_results']     = $filter_display_results;
+		$data['filter_country']             = $filter_country;
+		$data['filter_destination']         = $filter_destination;
+		$data['destination_advance_filter'] = $destination_advance_filter;
+		$data['filter_sort']                = $filter_sort;
+		$data['filter_display_results']     = $filter_display_results;
 
 		//for pagging set information
 		$this->load->library('pagination');
