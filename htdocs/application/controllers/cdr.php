@@ -675,7 +675,11 @@ class Cdr extends CI_Controller {
 			$sql12 = "SELECT * FROM settings WHERE customer_id = '".$this->session->userdata('customer_id')."'";
 			$query12 = $this->db->query($sql12);
             $row12 = $query12->row();
-            $data_array = explode(',',$row12->optional_cdr_fields_include);
+            if (!empty($row12){
+                $data_array = explode(',',$row12->optional_cdr_fields_include);
+            } else {
+            	$data_array = Array();
+            }
             
 			$tbl = '<table cellspacing="0" cellpadding="1" border="1" width="100%">
 				<tr style="background-color:grey; color:#ffffff;">
@@ -891,7 +895,11 @@ class Cdr extends CI_Controller {
 			$sql12 = "SELECT * FROM settings WHERE customer_id = '".$this->session->userdata('customer_id')."'";
 			$query12 = $this->db->query($sql12);
             $row12 = $query12->row();
-            $data_array = explode(',',$row12->optional_cdr_fields_include);
+            if (!empty($row12)){
+                $data_array = explode(',',$row12->optional_cdr_fields_include);
+            } else {
+            	$data_array = Array();
+            }
 
             $this->load->library('Spreadsheet_Excel_Writer');
 			$workbook = new Spreadsheet_Excel_Writer();
@@ -1227,7 +1235,11 @@ class Cdr extends CI_Controller {
 			$sql12 		= "SELECT * FROM settings WHERE customer_id = '".$this->session->userdata('customer_id')."'";
 			$query12 	= $this->db->query($sql12);
             $row12 		= $query12->row();
-            $data_array = explode(',',$row12->optional_cdr_fields_include);
+            if (!empty($row12)){
+                $data_array = explode(',',$row12->optional_cdr_fields_include);
+            } else {
+            	$data_array = Array();
+            }
 			
 			/*
 			foreach($data_array as $x):
