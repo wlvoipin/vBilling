@@ -93,11 +93,14 @@ installation.
 ********************************************************************************
 
 Name: Team - Digital Linx
-Email: vbilling@digitallinx.com
-Website: http://www.vbilling.org/
-Live Demo: http://demo.vbilling.org/ 	(Login and password pre-filled)
-										(Login: admin)
-										(Password: vBilling)
-Support: http://support.vbilling.org/
-Community Forum: http://forum.vbilling.org/
 
+Email: vbilling@digitallinx.com
+
+Website: http://www.vbilling.org/
+
+Live Demo: http://demo.vbilling.org/ 	(Login and password pre-filled)
+(Login: admin and Password: vBilling)
+
+Support: http://support.vbilling.org/
+
+Community Forum: http://forum.vbilling.org/
