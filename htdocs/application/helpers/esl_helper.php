@@ -44,9 +44,16 @@ function get_connected_calls()
 	// 
 	// Find a better way to secure this URL
 	// 
-    $xmlFileData = file_get_contents("http://127.0.0.1/freeswitch/generate_xml");
+    /*$xmlFileData = file_get_contents("http://127.0.0.1/freeswitch/generate_xml");
 	$xmlData = new SimpleXMLElement($xmlFileData);
 	$total_connected_calls = (string)$xmlData['row_count'];
-	echo $total_connected_calls;
+	echo $total_connected_calls;*/
+	
+	$CI = & get_instance();
+	$fp = $CI->esl->event_socket_create($CI->esl->ESL_host, $CI->esl->ESL_port, $CI->esl->ESL_password);
+	$cmd = "api show calls count";
+	$response = $CI->esl->event_socket_request($fp, $cmd);
+	echo nl2br($response);
+	fclose($fp);
 }
 ?>
