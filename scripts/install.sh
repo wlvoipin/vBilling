@@ -10,7 +10,7 @@
 #
 # Define some variables
 #
-VBILLING_REPO=git://github.com/digitallinx/vBilling.git
+VBILLING_REPO=git clone https://github.com/wlvoipin/vBilling.git
 TEMPDIR=$(/bin/mktemp -d)
 FS_GIT_REPO=git clone https://github.com/signalwire/freeswitch.git
 FS_INSTALL_PATH=/home/vBilling/freeswitch
