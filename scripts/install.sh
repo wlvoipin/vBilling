@@ -12,7 +12,7 @@
 #
 VBILLING_REPO=git://github.com/digitallinx/vBilling.git
 TEMPDIR=$(/bin/mktemp -d)
-FS_GIT_REPO=git://git.freeswitch.org/freeswitch.git
+FS_GIT_REPO=git clone https://github.com/signalwire/freeswitch.git
 FS_INSTALL_PATH=/home/vBilling/freeswitch
 FS_BASE_PATH=/usr/local/src/
 FS_USER=freeswitch
