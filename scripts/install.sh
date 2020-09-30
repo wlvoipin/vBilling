@@ -12,7 +12,7 @@
 #
 VBILLING_REPO=git clone https://github.com/wlvoipin/vBilling.git
 TEMPDIR=$(/bin/mktemp -d)
-FS_GIT_REPO=git clone https://github.com/signalwire/freeswitch.git
+FS_GIT_REPO=git clone –b v1.# https://github.com/signalwire/freeswitch.git
 FS_INSTALL_PATH=/home/vBilling/freeswitch
 FS_BASE_PATH=/usr/local/src/
 FS_USER=freeswitch
